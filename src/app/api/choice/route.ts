@@ -20,7 +20,7 @@ export async function DELETE(req: Request) {
       },
     });
     if (!existingChoice) {
-      return { success: false, message: "Choice not found" };
+      return Response.json({ error: "Choice not found" }, { status: 404 });
     }
     // Check user authorization or any other conditions
     // Add your authorization logic here

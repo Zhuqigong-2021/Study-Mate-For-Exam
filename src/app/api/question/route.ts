@@ -19,7 +19,7 @@ export async function DELETE(req: Request, res: Response) {
     });
 
     if (!existingQuestion) {
-      return { success: false, message: "Choice not found" };
+      return Response.json({ error: "Question not found" }, { status: 404 });
     }
 
     // Check user authorization or any other conditions
@@ -60,16 +60,13 @@ export async function DELETE(req: Request, res: Response) {
     //   },
     // });
 
-    return Response.json({
-      success: true,
-      message: "Question and associated choices deleted successfully",
-    });
+    return Response.json(
+      { message: "successfully delete a  question" },
+      { status: 200 },
+    );
   } catch (error) {
     console.error(error);
 
-    return Response.json({
-      success: true,
-      message: "Internal server error",
-    });
+    return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }
