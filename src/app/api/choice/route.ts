@@ -36,6 +36,6 @@ export async function DELETE(req: Request) {
     return Response.json({ message: "choice deleted" }, { status: 200 });
   } catch (error) {
     console.error(error);
-    return Response.json({ success: false, message: "Internal server error" });
+    return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }
