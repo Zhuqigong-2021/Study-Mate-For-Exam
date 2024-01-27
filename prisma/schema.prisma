@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Note{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  description String
+  userId String
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+  questions Question[] 
+
+  @@map("notes")
+}
+
+
+
+
+model Choice {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  content String 
+  answer Boolean @default(false)
+  question Question @relation(fields: [questionId],references: [id])
+  questionId String @unique @db.ObjectId
+  
+}
+
+
+model Question {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  questionTitle String
+  choices Choice[]
+  note Note @relation(fields: [noteId],references: [id])
+  noteId String @unique @db.ObjectId
+
+}
+
+
