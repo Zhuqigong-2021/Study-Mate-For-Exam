@@ -8,7 +8,7 @@ import { Inter, Roboto_Mono } from "next/font/google";
 import NavBar from "./NavBar";
 
 export const metadata: Metadata = {
-  title: "FlowBrain",
+  title: "Study Mate",
   description: "The intelligent note-taking app",
 };
 
