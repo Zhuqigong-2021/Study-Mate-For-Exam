@@ -1,10 +1,9 @@
-import { Fragment } from "react";
-import NavBar from "./NavBar";
+import CommonNavbar from "@/components/CommonNavbar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <NavBar />
+      <CommonNavbar />
       <main className="m-auto  max-w-7xl p-4">{children}</main>
     </>
   );

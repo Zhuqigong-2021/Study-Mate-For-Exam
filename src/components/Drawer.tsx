@@ -20,7 +20,7 @@ import AddEditNoteDialog from "./AddEditNoteDialog";
 const Drawer = () => {
   const pathname = usePathname();
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
-  console.log(pathname);
+
   return (
     <Sheet>
       <SheetTrigger asChild>

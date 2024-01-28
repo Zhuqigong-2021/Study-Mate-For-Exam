@@ -5,7 +5,7 @@ import prisma from "@/lib/db/prisma";
 import Note from "@/components/Note";
 
 export const metadata: Metadata = {
-  title: "FlowBrain - Notes",
+  title: "Study Mate - Notes",
 };
 const NotesPage = async () => {
   const { userId } = auth();

@@ -1,10 +1,9 @@
-import Nav from "./Nav";
-// import NavBar from "./NavBar";
+import CommonNavbar from "@/components/CommonNavbar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Nav />
+      <CommonNavbar />
       <main className="m-auto max-w-7xl p-4">{children}</main>
     </>
   );
