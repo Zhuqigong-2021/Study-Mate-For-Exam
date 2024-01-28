@@ -7,7 +7,7 @@ import ExamNote from "@/components/ExamNote";
 import WildCardNote from "@/components/WildCardNote";
 
 export const metadata: Metadata = {
-  title: "FlowBrain - Notes",
+  title: "Study Mate- Wildcard",
 };
 const NotesPage = async () => {
   const { userId } = auth();

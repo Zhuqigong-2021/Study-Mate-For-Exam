@@ -2,7 +2,7 @@ import { SignIn } from "@clerk/nextjs";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "FlowBrain - Sign in",
+  title: "Study Mate - Sign in",
 };
 const SignInPage = () => {
   return (

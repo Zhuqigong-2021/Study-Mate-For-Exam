@@ -6,7 +6,7 @@ import Note from "@/components/Note";
 import ExamNote from "@/components/ExamNote";
 
 export const metadata: Metadata = {
-  title: "FlowBrain - Notes",
+  title: "Study Mate - Exam",
 };
 const NotesPage = async () => {
   const { userId } = auth();

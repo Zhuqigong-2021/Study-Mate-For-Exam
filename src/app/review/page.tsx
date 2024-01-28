@@ -10,7 +10,7 @@ import ReviewNoteQuestion from "@/components/ReviewNoteQuestion";
 import ReviewNote from "@/components/ReviewNote";
 
 export const metadata: Metadata = {
-  title: "FlowBrain - Notes",
+  title: "Study Mate - Review",
 };
 
 const NotesPage = async () => {
