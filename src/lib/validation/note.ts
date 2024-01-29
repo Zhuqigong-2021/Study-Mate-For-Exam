@@ -26,23 +26,15 @@ export const createNoteSchema = z.object({
   questions: z.array(createQuestionSchema).optional(),
 });
 
-export const createHobbySchema = z.object({
-  hobby: z.string().min(1, { message: "hobby has to be one character long " }),
+export const FormSchema = z.object({
+  searchParam: z.string(),
 });
-export const createAnimalSchema = z.object({
-  name: z.string().min(3, { message: "animal name must be 3 character long " }),
-  description: z.string().min(1, {
-    message: "animal description must be at least one character long",
-  }),
-  hobbies: z.array(createHobbySchema).optional(),
-});
-
-export type CreateAnimalSchema = z.infer<typeof createAnimalSchema>;
 
 export type CreateNoteSchema = z.infer<typeof createNoteSchema>;
 
 export type CreateQuestionSchema = z.infer<typeof createQuestionSchema>;
 
+export type formSchema = z.infer<typeof FormSchema>;
 // export const updateNoteSchema = createNoteSchema.extend({
 //   id: z.string().min(1),
 // });

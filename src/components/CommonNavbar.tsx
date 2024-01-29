@@ -16,7 +16,7 @@ const CommonNavbar = () => {
 
   return (
     <>
-      <div className="bg-white p-4 shadow">
+      <div className=" bg-transparent p-4 shadow">
         <div className="m-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
           <Link href={"/notes"} className="flex items-center gap-1 space-x-2">
             {/* <Image src={logo} alt="logo" width={40} height={40} /> */}
@@ -72,6 +72,15 @@ const CommonNavbar = () => {
                 className="hidden scale-75 bg-teal-600 md:flex lg:flex xl:flex"
               >
                 <Plus size={20} />
+              </Button>
+            )}
+            {pathname === "/" && (
+              //   bg-[#f3c46e]
+              <Button
+                className="rounded-full   bg-white px-8 py-4  text-slate-800 hover:text-white"
+                asChild
+              >
+                <Link href="/notes"> registration</Link>
               </Button>
             )}
           </div>

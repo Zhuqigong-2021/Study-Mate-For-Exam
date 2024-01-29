@@ -27,7 +27,7 @@ export default function Home() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="flex flex-col items-center gap-5 rounded-lg  px-5 py-10 md:absolute md:left-[2%] md:top-[20%] md:items-start lg:left-[13%]">
+      <div className="flex flex-col items-center gap-5 rounded-lg  px-5 py-10 md:absolute md:left-[2%] md:top-[20%] md:items-start lg:left-[16%]">
         <div className=" flex flex-col items-center gap-6 text-center md:items-start md:text-left ">
           <span className=" flex flex-col items-center space-y-5 text-2xl font-bold tracking-tight text-slate-800 md:items-start md:text-5xl lg:text-6xl">
             <span className="scale-y-90">Ignite Brilliance Now</span>

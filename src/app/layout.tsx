@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 
 import { Inter, Roboto_Mono } from "next/font/google";
 import NavBar from "./NavBar";
+import CommonNavbar from "@/components/CommonNavbar";
 
 export const metadata: Metadata = {
   title: "Study Mate",
