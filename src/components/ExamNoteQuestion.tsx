@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
 import { Choice, Note as NoteModel, Question } from "@prisma/client";
 import { Question as QuestionModel } from "@prisma/client";
@@ -43,6 +43,25 @@ interface NoteProps {
   // questions: QuestionModel[];
   // choices: Choice[][];
 }
+const shuffleArray = (array: any) => {
+  let currentIndex = array.length,
+    randomIndex;
+
+  // While there remain elements to shuffle...
+  while (currentIndex !== 0) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+
+  return array;
+};
 
 const ExamNoteQuestion = ({ note }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
@@ -182,6 +201,11 @@ const ExamNoteQuestion = ({ note }: NoteProps) => {
     setResult,
   ]);
 
+  const shuffledQuestions = useMemo(
+    () => shuffleArray([...note.questions]),
+    [note.questions],
+  );
+
   return (
     <>
       <Card
@@ -195,7 +219,7 @@ const ExamNoteQuestion = ({ note }: NoteProps) => {
           <p className="flex flex-wrap ">{note.description}</p>
         </CardContent>
         <CardHeader>
-          {note.questions.map((question: QuestionType, index: number) => {
+          {shuffledQuestions.map((question: QuestionType, index: number) => {
             // console.log("question id:" + question.id);
             return (
               <MutipleChoiceQuestion

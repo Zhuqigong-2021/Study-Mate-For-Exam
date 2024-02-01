@@ -21,10 +21,7 @@ const ExamNote = ({ note }: NoteProps) => {
   const wasUpdated = note.updateAt > note.createdAt;
   const router = useRouter();
 
-  // useEffect(() => {
-  //   //router.replace(`/note/${note.id}/edit`);
-  //   window.location.reload();
-  // }, [note, router]);
+  
 
   const createdUpdatedAtTimestamp = (
     wasUpdated ? note.updateAt : note.createdAt
