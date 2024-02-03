@@ -172,7 +172,8 @@ export async function PUT(req: Request) {
                 create: [
                   {
                     questionTitle: questions[0].questionTitle,
-
+                    isFlagged: false,
+                    comment: "",
                     choices: {
                       create: questions[0].choices,
                     },

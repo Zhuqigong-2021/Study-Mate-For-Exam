@@ -14,9 +14,10 @@ import React, { useState } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
-import { BsMenuButtonWideFill } from "react-icons/bs";
+
 import { usePathname } from "next/navigation";
 import AddEditNoteDialog from "./AddEditNoteDialog";
+import { Menu } from "lucide-react";
 const Drawer = () => {
   const pathname = usePathname();
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
@@ -25,7 +26,7 @@ const Drawer = () => {
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="outline">
-          <BsMenuButtonWideFill className="scale-125" />
+          <Menu />
         </Button>
       </SheetTrigger>
       <SheetContent>
@@ -67,6 +68,13 @@ const Drawer = () => {
             className="underline-offset-1 hover:scale-105 hover:text-teal-700"
           >
             Review
+          </Link>
+
+          <Link
+            href="/bookmark"
+            className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+          >
+            Bookmark
           </Link>
 
           {pathname.includes("/notes") && (

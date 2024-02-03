@@ -36,9 +36,11 @@ export type QuestionType = {
   id: string;
   questionTitle: string;
   choices: ChoiceType[];
+  isFlagged: boolean;
+  comment: string;
 };
 
-interface NoteProps {
+export interface NoteProps {
   note: NoteType;
   // questions: QuestionModel[];
   // choices: Choice[][];

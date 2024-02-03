@@ -1,8 +1,12 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { CardContent, CardTitle } from "./ui/card";
 import { ChoiceType, QuestionType } from "./ExamNoteQuestion";
 import { Choice } from "@prisma/client";
+import { BookmarkCheck } from "lucide-react";
+import { auth } from "@clerk/nextjs";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface multipleProps {
   question: QuestionType;
@@ -16,6 +20,8 @@ const MutipleChoiceQuestion = ({
 
   onChange,
 }: multipleProps) => {
+  const [isFlagged, setIsFlagged] = useState(question.isFlagged);
+  const router = useRouter();
   const correctAnswerCount = question.choices.filter(
     (choice) => choice.answer,
   ).length;
@@ -60,9 +66,42 @@ const MutipleChoiceQuestion = ({
 
     return letter;
   };
+  const bookMarked = async (questionId: string, isFlagged: boolean) => {
+    try {
+      const response = await fetch("/api/question", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ questionId, isFlagged: !isFlagged }),
+      });
+      // setIsFlagged(!isFlagged);
+      if (response.ok) {
+        // router.refresh();
+        setIsFlagged(!isFlagged);
+
+        if (!isFlagged) {
+          toast.success("you successfully bookmarked a question");
+        } else {
+          toast.success("you successfully unselect a question");
+        }
+      }
+    } catch (error) {
+      toast.success("your request is not successful");
+    }
+  };
+
   return (
     <CardContent>
-      <CardTitle className="mb-4">{question.questionTitle}</CardTitle>
+      <CardTitle className="relative mb-4">
+        <BookmarkCheck
+          className={`${
+            isFlagged ? " text-teal-600" : "text-black"
+          } absolute   -left-6 top-0 `}
+          onClick={() => bookMarked(question.id, isFlagged)}
+        />{" "}
+        <span className=" pl-4">{question.questionTitle}</span>
+      </CardTitle>
       {/* question.choices */}
       {shuffledChoices.map((c: ChoiceType, index: number) => {
         let choiceLetter = String.fromCharCode(65 + index); // ASCII 65 is 'A'

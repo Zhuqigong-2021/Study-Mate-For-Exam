@@ -58,6 +58,8 @@ const EditNoteQuestion = ({
         noteToEdit?.questions.map((question) => ({
           id: question.id || "haha",
           questionTitle: question.questionTitle || "", // Set default value based on existing questionTitle
+          comment: question.comment || "",
+          isFlagged: question.isFlagged || false,
           choices: question.choices.map((choice) => ({
             id: choice.id || "",
             content: choice.content || "",

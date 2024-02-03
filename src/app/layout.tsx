@@ -33,8 +33,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
         <body>
-          <NavBar />
-
+          <CommonNavbar />
           {children}
           <Toaster />
         </body>

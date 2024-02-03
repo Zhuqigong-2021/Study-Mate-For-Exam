@@ -8,11 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Globe, Plus } from "lucide-react";
 import AddEditNoteDialog from "@/components/AddEditNoteDialog";
 import Drawer from "@/components/Drawer";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const CommonNavbar = () => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <>
@@ -55,6 +56,24 @@ const CommonNavbar = () => {
               >
                 review
               </Link>
+              {/* <Link
+                href="/bookmark"
+                className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+              >
+                bookmark
+              </Link> */}
+
+              <button
+                className="m-0 bg-transparent p-0"
+                onClick={() => router.refresh()}
+              >
+                <Link
+                  href="/bookmark"
+                  className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+                >
+                  bookmark
+                </Link>
+              </button>
             </div>
             <div className="hidden md:flex lg:flex xl:flex">
               <UserButton

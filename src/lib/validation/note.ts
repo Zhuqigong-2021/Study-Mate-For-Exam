@@ -18,6 +18,8 @@ export const updateQuestionSchema = z.object({
   id: z.string().min(1, { message: "id  is required" }),
   questionTitle: z.string().min(1, { message: "question  is required" }),
   choices: z.array(ChoiceSchema),
+  isFlagged: z.boolean(),
+  comment: z.string().optional(),
 });
 
 export const createNoteSchema = z.object({
@@ -31,6 +33,8 @@ export const FormSchema = z.object({
 });
 
 export type CreateNoteSchema = z.infer<typeof createNoteSchema>;
+
+export type UpdateQuestionSchema = z.infer<typeof updateQuestionSchema>;
 
 export type CreateQuestionSchema = z.infer<typeof createQuestionSchema>;
 

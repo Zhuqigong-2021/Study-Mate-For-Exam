@@ -24,6 +24,8 @@ export interface NoteType {
 interface QuestionType {
   id: string;
   questionTitle: string;
+  comment: string;
+  isFlagged: boolean;
   choices: ChoiceType[];
 }
 interface ChoiceType {

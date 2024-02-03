@@ -41,6 +41,8 @@ model Question {
   choices Choice[]
   note Note @relation(fields: [noteId],references: [id])
   noteId String @unique @db.ObjectId
+  isFlagged Boolean @default(false)
+  comment String
 
 }
 
