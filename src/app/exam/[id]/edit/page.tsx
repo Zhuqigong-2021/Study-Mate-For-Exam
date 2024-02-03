@@ -41,6 +41,8 @@ const page = async ({ params }: idProps) => {
         select: {
           id: true,
           questionTitle: true,
+          comment: true,
+          isFlagged: true,
           choices: {
             select: {
               id: true,
