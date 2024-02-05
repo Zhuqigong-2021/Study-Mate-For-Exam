@@ -27,11 +27,11 @@ const CommonNavbar = () => {
             </span>
           </Link>
           <div className="flex items-center gap-2 space-x-5 font-semibold">
-            <div className="flex md:hidden lg:hidden xl:hidden">
+            <div className="flex  lg:hidden xl:hidden">
               <Drawer />
             </div>
 
-            <div className="hidden  font-light md:flex md:space-x-5 lg:flex lg:space-x-16">
+            <div className="hidden  font-light  md:space-x-5 lg:flex lg:space-x-16">
               <Link
                 href="/notes"
                 className="underline-offset-1 hover:scale-105 hover:text-teal-700"
@@ -88,7 +88,7 @@ const CommonNavbar = () => {
             {pathname == "/notes" && (
               <Button
                 onClick={() => setShowAddEditNoteDialog(true)}
-                className="hidden scale-75 bg-teal-600 md:flex lg:flex xl:flex"
+                className="hidden scale-75 bg-teal-600 md:flex lg:flex xl:flex "
               >
                 <Plus size={20} />
               </Button>
@@ -96,7 +96,7 @@ const CommonNavbar = () => {
             {pathname === "/" && (
               //   bg-[#f3c46e]
               <Button
-                className="rounded-full   bg-white px-8 py-4  text-slate-800 hover:text-white"
+                className="hidden   rounded-full bg-white px-8  py-4 text-slate-800 hover:text-white lg:flex"
                 asChild
               >
                 <Link href="/notes"> registration</Link>
