@@ -40,6 +40,7 @@ const page = async ({ params }: idProps) => {
           // questionTitle: true,
           choices: {
             select: {
+              id: true,
               content: true,
               answer: true,
             },

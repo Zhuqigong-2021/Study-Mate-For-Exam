@@ -54,18 +54,7 @@ const MutipleChoiceQuestion = ({
     }
     return choices;
   }, [question.choices]);
-  const getChoiceLetter = (index: number) => {
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let letter = "";
-    let currentIndex = index;
 
-    do {
-      letter = letters[currentIndex % 26] + letter;
-      currentIndex = Math.floor(currentIndex / 26) - 1; // -1 is important because it's zero-based index
-    } while (currentIndex >= 0);
-
-    return letter;
-  };
   const bookMarked = async (questionId: string, isFlagged: boolean) => {
     try {
       const response = await fetch("/api/question", {
@@ -112,7 +101,7 @@ const MutipleChoiceQuestion = ({
         return (
           <CardContent
             key={c.id}
-            className={`border-grey-600  relative my-2 flex h-[40px] items-center rounded-md border  text-left `}
+            className={`border-grey-600  relative my-2 flex h-[40px] items-center rounded-md border  text-left  `}
           >
             <input
               type="checkbox"
@@ -121,7 +110,12 @@ const MutipleChoiceQuestion = ({
               checked={selectedChoices.includes(c.id as string)}
               onChange={() => handleCheckboxChange(c.id)}
             />
-            <span className="absolute top-[50%] -translate-y-[50%]">
+            <span
+              className="absolute top-[50%] -translate-y-[50%]"
+              // className={`absolute  top-[50%] -translate-y-[50%] ${
+              //   c.answer == true ? "bg-teal-400" : "bg-white"
+              // }`}
+            >
               {choiceLetter + "."} &nbsp;&nbsp;
               {c.content}
             </span>

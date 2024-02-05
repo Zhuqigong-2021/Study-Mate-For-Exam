@@ -7,9 +7,11 @@ const page = ({
   searchParams,
 }: {
   searchParams: {
+    id: string;
     correct: string;
     total: string;
     result: string;
+    choiceId: string;
   };
 }) => {
   let wrong = Number(searchParams.total) - Number(searchParams.correct);
@@ -33,7 +35,17 @@ const page = ({
         {Number(searchParams.result) + "%"}
       </p>
       <Button asChild className="mt-4">
-        <Link href="/exam">back</Link>
+        <Link
+          href={{
+            pathname: `/exam/${searchParams.id}`,
+            query: {
+              id: `${searchParams.id}`,
+              choiceId: `${searchParams.choiceId}`,
+            },
+          }}
+        >
+          get details report
+        </Link>
       </Button>
     </div>
   );

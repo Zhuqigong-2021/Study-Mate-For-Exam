@@ -95,10 +95,10 @@ const ExamNoteQuestion = ({ note }: NoteProps) => {
   if (!timer && timerFromStorage) {
     // Use the timer value from localStorage if available
     // timer = timerFromStorage;
-    console.log("we hit the timer assignment ");
+    // console.log("we hit the timer assignment ");
     () => setTime(Number(timerFromStorage));
   } else {
-    console.log("we have timer");
+    // console.log("we have timer");
   }
 
   function padTo2Digits(num: number) {
@@ -138,7 +138,11 @@ const ExamNoteQuestion = ({ note }: NoteProps) => {
           "&" +
           createQueryString("total", totalQuestionNumber.toString()) +
           "&" +
-          createQueryString("result", result.toString()),
+          createQueryString("result", result.toString()) +
+          "&" +
+          createQueryString("id", note.id) +
+          "&" +
+          createQueryString("choiceId", JSON.stringify(selectedChoices)),
       );
 
       toast.error("Time is up !!!");
@@ -146,19 +150,21 @@ const ExamNoteQuestion = ({ note }: NoteProps) => {
     return () => {
       clearInterval(timer);
     };
-  }, [time, router, note, correctNumber, totalQuestionNumber, result]);
+  }, [
+    time,
+    router,
+    note,
+    correctNumber,
+    totalQuestionNumber,
+    result,
+    selectedChoices,
+  ]);
 
   // Save the current timer value to localStorage whenever it changes
   useEffect(() => {
     if (time) localStorage.setItem("timer", time.toString());
   }, [time]);
 
-  // const handleChoiceChange = (questionId: string, choiceId: string | null) => {
-  //   setSelectedChoices((prevSelectedChoices) => ({
-  //     ...prevSelectedChoices,
-  //     [questionId]: choiceId,
-  //   }));
-  // };
   const handleChoiceChange = (questionId: string, choiceIds: string[]) => {
     setSelectedChoices((prevSelectedChoices) => ({
       ...prevSelectedChoices,
@@ -195,6 +201,7 @@ const ExamNoteQuestion = ({ note }: NoteProps) => {
 
     // Call the function directly here to avoid missing dependencies warnings
     checkAnswers();
+    console.log("selectedChoices" + JSON.stringify(selectedChoices));
   }, [
     selectedChoices,
     note.questions,
@@ -249,9 +256,11 @@ const ExamNoteQuestion = ({ note }: NoteProps) => {
             href={{
               pathname: `/exam/${note.id}/result`,
               query: {
+                id: note.id,
                 correct: correctNumber,
                 total: totalQuestionNumber,
                 result: result,
+                choiceId: JSON.stringify(selectedChoices),
               },
             }}
           >
