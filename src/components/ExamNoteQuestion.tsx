@@ -41,6 +41,7 @@ export type QuestionType = {
 };
 
 export interface NoteProps {
+  id: string;
   note: NoteType;
   // questions: QuestionModel[];
   // choices: Choice[][];
@@ -65,7 +66,7 @@ const shuffleArray = (array: any) => {
   return array;
 };
 
-const ExamNoteQuestion = ({ note }: NoteProps) => {
+const ExamNoteQuestion = ({ id, note }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const [correctNumber, setCurrentNumber] = useState(0);
   const [totalQuestionNumber, setTotalQuestionNumber] = useState(
@@ -95,7 +96,7 @@ const ExamNoteQuestion = ({ note }: NoteProps) => {
   if (!timer && timerFromStorage) {
     // Use the timer value from localStorage if available
     // timer = timerFromStorage;
-    // console.log("we hit the timer assignment ");
+
     () => setTime(Number(timerFromStorage));
   } else {
     // console.log("we have timer");
@@ -229,7 +230,6 @@ const ExamNoteQuestion = ({ note }: NoteProps) => {
         </CardContent>
         <CardHeader>
           {shuffledQuestions.map((question: QuestionType, index: number) => {
-            // console.log("question id:" + question.id);
             return (
               <MutipleChoiceQuestion
                 key={question.id}
@@ -240,7 +240,7 @@ const ExamNoteQuestion = ({ note }: NoteProps) => {
             );
           })}
         </CardHeader>
-        <CardFooter className="py-4"></CardFooter>
+        <CardFooter className="py-4">{id}</CardFooter>
 
         <Button
           //   asChild
@@ -254,9 +254,9 @@ const ExamNoteQuestion = ({ note }: NoteProps) => {
         >
           <Link
             href={{
-              pathname: `/exam/${note.id}/result`,
+              pathname: `/exam/${id}/result`,
               query: {
-                id: `${note.id}`,
+                id: id,
                 correct: correctNumber,
                 total: totalQuestionNumber,
                 result: result,

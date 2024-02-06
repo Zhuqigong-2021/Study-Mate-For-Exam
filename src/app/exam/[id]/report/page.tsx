@@ -17,8 +17,7 @@ const page = async ({
 }) => {
   // const { id } = params;
   let id = searchParams.id;
-  //console.log(JSON.parse(searchParams.choiceId));
-  //   console.log(id);
+
   let data =
     searchParams.choiceId != "undefined"
       ? JSON.parse(searchParams.choiceId)

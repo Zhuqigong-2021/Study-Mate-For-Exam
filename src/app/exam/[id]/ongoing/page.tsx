@@ -46,7 +46,7 @@ const page = async ({ params }: idProps) => {
   if (!singleNoteWithDetails) throw Error("Note Details not Found");
   return (
     <div className=" grid gap-3 " suppressHydrationWarning={true}>
-      {<ExamNoteQuestion note={singleNoteWithDetails} />}
+      {<ExamNoteQuestion note={singleNoteWithDetails} id={id} />}
     </div>
   );
 };
