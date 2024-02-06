@@ -30,6 +30,7 @@ const page = ({
 
       <Pie right={Number(searchParams.correct)} wrong={wrong} />
       <h2 className="my-4 text-xl font-bold">Your Test Result</h2>
+      <p>{id}</p>
       <p className="text-red-500">
         {/* {Math.round(
           (Number(searchParams.correct) / Number(searchParams.total)) * 100,
