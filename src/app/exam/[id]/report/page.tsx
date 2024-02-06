@@ -38,12 +38,12 @@ const page = async ({
 
   if (!userId) throw Error("userId undefined");
 
-  const note = await prisma.note.findUnique({ where: { id } });
-  if (!note) throw Error("Note not found");
+  //   const note = await prisma.note.findUnique({ where: { id } });
+  //   if (!note) throw Error("Note not found");
 
   const singleNoteWithDetails = await prisma.note.findUnique({
     where: {
-      id,
+      id: `${searchParams.id}`,
     },
     select: {
       id: true,
