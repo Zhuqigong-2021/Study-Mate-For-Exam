@@ -256,7 +256,7 @@ const ExamNoteQuestion = ({ note }: NoteProps) => {
             href={{
               pathname: `/exam/${note.id}/result`,
               query: {
-                id: note.id,
+                id: `${note.id}`,
                 correct: correctNumber,
                 total: totalQuestionNumber,
                 result: result,
