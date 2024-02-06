@@ -15,6 +15,8 @@ const page = ({
   };
 }) => {
   let wrong = Number(searchParams.total) - Number(searchParams.correct);
+  let id = searchParams.id;
+  console.log(id);
   // console.log("this is the result" + searchParams.result);
   return (
     <div
@@ -37,9 +39,9 @@ const page = ({
       <Button asChild className="mt-4">
         <Link
           href={{
-            pathname: `/exam/${searchParams.id}`,
+            pathname: `/exam/${id}`,
             query: {
-              id: `${searchParams.id}`,
+              id: `${id}`,
               choiceId: `${searchParams.choiceId}`,
             },
           }}
