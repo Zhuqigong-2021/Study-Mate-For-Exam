@@ -41,29 +41,29 @@ const page = async ({
   //   const note = await prisma.note.findUnique({ where: { id } });
   //   if (!note) throw Error("Note not found");
 
-  const singleNoteWithDetails = await prisma.note.findUnique({
-    where: {
-      id: `${searchParams.id}`,
-    },
-    select: {
-      id: true,
-      title: true,
-      description: true,
-      questions: {
-        include: {
-          // questionTitle: true,
-          choices: {
-            select: {
-              id: true,
-              content: true,
-              answer: true,
-            },
-          },
-        },
-      },
-    },
-  });
-  if (!singleNoteWithDetails) throw Error("Note Details not Found");
+  //   const singleNoteWithDetails = await prisma.note.findUnique({
+  //     where: {
+  //       id: `${searchParams.id}`,
+  //     },
+  //     select: {
+  //       id: true,
+  //       title: true,
+  //       description: true,
+  //       questions: {
+  //         include: {
+  //           // questionTitle: true,
+  //           choices: {
+  //             select: {
+  //               id: true,
+  //               content: true,
+  //               answer: true,
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //   });
+  //   if (!singleNoteWithDetails) throw Error("Note Details not Found");
   return (
     <div className=" grid gap-3" suppressHydrationWarning={true}>
       {/* <ReportNoteQuestion
