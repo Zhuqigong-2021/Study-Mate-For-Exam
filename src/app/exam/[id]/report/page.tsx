@@ -15,9 +15,6 @@ const page = async ({
     choiceId: string;
   };
 }) => {
-  // const { id } = params;
-  let id = searchParams.noteId;
-
   let data =
     searchParams.choiceId != "undefined"
       ? JSON.parse(searchParams.choiceId)
@@ -32,7 +29,7 @@ const page = async ({
   } else {
     mappedData = [];
   }
-  console.log(mappedData);
+  //   console.log(mappedData);
 
   const { userId } = auth();
 
@@ -70,8 +67,6 @@ const page = async ({
         note={singleNoteWithDetails}
         mappedData={mappedData}
       />
-      <p>{"id:" + searchParams.noteId}</p>
-      <p>{"choiceId: " + searchParams.choiceId}</p>
     </div>
   );
 };

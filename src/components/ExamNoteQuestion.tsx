@@ -202,7 +202,7 @@ const ExamNoteQuestion = ({ id, note }: NoteProps) => {
 
     // Call the function directly here to avoid missing dependencies warnings
     checkAnswers();
-    console.log("selectedChoices" + JSON.stringify(selectedChoices));
+    // console.log("selectedChoices" + JSON.stringify(selectedChoices));
   }, [
     selectedChoices,
     note.questions,
@@ -240,7 +240,7 @@ const ExamNoteQuestion = ({ id, note }: NoteProps) => {
             );
           })}
         </CardHeader>
-        <CardFooter className="py-4">{id}</CardFooter>
+        <CardFooter className="py-4"></CardFooter>
 
         <Button
           //   asChild
