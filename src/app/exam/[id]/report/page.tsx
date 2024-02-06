@@ -11,12 +11,12 @@ const page = async ({
   searchParams,
 }: {
   searchParams: {
-    id: string;
+    noteId: string;
     choiceId: string;
   };
 }) => {
   // const { id } = params;
-  let id = searchParams.id;
+  let id = searchParams.noteId;
 
   let data =
     searchParams.choiceId != "undefined"
@@ -70,7 +70,7 @@ const page = async ({
         note={singleNoteWithDetails}
         mappedData={mappedData}
       /> */}
-      <p>{"id:" + searchParams.id}</p>
+      <p>{"id:" + searchParams.noteId}</p>
       <p>{"choiceId: " + searchParams.choiceId}</p>
     </div>
   );

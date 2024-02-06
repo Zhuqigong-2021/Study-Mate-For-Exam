@@ -42,7 +42,7 @@ const FrontResult = () => {
           href={{
             pathname: `/exam/${searchParams.get("id")}/report`,
             query: {
-              id: `${id}`,
+              noteId: `${id}`,
               choiceId: `${searchParams.get("choiceId")}`,
             },
           }}
