@@ -29,7 +29,7 @@ const FrontResult = () => {
       <Pie right={Number(searchParams.get("correct"))} wrong={wrong} />
       <h2 className="my-4 text-xl font-bold">Your Test Result</h2>
       {/* <p>{id}</p> */}
-      <p>{searchParams.get("id")}</p>
+      <p>{"id:" + id}</p>
       <p>{"choiceId :" + searchParams.get("choiceId")}</p>
       <p className="text-red-500">
         {/* {Math.round(
@@ -42,7 +42,7 @@ const FrontResult = () => {
           href={{
             pathname: `/exam/${searchParams.get("id")}/report`,
             query: {
-              id: `${searchParams.get("id")}`,
+              id: `${id}`,
               choiceId: `${searchParams.get("choiceId")}`,
             },
           }}
