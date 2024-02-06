@@ -39,7 +39,7 @@ const page = ({
       <Button asChild className="mt-4">
         <Link
           href={{
-            pathname: `/exam/${id}`,
+            pathname: `/exam/${id}/report`,
             query: {
               id: `${id}`,
               choiceId: `${searchParams.choiceId}`,
