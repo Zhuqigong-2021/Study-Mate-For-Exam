@@ -12,6 +12,8 @@ const FrontResult = () => {
     Number(searchParams.get("total")) - Number(searchParams.get("correct"));
   let id = searchParams.get("id");
   // console.log(id);
+  console.log(searchParams.get("id"));
+  console.log(searchParams.get("choiceId"));
 
   return (
     <div
@@ -26,7 +28,9 @@ const FrontResult = () => {
 
       <Pie right={Number(searchParams.get("correct"))} wrong={wrong} />
       <h2 className="my-4 text-xl font-bold">Your Test Result</h2>
-      <p>{id}</p>
+      {/* <p>{id}</p> */}
+      <p>{searchParams.get("id")}</p>
+      <p>{"choiceId :" + searchParams.get("choiceId")}</p>
       <p className="text-red-500">
         {/* {Math.round(
           (Number(searchParams.correct) / Number(searchParams.total)) * 100,
