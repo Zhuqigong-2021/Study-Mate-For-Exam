@@ -29,9 +29,16 @@ export async function POST(req: Request) {
           in: vectorQueryResponse.matches.map((match) => match.id),
         },
       },
+      include: {
+        questions: {
+          include: {
+            choices: true,
+          },
+        },
+      },
     });
 
-    console.log("Relevant notes found: ", relevantNotes);
+    console.log("Relevant notes found: ", JSON.stringify(relevantNotes));
     const systemMessage: ChatCompletionMessage = {
       role: "assistant",
       content:
@@ -39,7 +46,10 @@ export async function POST(req: Request) {
         "The relevant notes for this query are: \n" +
         relevantNotes
           ?.map(
-            (note) => `Title: ${note.title}\n\nContent:\n${note.description}`,
+            (note) =>
+              `Title: ${note.title}\n\nDescription:\n${
+                note.description
+              }\n\nQuestions:${JSON.stringify(note.questions)}`,
           )
           .join("\n\n"),
     };
