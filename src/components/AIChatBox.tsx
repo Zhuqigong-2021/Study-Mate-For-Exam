@@ -52,10 +52,13 @@ export default function AIChatBox({ open, onClose }: AIChatBoxProps) {
         onClick={onClose}
         className="relative right-2 top-10 mb-1 ms-auto block"
       >
-        <XCircle size={30} />
+        <XCircle size={25} />
       </button>
       <div className="flex h-[600px] flex-col rounded border bg-background shadow-xl">
-        <div className="mt-3 h-full overflow-y-auto p-2 " ref={scrollRef}>
+        <div
+          className="no-scrollbar mt-7 h-full overflow-y-auto  p-2"
+          ref={scrollRef}
+        >
           {messages.map((message) => (
             <ChatMessage message={message} key={message.id} />
           ))}
@@ -99,7 +102,7 @@ export default function AIChatBox({ open, onClose }: AIChatBoxProps) {
             placeholder="Say something..."
             ref={inputRef}
           />
-          <Button type="submit" className="bg-teal-700 text-white">
+          <Button type="submit" className="bg-slate-900 text-white">
             Send{" "}
           </Button>
         </form>
@@ -142,7 +145,9 @@ function ChatMessage({
       >
         {content}
       </p>
-      {isAiMessage && <Bot className="ml-2 shrink-0" />}
+      {isAiMessage && (
+        <Bot className="ml-2 h-10 w-10 shrink-0 rounded-full  bg-violet-400 p-2 text-white shadow-sm shadow-violet-800" />
+      )}
     </div>
   );
 }
