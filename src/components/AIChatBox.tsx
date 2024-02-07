@@ -22,7 +22,7 @@ export default function AIChatBox({ open, onClose }: AIChatBoxProps) {
     setMessages,
     isLoading,
     error,
-  } = useChat(); //api/chat is the automatic route to handle gpt request
+  } = useChat(); //api/chat is the automatic route to handle gpt request , but so far not so sure if there is error
 
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
