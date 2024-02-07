@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import prisma from "@/lib/db/prisma";
 
 import FilterNote from "@/components/FilterNote";
+import AIChatButton from "@/components/AIChatButton";
 
 export const metadata: Metadata = {
   title: "Study Mate - Notes",
@@ -17,6 +18,9 @@ const NotesPage = async () => {
   return (
     <div>
       <FilterNote allNotes={allNotes} />
+      <div className="absolute bottom-4 right-20">
+        <AIChatButton />
+      </div>
     </div>
   );
 };
