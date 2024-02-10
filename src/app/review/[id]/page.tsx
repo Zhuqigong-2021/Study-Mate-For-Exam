@@ -13,11 +13,12 @@ import {
 
 import ReviewNoteQuestion from "@/components/ReviewNoteQuestion";
 import { idProps } from "@/app/notes/[id]/page";
+import { checkRole } from "@/app/utils/roles/role";
 
 const page = async ({ params }: idProps) => {
   const { id } = params;
   const { userId } = auth();
-
+  const isAdmin = checkRole("admin");
   if (!userId) throw Error("userId undefined");
 
   // const allNotes = await prisma.note.findMany({ where: { userId } });
@@ -52,7 +53,7 @@ const page = async ({ params }: idProps) => {
   if (!singleNoteWithDetails) throw Error("Note Details not Found");
   return (
     <div className=" grid gap-3" suppressHydrationWarning={true}>
-      {<ReviewNoteQuestion note={singleNoteWithDetails} />}
+      {<ReviewNoteQuestion note={singleNoteWithDetails} isAdmin={isAdmin} />}
     </div>
   );
 };
