@@ -20,15 +20,15 @@ export async function POST(req: Request) {
     const vectorQueryResponse = await notesIndex.query({
       vector: embedding,
       topK: 4,
-      filter: { userId },
+      //filter: { userId },
     });
 
     const relevantNotes = await prisma?.note.findMany({
-      where: {
-        id: {
-          in: vectorQueryResponse.matches.map((match) => match.id),
-        },
-      },
+      // where: {
+      //   id: {
+      //     in: vectorQueryResponse.matches.map((match) => match.id),
+      //   },
+      // },
       include: {
         questions: {
           include: {

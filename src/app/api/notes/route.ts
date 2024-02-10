@@ -442,3 +442,5 @@ async function getEmbeddingForNoteUpdating(noteId: string) {
   // Generate embedding for the combined content
   return getEmbedding(noteContent);
 }
+
+

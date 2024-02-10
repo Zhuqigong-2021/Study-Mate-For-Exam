@@ -4,6 +4,8 @@ import React from "react";
 import prisma from "@/lib/db/prisma";
 
 import BookMarkedQuestion from "@/components/BookMarkedQuestion";
+import { checkRole } from "../utils/roles/role";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Study Mate - Exam",
@@ -11,7 +13,8 @@ export const metadata: Metadata = {
 const BookMarkPage = async () => {
   const { userId } = auth();
   if (!userId) throw Error("userId undefined");
-
+  const isAdmin = checkRole("admin");
+  if (!isAdmin) redirect("/");
   // const allNotes = await prisma.note.findMany({ where: { userId } });
   const flaggedQuestions = await prisma.question.findMany({
     where: {

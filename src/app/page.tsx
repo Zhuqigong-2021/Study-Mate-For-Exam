@@ -6,9 +6,11 @@ import { UserButton, auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import yellowbook from "@/assets/neatperson.png";
 import Drawer from "@/components/Drawer";
+import { checkRole } from "./utils/roles/role";
 export default function Home() {
   const { userId } = auth();
-  if (userId) redirect("/notes");
+  if (userId) redirect("/notes/public");
+  const isAdmin = checkRole("admin");
   return (
     // flex-col items-center justify-center
     <main
@@ -33,7 +35,7 @@ export default function Home() {
         {/* md:absolute md:left-[2%] md:top-[20%] md:items-start lg:left-[16%] */}
         <div className=" mx-5 ml-5 flex flex-col items-center justify-center gap-5 rounded-lg  py-5 pt-16 sm:items-start lg:mx-0 ">
           <div className=" flex max-w-[1200px] flex-col items-center gap-6 text-center md:items-start md:text-left  ">
-            <span className="flex  flex-col items-center space-y-5 text-2xl font-bold tracking-tight text-slate-800 md:items-start md:text-5xl  lg:text-6xl">
+            <span className="flex  flex-col items-center space-y-5  text-2xl font-[750] tracking-tight text-slate-800 md:items-start md:text-5xl  lg:text-6xl">
               <span className=" scale-y-90 lg:block lg:whitespace-nowrap">
                 Ignite Brilliance Now
               </span>
@@ -54,13 +56,13 @@ export default function Home() {
             className="hover:white w-44 rounded-full bg-gradient-to-br from-teal-300 from-10% via-teal-400 via-30% to-teal-600 to-90% text-white shadow-lg shadow-[#9d824f]"
             // className="hover:white bg-gradient-to-bar   rounded-full from-teal-300 from-10% via-teal-400 via-30% to-teal-600 to-90% text-white shadow-lg shadow-[#9d824f]"
           >
-            <Link href="/notes"> start using now</Link>
+            <Link href="/notes/public"> start using now</Link>
           </Button>
         </div>
 
         <div className="pointer-events-none -z-50   hidden items-center gap-2 space-x-5  font-semibold opacity-0 md:flex ">
-          <div className="flex md:hidden lg:hidden xl:hidden">
-            <Drawer />
+          <div className="flex md:hidden xl:hidden lg:hidden">
+            <Drawer isAdmin={isAdmin} />
           </div>
 
           <div className="hidden  font-light md:flex md:space-x-5 lg:flex lg:space-x-16">
@@ -107,7 +109,7 @@ export default function Home() {
               </Link>
             </button>
           </div>
-          <div className="hidden md:flex lg:flex xl:flex">
+          <div className="hidden md:flex xl:flex lg:flex">
             <UserButton
               afterSignOutUrl="/"
               appearance={{

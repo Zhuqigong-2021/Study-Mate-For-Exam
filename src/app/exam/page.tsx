@@ -12,7 +12,8 @@ const NotesPage = async () => {
   const { userId } = auth();
   if (!userId) throw Error("userId undefined");
 
-  const allNotes = await prisma.note.findMany({ where: { userId } });
+  // const allNotes = await prisma.note.findMany({ where: { userId } });
+  const allNotes = await prisma.note.findMany({ where: { isShared: true } });
   return (
     <div className="grid     gap-3  sm:grid-cols-2 lg:grid-cols-3">
       {allNotes.map((note) => (

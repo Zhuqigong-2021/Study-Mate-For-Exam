@@ -15,6 +15,7 @@ model Note{
   title String
   description String
   userId String
+  isShared Boolean @default(false)
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt
   questions Question[] 

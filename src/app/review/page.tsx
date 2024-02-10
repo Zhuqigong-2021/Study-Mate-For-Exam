@@ -8,6 +8,8 @@ import WildCardNote from "@/components/WildCardNote";
 
 import ReviewNoteQuestion from "@/components/ReviewNoteQuestion";
 import ReviewNote from "@/components/ReviewNote";
+import { checkRole } from "../utils/roles/role";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Study Mate - Review",
@@ -16,8 +18,10 @@ export const metadata: Metadata = {
 const NotesPage = async () => {
   const { userId } = auth();
   if (!userId) throw Error("userId undefined");
-
-  const allNotes = await prisma.note.findMany({ where: { userId } });
+  // const isAdmin = checkRole("admin");
+  // if (!isAdmin) redirect("/");
+  // const allNotes = await prisma.note.findMany({ where: { userId } });
+  const allNotes = await prisma.note.findMany({ where: { isShared: true } });
   // const allNotes = await prisma.note.findMany({
   //   where: { userId },
   //   select: {
@@ -45,7 +49,7 @@ const NotesPage = async () => {
       ))}
       {allNotes.length === 0 && (
         <div className="col-span-full text-center">
-          {"You have no note to take exam"}
+          {"You have no note to review"}
         </div>
       )}
     </div>

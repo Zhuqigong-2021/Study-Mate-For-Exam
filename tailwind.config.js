@@ -21,8 +21,10 @@ module.exports = {
         lg: "1317px",
       },
       fontFamily: {
-        sans: ["var(--font-inter)"],
+        sans: ["var(--font-inter)", "sans-serif"],
         mono: ["var(--font-roboto-mono)"],
+        // sans: ["Archivo Black", "sans-serif"],
+        // mono: ["Roboto Mono", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",

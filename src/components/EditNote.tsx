@@ -35,6 +35,7 @@ interface ChoiceType {
 }
 interface NoteProps {
   note: NoteType;
+
   // questions: QuestionModel[];
   // choices: Choice[][];
 }

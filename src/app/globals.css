@@ -72,6 +72,8 @@
   }
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased; /* for Chrome and Safari */
+    -moz-osx-font-smoothing: grayscale; /* for Firefox */
   }
 }
 

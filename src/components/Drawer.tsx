@@ -18,7 +18,10 @@ import { UserButton } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import AddEditNoteDialog from "./AddEditNoteDialog";
 import { Menu } from "lucide-react";
-const Drawer = () => {
+interface roleType {
+  isAdmin: boolean;
+}
+const Drawer = ({ isAdmin }: roleType) => {
   const pathname = usePathname();
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
 
@@ -63,21 +66,25 @@ const Drawer = () => {
           >
             Exam
           </Link>
-          <Link
-            href="/review"
-            className="underline-offset-1 hover:scale-105 hover:text-teal-700"
-          >
-            Review
-          </Link>
+          {isAdmin && (
+            <Link
+              href="/review"
+              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+            >
+              Review
+            </Link>
+          )}
 
-          <Link
-            href="/bookmark"
-            className="underline-offset-1 hover:scale-105 hover:text-teal-700"
-          >
-            Bookmark
-          </Link>
+          {isAdmin && (
+            <Link
+              href="/bookmark"
+              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+            >
+              Bookmark
+            </Link>
+          )}
 
-          {pathname.includes("/notes") && (
+          {pathname.includes("/notes") && isAdmin && (
             <Button
               onClick={() => setShowAddEditNoteDialog(true)}
               className=" "
@@ -88,6 +95,7 @@ const Drawer = () => {
           <AddEditNoteDialog
             open={showAddEditNoteDialog}
             setOpen={setShowAddEditNoteDialog}
+            isAdmin={isAdmin}
           />
         </div>
       </SheetContent>

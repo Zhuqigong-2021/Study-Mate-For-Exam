@@ -13,11 +13,12 @@ import {
 } from "@/components/ui/card";
 
 import ReviewNoteQuestion from "@/components/ReviewNoteQuestion";
+import { checkRole } from "@/app/utils/roles/role";
 
 const page = async ({ params }: idProps) => {
   const { id } = params;
   const { userId } = auth();
-
+  const isAdmin = checkRole("admin");
   if (!userId) throw Error("userId undefined");
 
   const note = await prisma.note.findUnique({ where: { id } });
@@ -50,7 +51,7 @@ const page = async ({ params }: idProps) => {
   if (!singleNoteWithDetails) throw Error("Note Details not Found");
   return (
     <div className=" grid gap-3" suppressHydrationWarning={true}>
-      <ReviewNoteQuestion note={singleNoteWithDetails} />
+      <ReviewNoteQuestion note={singleNoteWithDetails} isAdmin={isAdmin} />
     </div>
   );
 };

@@ -5,6 +5,7 @@ import prisma from "@/lib/db/prisma";
 import { idProps } from "../page";
 
 import EditNote from "@/components/EditNote";
+import { checkRole } from "@/app/utils/roles/role";
 
 const page = async ({ params }: idProps) => {
   const { id } = params;

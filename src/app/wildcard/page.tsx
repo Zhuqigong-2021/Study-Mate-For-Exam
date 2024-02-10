@@ -13,7 +13,8 @@ const NotesPage = async () => {
   const { userId } = auth();
   if (!userId) throw Error("userId undefined");
 
-  const allNotes = await prisma.note.findMany({ where: { userId } });
+  // const allNotes = await prisma.note.findMany({ where: { userId } });
+  const allNotes = await prisma.note.findMany({ where: { isShared: true } });
   return (
     <div className="grid     gap-3  sm:grid-cols-2 lg:grid-cols-3">
       {allNotes.map((note) => (
@@ -21,7 +22,7 @@ const NotesPage = async () => {
       ))}
       {allNotes.length === 0 && (
         <div className="col-span-full text-center">
-          {"You have no note to take exam"}
+          {"You have no note to review in wildcard"}
         </div>
       )}
     </div>

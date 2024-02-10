@@ -31,6 +31,7 @@ interface AddEditNoteDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   noteToEdit?: Note;
+  isAdmin: boolean;
   // questions?: Question[];
 }
 
@@ -38,6 +39,7 @@ export default function AddEditNoteDialog({
   open,
   setOpen,
   noteToEdit,
+  isAdmin,
   // questions,
 }: AddEditNoteDialogProps) {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
@@ -142,7 +144,7 @@ export default function AddEditNoteDialog({
             />
 
             <DialogFooter className="gap-1 sm:gap-0">
-              {noteToEdit && (
+              {noteToEdit && isAdmin && (
                 <LoadingButton
                   variant="destructive"
                   loading={deleteInProgress}
@@ -158,13 +160,15 @@ export default function AddEditNoteDialog({
                   <Link href={`/notes/${noteToEdit.id}/review `}>Review</Link>
                 </Button>
               )}
-              <LoadingButton
-                type="submit"
-                loading={form.formState.isSubmitting}
-                disabled={deleteInProgress}
-              >
-                {noteToEdit ? "Update" : "Submit"}
-              </LoadingButton>
+              {isAdmin && (
+                <LoadingButton
+                  type="submit"
+                  loading={form.formState.isSubmitting}
+                  disabled={deleteInProgress}
+                >
+                  {noteToEdit ? "Update" : "Submit"}
+                </LoadingButton>
+              )}
             </DialogFooter>
           </form>
         </Form>

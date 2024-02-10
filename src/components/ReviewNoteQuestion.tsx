@@ -34,9 +34,10 @@ interface ChoiceType {
 }
 export interface NoteProps {
   note: NoteType;
+  isAdmin: boolean;
 }
 
-const ReviewNoteQuestion = ({ note }: NoteProps) => {
+const ReviewNoteQuestion = ({ note, isAdmin }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const router = useRouter();
 
@@ -102,14 +103,16 @@ const ReviewNoteQuestion = ({ note }: NoteProps) => {
         {/* <Button asChild className="right-30 absolute bottom-2 right-20 ">
           <Link href={`/notes/${note.id}/edit`}>Edit</Link>
         </Button> */}
-        <BsPencilSquare
-          className="right-30 absolute right-10 top-10 scale-125 "
-          onClick={() => {
-            router.push(`/notes/${note.id}/edit`);
-          }}
-        />
+        {isAdmin && (
+          <BsPencilSquare
+            className="right-30 absolute right-10 top-10 scale-125 "
+            onClick={() => {
+              router.push(`/notes/${note.id}/edit`);
+            }}
+          />
+        )}
         <Button asChild className="absolute bottom-5 right-10">
-          <Link href="/notes">Back</Link>
+          <Link href="/notes/public">Back</Link>
         </Button>
       </Card>
       {/* <EditNoteQuestion
