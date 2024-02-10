@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { SearchUsers } from "./_search-users";
-import { clerkClient } from "@clerk/nextjs";
+import { auth, clerkClient } from "@clerk/nextjs";
 import { setRole } from "./_actions";
 import { checkRole } from "@/app/utils/roles/role";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Crown } from "lucide-react";
+import GrantAdmin from "@/components/GrantAdmin";
 
 export default async function AdminDashboard(params: {
   searchParams: { search?: string };
@@ -24,7 +25,7 @@ export default async function AdminDashboard(params: {
   if (!checkRole("admin")) {
     redirect("/");
   }
-
+  const { userId } = auth();
   const query = params.searchParams.search;
 
   const users = query
@@ -40,10 +41,18 @@ export default async function AdminDashboard(params: {
           <TableCaption>All users in this app with details.</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="min-w-[100px] ">username</TableHead>
-              <TableHead>email</TableHead>
-              <TableHead>role</TableHead>
-              <TableHead className="text-right ">operations</TableHead>
+              <TableHead className="text-md min-w-[100px] font-semibold capitalize text-slate-900">
+                username
+              </TableHead>
+              <TableHead className="text-md font-semibold capitalize  text-slate-900">
+                email
+              </TableHead>
+              <TableHead className="text-md  font-semibold capitalize  text-slate-900">
+                role
+              </TableHead>
+              <TableHead className="text-md text-right font-semibold capitalize  text-slate-900 ">
+                operations
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -62,7 +71,12 @@ export default async function AdminDashboard(params: {
                 </TableCell>
                 <TableCell>{user.publicMetadata.role as string}</TableCell>
                 <TableCell className="flex justify-end space-x-4 text-right">
-                  <form action={setRole}>
+                  <GrantAdmin
+                    userId={user.id}
+                    userRole={user.publicMetadata.role as string}
+                    currentUserId={userId ? userId : ""}
+                  />
+                  {/* <form action={setRole}>
                     <input type="hidden" value={user.id} name="id" />
                     <input
                       type="hidden"
@@ -88,7 +102,7 @@ export default async function AdminDashboard(params: {
                         } hover:text-white `}
                       />
                     </Button>
-                  </form>
+                  </form> */}
                   {/* <form action={setRole}>
                     <input type="hidden" value={user.id} name="id" />
                     <input type="hidden" value="moderator" name="role" />

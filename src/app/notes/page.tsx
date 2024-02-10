@@ -21,7 +21,7 @@ const NotesPage = async () => {
   return (
     <div>
       <FilterNote allNotes={allNotes} isAdmin={isAdmin} />
-      <div className="absolute bottom-4 right-20">
+      <div className="absolute bottom-4 right-4  lg:right-20 ">
         <AIChatButton />
       </div>
     </div>
