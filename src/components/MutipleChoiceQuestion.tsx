@@ -11,13 +11,14 @@ import { useRouter } from "next/navigation";
 interface multipleProps {
   question: QuestionType;
   selectedChoices: string[];
+  isAdmin: boolean;
   //   handleCheckboxChange: (choiceId: string) => void;
   onChange: (questionId: string, choicesId: string[]) => void;
 }
 const MutipleChoiceQuestion = ({
   question,
   selectedChoices,
-
+  isAdmin,
   onChange,
 }: multipleProps) => {
   const [isFlagged, setIsFlagged] = useState(question.isFlagged);
@@ -83,12 +84,14 @@ const MutipleChoiceQuestion = ({
   return (
     <CardContent>
       <CardTitle className="relative mb-4">
-        <BookmarkCheck
-          className={`${
-            isFlagged ? " text-teal-600" : "text-black"
-          } absolute   -left-6 top-0 `}
-          onClick={() => bookMarked(question.id, isFlagged)}
-        />
+        {isAdmin && (
+          <BookmarkCheck
+            className={`${
+              isFlagged ? " text-teal-600" : "text-black"
+            } absolute   -left-6 top-0 `}
+            onClick={() => bookMarked(question.id, isFlagged)}
+          />
+        )}
         <span className=" pl-4">{question.questionTitle}</span>
       </CardTitle>
       {/* question.choices */}

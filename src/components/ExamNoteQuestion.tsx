@@ -43,6 +43,7 @@ export type QuestionType = {
 export interface NoteProps {
   id: string;
   note: NoteType;
+  isAdmin: boolean;
   // questions: QuestionModel[];
   // choices: Choice[][];
 }
@@ -66,7 +67,7 @@ const shuffleArray = (array: any) => {
   return array;
 };
 
-const ExamNoteQuestion = ({ id, note }: NoteProps) => {
+const ExamNoteQuestion = ({ id, note, isAdmin }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const [correctNumber, setCurrentNumber] = useState(0);
   const [totalQuestionNumber, setTotalQuestionNumber] = useState(
@@ -233,6 +234,7 @@ const ExamNoteQuestion = ({ id, note }: NoteProps) => {
             return (
               <MutipleChoiceQuestion
                 key={question.id}
+                isAdmin={isAdmin}
                 question={question}
                 selectedChoices={selectedChoices[question.id] || []}
                 onChange={handleChoiceChange}
