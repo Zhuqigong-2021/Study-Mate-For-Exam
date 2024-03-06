@@ -141,7 +141,13 @@ export default function SetTimer({
             <Button variant="outline" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button disabled={timeValue == 0}>
+            <Button
+              disabled={timeValue == 0}
+              onClick={() => {
+                if (localStorage.getItem("timer"))
+                  localStorage.removeItem("timer");
+              }}
+            >
               <Link
                 href={{
                   pathname: `/exam/${noteToEdit?.id}/ongoing`,
