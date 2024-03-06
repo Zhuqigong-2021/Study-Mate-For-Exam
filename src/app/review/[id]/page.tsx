@@ -24,9 +24,33 @@ const page = async ({ params }: idProps) => {
   // const allNotes = await prisma.note.findMany({ where: { userId } });
   const note = await prisma.note.findUnique({ where: { id } });
   if (!note) throw Error("Note not found");
-  const allQuestions = await prisma.question.findMany({
-    where: { noteId: id },
-  });
+  // const allQuestions = await prisma.question.findMany({
+  //   where: { noteId: id },
+  // });
+
+  // const singleNoteWithDetails = await prisma.note.findUnique({
+  //   where: {
+  //     id,
+  //   },
+  //   select: {
+  //     id: true,
+  //     title: true,
+  //     description: true,
+  //     questions: {
+  //       include: {
+  //         //questionTitle: true,
+  //         isFlagged: true,
+  //         choices: {
+  //           select: {
+  //             id: true,
+  //             content: true,
+  //             answer: true,
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  // });
 
   const singleNoteWithDetails = await prisma.note.findUnique({
     where: {
@@ -36,9 +60,15 @@ const page = async ({ params }: idProps) => {
       id: true,
       title: true,
       description: true,
+      isShared: true,
+
       questions: {
-        include: {
-          // questionTitle: true,
+        select: {
+          id: true,
+          questionTitle: true,
+          isFlagged: true,
+          comment: true,
+          noteId: true,
           choices: {
             select: {
               id: true,
@@ -50,7 +80,9 @@ const page = async ({ params }: idProps) => {
       },
     },
   });
+
   if (!singleNoteWithDetails) throw Error("Note Details not Found");
+  console.log(singleNoteWithDetails.questions[0]);
   return (
     <div className=" grid gap-3" suppressHydrationWarning={true}>
       {<ReviewNoteQuestion note={singleNoteWithDetails} isAdmin={isAdmin} />}

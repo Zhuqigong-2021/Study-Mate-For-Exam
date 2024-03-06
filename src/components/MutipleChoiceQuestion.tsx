@@ -88,7 +88,7 @@ const MutipleChoiceQuestion = ({
             isFlagged ? " text-teal-600" : "text-black"
           } absolute   -left-6 top-0 `}
           onClick={() => bookMarked(question.id, isFlagged)}
-        />{" "}
+        />
         <span className=" pl-4">{question.questionTitle}</span>
       </CardTitle>
       {/* question.choices */}

@@ -15,20 +15,27 @@ import {
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { BookmarkCheck } from "lucide-react";
+import toast from "react-hot-toast";
+import ReviewChoiceQuestion from "./ReviewChoiceQuestion";
 export interface NoteType {
   id: string;
   title: string;
   description: string;
   questions: QuestionType[];
+  isShared: boolean;
 }
-interface QuestionType {
+export interface QuestionType {
   id: string;
   questionTitle: string;
-  choices: ChoiceType[];
+  isFlagged: boolean;
+  comment: string;
   noteId: string;
+  choices: ChoiceType[];
 }
-interface ChoiceType {
-  id?: string;
+
+export interface ChoiceType {
+  id: string;
   content: string;
   answer: boolean;
 }
@@ -58,11 +65,23 @@ const ReviewNoteQuestion = ({ note, isAdmin }: NoteProps) => {
           <p className="flex flex-wrap ">{note.description}</p>
         </CardContent>
         <CardHeader>
-          {note.questions.map((q: QuestionType, index: number) => {
+          {note.questions.map((q: QuestionType) => {
+            // const [isFlagged, setIsFlagged] = useState(question.isFlagged);
+            console.log(JSON.stringify(note.questions));
             return (
               <CardContent key={q.id}>
-                <CardTitle className="mb-4">{q.questionTitle}</CardTitle>
-                {q.choices.map((c: ChoiceType, index: number) => {
+                <ReviewChoiceQuestion q={q} />
+                {/* <CardTitle className="relative mb-4">
+                  {" "}
+                  <BookmarkCheck
+                    className={`${
+                      q.isFlagged ? " text-teal-600" : "text-black"
+                    } absolute   -left-6 top-0 `}
+                    // onClick={() => bookMarked(question.id, q.isFlagged)}
+                  />{" "}
+                  {q.questionTitle}
+                </CardTitle> */}
+                {/* {q.choices.map((c: ChoiceType, index: number) => {
                   let choiceLetter = String.fromCharCode(65 + index);
                   // let choiceLetter =
                   //   index === 0
@@ -94,7 +113,7 @@ const ReviewNoteQuestion = ({ note, isAdmin }: NoteProps) => {
                       </span>
                     </CardContent>
                   );
-                })}
+                })} */}
               </CardContent>
             );
           })}
