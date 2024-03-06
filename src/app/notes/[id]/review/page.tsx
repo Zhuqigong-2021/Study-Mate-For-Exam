@@ -27,6 +27,28 @@ const page = async ({ params }: idProps) => {
     where: { noteId: id },
   });
 
+  // const singleNoteWithDetails = await prisma.note.findUnique({
+  //   where: {
+  //     id,
+  //   },
+  //   select: {
+  //     id: true,
+  //     title: true,
+  //     description: true,
+  //     questions: {
+  //       include: {
+  //         // questionTitle: true,
+  //         choices: {
+  //           select: {
+  //             content: true,
+  //             answer: true,
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  // });
+
   const singleNoteWithDetails = await prisma.note.findUnique({
     where: {
       id,
@@ -35,11 +57,18 @@ const page = async ({ params }: idProps) => {
       id: true,
       title: true,
       description: true,
+      isShared: true,
+
       questions: {
-        include: {
-          // questionTitle: true,
+        select: {
+          id: true,
+          questionTitle: true,
+          isFlagged: true,
+          comment: true,
+          noteId: true,
           choices: {
             select: {
+              id: true,
               content: true,
               answer: true,
             },
