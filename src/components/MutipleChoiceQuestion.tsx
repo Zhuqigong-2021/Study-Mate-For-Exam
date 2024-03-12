@@ -7,6 +7,8 @@ import { BookmarkCheck } from "lucide-react";
 import { auth } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 
 interface multipleProps {
   question: QuestionType;
@@ -113,7 +115,12 @@ const MutipleChoiceQuestion = ({
               checked={selectedChoices.includes(c.id as string)}
               onChange={() => handleCheckboxChange(c.id)}
             />
-            <span
+            <Input
+              className="absolute left-0 top-[50%]  -translate-y-[50%] text-wrap"
+              value={choiceLetter + "." + c.content}
+              readOnly
+            />
+            {/* <input
               className="absolute top-[50%] -translate-y-[50%]"
               // className={`absolute  top-[50%] -translate-y-[50%] ${
               //   c.answer == true ? "bg-teal-400" : "bg-white"
@@ -121,7 +128,8 @@ const MutipleChoiceQuestion = ({
             >
               {choiceLetter + "."} &nbsp;&nbsp;
               {c.content}
-            </span>
+             
+            </input> */}
           </CardContent>
         );
       })}
