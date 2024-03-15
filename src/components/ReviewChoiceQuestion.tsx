@@ -7,8 +7,9 @@ import toast from "react-hot-toast";
 import { QuestionType, ChoiceType } from "./ReviewNoteQuestion";
 interface propType {
   q: QuestionType;
+  index: number;
 }
-const ReviewChoiceQuestion = ({ q }: propType) => {
+const ReviewChoiceQuestion = ({ q, index }: propType) => {
   const [isFlagged, setIsFlagged] = useState(q.isFlagged);
   const bookMarked = async (questionId: string, isFlagged: boolean) => {
     try {
@@ -43,6 +44,7 @@ const ReviewChoiceQuestion = ({ q }: propType) => {
           } absolute   -left-6 top-0 `}
           onClick={() => bookMarked(q.id, isFlagged)}
         />
+        {index + 1 + ". "}
         {q.questionTitle}
       </CardTitle>
       {q.choices.map((c: ChoiceType, index: number) => {
@@ -51,11 +53,11 @@ const ReviewChoiceQuestion = ({ q }: propType) => {
         return (
           <CardContent
             key={c.id}
-            className={`border-grey-600  relative my-2 flex h-[40px] items-center rounded-md border  text-left hover:shadow-lg ${
+            className={`border-grey-600  relative my-2 flex min-h-[40px] items-center rounded-md border py-2  text-left hover:shadow-lg ${
               answer ? "hover:bg-green-50" : "hover:bg-red-100"
             }`}
           >
-            <span className="absolute top-[50%] -translate-y-[50%]">
+            <span>
               {choiceLetter + "."} &nbsp;&nbsp;
               {c.content}
             </span>

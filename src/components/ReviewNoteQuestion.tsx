@@ -65,12 +65,12 @@ const ReviewNoteQuestion = ({ note, isAdmin }: NoteProps) => {
           <p className="flex flex-wrap ">{note.description}</p>
         </CardContent>
         <CardHeader>
-          {note.questions.map((q: QuestionType) => {
+          {note.questions.map((q: QuestionType, index: number) => {
             // const [isFlagged, setIsFlagged] = useState(question.isFlagged);
-            console.log(JSON.stringify(note.questions));
+            //console.log(JSON.stringify(note.questions));
             return (
               <CardContent key={q.id}>
-                <ReviewChoiceQuestion q={q} />
+                <ReviewChoiceQuestion q={q} index={index} />
                 {/* <CardTitle className="relative mb-4">
                   {" "}
                   <BookmarkCheck

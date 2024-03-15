@@ -87,11 +87,11 @@ const page = async ({ params }: idProps) => {
                         return (
                           <CardContent
                             key={c.id}
-                            className={`border-grey-600 relative my-2 flex h-[40px] items-center rounded-md border  text-left hover:shadow-lg ${
+                            className={`border-grey-600 relative my-2 flex min-h-[40px] items-center rounded-md border py-2  text-left hover:shadow-lg ${
                               answer ? "hover:bg-green-50" : "hover:bg-red-100"
                             }`}
                           >
-                            <span className="absolute top-[50%] -translate-y-[50%]">
+                            <span>
                               {choiceLetter + "."} &nbsp;&nbsp;
                               {c.content}
                             </span>

@@ -236,6 +236,7 @@ const ExamNoteQuestion = ({ id, note, isAdmin }: NoteProps) => {
                 key={question.id}
                 isAdmin={isAdmin}
                 question={question}
+                index={index}
                 selectedChoices={selectedChoices[question.id] || []}
                 onChange={handleChoiceChange}
               />

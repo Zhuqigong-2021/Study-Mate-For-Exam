@@ -62,7 +62,9 @@ const ReportNoteQuestion = ({ note, mappedData }: NoteProps) => {
           {note.questions.map((q: QuestionType, index: number) => {
             return (
               <CardContent key={q.id}>
-                <CardTitle className="mb-4">{q.questionTitle}</CardTitle>
+                <CardTitle className="mb-4">
+                  {index + 1 + ". " + q.questionTitle}
+                </CardTitle>
                 {q.choices.map((c: ChoiceType, index: number) => {
                   let choiceLetter = String.fromCharCode(65 + index);
 
@@ -71,15 +73,15 @@ const ReportNoteQuestion = ({ note, mappedData }: NoteProps) => {
                   let selectedChoiceIds = mappedData.find(
                     (d) => d.questionId === q.id,
                   )?.selectedChoices;
-                  console.log("choice id:" + c.id);
-                  console.log("selectedChoiceId:" + selectedChoiceIds);
+                  //console.log("choice id:" + c.id);
+                  //console.log("selectedChoiceId:" + selectedChoiceIds);
                   return (
                     <CardContent
                       key={c.id}
                       //   className={`border-grey-600  relative my-2 flex h-[40px] items-center rounded-md border  text-left hover:shadow-lg ${
                       //     answer ? "bg-green-50" : ""
                       //   }`}
-                      className={`border-grey-600 relative my-2 flex h-[40px] items-center rounded-md border text-left hover:shadow-lg 
+                      className={`border-grey-600 relative my-2 flex min-h-[40px] items-center rounded-md  border pb-0 text-left hover:shadow-lg 
                       ${
                         answer
                           ? "bg-green-50"
@@ -88,14 +90,14 @@ const ReportNoteQuestion = ({ note, mappedData }: NoteProps) => {
                             : ""
                       }`}
                     >
-                      <span className="absolute top-[50%] -translate-y-[50%]">
+                      {/* className="absolute top-[50%] -translate-y-[50%] " */}
+                      <span>
                         {choiceLetter + "."} &nbsp;&nbsp;
                         {c.content}
                       </span>
                       {c.answer && selectedChoiceIds?.includes(c.id) && (
                         <CheckCircle2 className="absolute right-2 top-[50%] -translate-y-[50%] rounded-full bg-green-400 text-white" />
                       )}
-                      ,
                       {!c.answer && selectedChoiceIds?.includes(c.id) && (
                         <XCircle className="absolute right-2 top-[50%] -translate-y-[50%] rounded-full bg-red-400 text-white" />
                       )}

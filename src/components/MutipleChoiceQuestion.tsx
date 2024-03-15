@@ -14,10 +14,12 @@ interface multipleProps {
   question: QuestionType;
   selectedChoices: string[];
   isAdmin: boolean;
+  index: number;
   //   handleCheckboxChange: (choiceId: string) => void;
   onChange: (questionId: string, choicesId: string[]) => void;
 }
 const MutipleChoiceQuestion = ({
+  index,
   question,
   selectedChoices,
   isAdmin,
@@ -94,7 +96,9 @@ const MutipleChoiceQuestion = ({
             onClick={() => bookMarked(question.id, isFlagged)}
           />
         )}
-        <span className=" pl-4">{question.questionTitle}</span>
+        <span className=" pl-0">
+          {index + 1 + ". " + question.questionTitle}
+        </span>
       </CardTitle>
       {/* question.choices */}
       {shuffledChoices.map((c: ChoiceType, index: number) => {
@@ -106,7 +110,7 @@ const MutipleChoiceQuestion = ({
         return (
           <CardContent
             key={c.id}
-            className={`border-grey-600  relative my-2 flex h-[40px] items-center rounded-md border  text-left  `}
+            className={`border-grey-600  relative my-2 flex min-h-[40px] items-center rounded-md border py-2  text-left  `}
           >
             <input
               type="checkbox"
@@ -115,11 +119,12 @@ const MutipleChoiceQuestion = ({
               checked={selectedChoices.includes(c.id as string)}
               onChange={() => handleCheckboxChange(c.id)}
             />
-            <Input
-              className="absolute left-0 top-[50%]  -translate-y-[50%] text-wrap"
+            {/* <Input
+              // className="absolute left-0 top-[50%]  -translate-y-[50%] text-wrap"
               value={choiceLetter + "." + c.content}
               readOnly
-            />
+            /> */}
+            <span>{choiceLetter + "." + c.content}</span>
             {/* <input
               className="absolute top-[50%] -translate-y-[50%]"
               // className={`absolute  top-[50%] -translate-y-[50%] ${
