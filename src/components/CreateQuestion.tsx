@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { IoMdAdd } from "react-icons/io";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { LuEye } from "react-icons/lu";
+
 import {
   Card,
   CardContent,
@@ -56,13 +57,11 @@ type FormValues = {
 const CreateQuestion = ({ params }: idProps) => {
   const { id } = params;
   const router = useRouter();
-  const [reload, setReload] = useState(false);
 
-  const [numberOfChoices, setNumberOfChoices] = useState(4);
   const {
     register,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     handleSubmit,
     watch,
     control,
@@ -84,7 +83,6 @@ const CreateQuestion = ({ params }: idProps) => {
     defaultValues: {
       // id: id,
       questionTitle: "",
-
       choices: [
         {
           content: "",
@@ -94,6 +92,7 @@ const CreateQuestion = ({ params }: idProps) => {
     },
   });
   async function onSubmit(data: CreateQuestionSchema) {
+    console.log(form);
     try {
       const response = await fetch("/api/notes", {
         method: "PUT",
@@ -105,7 +104,10 @@ const CreateQuestion = ({ params }: idProps) => {
         }),
       });
       // router.reload();
+      //console.log("isLoading : " + form.formState.isSubmitting);
+      if (!response.ok) throw Error("Status code: " + response.status);
       toast.success("You have submitted this question");
+      console.log(form);
       // form.reset({
       //   questionTitle: "",
       //   choices: [],
@@ -113,16 +115,6 @@ const CreateQuestion = ({ params }: idProps) => {
       reset();
       router.replace(window.location.pathname);
       router.refresh();
-      console.log(
-        "this is input:" +
-          JSON.stringify({
-            id,
-            title: "CSA 123",
-            description: "OK",
-            questions: [{ ...data }],
-          }),
-      );
-      if (!response.ok) throw Error("Status code: " + response.status);
     } catch (error) {
       console.error(error);
       toast.error("Something went wront. Please try again .");
@@ -142,7 +134,7 @@ const CreateQuestion = ({ params }: idProps) => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           <CardContent>
             <FormField
-              control={form.control}
+              control={control}
               name="questionTitle"
               render={({ field }) => (
                 <FormItem>
@@ -162,7 +154,7 @@ const CreateQuestion = ({ params }: idProps) => {
             />
 
             <FormField
-              control={form.control}
+              control={control}
               name="choices"
               render={({ field }) => (
                 <>
@@ -233,9 +225,9 @@ const CreateQuestion = ({ params }: idProps) => {
               <LoadingButton
                 className="via-green-700"
                 type="submit"
-                loading={form.formState.isSubmitting}
+                loading={isSubmitting}
               >
-                Next
+                {!isSubmitting && "Next"}
               </LoadingButton>
               <Button
                 type="button"
