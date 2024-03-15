@@ -11,8 +11,10 @@ export default function LoadingButton({
 }: LoadingButtonProps) {
   return (
     <Button {...props} disabled={props.disabled || loading}>
-      {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-      {children}
+      <span className="flex gap-x-2">
+        {loading && <Loader2 className=" h-4 w-4 animate-spin" />}
+        {children}
+      </span>
     </Button>
   );
 }
