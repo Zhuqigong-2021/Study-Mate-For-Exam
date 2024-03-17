@@ -73,25 +73,25 @@ export async function POST(req: Request) {
       //   .join("\n\n")}`,
       content:
         "You are an intelligent note-taking app. You answer the user's question based on their existing notes." +
-        "The relevant notes for this query are: \n" +
-        relevantNotes
-          ?.map(
-            (note) => {
-              const questions = note.questions.map((q) => {
-                const choices = q.choices.map(
-                  (choice) => choice.content + choice.answer,
-                );
-                return q.questionTitle + JSON.stringify(choices);
-              });
+        "The relevant notes for this query are: \n",
+      // relevantNotes
+      //   ?.map(
+      //     (note) => {
+      //       const questions = note.questions.map((q) => {
+      //         const choices = q.choices.map(
+      //           (choice) => choice.content + choice.answer,
+      //         );
+      //         return q.questionTitle + JSON.stringify(choices);
+      //       });
 
-              return `Title: ${note.title}\nDescription:\n${
-                note.description
-              }\nQuestions:${JSON.stringify(questions)}`;
-            },
+      //       return `Title: ${note.title}\nDescription:\n${
+      //         note.description
+      //       }\nQuestions:${JSON.stringify(questions)}`;
+      //     },
 
-            // \n\nQuestions:${ JSON.stringify(note.questions) }`,
-          )
-          .join("\n\n"),
+      //     // \n\nQuestions:${ JSON.stringify(note.questions) }`,
+      //   )
+      //   .join("\n\n"),
     };
     console.log(systemMessage);
     const response = await openai.chat.completions.create({

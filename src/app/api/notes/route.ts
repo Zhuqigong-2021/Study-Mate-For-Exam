@@ -38,13 +38,13 @@ export async function POST(req: Request) {
         },
       });
       //pinecone transaction execute pinecone second it will work for the purpose of transaction
-      await notesIndex.upsert([
-        {
-          id: note.id,
-          values: embedding,
-          metadata: { userId },
-        },
-      ]);
+      // await notesIndex.upsert([
+      //   {
+      //     id: note.id,
+      //     values: embedding,
+      //     metadata: { userId },
+      //   },
+      // ]);
       return note;
     });
 
@@ -281,27 +281,16 @@ export async function PUT(req: Request) {
       }
 
       // Generate the updated embedding for the note including correct answers
-      const updatedEmbedding = await getEmbeddingForNoteUpdating(id);
+      // const updatedEmbedding = await getEmbeddingForNoteUpdating(id);
 
       // Update the vector search index with the new embedding
       // Replace `notesIndex.upsert` with the actual method you use to update the embedding in your search index
-      await notesIndex.upsert([
-        { id, values: updatedEmbedding, metadata: { userId } },
-      ]);
+      // await notesIndex.upsert([
+      //   { id, values: updatedEmbedding, metadata: { userId } },
+      // ]);
 
       return updatedNote;
     });
-
-    // try {
-    //   // Generate the updated embedding for the note including correct answers
-    //   const updatedEmbedding = await getEmbeddingForNoteUpdating(id);
-
-    //   // Update the vector search index with the new embedding
-    //   // Replace `notesIndex.upsert` with the actual method you use to update the embedding in your search index
-    //   await notesIndex.upsert([{ id, values: updatedEmbedding }]);
-    // } catch (error) {
-    //   console.error("Failed to update vector embedding:", error);
-    // }
 
     return Response.json({ updatedNote }, { status: 200 });
   } catch (error) {
@@ -442,5 +431,3 @@ async function getEmbeddingForNoteUpdating(noteId: string) {
   // Generate embedding for the combined content
   return getEmbedding(noteContent);
 }
-
-
