@@ -20,7 +20,7 @@ const page = async ({ params }: idProps) => {
   const { userId } = auth();
   const isAdmin = checkRole("admin");
   if (!userId) throw Error("userId undefined");
-
+  const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
   const note = await prisma.note.findUnique({ where: { id } });
   if (!note) throw Error("Note not found");
   const allQuestions = await prisma.question.findMany({
@@ -80,7 +80,11 @@ const page = async ({ params }: idProps) => {
   if (!singleNoteWithDetails) throw Error("Note Details not Found");
   return (
     <div className=" grid gap-3" suppressHydrationWarning={true}>
-      <ReviewNoteQuestion note={singleNoteWithDetails} isAdmin={isAdmin} />
+      <ReviewNoteQuestion
+        note={singleNoteWithDetails}
+        isAdmin={isAdmin}
+        isSuperAdmin={isSuperAdmin}
+      />
     </div>
   );
 };
