@@ -66,7 +66,7 @@ export default function SetTimer({
   questions,
 }: AddEditNoteDialogProps) {
   const [timeValue, setTimeValue] = useState<number>(0);
-  const [batchValue, setBatchValue] = useState<number>(0);
+  const [batchValue, setBatchValue] = useState<number>(-1);
   const [error, setError] = useState("");
   // const router = useRouter();
 
@@ -220,7 +220,7 @@ export default function SetTimer({
               Cancel
             </Button>
             <Button
-              disabled={timeValue == 0 || batchValue == 0}
+              disabled={timeValue == 0 || batchValue == -1}
               onClick={() => {
                 if (localStorage.getItem("timer"))
                   localStorage.removeItem("timer");
