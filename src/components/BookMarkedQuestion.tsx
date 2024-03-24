@@ -24,6 +24,7 @@ export interface QuesionType {
   isFlagged: boolean;
   comment: string;
   choices: choiceProps[];
+  noteId: string;
 }
 interface questionProps {
   question: QuesionType;
