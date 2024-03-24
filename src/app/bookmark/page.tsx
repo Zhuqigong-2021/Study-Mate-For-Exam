@@ -28,6 +28,7 @@ const BookMarkPage = async () => {
       questionTitle: true,
       comment: true,
       isFlagged: true, // Include if needed
+      noteId: true,
       note: {
         select: {
           id: true, // Include fields from Note you're interested in
