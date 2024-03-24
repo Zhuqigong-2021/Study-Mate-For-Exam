@@ -22,6 +22,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
   const pathname = usePathname();
   const router = useRouter();
   const { has } = useAuth();
+  let isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
   // console.log("has: " + );
   // const isAdmin = has && has({ role: "org:admin" });
   // if (!isAdmin) return null;
@@ -73,14 +74,14 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
               >
                 exam
               </Link>
-              {isAdmin && (
-                <Link
-                  href="/review"
-                  className="underline-offset-1 hover:scale-105 hover:text-teal-700"
-                >
-                  review
-                </Link>
-              )}
+              {/* {isAdmin && ( */}
+              <Link
+                href="/review"
+                className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+              >
+                review
+              </Link>
+              {/* )} */}
               {/* <Link
                 href="/bookmark"
                 className="underline-offset-1 hover:scale-105 hover:text-teal-700"
@@ -88,7 +89,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                 bookmark
               </Link> */}
 
-              {isAdmin && (
+              {isAdmin && isSuperAdmin && (
                 <button
                   className="m-0 bg-transparent p-0"
                   onClick={() => router.refresh()}

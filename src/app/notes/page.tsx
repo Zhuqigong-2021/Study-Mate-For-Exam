@@ -22,7 +22,7 @@ const NotesPage = async () => {
     <div>
       <FilterNote allNotes={allNotes} isAdmin={isAdmin} />
       <div className="absolute bottom-4 right-4  lg:right-20 ">
-        <AIChatButton />
+        {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && <AIChatButton />}
       </div>
     </div>
   );

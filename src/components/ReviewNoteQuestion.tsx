@@ -42,9 +42,10 @@ export interface ChoiceType {
 export interface NoteProps {
   note: NoteType;
   isAdmin: boolean;
+  isSuperAdmin: boolean;
 }
 
-const ReviewNoteQuestion = ({ note, isAdmin }: NoteProps) => {
+const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const router = useRouter();
 
@@ -70,7 +71,11 @@ const ReviewNoteQuestion = ({ note, isAdmin }: NoteProps) => {
             //console.log(JSON.stringify(note.questions));
             return (
               <CardContent key={q.id}>
-                <ReviewChoiceQuestion q={q} index={index} />
+                <ReviewChoiceQuestion
+                  q={q}
+                  index={index}
+                  isSuperAdmin={isSuperAdmin}
+                />
                 {/* <CardTitle className="relative mb-4">
                   {" "}
                   <BookmarkCheck

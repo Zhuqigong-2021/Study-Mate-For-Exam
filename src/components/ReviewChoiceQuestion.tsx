@@ -8,8 +8,9 @@ import { QuestionType, ChoiceType } from "./ReviewNoteQuestion";
 interface propType {
   q: QuestionType;
   index: number;
+  isSuperAdmin: boolean;
 }
-const ReviewChoiceQuestion = ({ q, index }: propType) => {
+const ReviewChoiceQuestion = ({ q, index, isSuperAdmin }: propType) => {
   const [isFlagged, setIsFlagged] = useState(q.isFlagged);
   const bookMarked = async (questionId: string, isFlagged: boolean) => {
     try {
@@ -38,12 +39,14 @@ const ReviewChoiceQuestion = ({ q, index }: propType) => {
   return (
     <>
       <CardTitle className="relative mb-4">
-        <BookmarkCheck
-          className={`${
-            isFlagged ? " text-teal-600" : "text-black"
-          } absolute   -left-6 top-0 `}
-          onClick={() => bookMarked(q.id, isFlagged)}
-        />
+        {isSuperAdmin && (
+          <BookmarkCheck
+            className={`${
+              isFlagged ? " text-teal-600" : "text-black"
+            } absolute   -left-6 top-0 `}
+            onClick={() => bookMarked(q.id, isFlagged)}
+          />
+        )}
         {index + 1 + ". "}
         {q.questionTitle}
       </CardTitle>
