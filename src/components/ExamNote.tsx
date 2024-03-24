@@ -11,17 +11,16 @@ import {
 
 import { useRouter } from "next/navigation";
 import SetTimer from "./SetTimer";
+import { NoteType } from "./ExamNoteQuestion";
 
 export interface NoteProps {
-  note: NoteModel;
+  note: NoteType;
 }
 
 const ExamNote = ({ note }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const wasUpdated = note.updateAt > note.createdAt;
   const router = useRouter();
-
-  
 
   const createdUpdatedAtTimestamp = (
     wasUpdated ? note.updateAt : note.createdAt
@@ -47,7 +46,7 @@ const ExamNote = ({ note }: NoteProps) => {
       <SetTimer
         open={showAddEditNoteDialog}
         setOpen={setShowAddEditNoteDialog}
-        // questions={questions}
+        questions={note.questions}
         noteToEdit={note}
       />
     </>

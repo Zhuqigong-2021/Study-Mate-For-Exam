@@ -24,6 +24,10 @@ export interface NoteType {
   title: string;
   description: string;
   questions: QuestionType[];
+  updateAt: Date;
+  createdAt: Date;
+  isShared: boolean;
+  userId: string;
 }
 
 export type ChoiceType = {
@@ -38,6 +42,7 @@ export type QuestionType = {
   choices: ChoiceType[];
   isFlagged: boolean;
   comment: string;
+  noteId: string;
 };
 
 export interface NoteProps {
@@ -88,6 +93,7 @@ const ExamNoteQuestion = ({ id, note, isAdmin }: NoteProps) => {
   // const navigator = Router();
   const searchParams = useSearchParams();
   let timer = searchParams.get("timer");
+  let batch = searchParams.get("batch");
 
   const timerFromStorage = localStorage.getItem("timer");
   const [time, setTime] = useState(

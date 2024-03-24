@@ -53,7 +53,7 @@ interface AddEditNoteDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   noteToEdit?: Note;
-  // questions?: Question[];
+  questions?: Question[];
 }
 
 interface TimerValueSchema {
@@ -63,9 +63,10 @@ export default function SetTimer({
   open,
   setOpen,
   noteToEdit,
-  // questions,
+  questions,
 }: AddEditNoteDialogProps) {
   const [timeValue, setTimeValue] = useState<number>(0);
+  const [batchValue, setBatchValue] = useState<number>(0);
   const [error, setError] = useState("");
   // const router = useRouter();
 
@@ -79,7 +80,50 @@ export default function SetTimer({
   // async function onSubmit(input: TimerValueSchema) {
   //   alert(JSON.stringify(input));
 
+  // let batch = 60;
+  // let totalBatch: number = 0;
+  // if (questions) {
+  //   if (questions?.length / batch == 0) {
+  //     totalBatch = 1;
+  //   } else {
+  //     totalBatch = Math.floor(questions.length / batch);
+  //   }
+  //   return totalBatch;
   // }
+  const questionsCopy = Array.from(
+    { length: questions?.length || 0 },
+    (_, index) => ({
+      id: index,
+      question: `Question ${index + 1}`,
+    }),
+  );
+
+  // Function to divide the questions array into batches
+  const divideIntoBatches = (questionsCopy: any, batchSize: number) => {
+    // const batches = [];
+    // for (let i = 0; i < questionsCopy.length; i += batchSize) {
+    //   batches.push(questionsCopy.slice(i, i + batchSize));
+    // }
+    // return batches;
+    const batches: (string | any[])[] = [];
+    for (let i = 0; i < questionsCopy.length; i += batchSize) {
+      // If it's the last batch and adding the next batch won't exceed the length of questions
+      if (
+        i + batchSize >= questionsCopy.length &&
+        questionsCopy.length % batchSize < batchSize &&
+        questionsCopy.length % batchSize !== 0
+      ) {
+        // Merge the last two batches
+        batches[batches.length - 1] = batches[batches.length - 1].concat(
+          questionsCopy.slice(i, questionsCopy.length),
+        );
+      } else {
+        batches.push(questionsCopy.slice(i, i + batchSize));
+      }
+    }
+    return batches;
+  };
+  const questionsBatches = divideIntoBatches(questions, 60);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -135,6 +179,40 @@ export default function SetTimer({
                   </div>
                 )}
               </div>
+
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="framework1" className="mb-2 flex space-x-1">
+                  <span>Set your batch</span> <RiTimerLine />
+                </Label>
+                <Select onValueChange={(value) => setBatchValue(Number(value))}>
+                  <SelectTrigger id="framework1">
+                    <SelectValue
+                      placeholder="Select"
+                      className="border-transparent focus:border-transparent focus:ring-0"
+                    />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    {/* value={`${questions?.length}`} */}
+                    {questionsBatches &&
+                      questionsBatches.map((batch, index) => {
+                        return (
+                          <SelectItem value={`${index}`} key={index}>
+                            batch {index + 1} ({batch.length})
+                          </SelectItem>
+                        );
+                      })}
+                    <SelectItem value={`${questions?.length}`}>
+                      All Questions ({`${questions?.length}`})
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+
+                {error && (
+                  <div className="text-red-500">
+                    You have not set your timer
+                  </div>
+                )}
+              </div>
             </div>
           </CardContent>
           <CardFooter className="flex justify-end space-x-2">
@@ -142,7 +220,7 @@ export default function SetTimer({
               Cancel
             </Button>
             <Button
-              disabled={timeValue == 0}
+              disabled={timeValue == 0 || batchValue == 0}
               onClick={() => {
                 if (localStorage.getItem("timer"))
                   localStorage.removeItem("timer");
@@ -151,7 +229,7 @@ export default function SetTimer({
               <Link
                 href={{
                   pathname: `/exam/${noteToEdit?.id}/ongoing`,
-                  query: { timer: timeValue },
+                  query: { timer: timeValue, batch: batchValue },
                 }}
               >
                 Confirm
