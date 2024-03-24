@@ -66,7 +66,7 @@ export default function SetTimer({
   questions,
 }: AddEditNoteDialogProps) {
   const [timeValue, setTimeValue] = useState<number>(0);
-  const [batchValue, setBatchValue] = useState<number>(-1);
+  const [batchValue, setBatchValue] = useState<number | string>(-1);
   const [error, setError] = useState("");
   // const router = useRouter();
 
@@ -90,37 +90,61 @@ export default function SetTimer({
   //   }
   //   return totalBatch;
   // }
-  const questionsCopy = Array.from(
-    { length: questions?.length || 0 },
-    (_, index) => ({
-      id: index,
-      question: `Question ${index + 1}`,
-    }),
-  );
 
   // Function to divide the questions array into batches
+  // const divideIntoBatches = (questionsCopy: any, batchSize: number) => {
+  //   // const batches = [];
+  //   // for (let i = 0; i < questionsCopy.length; i += batchSize) {
+  //   //   batches.push(questionsCopy.slice(i, i + batchSize));
+  //   // }
+  //   // return batches;
+  //   const batches: (string | any[])[] = [];
+  //   for (let i = 0; i < questionsCopy.length; i += batchSize) {
+  //     // If it's the last batch and adding the next batch won't exceed the length of questions
+  //     if (
+  //       i + batchSize >= questionsCopy.length &&
+  //       questionsCopy.length % batchSize < batchSize &&
+  //       questionsCopy.length % batchSize !== 0
+  //     ) {
+  //       // Merge the last two batches
+  //       batches[batches.length - 1] = batches[batches.length - 1].concat(
+  //         questionsCopy.slice(i, questionsCopy.length),
+  //       );
+  //     } else {
+  //       batches.push(questionsCopy.slice(i, i + batchSize));
+  //     }
+  //   }
+  //   return batches;
+  // };
+
   const divideIntoBatches = (questionsCopy: any, batchSize: number) => {
-    // const batches = [];
-    // for (let i = 0; i < questionsCopy.length; i += batchSize) {
-    //   batches.push(questionsCopy.slice(i, i + batchSize));
-    // }
-    // return batches;
-    const batches: (string | any[])[] = [];
+    const batches: any[] = [];
+
+    // If there's only one question or less than a batch size, just return a single batch.
+    if (questionsCopy.length <= batchSize) {
+      return [questionsCopy];
+    }
+
     for (let i = 0; i < questionsCopy.length; i += batchSize) {
-      // If it's the last batch and adding the next batch won't exceed the length of questions
-      if (
-        i + batchSize >= questionsCopy.length &&
-        questionsCopy.length % batchSize < batchSize &&
-        questionsCopy.length % batchSize !== 0
-      ) {
-        // Merge the last two batches
-        batches[batches.length - 1] = batches[batches.length - 1].concat(
-          questionsCopy.slice(i, questionsCopy.length),
-        );
-      } else {
+      // If adding another batch doesn't exceed the total questions, push this batch
+      if (i + batchSize < questionsCopy.length) {
         batches.push(questionsCopy.slice(i, i + batchSize));
+      } else {
+        // If we're at the end and there's less than a full batch left, add all remaining questions to the last batch
+        // This is either going to be the only batch, or it's going to be added to the previous batch in the array
+        const remainingQuestions = questionsCopy.slice(i, questionsCopy.length);
+        if (batches.length === 0) {
+          // If no batches have been added, this is the only batch
+          batches.push(remainingQuestions);
+        } else {
+          // If there are already batches, add remaining questions to the last batch
+          batches[batches.length - 1] =
+            batches[batches.length - 1].concat(remainingQuestions);
+        }
+        break; // No more batches after this
       }
     }
+
     return batches;
   };
   const questionsBatches = divideIntoBatches(questions, 60);
@@ -201,7 +225,8 @@ export default function SetTimer({
                           </SelectItem>
                         );
                       })}
-                    <SelectItem value={`${questions?.length}`}>
+                    {/* {`${questions?.length}`} */}
+                    <SelectItem value="All">
                       All Questions ({`${questions?.length}`})
                     </SelectItem>
                   </SelectContent>
@@ -229,7 +254,13 @@ export default function SetTimer({
               <Link
                 href={{
                   pathname: `/exam/${noteToEdit?.id}/ongoing`,
-                  query: { timer: timeValue, batch: batchValue },
+                  query: {
+                    timer: timeValue,
+                    batch:
+                      batchValue === "all"
+                        ? questions?.length.toString()
+                        : batchValue.toString(),
+                  },
                 }}
               >
                 Confirm

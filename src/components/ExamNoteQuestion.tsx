@@ -94,6 +94,7 @@ const ExamNoteQuestion = ({ id, note, isAdmin }: NoteProps) => {
   const searchParams = useSearchParams();
   let timer = searchParams.get("timer");
   let batch = searchParams.get("batch");
+  // console.log("batch: " + batch);
 
   const timerFromStorage = localStorage.getItem("timer");
   const [time, setTime] = useState(
@@ -218,10 +219,49 @@ const ExamNoteQuestion = ({ id, note, isAdmin }: NoteProps) => {
     setResult,
   ]);
 
-  const shuffledQuestions = useMemo(
-    () => shuffleArray([...note.questions]),
-    [note.questions],
-  );
+  // Determine the subset of questions for the given batch
+
+  const batchSize = 60;
+
+  // Check if 'batch' is null and provide a default value (e.g., 0) or handle accordingly
+  // const currentBatch = useMemo(() => {
+  //   return batch !== null ? Number(batch) : 0;
+  // }, [batch]);
+  // Convert the `batch` query parameter to a number
+  const currentBatchIndex = Number(batch);
+
+  // Calculate the total number of batches
+
+  const totalQuestions = note.questions.length;
+  const totalBatches = Math.ceil(totalQuestions / batchSize);
+
+  // Determine the subset of questions for the given batch
+  const batchQuestions = useMemo(() => {
+    if (isNaN(currentBatchIndex)) {
+      // If 'currentBatchIndex' is -1, return all questions
+      return note.questions;
+    }
+    const start = currentBatchIndex * batchSize;
+    let end = start + batchSize;
+
+    // If this is the last batch, extend 'end' to include all remaining questions
+    if (currentBatchIndex === totalBatches - 2) {
+      end = totalQuestions; // Set 'end' to the total number of questions
+    }
+
+    // Slice the array to get the questions for the current batch
+    return note.questions.slice(start, end);
+  }, [currentBatchIndex, note.questions, totalBatches, totalQuestions]);
+  // Render logic here
+  // ...
+
+  // const shuffledQuestions = useMemo(
+  //   () => shuffleArray([...note.questions]),
+  //   [note.questions],
+  // );
+  const shuffledBatchQuestions = useMemo(() => {
+    return shuffleArray(batchQuestions);
+  }, [batchQuestions]);
 
   return (
     <>
@@ -236,18 +276,20 @@ const ExamNoteQuestion = ({ id, note, isAdmin }: NoteProps) => {
           <p className="flex flex-wrap ">{note.description}</p>
         </CardContent>
         <CardHeader>
-          {shuffledQuestions.map((question: QuestionType, index: number) => {
-            return (
-              <MutipleChoiceQuestion
-                key={question.id}
-                isAdmin={isAdmin}
-                question={question}
-                index={index}
-                selectedChoices={selectedChoices[question.id] || []}
-                onChange={handleChoiceChange}
-              />
-            );
-          })}
+          {shuffledBatchQuestions.map(
+            (question: QuestionType, index: number) => {
+              return (
+                <MutipleChoiceQuestion
+                  key={question.id}
+                  isAdmin={isAdmin}
+                  question={question}
+                  index={index}
+                  selectedChoices={selectedChoices[question.id] || []}
+                  onChange={handleChoiceChange}
+                />
+              );
+            },
+          )}
         </CardHeader>
         <CardFooter className="py-4"></CardFooter>
 
