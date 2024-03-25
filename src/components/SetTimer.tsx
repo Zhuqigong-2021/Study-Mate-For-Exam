@@ -2,6 +2,7 @@
 import { CreateNoteSchema, createNoteSchema } from "@/lib/validation/note";
 import { useForm } from "react-hook-form";
 import { RiTimerLine, RiBookmarkLine } from "react-icons/ri";
+import { FaLayerGroup } from "react-icons/fa6";
 
 import {
   Dialog,
@@ -206,7 +207,7 @@ export default function SetTimer({
 
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="framework1" className="mb-2 flex space-x-1">
-                  <span>Set your batch</span> <RiTimerLine />
+                  <span>Set your batch</span> <FaLayerGroup />
                 </Label>
                 <Select onValueChange={(value) => setBatchValue(Number(value))}>
                   <SelectTrigger id="framework1">
