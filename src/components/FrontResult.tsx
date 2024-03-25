@@ -44,6 +44,7 @@ const FrontResult = () => {
             query: {
               noteId: `${id}`,
               choiceId: `${searchParams.get("choiceId")}`,
+              batch: `${searchParams.get("batch")}`,
             },
           }}
         >

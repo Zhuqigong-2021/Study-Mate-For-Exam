@@ -13,6 +13,7 @@ const page = async ({
   searchParams: {
     noteId: string;
     choiceId: string;
+    batch: string;
   };
 }) => {
   let data =
@@ -61,12 +62,41 @@ const page = async ({
     },
   });
   if (!singleNoteWithDetails) throw Error("Note Details not Found");
+  // console.log(searchParams.batch);
+  console.log("batch: " + searchParams.batch);
+  // let newQuestions = singleNoteWithDetails.questions.slice(0, 60);
+  // let newNote = { ...singleNoteWithDetails, questions: newQuestions };
+  // Assume batch is the batch number you received.
+  let newNote;
+  const batchNumber = searchParams.batch;
+  if (isNaN(Number(batchNumber))) {
+    newNote = singleNoteWithDetails;
+  } else {
+    // For example, this would be passed into your function
+    const batchSize = 60;
+    const totalQuestions = singleNoteWithDetails.questions.length;
+
+    // Calculate the start index of the questions for the current batch
+    const start = Number(batchNumber) * batchSize;
+
+    // Calculate the end index for the current batch.
+    // If it's the last batch, the end index should be the length of the questions array.
+    // Otherwise, it's the start index plus the batch size.
+    let end =
+      Number(batchNumber) + 2 === Math.ceil(totalQuestions / batchSize)
+        ? totalQuestions
+        : start + batchSize;
+
+    // Slice the questions for the current batch
+    let newQuestions = singleNoteWithDetails.questions.slice(start, end);
+
+    // Create a new note with the batch's questions
+    newNote = { ...singleNoteWithDetails, questions: newQuestions };
+  }
+
   return (
     <div className=" grid gap-3" suppressHydrationWarning={true}>
-      <ReportNoteQuestion
-        note={singleNoteWithDetails}
-        mappedData={mappedData}
-      />
+      <ReportNoteQuestion note={newNote} mappedData={mappedData} />
     </div>
   );
 };

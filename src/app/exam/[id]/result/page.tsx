@@ -14,6 +14,7 @@ const page = ({
     total: string;
     result: string;
     choiceId: string;
+    batch: string;
   };
 }) => {
   let wrong = Number(searchParams.total) - Number(searchParams.correct);

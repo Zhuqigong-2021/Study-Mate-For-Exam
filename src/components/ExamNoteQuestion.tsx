@@ -151,6 +151,8 @@ const ExamNoteQuestion = ({ id, note, isAdmin }: NoteProps) => {
           "&" +
           createQueryString("id", note.id) +
           "&" +
+          createQueryString("batch", batch ? batch : "") +
+          "&" +
           createQueryString("choiceId", JSON.stringify(selectedChoices)),
       );
 
@@ -167,6 +169,7 @@ const ExamNoteQuestion = ({ id, note, isAdmin }: NoteProps) => {
     totalQuestionNumber,
     result,
     selectedChoices,
+    batch,
   ]);
 
   // Save the current timer value to localStorage whenever it changes
@@ -316,6 +319,7 @@ const ExamNoteQuestion = ({ id, note, isAdmin }: NoteProps) => {
                 total: totalQuestionNumber,
                 result: result,
                 choiceId: JSON.stringify(selectedChoices),
+                batch: batch,
               },
             }}
           >
