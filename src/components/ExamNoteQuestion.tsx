@@ -180,44 +180,6 @@ const ExamNoteQuestion = ({ id, note, isAdmin }: NoteProps) => {
       [questionId]: choiceIds,
     }));
   };
-  useEffect(() => {
-    const checkAnswers = () => {
-      let correctCount = 0;
-
-      for (const question of note.questions) {
-        const selectedChoicesForQuestion = selectedChoices[question.id] || [];
-        const correctAnswerIds = question.choices
-          .filter((choice) => choice.answer)
-          .map((choice) => choice.id);
-
-        const isCorrect =
-          correctAnswerIds.every((id) =>
-            selectedChoicesForQuestion.includes(id),
-          ) &&
-          selectedChoicesForQuestion.every((id) =>
-            correctAnswerIds.includes(id),
-          );
-
-        if (isCorrect) {
-          correctCount++;
-        }
-      }
-
-      setCurrentNumber(correctCount);
-      setTotalQuestionNumber(note.questions.length);
-      setResult(Math.round((correctCount / note.questions.length) * 100));
-    };
-
-    // Call the function directly here to avoid missing dependencies warnings
-    checkAnswers();
-    // console.log("selectedChoices" + JSON.stringify(selectedChoices));
-  }, [
-    selectedChoices,
-    note.questions,
-    setCurrentNumber,
-    setTotalQuestionNumber,
-    setResult,
-  ]);
 
   // Determine the subset of questions for the given batch
 
@@ -262,6 +224,48 @@ const ExamNoteQuestion = ({ id, note, isAdmin }: NoteProps) => {
   const shuffledBatchQuestions = useMemo(() => {
     return shuffleArray(batchQuestions);
   }, [batchQuestions]);
+
+  useEffect(() => {
+    const checkAnswers = () => {
+      let correctCount = 0;
+
+      for (const question of note.questions) {
+        const selectedChoicesForQuestion = selectedChoices[question.id] || [];
+        const correctAnswerIds = question.choices
+          .filter((choice) => choice.answer)
+          .map((choice) => choice.id);
+
+        const isCorrect =
+          correctAnswerIds.every((id) =>
+            selectedChoicesForQuestion.includes(id),
+          ) &&
+          selectedChoicesForQuestion.every((id) =>
+            correctAnswerIds.includes(id),
+          );
+
+        if (isCorrect) {
+          correctCount++;
+        }
+      }
+
+      setCurrentNumber(correctCount);
+      setTotalQuestionNumber(shuffledBatchQuestions.length);
+      setResult(
+        Math.round((correctCount / shuffledBatchQuestions.length) * 100),
+      );
+    };
+
+    // Call the function directly here to avoid missing dependencies warnings
+    checkAnswers();
+    // console.log("selectedChoices" + JSON.stringify(selectedChoices));
+  }, [
+    selectedChoices,
+    note.questions,
+    setCurrentNumber,
+    setTotalQuestionNumber,
+    setResult,
+    shuffledBatchQuestions.length,
+  ]);
 
   return (
     <>
