@@ -48,7 +48,7 @@ const page = async ({ params }: idProps) => {
           </CardDescription>
         </CardHeader>
 
-        <Carousel className="w-full max-w-[600px]">
+        <Carousel className="flex h-[600px]  w-full max-w-[600px] ">
           <CarouselContent>
             {allQuestions.map(async (q, index) => {
               const choices = await prisma.choice.findMany({
@@ -58,6 +58,14 @@ const page = async ({ params }: idProps) => {
                 allQuestions.length == 1 ? "question" : "questions";
               return (
                 <CarouselItem key={index}>
+                  <div>
+                    {index +
+                      1 +
+                      "/" +
+                      allQuestions.length +
+                      "  " +
+                      questionPage}
+                  </div>
                   <div className="w-full ">
                     <Card className="min-h-[350px] p-4">
                       <CardTitle className=" my-8  text-[22px] capitalize">
@@ -66,22 +74,7 @@ const page = async ({ params }: idProps) => {
 
                       {choices.map((c, index) => {
                         let choiceLetter = String.fromCharCode(65 + index);
-                        // let choiceLetter =
-                        //   index === 0
-                        //     ? "A"
-                        //     : index === 1
-                        //       ? "B"
-                        //       : index === 2
-                        //         ? "C"
-                        //         : index === 3
-                        //           ? "D"
-                        //           : index === 4
-                        //             ? "E"
-                        //             : index === 5
-                        //               ? "F"
-                        //               : index === 6
-                        //                 ? "G"
-                        //                 : "H";
+
                         let answer = c.answer;
                         console.log(c.answer);
                         return (
@@ -98,16 +91,7 @@ const page = async ({ params }: idProps) => {
                           </CardContent>
                         );
                       })}
-                      {/* </CardContent> */}
                     </Card>
-
-                    {index +
-                      1 +
-                      "/" +
-                      allQuestions.length +
-                      "  " +
-                      questionPage}
-                    {/* </span> */}
                   </div>
                 </CarouselItem>
               );
@@ -121,6 +105,7 @@ const page = async ({ params }: idProps) => {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
+
         <CardFooter className="py-10"></CardFooter>
 
         <Button asChild className="absolute bottom-2 right-2">
