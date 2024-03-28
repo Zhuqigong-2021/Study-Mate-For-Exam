@@ -23,7 +23,7 @@ export async function POST(req: Request) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const embedding = await getEmbeddingForNote(title, description);
+    // const embedding = await getEmbeddingForNote(title, description);
     const note = await prisma.$transaction(async (tx) => {
       //mongodb transaction
       const note = await tx.note.create({
@@ -235,7 +235,10 @@ export async function PUT(req: Request) {
               },
             });
 
+            //try new method of updating choice
+
             // Update each choice
+
             for (const updatedChoice of updatedQuestion.choices) {
               const existingChoice = existingQuestion.choices.find(
                 (c) => c.id === updatedChoice.id,
@@ -386,48 +389,48 @@ export async function DELETE(req: Request) {
   }
 }
 
-async function getEmbeddingForNote(
-  title: string,
-  description: string | undefined,
-) {
-  return getEmbedding(title + "\n\n" + description ?? "");
-}
+// async function getEmbeddingForNote(
+//   title: string,
+//   description: string | undefined,
+// ) {
+//   return getEmbedding(title + "\n\n" + description ?? "");
+// }
 
-async function getEmbeddingForNoteUpdating(noteId: string) {
-  // Attempt to fetch the note along with its questions and choices
-  const note = await prisma.note.findUnique({
-    where: { id: noteId },
-    include: {
-      questions: {
-        include: {
-          choices: true,
-        },
-      },
-    },
-  });
+// async function getEmbeddingForNoteUpdating(noteId: string) {
+//   // Attempt to fetch the note along with its questions and choices
+//   const note = await prisma.note.findUnique({
+//     where: { id: noteId },
+//     include: {
+//       questions: {
+//         include: {
+//           choices: true,
+//         },
+//       },
+//     },
+//   });
 
-  // Check if the note was found
-  if (!note) {
-    // Handle the case where the note does not exist
-    throw new Error("Note not found");
-  }
+//   // Check if the note was found
+//   if (!note) {
+//     // Handle the case where the note does not exist
+//     throw new Error("Note not found");
+//   }
 
-  // If the note exists, proceed to generate the content string
-  let noteContent = note.title + "\n\n" + note.description;
+//   // If the note exists, proceed to generate the content string
+//   let noteContent = note.title + "\n\n" + note.description;
 
-  note.questions.forEach((question) => {
-    noteContent += "\n\n" + question.questionTitle;
-    question.choices.forEach((choice) => {
-      // Append a marker or modify the content to indicate the correct answer
-      let choiceContent = choice.content;
-      if (choice.answer) {
-        // You can adjust this part to mark the choice in a way that suits your application
-        choiceContent += " (Correct Answer)";
-      }
-      noteContent += "\n- " + choiceContent;
-    });
-  });
+//   note.questions.forEach((question) => {
+//     noteContent += "\n\n" + question.questionTitle;
+//     question.choices.forEach((choice) => {
+//       // Append a marker or modify the content to indicate the correct answer
+//       let choiceContent = choice.content;
+//       if (choice.answer) {
+//         // You can adjust this part to mark the choice in a way that suits your application
+//         choiceContent += " (Correct Answer)";
+//       }
+//       noteContent += "\n- " + choiceContent;
+//     });
+//   });
 
-  // Generate embedding for the combined content
-  return getEmbedding(noteContent);
-}
+//   // Generate embedding for the combined content
+//   return getEmbedding(noteContent);
+// }

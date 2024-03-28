@@ -35,9 +35,9 @@ const page = async ({ params }: idProps) => {
   });
 
   return (
-    <div className="  w-full gap-3 " suppressHydrationWarning={true}>
+    <div className="  w-full gap-3  " suppressHydrationWarning={true}>
       <Card
-        className="relative flex cursor-pointer flex-col items-center justify-center text-center transition-shadow hover:shadow-lg"
+        className="relative flex  cursor-pointer flex-col items-center justify-center text-center transition-shadow hover:shadow-lg"
         suppressHydrationWarning={true}
       >
         <CardHeader>
@@ -48,7 +48,7 @@ const page = async ({ params }: idProps) => {
           </CardDescription>
         </CardHeader>
 
-        <Carousel className="flex h-[600px]  w-full max-w-[600px] ">
+        <Carousel className="flex min-h-[400px]  w-full max-w-[800px]  ">
           <CarouselContent>
             {allQuestions.map(async (q, index) => {
               const choices = await prisma.choice.findMany({
@@ -102,11 +102,11 @@ const page = async ({ params }: idProps) => {
               </Card>
             )}
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          <CarouselPrevious className="absolute -left-5 top-[20%]" />
+          <CarouselNext className="absolute -right-5 top-[20%]" />
         </Carousel>
 
-        <CardFooter className="py-10"></CardFooter>
+        {/* <CardFooter className="py-10"></CardFooter> */}
 
         <Button asChild className="absolute bottom-2 right-2">
           <Link href="/notes">Back</Link>
