@@ -137,8 +137,6 @@ const ExamNoteQuestion = ({ id, note, isAdmin }: NoteProps) => {
       }, 1000);
     }
     if (time === 0) {
-      // router.push("/exam");
-      // router.push(`/exam/${note.id}/result `);
       localStorage.removeItem("timer");
       router.push(
         `/exam/${note.id}/result` +
