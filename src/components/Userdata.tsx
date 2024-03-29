@@ -123,7 +123,7 @@ const Userdata = ({ users, userId, totalUsersNumber }: queryProps) => {
       // Calculate the offset for the clicked page number
       //   setCurrentPage(pageNumber);
       const newOffset = (pageNumber - 1) * limit;
-
+      setOffset(newOffset);
       // Replace the current entry in the history stack
       router.replace(
         pathname +
