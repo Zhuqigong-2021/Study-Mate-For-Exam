@@ -12,6 +12,8 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
+
+import { BiSolidBookmarkAltPlus } from "react-icons/bi";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -77,12 +79,15 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <Card className="w-full">
+    <Card className="relative w-full">
       <CardHeader>
-        <CardTitle>All Bookmarked Questions</CardTitle>
+        <CardTitle className="font-bold">All Bookmarked Questions</CardTitle>
         <CardDescription>
           This table below show all bookmarked questions
         </CardDescription>
+        <span className="absolute right-10 top-10 scale-[1.6] rounded-full  bg-neutral-100 p-[0.3rem] text-neutral-800 drop-shadow-sm">
+          <BiSolidBookmarkAltPlus />
+        </span>
       </CardHeader>
       <CardContent>
         {/* filter */}
@@ -103,8 +108,15 @@ export function DataTable<TData, TValue>({
           {/* Visibility */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto space-x-2">
-                <Settings2 /> <span>Views</span>
+              <Button
+                variant="outline"
+                size={"sm"}
+                className="ml-auto space-x-1"
+              >
+                <span className="scale-[0.8] text-sm font-thin">
+                  <Settings2 />
+                </span>
+                <span>Views</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
