@@ -6,6 +6,9 @@ import prisma from "@/lib/db/prisma";
 import BookMarkedQuestion from "@/components/BookMarkedQuestion";
 import { checkRole } from "../utils/roles/role";
 import { redirect } from "next/navigation";
+import { DataTable } from "@/components/data-table";
+import { columns } from "./columns";
+import ShowModal from "@/components/ShowModal";
 
 export const metadata: Metadata = {
   title: "Study Mate - Exam",
@@ -15,12 +18,15 @@ const BookMarkPage = async () => {
   if (!userId) throw Error("userId undefined");
   const isAdmin = checkRole("admin");
   if (!isAdmin) redirect("/");
+
+  const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
   // const allNotes = await prisma.note.findMany({ where: { userId } });
   const flaggedQuestions = await prisma.question.findMany({
     where: {
-      note: {
-        userId: userId, // This assumes that the Note model has a userId field
-      }, // Assuming direct relation to userId or use note: { userId } for indirect relation
+      // note: {
+      //   userId: userId, // This assumes that the Note model has a userId field
+      // },
+      // Assuming direct relation to userId or use note: { userId } for indirect relation
       isFlagged: true,
     },
     select: {
@@ -49,15 +55,21 @@ const BookMarkPage = async () => {
     },
   });
   return (
-    <div className="grid     gap-3  sm:grid-cols-2 lg:grid-cols-3">
-      {flaggedQuestions.map((question) => (
+    // className="grid     gap-3  sm:grid-cols-2 lg:grid-cols-3"
+    <div className="w-full max-w-[100rem] ">
+      {/* {flaggedQuestions.map((question) => (
         <BookMarkedQuestion question={question} key={question.id} />
       ))}
       {flaggedQuestions.length === 0 && (
         <div className="col-span-full text-center">
           {"You have no bookmarked questions yet"}
         </div>
-      )}
+      )} */}
+      {/* <DataTable columns={columns} data={flaggedQuestions} /> */}
+      <ShowModal
+        flaggedQuestions={flaggedQuestions}
+        isSuperAdmin={isSuperAdmin}
+      />
     </div>
   );
 };

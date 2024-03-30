@@ -56,7 +56,6 @@ const BookMarkedQuestion = ({ question }: questionProps) => {
       // setIsFlagged(!isFlagged);
       if (response.ok) {
         setIsFlagged(!isFlagged);
-        // setQuestion({ ...question, isFlagged: !isFlagged });
 
         if (!isFlagged) {
           toast.success("you successfully bookmarked a question");
