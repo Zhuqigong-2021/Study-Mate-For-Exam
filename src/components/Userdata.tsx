@@ -36,6 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import Image from "next/image";
 
 interface queryProps {
   users: string;
@@ -174,54 +175,101 @@ const Userdata = ({ users, userId, totalUsersNumber }: queryProps) => {
   return (
     <Card className="my-5 flex w-full max-w-7xl items-center justify-center ">
       <Table>
-        {/* <TableCaption>All users in this app with details.</TableCaption> */}
-        <TableHeader className="bg-violet-500  ">
-          <TableRow>
-            <TableHead className="text-md min-w-[100px] py-5 font-semibold capitalize text-white">
+        {/* <TableCaption>All users in this app with details.</TableCaption>  bg-violet-500*/}
+        <TableHeader className="rounded-lg ">
+          <TableRow className="border-none">
+            <TableHead className="text-md min-w-[100px] py-5  font-bold capitalize text-stone-600  ">
               username
             </TableHead>
-            <TableHead className="text-md font-semibold capitalize text-white ">
+            {/* <TableHead className="text-md font-semibold capitalize text-white ">
               email
+            </TableHead> */}
+
+            <TableHead className="text-md  font-bold  capitalize text-stone-600  ">
+              Register
             </TableHead>
-            <TableHead className="text-md  font-semibold capitalize text-white ">
+            <TableHead className="text-md  font-bold  capitalize text-stone-600  ">
+              Last signed-in
+            </TableHead>
+            <TableHead className="text-md  font-bold capitalize  text-stone-600  ">
               role
             </TableHead>
-            <TableHead className="text-md capitalizetext-white text-right font-semibold text-white">
+            <TableHead className="text-md capitalizetext-white  text-right font-bold text-stone-600  ">
               operations
             </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {isClient &&
-            usersList.map((user) => (
-              <TableRow key={user.id} className="py-2">
-                <TableCell className="py-2 font-medium">
-                  {user.firstName} {user.lastName}
-                </TableCell>
-                <TableCell>
-                  {" "}
-                  {
-                    user.emailAddresses.find(
-                      (email) => email.id === user.primaryEmailAddressId,
-                    )?.emailAddress
-                  }
-                </TableCell>
-                <TableCell>{user.publicMetadata.role as string}</TableCell>
-                <TableCell className="flex justify-end space-x-4 text-right">
-                  <GrantAdmin
-                    userId={user.id}
-                    userRole={user.publicMetadata.role as string}
-                    currentUserId={userId ? userId : ""}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
+            usersList.map((user, index) => {
+              const lastSignin = new Date(
+                Number(user.lastSignInAt),
+              ).toLocaleString();
+              const signupAt = new Date(
+                Number(user.createdAt),
+              ).toLocaleString();
+              return (
+                <TableRow
+                  key={user.id}
+                  className={`${
+                    index % 2 == 0 ? "bg-slate-50 hover:bg-white" : ""
+                  }`}
+                >
+                  {/* Username */}
+                  <TableCell className="flex space-x-2  border-none font-medium">
+                    <Image
+                      src={user.imageUrl}
+                      alt=""
+                      width={40}
+                      height={40}
+                      className="rounded-full"
+                    />
+                    <div className="flex flex-col justify-center">
+                      <span className="font-semibold">
+                        {user.firstName} {user.lastName} {user.passwordEnabled}
+                      </span>
+                      <span className="font-normal">
+                        {
+                          user.emailAddresses.find(
+                            (email) => email.id === user.primaryEmailAddressId,
+                          )?.emailAddress
+                        }
+                      </span>
+                    </div>
+                  </TableCell>
+                  {/* Email */}
+                  {/* <TableCell>
+                    {
+                      user.emailAddresses.find(
+                        (email) => email.id === user.primaryEmailAddressId,
+                      )?.emailAddress
+                    }
+                  </TableCell> */}
+
+                  <TableCell className="border-none">{signupAt}</TableCell>
+                  {/* Last signed-in */}
+                  <TableCell className="border-none">{lastSignin}</TableCell>
+                  {/* role */}
+                  <TableCell className="border-none">
+                    {user.publicMetadata.role as string}
+                  </TableCell>
+                  {/* operations */}
+                  <TableCell className="flex items-center justify-end space-x-4 border-none text-right">
+                    <GrantAdmin
+                      userId={user.id}
+                      userRole={user.publicMetadata.role as string}
+                      currentUserId={userId ? userId : ""}
+                    />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
         </TableBody>
 
         {/* footer */}
-        <TableFooter className=" ">
+        <TableFooter className="w-full ">
           <TableRow>
-            <TableCell colSpan={3}>
+            <TableCell colSpan={4}>
               {isClient && (
                 <div className="flex  w-full space-x-10  px-0">
                   <div className="flex  w-32 items-center space-x-3 ">
