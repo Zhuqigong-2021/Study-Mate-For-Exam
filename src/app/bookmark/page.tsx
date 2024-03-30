@@ -56,7 +56,7 @@ const BookMarkPage = async () => {
   });
   return (
     // className="grid     gap-3  sm:grid-cols-2 lg:grid-cols-3"
-    <div className="w-full max-w-[100rem] ">
+    <div className="w-full max-w-[84rem]">
       {/* {flaggedQuestions.map((question) => (
         <BookMarkedQuestion question={question} key={question.id} />
       ))}
