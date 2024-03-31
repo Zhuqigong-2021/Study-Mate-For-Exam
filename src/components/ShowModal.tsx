@@ -18,6 +18,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { DataTable } from "./data-table";
 import { useRouter } from "next/navigation";
+import { Badge } from "./ui/badge";
 
 export type Question = {
   id: string;
@@ -159,6 +160,11 @@ const ShowModal = ({
     {
       accessorKey: "note.title",
       header: "Note",
+      cell: (props: any) => {
+        return (
+          <Badge className=" bg-red-400  text-white">{props.getValue()}</Badge>
+        );
+      },
     },
     {
       accessorKey: "note",
