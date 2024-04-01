@@ -88,3 +88,24 @@
     scrollbar-width: none; /* Firefox */
   }
 }
+
+.resizer {
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 5px;
+  background-color: #27bbff;
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+  border-radius: 6px;
+}
+.resizer.isResizing {
+  background-color: lightpink;
+  opacity: 1;
+}
+*:hover > .resizer {
+  opacity: 1;
+}

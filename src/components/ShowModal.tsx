@@ -130,6 +130,7 @@ const ShowModal = ({
   const columns: ColumnDef<Question>[] = [
     {
       id: "select",
+      size: 45,
       header: ({ table }) => (
         <Checkbox
           checked={
@@ -153,21 +154,20 @@ const ShowModal = ({
 
     {
       accessorKey: "questionTitle",
+      size: 1250,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="questionTitle" />
       ),
     },
     {
       accessorKey: "note.title",
+      size: 130,
       header: "Note",
       cell: (props: any) => {
         const noteTitle = props.row.original.note.title;
         // Get the color class based on the value
         const colorClass = getColorForTitle(noteTitle);
         return (
-          // className=" bg-red-400  text-white"
-          // Access the nested value
-
           <Badge
             className={colorClass + " " + "flex w-12 justify-center text-white"}
           >
@@ -178,7 +178,7 @@ const ShowModal = ({
     },
     {
       accessorKey: "note",
-
+      size: 150,
       header: "UpdateAt",
 
       cell: ({ row }) => {
@@ -190,6 +190,7 @@ const ShowModal = ({
     },
     {
       id: "actions",
+      size: 20,
       cell: ({ row }) => {
         const question = row.original;
         return (
