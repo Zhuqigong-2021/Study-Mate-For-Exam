@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { QuestionType } from "./ExamNoteQuestion";
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from "./ui/dialog";
 import { Button } from "./ui/button";
@@ -34,11 +34,20 @@ const EditBookMarkedQuestion = ({
       id: question.id || "haha",
       questionTitle: question.questionTitle || "haha",
       isFlagged: question.isFlagged || false,
-
       choices: question.choices,
       comment: question.comment || "",
     },
   });
+  useEffect(() => {
+    // Reset the form with new values whenever the `question` prop changes
+    form.reset({
+      id: question.id,
+      questionTitle: question.questionTitle,
+      isFlagged: question.isFlagged,
+      choices: question.choices,
+      comment: question.comment,
+    });
+  }, [question, form.reset, form]);
   // console.log(questions);
   async function onSubmit(input: UpdateQuestionSchema) {
     try {
@@ -86,6 +95,7 @@ const EditBookMarkedQuestion = ({
             );
           })}
         </div>
+        {/* {question.comment} */}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3  ">
             <FormField

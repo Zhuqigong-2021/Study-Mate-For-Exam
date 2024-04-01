@@ -161,8 +161,18 @@ const ShowModal = ({
       accessorKey: "note.title",
       header: "Note",
       cell: (props: any) => {
+        const noteTitle = props.row.original.note.title;
+        // Get the color class based on the value
+        const colorClass = getColorForTitle(noteTitle);
         return (
-          <Badge className=" bg-red-400  text-white">{props.getValue()}</Badge>
+          // className=" bg-red-400  text-white"
+          // Access the nested value
+
+          <Badge
+            className={colorClass + " " + "flex w-12 justify-center text-white"}
+          >
+            {noteTitle}
+          </Badge>
         );
       },
     },
@@ -221,7 +231,53 @@ const ShowModal = ({
       },
     },
   ];
+  // this is for auto-assigned different color to the tag
 
+  const colorClasses = [
+    "bg-red-400",
+    "bg-teal-400",
+    "bg-indigo-400",
+    "bg-sky-400",
+    "bg-emerald-400",
+    "bg-lime-400",
+    "bg-pink-400",
+    "bg-violet-400",
+    "bg-orange-400",
+    "bg-amber-400",
+    "bg-green-400",
+    "bg-blue-400",
+    // ... more color classes
+  ];
+
+  // Function to generate the mapping
+  const generateTitleToColorMapping = (
+    flaggedQuestions: any[],
+  ): TitleToColorMapping => {
+    const uniqueTitlesArray = Array.from(
+      new Set(flaggedQuestions.map((q) => q.note.title.trim().toUpperCase())),
+    );
+    const mapping: TitleToColorMapping = {};
+
+    uniqueTitlesArray.forEach((title, index) => {
+      mapping[title] = colorClasses[index % colorClasses.length];
+    });
+
+    return mapping;
+  };
+  // Define a mapping from titles to colors
+  type TitleToColorMapping = {
+    [key: string]: string;
+  };
+  const titleToColorMapping: TitleToColorMapping =
+    generateTitleToColorMapping(flaggedQuestions);
+
+  const getColorForTitle = (title: string) => {
+    // Normalize the title to remove extra spaces and handle case insensitivity
+    const normalizedTitle: string = title.trim().toUpperCase();
+    // If the title is in the mapping, return its color, otherwise return a default color
+    return titleToColorMapping[normalizedTitle] || "bg-gray-200 text-black"; // default color
+  };
+  // console.log(titleToColorMapping);
   return (
     <div>
       <DataTable columns={columns} data={flaggedQuestions} />
