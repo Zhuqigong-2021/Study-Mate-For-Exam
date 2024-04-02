@@ -21,7 +21,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { has } = useAuth();
+
   let isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
   // console.log("has: " + );
   // const isAdmin = has && has({ role: "org:admin" });
@@ -89,19 +89,17 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                 bookmark
               </Link> */}
 
-              {isAdmin && isSuperAdmin && (
-                <button
-                  className="m-0 bg-transparent p-0"
-                  onClick={() => router.refresh()}
+              <button
+                className="m-0 bg-transparent p-0"
+                onClick={() => router.refresh()}
+              >
+                <Link
+                  href="/bookmark"
+                  className="underline-offset-1 hover:scale-105 hover:text-teal-700"
                 >
-                  <Link
-                    href="/bookmark"
-                    className="underline-offset-1 hover:scale-105 hover:text-teal-700"
-                  >
-                    bookmark
-                  </Link>
-                </button>
-              )}
+                  bookmark
+                </Link>
+              </button>
             </div>
             <div className="hidden md:flex xl:flex lg:flex">
               <UserButton

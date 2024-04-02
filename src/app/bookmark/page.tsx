@@ -16,8 +16,8 @@ export const metadata: Metadata = {
 const BookMarkPage = async () => {
   const { userId } = auth();
   if (!userId) throw Error("userId undefined");
-  const isAdmin = checkRole("admin");
-  if (!isAdmin) redirect("/");
+  // const isAdmin = checkRole("admin");
+  // if (!isAdmin) redirect("/");
 
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
   // const allNotes = await prisma.note.findMany({ where: { userId } });
