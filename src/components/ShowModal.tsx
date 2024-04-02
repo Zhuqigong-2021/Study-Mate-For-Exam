@@ -10,7 +10,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import {
+  ArrowUpDown,
+  Filter,
+  LayoutDashboard,
+  LayoutGrid,
+  MoreHorizontal,
+  RotateCw,
+  SkipForward,
+  Waypoints,
+} from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/DataTableColumnHeader";
 import EditBookMarkedQuestion from "@/components/EditBookMarkedQuestion";
@@ -19,6 +28,14 @@ import toast from "react-hot-toast";
 import { DataTable } from "./data-table";
 import { useRouter } from "next/navigation";
 import { Badge } from "./ui/badge";
+import CellFilter from "./CellFilter";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "./ui/context-menu";
 
 export type Question = {
   id: string;
@@ -101,6 +118,9 @@ const ShowModal = ({
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
     null,
   );
+  const [filterOutNote, setFilterOutNote] = useState("");
+  const [showMatchingNote, setShowMatchingNote] = useState("");
+
   const [showAddEditQuestionDialog, setShowAddEditQuestionDialog] =
     useState(false);
   const router = useRouter();
@@ -160,31 +180,120 @@ const ShowModal = ({
       ),
     },
     {
-      accessorKey: "note.title",
+      accessorKey: "note",
       size: 130,
       header: "Note",
       cell: (props: any) => {
         const noteTitle = props.row.original.note.title;
         // Get the color class based on the value
+        const question = props.row.original;
         const colorClass = getColorForTitle(noteTitle);
+
         return (
-          <Badge
-            className={colorClass + " " + "flex w-12 justify-center text-white"}
-          >
-            {noteTitle}
-          </Badge>
+          // <CellFilter
+          //   noteTitle={noteTitle}
+          //   colorClass={colorClass}
+          //   getValue={props.getValue()}
+          //   row={row}
+          //   column={column}
+          //   table={table}
+          // />
+          <ContextMenu>
+            <ContextMenuTrigger className="h-full w-full">
+              <Badge
+                className={
+                  colorClass + " " + "flex w-12 justify-center text-white"
+                }
+              >
+                {noteTitle}
+              </Badge>
+            </ContextMenuTrigger>
+            {/* onClick=
+            {() => {
+              setSelectedQuestion(question);
+              setShowAddEditQuestionDialog(true);
+            }} */}
+            <ContextMenuContent className="w-full">
+              <ContextMenuItem
+                className="p-2"
+                onClick={() => {
+                  setSelectedQuestion(question);
+                  setShowAddEditQuestionDialog(true);
+                }}
+              >
+                <span className="flex items-center space-x-2">
+                  <SkipForward size={14} /> <span>Forward</span>
+                </span>{" "}
+              </ContextMenuItem>
+              <ContextMenuItem
+                className="p-2"
+                onClick={() => {
+                  setFilterOutNote("");
+                  setShowMatchingNote("");
+                }}
+              >
+                <span className="flex w-full items-center justify-between">
+                  <span className="flex items-center space-x-2">
+                    <RotateCw size={14} /> <span>Reload</span>
+                  </span>
+                  {/* <span className="flex items-center space-x-1 text-xs">
+                    <LayoutGrid size={10} /> <span>R</span>
+                  </span> */}
+                  <span className="text-[12px]">F5</span>
+                </span>
+              </ContextMenuItem>
+              <ContextMenuSeparator />
+              <ContextMenuItem
+                className="p-2"
+                onClick={() => {
+                  setFilterOutNote(noteTitle.trim());
+                  setShowMatchingNote("");
+                }}
+              >
+                <span className="flex items-center space-x-2">
+                  <Filter size={14} /> <span>Filter out</span>
+                </span>
+              </ContextMenuItem>
+              <ContextMenuItem
+                className="p-2"
+                onClick={() => {
+                  setShowMatchingNote(noteTitle.trim());
+                  setFilterOutNote("");
+                }}
+              >
+                <span className="flex items-center space-x-2">
+                  <Waypoints size={14} /> <span>Show matching</span>
+                </span>
+              </ContextMenuItem>
+              <ContextMenuItem
+                className="p-2"
+                onClick={() => {
+                  setFilterOutNote("");
+                  setShowMatchingNote("");
+                }}
+              >
+                <span className="flex items-center space-x-40">
+                  <span className="flex items-center space-x-2">
+                    <LayoutGrid size={14} /> <span>Show All records</span>
+                  </span>
+                  <span className="flex items-center space-x-1 text-xs">
+                    <LayoutGrid size={10} /> <span>A</span>
+                  </span>
+                </span>
+              </ContextMenuItem>
+            </ContextMenuContent>
+          </ContextMenu>
         );
       },
     },
     {
-      accessorKey: "note",
+      accessorKey: "note.updateAt",
       size: 150,
       header: "UpdateAt",
 
       cell: ({ row }) => {
         const date: any = row.getValue("note");
         const formatted = date.updateAt.toLocaleDateString();
-
         return <div className=" font-medium">{formatted}</div>;
       },
     },
@@ -278,10 +387,26 @@ const ShowModal = ({
     // If the title is in the mapping, return its color, otherwise return a default color
     return titleToColorMapping[normalizedTitle] || "bg-gray-200 text-black"; // default color
   };
-  // console.log(titleToColorMapping);
+
+  let data: any;
+  if (showMatchingNote && !filterOutNote) {
+    data = flaggedQuestions.filter(
+      (q) => q.note.title.trim() === showMatchingNote.trim(),
+    );
+  } else if (!showMatchingNote && filterOutNote) {
+    data = flaggedQuestions.filter(
+      (q) => q.note.title.trim() !== filterOutNote.trim(),
+    );
+  } else {
+    data = flaggedQuestions;
+  }
+  // console.log(
+  //   "filter out:" + filterOutNote + "show matching: " + showMatchingNote,
+  // );
+
   return (
     <div>
-      <DataTable columns={columns} data={flaggedQuestions} />
+      <DataTable columns={columns} data={data} />
       {selectedQuestion && (
         <EditBookMarkedQuestion
           open={showAddEditQuestionDialog}
