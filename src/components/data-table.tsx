@@ -23,15 +23,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Settings2 } from "lucide-react";
+import { Filter, Settings2 } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -40,22 +41,32 @@ import {
   CardTitle,
 } from "./ui/card";
 import { DataTablePagination } from "./DataTablePagination";
+import TopicFilter from "./TopicFilter";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  noteTitle: string[];
+  topicFilter: string;
+  setTopicFilter: Dispatch<SetStateAction<any>>;
+  setShowMatchingNote: Dispatch<SetStateAction<any>>;
+  setFilterOutNote: Dispatch<SetStateAction<any[]>>;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends any, TValue>({
   columns,
   data,
+  noteTitle,
+  topicFilter,
+  setTopicFilter,
+  setShowMatchingNote,
+  setFilterOutNote,
 }: DataTableProps<TData, TValue>) {
-  const [showAddEditQuestionDialog, setShowAddEditQuestionDialog] =
-    React.useState(false);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
+
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -79,6 +90,21 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const colorClasses = [
+    "bg-red-400",
+    "bg-teal-400",
+    "bg-indigo-400",
+    "bg-sky-400",
+    "bg-emerald-400",
+    "bg-lime-400",
+    "bg-pink-400",
+    "bg-violet-400",
+    "bg-orange-400",
+    "bg-amber-400",
+    "bg-green-400",
+    "bg-blue-400",
+    // ... more color classes
+  ];
   return (
     <Card className="relative w-full">
       <CardHeader>
@@ -86,13 +112,13 @@ export function DataTable<TData, TValue>({
         <CardDescription>
           This table below show all bookmarked questions
         </CardDescription>
-        <span className="absolute right-10 top-10 scale-[1.6] rounded-full  bg-neutral-100 p-[0.3rem] text-neutral-800 drop-shadow-sm">
+        <span className="absolute right-10 top-10 hidden scale-[1.6]  rounded-full bg-neutral-100 p-[0.3rem] text-neutral-800 drop-shadow-sm md:block lg:block">
           <BiSolidBookmarkAltPlus />
         </span>
       </CardHeader>
       <CardContent>
         {/* filter */}
-        <div className="flex items-center py-4">
+        <div className="flex flex-wrap items-center py-4">
           <Input
             placeholder="Filter question..."
             value={
@@ -104,7 +130,36 @@ export function DataTable<TData, TValue>({
                 .getColumn("questionTitle")
                 ?.setFilterValue(event.target.value)
             }
-            className="max-w-sm"
+            className="h-9 max-w-sm lg:mr-3"
+          />
+
+          {/* <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <span className="flex items-center space-x-2">
+                <Filter size={20} />
+                <span>Filter</span>
+              </span>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-32">
+              {noteTitle.map((note, index) => {
+                return (
+                  <DropdownMenuItem className="w-full" key={index}>
+                    <span
+                      className={`${colorClasses[index]} mr-2 h-2 w-2 rounded-full`}
+                    ></span>{" "}
+                    <span>{note}</span>
+                  </DropdownMenuItem>
+                );
+              })}
+            </DropdownMenuContent>
+          </DropdownMenu> */}
+          <TopicFilter
+            colorClasses={colorClasses}
+            noteTitle={noteTitle}
+            topicFilter={topicFilter}
+            setTopicFilter={setTopicFilter}
+            setShowMatchingNote={setShowMatchingNote}
+            setFilterOutNote={setFilterOutNote}
           />
           {/* Visibility */}
           <DropdownMenu>

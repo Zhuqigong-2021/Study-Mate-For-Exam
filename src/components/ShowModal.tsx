@@ -28,7 +28,7 @@ import toast from "react-hot-toast";
 import { DataTable } from "./data-table";
 import { useRouter } from "next/navigation";
 import { Badge } from "./ui/badge";
-import CellFilter from "./CellFilter";
+
 import {
   ContextMenu,
   ContextMenuContent,
@@ -118,8 +118,9 @@ const ShowModal = ({
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
     null,
   );
-  const [filterOutNote, setFilterOutNote] = useState("");
+  const [filterOutNote, setFilterOutNote] = useState<any[]>([]);
   const [showMatchingNote, setShowMatchingNote] = useState("");
+  const [topicFilter, setTopicFilter] = useState("");
 
   const [showAddEditQuestionDialog, setShowAddEditQuestionDialog] =
     useState(false);
@@ -182,7 +183,9 @@ const ShowModal = ({
     {
       accessorKey: "note",
       size: 130,
-      header: "Note",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Note" />
+      ),
       cell: (props: any) => {
         const noteTitle = props.row.original.note.title;
         // Get the color class based on the value
@@ -228,8 +231,9 @@ const ShowModal = ({
               <ContextMenuItem
                 className="p-2"
                 onClick={() => {
-                  setFilterOutNote("");
+                  setFilterOutNote([]);
                   setShowMatchingNote("");
+                  setTopicFilter("");
                 }}
               >
                 <span className="flex w-full items-center justify-between">
@@ -246,7 +250,7 @@ const ShowModal = ({
               <ContextMenuItem
                 className="p-2"
                 onClick={() => {
-                  setFilterOutNote(noteTitle.trim());
+                  setFilterOutNote([...filterOutNote, noteTitle.trim()]);
                   setShowMatchingNote("");
                 }}
               >
@@ -258,7 +262,7 @@ const ShowModal = ({
                 className="p-2"
                 onClick={() => {
                   setShowMatchingNote(noteTitle.trim());
-                  setFilterOutNote("");
+                  setFilterOutNote([]);
                 }}
               >
                 <span className="flex items-center space-x-2">
@@ -268,8 +272,9 @@ const ShowModal = ({
               <ContextMenuItem
                 className="p-2"
                 onClick={() => {
-                  setFilterOutNote("");
+                  setFilterOutNote([]);
                   setShowMatchingNote("");
+                  setTopicFilter("");
                 }}
               >
                 <span className="flex items-center space-x-40">
@@ -289,7 +294,9 @@ const ShowModal = ({
     {
       accessorKey: "note.updateAt",
       size: 150,
-      header: "UpdateAt",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="UpdateAt" />
+      ),
 
       cell: ({ row }) => {
         const date: any = row.getValue("note");
@@ -389,24 +396,50 @@ const ShowModal = ({
   };
 
   let data: any;
-  if (showMatchingNote && !filterOutNote) {
-    data = flaggedQuestions.filter(
-      (q) => q.note.title.trim() === showMatchingNote.trim(),
-    );
-  } else if (!showMatchingNote && filterOutNote) {
-    data = flaggedQuestions.filter(
-      (q) => q.note.title.trim() !== filterOutNote.trim(),
-    );
-  } else {
-    data = flaggedQuestions;
-  }
+
   // console.log(
   //   "filter out:" + filterOutNote + "show matching: " + showMatchingNote,
   // );
+  const noteTitle = Array.from(
+    new Set(flaggedQuestions.map((f) => f.note.title)),
+  );
+  // console.log("topicfilter: " + topicFilter);
+  if (topicFilter) {
+    data = flaggedQuestions.filter(
+      (q) => q.note.title.trim() == topicFilter.trim(),
+    );
+  } else {
+    // data = flaggedQuestions;
+    if (showMatchingNote) {
+      data = flaggedQuestions.filter(
+        (q) => q.note.title.trim() === showMatchingNote.trim(),
+      );
+    } else if (!showMatchingNote && filterOutNote) {
+      // data = flaggedQuestions.filter(
+      //   (q) => q.note.title.trim() !== filterOutNote.trim(),
+      // );
+      data = flaggedQuestions.filter(
+        (q) =>
+          !filterOutNote
+            .map((note) => note.trim())
+            .includes(q.note.title.trim()),
+      );
+    } else {
+      data = flaggedQuestions;
+    }
+  }
 
   return (
     <div>
-      <DataTable columns={columns} data={data} />
+      <DataTable
+        columns={columns}
+        data={data}
+        noteTitle={noteTitle}
+        topicFilter={topicFilter}
+        setTopicFilter={setTopicFilter}
+        setShowMatchingNote={setShowMatchingNote}
+        setFilterOutNote={setFilterOutNote}
+      />
       {selectedQuestion && (
         <EditBookMarkedQuestion
           open={showAddEditQuestionDialog}

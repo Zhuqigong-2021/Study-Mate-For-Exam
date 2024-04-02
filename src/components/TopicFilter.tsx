@@ -1,0 +1,82 @@
+import React, { Dispatch, SetStateAction } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { Check, Eraser, Filter } from "lucide-react";
+import { Button } from "./ui/button";
+interface props {
+  noteTitle: string[];
+  colorClasses: string[];
+  topicFilter: string;
+  setTopicFilter: Dispatch<SetStateAction<any>>;
+  setShowMatchingNote: Dispatch<SetStateAction<any>>;
+  setFilterOutNote: Dispatch<SetStateAction<any[]>>;
+}
+
+const TopicFilter = ({
+  noteTitle,
+  colorClasses,
+  topicFilter,
+  setTopicFilter,
+  setShowMatchingNote,
+  setFilterOutNote,
+}: props) => {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          className="mx-1 flex  items-center space-x-2 "
+          size={"sm"}
+          variant="outline"
+        >
+          <Filter size={20} />
+          <span>Filter</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-32">
+        {noteTitle.map((note, index) => {
+          return (
+            <DropdownMenuItem
+              className="w-full"
+              key={index}
+              onClick={() => {
+                setTopicFilter(note);
+              }}
+            >
+              <div className="flex w-full items-center justify-between">
+                <div className="flex items-center">
+                  <span
+                    className={`${colorClasses[index]} mr-2 h-2 w-2 rounded-full`}
+                  ></span>
+                  <span>{note}</span>
+                </div>
+
+                <span>
+                  {topicFilter && topicFilter === note && <Check size={18} />}
+                </span>
+              </div>
+            </DropdownMenuItem>
+          );
+        })}
+        <DropdownMenuItem
+          className="w-full"
+          onClick={() => {
+            setTopicFilter("");
+            setFilterOutNote([]);
+            setShowMatchingNote("");
+          }}
+        >
+          <span className="flex items-center space-x-2">
+            <Eraser size={12} />
+            <span>clear</span>
+          </span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+export default TopicFilter;
