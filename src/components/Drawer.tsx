@@ -20,8 +20,9 @@ import AddEditNoteDialog from "./AddEditNoteDialog";
 import { Menu } from "lucide-react";
 interface roleType {
   isAdmin: boolean;
+  userId: string;
 }
-const Drawer = ({ isAdmin }: roleType) => {
+const Drawer = ({ isAdmin, userId }: roleType) => {
   const pathname = usePathname();
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
 
@@ -48,6 +49,14 @@ const Drawer = ({ isAdmin }: roleType) => {
           </SheetDescription>
         </SheetHeader>
         <div className="flex flex-col items-center space-y-10 py-10">
+          {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && (
+            <Link
+              href="/admin/dashboard"
+              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+            >
+              admin
+            </Link>
+          )}
           <Link
             href="/notes"
             className="underline-offset-1 hover:scale-105 hover:text-teal-700"
