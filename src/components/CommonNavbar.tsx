@@ -44,7 +44,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
           </Link>
           <div className="flex items-center gap-2 space-x-5 font-semibold">
             <div className="flex  xl:hidden lg:hidden">
-              <Drawer isAdmin={isAdmin} userId={userId} />
+              <Drawer isAdmin={isAdmin} userId={userId ?? ""} />
             </div>
 
             <div className="hidden  font-light  md:space-x-5 lg:flex lg:space-x-16">

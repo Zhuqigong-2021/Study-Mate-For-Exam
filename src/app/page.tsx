@@ -62,7 +62,7 @@ export default function Home() {
 
         <div className="pointer-events-none -z-50   hidden items-center gap-2 space-x-5  font-semibold opacity-0 md:flex ">
           <div className="flex md:hidden xl:hidden lg:hidden">
-            <Drawer isAdmin={isAdmin} />
+            <Drawer isAdmin={isAdmin} userId={userId ?? ""} />
           </div>
 
           <div className="hidden  font-light md:flex md:space-x-5 lg:flex lg:space-x-16">
