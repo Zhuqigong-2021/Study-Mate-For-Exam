@@ -20,7 +20,7 @@ import AddEditNoteDialog from "./AddEditNoteDialog";
 import { Menu } from "lucide-react";
 interface roleType {
   isAdmin: boolean;
-  userId: string;
+  userId?: string;
 }
 const Drawer = ({ isAdmin, userId }: roleType) => {
   const pathname = usePathname();
