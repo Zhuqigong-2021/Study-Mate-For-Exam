@@ -201,7 +201,11 @@ export async function PUT(req: Request) {
 
     const { userId } = auth();
     // || userId !== existingNote.userId
-    if (!userId || userId !== "user_2aFBx8E20RdENmTS0CRlRej0Px4") {
+    const isAuthorize =
+      userId == "user_2aFBx8E20RdENmTS0CRlRej0Px4" ||
+      userId == existingNote.userId;
+
+    if (!userId || !isAuthorize) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
     let updatedNote;
