@@ -178,23 +178,40 @@ const Userdata = ({ users, userId, totalUsersNumber }: queryProps) => {
         {/* <TableCaption>All users in this app with details.</TableCaption>  bg-violet-500*/}
         <TableHeader className="rounded-lg ">
           <TableRow className="border-none">
-            <TableHead className="text-md min-w-[100px] py-5  font-bold capitalize text-stone-600  ">
+            <TableHead
+              className="text-md min-w-[100px] py-5  font-bold capitalize text-stone-600  "
+              colSpan={2}
+            >
               username
             </TableHead>
-            {/* <TableHead className="text-md font-semibold capitalize text-white ">
-              email
-            </TableHead> */}
-
-            <TableHead className="text-md  font-bold  capitalize text-stone-600  ">
+            <TableHead
+              className="text-md  font-bold  capitalize text-stone-600  "
+              colSpan={1}
+            >
+              UserId
+            </TableHead>
+            <TableHead
+              className="text-md  font-bold  capitalize text-stone-600  "
+              colSpan={1}
+            >
               Register
             </TableHead>
-            <TableHead className="text-md  font-bold  capitalize text-stone-600  ">
+            <TableHead
+              className="text-md  font-bold  capitalize text-stone-600  "
+              colSpan={1}
+            >
               Last signed-in
             </TableHead>
-            <TableHead className="text-md  font-bold capitalize  text-stone-600  ">
+            <TableHead
+              className="text-md  font-bold capitalize  text-stone-600  "
+              colSpan={1}
+            >
               role
             </TableHead>
-            <TableHead className="text-md capitalizetext-white  text-right font-bold text-stone-600  ">
+            <TableHead
+              className="text-md capitalizetext-white  text-right font-bold text-stone-600  "
+              colSpan={1}
+            >
               operations
             </TableHead>
           </TableRow>
@@ -216,7 +233,10 @@ const Userdata = ({ users, userId, totalUsersNumber }: queryProps) => {
                   }`}
                 >
                   {/* Username */}
-                  <TableCell className="flex space-x-2  border-none font-medium">
+                  <TableCell
+                    className="flex space-x-2  border-none font-medium"
+                    colSpan={2}
+                  >
                     <Image
                       src={user.imageUrl}
                       alt=""
@@ -228,7 +248,7 @@ const Userdata = ({ users, userId, totalUsersNumber }: queryProps) => {
                       <span className="font-semibold">
                         {user.firstName} {user.lastName} {user.passwordEnabled}
                       </span>
-                      <span className="font-normal">
+                      <span className="flex flex-wrap text-wrap font-normal">
                         {
                           user.emailAddresses.find(
                             (email) => email.id === user.primaryEmailAddressId,
@@ -237,24 +257,33 @@ const Userdata = ({ users, userId, totalUsersNumber }: queryProps) => {
                       </span>
                     </div>
                   </TableCell>
+                  <TableCell className="w-42"></TableCell>
                   {/* Email */}
-                  {/* <TableCell>
-                    {
+                  <TableCell>
+                    {/* {
                       user.emailAddresses.find(
                         (email) => email.id === user.primaryEmailAddressId,
                       )?.emailAddress
-                    }
-                  </TableCell> */}
+                    } */}
+                    {user.id}
+                  </TableCell>
 
-                  <TableCell className="border-none">{signupAt}</TableCell>
+                  <TableCell className="border-none" colSpan={1}>
+                    {signupAt}
+                  </TableCell>
                   {/* Last signed-in */}
-                  <TableCell className="border-none">{lastSignin}</TableCell>
+                  <TableCell className="border-none" colSpan={1}>
+                    {lastSignin}
+                  </TableCell>
                   {/* role */}
-                  <TableCell className="border-none">
+                  <TableCell className="border-none" colSpan={1}>
                     {user.publicMetadata.role as string}
                   </TableCell>
                   {/* operations */}
-                  <TableCell className="flex items-center justify-end space-x-4 border-none text-right">
+                  <TableCell
+                    className="flex items-center justify-end space-x-4 border-none text-right"
+                    colSpan={1}
+                  >
                     <GrantAdmin
                       userId={user.id}
                       userRole={user.publicMetadata.role as string}
@@ -269,7 +298,7 @@ const Userdata = ({ users, userId, totalUsersNumber }: queryProps) => {
         {/* footer */}
         <TableFooter className="w-full ">
           <TableRow>
-            <TableCell colSpan={4}>
+            <TableCell>
               {isClient && (
                 <div className="flex  w-full space-x-10  px-0">
                   <div className="flex  w-32 items-center space-x-3 ">
@@ -277,48 +306,43 @@ const Userdata = ({ users, userId, totalUsersNumber }: queryProps) => {
                     <span>{totalUsersNumber} </span>
                     <span>users</span>
                   </div>
-                  <Pagination className="p-0">
-                    <PaginationContent>
-                      <PaginationItem>
-                        <Button
-                          onClick={handleLeftClick}
-                          className="space-x-2 bg-transparent text-black hover:bg-slate-100"
-                          disabled={offset == 0}
-                        >
-                          <FaChevronLeft /> <span>Previous</span>
-                        </Button>
-                      </PaginationItem>
-                      {/* <PaginationItem>
-                        <Link href="#">1</Link>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink href="#" isActive>
-                          2
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <Link href="#">3</Link>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationEllipsis />
-                      </PaginationItem> */}
-
-                      {paginationItems}
-                      <PaginationItem>
-                        <Button
-                          onClick={handleRightClick}
-                          className="space-x-2 bg-transparent text-black hover:bg-slate-100"
-                          disabled={offset + limit >= totalUsersNumber}
-                        >
-                          <span>Next</span> <FaChevronRight />
-                        </Button>
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
                 </div>
               )}
             </TableCell>
-            <TableCell className="flex justify-end">
+            <TableCell className="w-42"></TableCell>
+            <TableCell>
+              {isClient && (
+                <Pagination className="p-0">
+                  <PaginationContent>
+                    <PaginationItem>
+                      <Button
+                        onClick={handleLeftClick}
+                        className="space-x-2 bg-transparent text-black hover:bg-slate-100"
+                        disabled={offset == 0}
+                      >
+                        <FaChevronLeft /> <span>Previous</span>
+                      </Button>
+                    </PaginationItem>
+
+                    {paginationItems}
+                    <PaginationItem>
+                      <Button
+                        onClick={handleRightClick}
+                        className="space-x-2 bg-transparent text-black hover:bg-slate-100"
+                        disabled={offset + limit >= totalUsersNumber}
+                      >
+                        <span>Next</span> <FaChevronRight />
+                      </Button>
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              )}
+            </TableCell>
+
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell className="flex w-40 justify-end">
               <Select
                 defaultValue="10"
                 onValueChange={(value) => handleLimitChange(Number(value))}
