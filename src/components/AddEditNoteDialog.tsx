@@ -1,3 +1,4 @@
+"use client";
 import { CreateNoteSchema, createNoteSchema } from "@/lib/validation/note";
 import { useForm } from "react-hook-form";
 import {
@@ -43,6 +44,7 @@ export default function AddEditNoteDialog({
   // questions,
 }: AddEditNoteDialogProps) {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
+
   const router = useRouter();
   const form = useForm<CreateNoteSchema>({
     resolver: zodResolver(createNoteSchema),
@@ -85,6 +87,7 @@ export default function AddEditNoteDialog({
 
   async function deleteNote() {
     if (!noteToEdit) return;
+    setDeleteInProgress(true);
     try {
       const response = await fetch("/api/notes", {
         method: "DELETE",

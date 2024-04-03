@@ -57,6 +57,7 @@ type FormValues = {
 const CreateQuestion = ({ params }: idProps) => {
   const { id } = params;
   const router = useRouter();
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
 
   const {
     register,
@@ -92,7 +93,7 @@ const CreateQuestion = ({ params }: idProps) => {
     },
   });
   async function onSubmit(data: CreateQuestionSchema) {
-    console.log(form);
+    setIsFormSubmitting(true);
     try {
       const response = await fetch("/api/notes", {
         method: "PUT",
@@ -118,6 +119,8 @@ const CreateQuestion = ({ params }: idProps) => {
     } catch (error) {
       console.error(error);
       toast.error("Something went wront. Please try again .");
+    } finally {
+      setIsFormSubmitting(false);
     }
   }
 
@@ -225,7 +228,8 @@ const CreateQuestion = ({ params }: idProps) => {
               <LoadingButton
                 className="via-green-700"
                 type="submit"
-                loading={isSubmitting}
+                loading={isFormSubmitting}
+                disabled={form.formState.isSubmitting}
               >
                 {!isSubmitting && "Next"}
               </LoadingButton>

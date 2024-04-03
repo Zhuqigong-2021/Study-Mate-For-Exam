@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { CardContent, CardTitle } from "./ui/card";
 import { ChoiceType, QuestionType } from "./ExamNoteQuestion";
 import { Choice } from "@prisma/client";
-import { BookmarkCheck } from "lucide-react";
+import { BookmarkCheck, Loader2 } from "lucide-react";
 import { auth } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -26,6 +26,7 @@ const MutipleChoiceQuestion = ({
   onChange,
 }: multipleProps) => {
   const [isFlagged, setIsFlagged] = useState(question.isFlagged);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const correctAnswerCount = question.choices.filter(
     (choice) => choice.answer,
@@ -61,6 +62,7 @@ const MutipleChoiceQuestion = ({
   }, [question.choices]);
 
   const bookMarked = async (questionId: string, isFlagged: boolean) => {
+    setIsLoading(true);
     try {
       const response = await fetch("/api/question", {
         method: "POST",
@@ -79,8 +81,10 @@ const MutipleChoiceQuestion = ({
         } else {
           toast.success("you successfully unselect a question");
         }
+        setIsLoading(false);
       }
     } catch (error) {
+      setIsLoading(false);
       toast.success("your request is not successful");
     }
   };
@@ -88,13 +92,16 @@ const MutipleChoiceQuestion = ({
   return (
     <CardContent>
       <CardTitle className="relative mb-4">
-        {isAdmin && (
+        {isAdmin && !isLoading && (
           <BookmarkCheck
             className={`${
               isFlagged ? " text-teal-600" : "text-black"
             } absolute   -left-6 top-0 `}
             onClick={() => bookMarked(question.id, isFlagged)}
           />
+        )}
+        {isLoading && (
+          <Loader2 className=" absolute -left-6 top-0 h-4   w-4 animate-spin " />
         )}
         <span className=" pl-0">
           {index + 1 + ". " + question.questionTitle}
