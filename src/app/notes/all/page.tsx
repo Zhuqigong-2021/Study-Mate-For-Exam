@@ -7,7 +7,7 @@ import { checkRole } from "@/app/utils/roles/role";
 const page = async () => {
   const { userId } = auth();
   if (!userId) throw Error("userId undefined");
-  const allNotes = await prisma.note.findMany({ where: { isShared: true } });
+  const allNotes = await prisma.note.findMany({});
   const isAdmin = checkRole("admin");
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
   return (

@@ -35,7 +35,7 @@ const page = async ({ params }: idProps) => {
   });
 
   return (
-    <div className="  w-full gap-3  " suppressHydrationWarning={true}>
+    <div className="w-full gap-3  " suppressHydrationWarning={true}>
       <Card
         className="relative flex  cursor-pointer flex-col items-center justify-center text-center transition-shadow hover:shadow-lg"
         suppressHydrationWarning={true}
@@ -48,7 +48,7 @@ const page = async ({ params }: idProps) => {
           </CardDescription>
         </CardHeader>
 
-        <Carousel className="flex min-h-[400px]  w-full max-w-[800px]  ">
+        <Carousel className="flex min-h-[400px]  max-w-[800px] justify-center ">
           <CarouselContent>
             {allQuestions.map(async (q, index) => {
               const choices = await prisma.choice.findMany({
@@ -57,7 +57,7 @@ const page = async ({ params }: idProps) => {
               let questionPage =
                 allQuestions.length == 1 ? "question" : "questions";
               return (
-                <CarouselItem key={index}>
+                <CarouselItem key={index} className=" min-w-[260px]  ">
                   <div>
                     {index +
                       1 +
@@ -66,33 +66,33 @@ const page = async ({ params }: idProps) => {
                       "  " +
                       questionPage}
                   </div>
-                  <div className="w-full ">
-                    <Card className="min-h-[350px] p-4">
-                      <CardTitle className=" my-8  text-[22px] capitalize">
-                        {q.questionTitle}
-                      </CardTitle>
+                  {/* <div className="w-full "> */}
+                  <Card className="min-h-[350px] w-full p-4">
+                    <CardTitle className=" my-8  text-[22px] capitalize">
+                      {q.questionTitle}
+                    </CardTitle>
 
-                      {choices.map((c, index) => {
-                        let choiceLetter = String.fromCharCode(65 + index);
+                    {choices.map((c, index) => {
+                      let choiceLetter = String.fromCharCode(65 + index);
 
-                        let answer = c.answer;
-                        console.log(c.answer);
-                        return (
-                          <CardContent
-                            key={c.id}
-                            className={`border-grey-600 relative my-2 flex min-h-[40px] items-center rounded-md border py-2  text-left hover:shadow-lg ${
-                              answer ? "hover:bg-green-50" : "hover:bg-red-100"
-                            }`}
-                          >
-                            <span>
-                              {choiceLetter + "."} &nbsp;&nbsp;
-                              {c.content}
-                            </span>
-                          </CardContent>
-                        );
-                      })}
-                    </Card>
-                  </div>
+                      let answer = c.answer;
+                      console.log(c.answer);
+                      return (
+                        <CardContent
+                          key={c.id}
+                          className={`border-grey-600 relative my-2 flex min-h-[40px] items-center rounded-md border py-2  text-left hover:shadow-lg ${
+                            answer ? "hover:bg-green-50" : "hover:bg-red-100"
+                          }`}
+                        >
+                          <span>
+                            {choiceLetter + "."} &nbsp;&nbsp;
+                            {c.content}
+                          </span>
+                        </CardContent>
+                      );
+                    })}
+                  </Card>
+                  {/* </div> */}
                 </CarouselItem>
               );
             })}
@@ -106,7 +106,7 @@ const page = async ({ params }: idProps) => {
           <CarouselNext className="absolute -right-5 top-[20%]" />
         </Carousel>
 
-        {/* <CardFooter className="py-10"></CardFooter> */}
+        <CardFooter className="py-10"></CardFooter>
 
         <Button asChild className="absolute bottom-2 right-2">
           <Link href="/notes">Back</Link>

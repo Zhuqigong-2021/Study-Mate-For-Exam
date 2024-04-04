@@ -15,6 +15,7 @@ import NotFound from "../assets/NOTFOUNDFinal.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
@@ -35,9 +36,10 @@ type Note = {
 type allNotesProps = {
   allNotes: Note[];
   isAdmin: boolean;
+  isSuperAdmin: boolean;
 };
 
-const FilterNote = ({ allNotes, isAdmin }: allNotesProps) => {
+const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
   const [userInput, setUserInput] = useState("");
   const [link, setLink] = useState("/notes");
   const pathname = usePathname();
@@ -65,20 +67,7 @@ const FilterNote = ({ allNotes, isAdmin }: allNotesProps) => {
   function onSubmit(data: formSchema) {
     setUserInput(data.searchParam);
   }
-  //   useEffect(() => {
-  //     if (userInput) {
-  //       const change = allNotes.filter(
-  //         (note) =>
-  //           note.title.trim().toLowerCase() == userInput.toLowerCase().trim(),
-  //       );
-  //       console.log(change);
-  //     }
-  //   }, [userInput, allNotes]);
-  // useEffect(() => {
-  //   if (link) {
-  //     router.push(link);
-  //   }
-  // }, [link, router]);
+
   return (
     <div>
       <div className="absolute left-0 right-0 top-[4.6rem]   flex h-[24rem] w-full items-center justify-center bg-teal-500/40">
@@ -133,29 +122,54 @@ const FilterNote = ({ allNotes, isAdmin }: allNotesProps) => {
                 <DropdownMenuContent className="mr-4 w-48  lg:mr-24">
                   <DropdownMenuLabel>Filter Notes</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-
-                  <div className="flex flex-col p-2">
-                    <Link href="/notes/public">
-                      <div className="flex items-center justify-between">
-                        <span>public</span>{" "}
-                        {pathname && pathname === "/notes/public" ? (
+                  <DropdownMenuItem
+                    onClick={() => router.push("/notes/public")}
+                  >
+                    <div className="flex w-full items-center justify-between">
+                      <span>public</span>{" "}
+                      {pathname && pathname === "/notes/public" ? (
+                        <Check size={15} />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push("/notes")}>
+                    <div className="flex w-full items-center justify-between">
+                      <span>my notes</span>{" "}
+                      {pathname && pathname === "/notes" ? (
+                        <Check size={15} />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </DropdownMenuItem>
+                  {isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => router.push("/notes/all")}>
+                      <div className="flex w-full items-center justify-between">
+                        <span>all notes</span>{" "}
+                        {pathname && pathname === "/notes/all" ? (
                           <Check size={15} />
                         ) : (
                           ""
                         )}
                       </div>
-                    </Link>
-                    <Link href="/notes">
-                      <div className="flex items-center justify-between">
-                        <span>my notes</span>{" "}
-                        {pathname && pathname === "/notes" ? (
-                          <Check size={15} />
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    </Link>
-                  </div>
+                    </DropdownMenuItem>
+                  )}
+                  {/* <div className="flex flex-col p-2">
+                    {isSuperAdmin && (
+                      <Link href="/notes/all">
+                        <div className="flex items-center justify-between">
+                          <span>all notes</span>{" "}
+                          {pathname && pathname === "/notes/all" ? (
+                            <Check size={15} />
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </Link>
+                    )}
+                  </div> */}
                 </DropdownMenuContent>
               </div>
             </DropdownMenu>
