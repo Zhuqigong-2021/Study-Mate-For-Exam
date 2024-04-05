@@ -46,7 +46,7 @@ export default function RootLayout({
         lang="en"
         className={`${open_sans.variable} ${roboto_mono.variable}`}
       >
-        <body>
+        <body className="">
           <CommonNavbar isAdmin={isAdmin} userId={userId ? userId : ""} />
           {children}
           <Toaster />

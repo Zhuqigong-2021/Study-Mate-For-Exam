@@ -16,7 +16,35 @@ const NotesPage = async () => {
   if (!userId) throw Error("userId undefined");
 
   console.log("my current userId :" + userId);
-  const allNotes = await prisma.note.findMany({ where: { userId } });
+  // const allNotes = await prisma.note.findMany({ where: { userId } });
+  const allNotes = await prisma.note.findMany({
+    where: { userId },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      isShared: true,
+      updateAt: true,
+      createdAt: true,
+      userId: true,
+      questions: {
+        select: {
+          id: true,
+          questionTitle: true,
+          isFlagged: true,
+          comment: true,
+          noteId: true,
+          choices: {
+            select: {
+              id: true,
+              content: true,
+              answer: true,
+            },
+          },
+        },
+      },
+    },
+  });
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
 
   return (

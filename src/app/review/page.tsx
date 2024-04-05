@@ -22,27 +22,35 @@ const NotesPage = async () => {
   // const isAdmin = checkRole("admin");
   // if (!isAdmin) redirect("/");
   // const allNotes = await prisma.note.findMany({ where: { userId } });
-  const allNotes = await prisma.note.findMany({ where: { isShared: true } });
-  // const allNotes = await prisma.note.findMany({
-  //   where: { userId },
-  //   select: {
-  //     id: true,
-  //     title: true,
-  //     description: true,
+  const allNotes = await prisma.note.findMany({
+    where: { isShared: true },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      isShared: true,
+      updateAt: true,
+      createdAt: true,
+      userId: true,
+      questions: {
+        select: {
+          id: true,
+          questionTitle: true,
+          isFlagged: true,
+          comment: true,
+          noteId: true,
+          choices: {
+            select: {
+              id: true,
+              content: true,
+              answer: true,
+            },
+          },
+        },
+      },
+    },
+  });
 
-  //     questions: {
-  //       include: {
-  //         // questionTitle: true,
-  //         choices: {
-  //           select: {
-  //             content: true,
-  //             answer: true,
-  //           },
-  //         },
-  //       },
-  //     },
-  //   },
-  // });
   return (
     <div className="grid     gap-3  sm:grid-cols-2 lg:grid-cols-3">
       {allNotes.map((note) => (

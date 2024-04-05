@@ -7,7 +7,35 @@ import { checkRole } from "@/app/utils/roles/role";
 const page = async () => {
   const { userId } = auth();
   if (!userId) throw Error("userId undefined");
-  const allNotes = await prisma.note.findMany({ where: { isShared: true } });
+  // const allNotes = await prisma.note.findMany({ where: { isShared: true } });
+  const allNotes = await prisma.note.findMany({
+    where: { isShared: true },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      isShared: true,
+      updateAt: true,
+      createdAt: true,
+      userId: true,
+      questions: {
+        select: {
+          id: true,
+          questionTitle: true,
+          isFlagged: true,
+          comment: true,
+          noteId: true,
+          choices: {
+            select: {
+              id: true,
+              content: true,
+              answer: true,
+            },
+          },
+        },
+      },
+    },
+  });
   const isAdmin = checkRole("admin");
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
   return (

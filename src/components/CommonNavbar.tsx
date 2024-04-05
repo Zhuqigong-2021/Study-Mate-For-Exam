@@ -30,7 +30,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
 
   return (
     <>
-      <div className=" bg-transparent p-4 shadow">
+      <div className=" bg-white p-4 shadow">
         <div className="m-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
           <Link
             href={"/notes/public"}

@@ -25,10 +25,22 @@ import {
 import { useParams, usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 type Note = {
+  userId: string;
   id: string;
   title: string;
   description: string;
-  userId: string;
+  questions: {
+    id: string;
+    questionTitle: string;
+    noteId: string;
+    isFlagged: boolean;
+    comment: string;
+    choices: {
+      id: string;
+      content: string;
+      answer: boolean;
+    }[];
+  }[];
   isShared: boolean;
   createdAt: Date;
   updateAt: Date;
@@ -110,7 +122,11 @@ const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
         {isAdmin && (
           <div className="my-5 flex items-center justify-between">
             <span className=" font-bold">
-              {pathname && pathname === "/notes" ? "My Notes" : "Public Notes"}
+              {pathname && pathname === "/notes"
+                ? "My Notes"
+                : pathname && pathname === "/notes/public"
+                  ? "Public Notes"
+                  : "All Notes"}
             </span>
             <DropdownMenu>
               <div className="flex flex-col items-end">
@@ -176,8 +192,8 @@ const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
           </div>
         )}
         <div className=" grid  gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {selecedNotes.map((note) => (
-            <Note note={note} key={note.id} isAdmin={isAdmin} />
+          {selecedNotes.map((note, index) => (
+            <Note note={note} key={note.id} isAdmin={isAdmin} index={index} />
           ))}
           {selecedNotes.length === 0 && (
             <div className="col-span-full flex w-full flex-col items-center  justify-center text-center">
