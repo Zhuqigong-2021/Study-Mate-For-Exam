@@ -60,11 +60,11 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
         <div className="m-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
           <Link
             href={"/notes/public"}
-            className="flex items-center gap-1 space-x-2"
+            className="flex items-center space-x-1  lg:space-x-2"
           >
             {/* <Image src={logo} alt="logo" width={40} height={40} /> */}
-            <Globe className=" hidden rotate-45 scale-110 text-teal-500 lg:block" />
-            <span className="-translate-x-2 scale-y-95 font-sans text-xl font-black text-slate-800 md:translate-x-0 md:text-2xl lg:text-2xl">
+            <Globe className=" rotate-45 scale-95 text-teal-500 lg:block lg:scale-110" />
+            <span className=" scale-y-95 font-sans text-lg font-black text-slate-800 md:translate-x-0 md:text-2xl lg:text-2xl">
               Study Mate
             </span>
           </Link>
