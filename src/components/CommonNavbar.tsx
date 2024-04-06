@@ -5,7 +5,7 @@ import logo from "@/assets/logo.png";
 import Image from "next/image";
 import { UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
-import { Globe, Plus } from "lucide-react";
+import { Globe, Leaf, Plus } from "lucide-react";
 import AddEditNoteDialog from "@/components/AddEditNoteDialog";
 import Drawer from "@/components/Drawer";
 import { usePathname, useRouter } from "next/navigation";
@@ -60,13 +60,34 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
         <div className="m-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
           <Link
             href={"/notes/public"}
-            className="flex items-center space-x-1  lg:space-x-2"
+            className="flex items-center gap-1 space-x-2"
           >
             {/* <Image src={logo} alt="logo" width={40} height={40} /> */}
-            <Globe className=" rotate-45 scale-95 text-teal-500 lg:block lg:scale-110" />
-            <span className=" scale-y-95 font-sans text-lg font-black text-slate-800 md:translate-x-0 md:text-2xl lg:text-2xl">
-              Study Mate
+
+            <span className="relative flex scale-y-95 font-sans  text-2xl font-black text-slate-800  lg:text-2xl">
+              Study Mate{" "}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="#14b8a6"
+                // stroke="#0f766e"
+                stroke="white"
+                stroke-width="1"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                className="lucide lucide-leaf absolute -right-1 -top-2 -z-10 rotate-12"
+              >
+                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+              </svg>{" "}
+              {/* <Leaf
+                color="red"
+                className="absolute -right-2  top-0 text-teal-500"
+              /> */}
             </span>
+            {/* <Globe className=" rotate-45 scale-95 text-teal-500 lg:block lg:scale-110" /> */}
           </Link>
           <NavigationMenu>
             {/* className="flex items-center gap-2 space-x-5 font-semibold" */}
@@ -126,7 +147,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
-              <NavigationMenuItem className="flex translate-x-3 md:translate-x-0 xl:hidden lg:hidden">
+              <NavigationMenuItem className="flex  xl:hidden lg:hidden">
                 <Drawer isAdmin={isAdmin} userId={userId ?? ""} />
               </NavigationMenuItem>
               <NavigationMenuItem className="z-50  hidden  font-light  lg:flex ">
