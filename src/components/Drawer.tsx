@@ -50,46 +50,57 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
         </SheetHeader>
         <div className="flex flex-col items-center space-y-10 py-10">
           {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && (
+            <SheetClose asChild>
+              <Link
+                href="/admin/dashboard"
+                className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+              >
+                admin
+              </Link>
+            </SheetClose>
+          )}
+          <SheetClose asChild>
             <Link
-              href="/admin/dashboard"
+              href="/notes/public"
               className="underline-offset-1 hover:scale-105 hover:text-teal-700"
             >
-              admin
+              Note
             </Link>
-          )}
-          <Link
-            href="/notes/public"
-            className="underline-offset-1 hover:scale-105 hover:text-teal-700"
-          >
-            Note
-          </Link>
-          <Link
-            href="/wildcard"
-            className="underline-offset-1 hover:scale-105 hover:text-teal-700"
-          >
-            Wildcard
-          </Link>
-          <Link
-            href="/exam"
-            className="underline-offset-1 hover:scale-105 hover:text-teal-700"
-          >
-            Exam
-          </Link>
-
-          <Link
-            href="/review"
-            className="underline-offset-1 hover:scale-105 hover:text-teal-700"
-          >
-            Review
-          </Link>
+          </SheetClose>
+          <SheetClose asChild>
+            <Link
+              href="/wildcard"
+              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+            >
+              Wildcard
+            </Link>
+          </SheetClose>
+          <SheetClose asChild>
+            <Link
+              href="/exam"
+              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+            >
+              Exam
+            </Link>
+          </SheetClose>
+          <SheetClose asChild>
+            <Link
+              href="/review"
+              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+            >
+              Review
+            </Link>
+          </SheetClose>
 
           {isAdmin && (
-            <Link
-              href="/bookmark"
-              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
-            >
-              Bookmark
-            </Link>
+            <SheetClose asChild>
+              <Link
+                href="/bookmark"
+                className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+              >
+                Bookmark
+              </Link>
+            </SheetClose>
           )}
 
           {pathname.includes("/notes") && isAdmin && (
