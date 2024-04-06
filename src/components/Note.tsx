@@ -122,8 +122,6 @@ const Note = ({ note, isAdmin, index }: NoteProps) => {
   return (
     <>
       <Card
-        // transition-shadow
-        // hover:shadow-lg
         className="relative cursor-pointer  rounded-xl  shadow-gray-300 hover:shadow-gray-600 "
         onClick={() => setShowAddEditNoteDialog(true)}
       >

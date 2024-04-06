@@ -77,7 +77,7 @@ const ReviewNote = ({ note }: NoteProps) => {
             {note.title}
           </CardTitle>
           <div
-            className="absolute  -left-1 -right-1 top-14 w-1/4 rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r from-teal-500 to-transparent pl-6 text-sm text-white lg:w-1/3"
+            className="absolute  -left-1 -right-1 top-14 w-1/2 rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r from-teal-500 to-transparent pl-6 text-sm text-white lg:w-1/3"
             style={{
               clipPath: `polygon(100% 0%, 85% 48%, 100% 100%, 0.5% 100%, 0% 50%, 0.5% 0)`,
             }}
