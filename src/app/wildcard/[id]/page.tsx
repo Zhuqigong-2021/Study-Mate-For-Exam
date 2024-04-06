@@ -32,6 +32,21 @@ const page = async ({ params }: idProps) => {
   const note = await prisma.note.findUnique({ where: { id } });
   const allQuestions = await prisma.question.findMany({
     where: { noteId: id },
+
+    select: {
+      id: true,
+      questionTitle: true,
+      isFlagged: true,
+      comment: true,
+      noteId: true,
+      choices: {
+        select: {
+          id: true,
+          content: true,
+          answer: true,
+        },
+      },
+    },
   });
 
   return (
@@ -43,21 +58,18 @@ const page = async ({ params }: idProps) => {
         <CardHeader>
           <CardTitle className="text-3xl font-black">{note?.title}</CardTitle>
 
-          <CardDescription className="flex flex-wrap ">
-            {note?.description}
-          </CardDescription>
+          <CardDescription>{note?.description}</CardDescription>
         </CardHeader>
-
-        <Carousel className="flex min-h-[400px]  max-w-[800px] justify-center ">
+        <Carousel className="flex min-h-[400px] w-full max-w-[800px]">
           <CarouselContent>
-            {allQuestions.map(async (q, index) => {
-              const choices = await prisma.choice.findMany({
-                where: { questionId: q.id },
-              });
+            {allQuestions.map((q, index) => {
               let questionPage =
                 allQuestions.length == 1 ? "question" : "questions";
               return (
-                <CarouselItem key={index} className=" min-w-[260px]  ">
+                <CarouselItem
+                  key={index}
+                  className="flex flex-col items-center "
+                >
                   <div>
                     {index +
                       1 +
@@ -66,17 +78,16 @@ const page = async ({ params }: idProps) => {
                       "  " +
                       questionPage}
                   </div>
-                  {/* <div className="w-full "> */}
                   <Card className="min-h-[350px] w-full p-4">
-                    <CardTitle className=" my-8  text-[22px] capitalize">
+                    <CardTitle className=" my-8  text-start text-[22px] capitalize">
                       {q.questionTitle}
                     </CardTitle>
 
-                    {choices.map((c, index) => {
+                    {allQuestions[index].choices.map((c, index) => {
                       let choiceLetter = String.fromCharCode(65 + index);
 
                       let answer = c.answer;
-                      console.log(c.answer);
+
                       return (
                         <CardContent
                           key={c.id}
@@ -92,17 +103,12 @@ const page = async ({ params }: idProps) => {
                       );
                     })}
                   </Card>
-                  {/* </div> */}
                 </CarouselItem>
               );
             })}
-            {allQuestions.length == 0 && (
-              <Card className="flex min-h-[100px] w-full items-center justify-center border-none text-center">
-                <CardTitle>You have no questions in this note</CardTitle>
-              </Card>
-            )}
           </CarouselContent>
-          <CarouselPrevious className="absolute -left-5 top-[20%]" />
+
+          <CarouselPrevious className="absolute -left-5 top-[20%] z-10" />
           <CarouselNext className="absolute -right-5 top-[20%]" />
         </Carousel>
 
@@ -117,3 +123,82 @@ const page = async ({ params }: idProps) => {
 };
 
 export default page;
+{
+  /* <CarouselContent>
+            {allQuestions.map(async (q, index) => {
+              const choices = await prisma.choice.findMany({
+                where: { questionId: q.id },
+              });
+              let questionPage =
+                allQuestions.length == 1 ? "question" : "questions";
+              return (
+                <CarouselItem key={index}>
+                  <div>
+                    {index +
+                      1 +
+                      "/" +
+                      allQuestions.length +
+                      "  " +
+                      questionPage}
+                  </div>
+                  <Card className=" min-h-[350px] w-full p-4">
+                    <CardTitle className=" my-8   text-[22px] capitalize">
+                      {q.questionTitle}
+                    </CardTitle>
+
+                    {choices.map((c, index) => {
+                      let choiceLetter = String.fromCharCode(65 + index);
+
+                      let answer = c.answer;
+
+                      return (
+                        <CardContent
+                          key={c.id}
+                          className={`border-grey-600 relative my-2 flex min-h-[40px] items-center rounded-md border py-2  text-left hover:shadow-lg ${
+                            answer ? "hover:bg-green-50" : "hover:bg-red-100"
+                          }`}
+                        >
+                          <span>
+                            {choiceLetter + "."} &nbsp;&nbsp;
+                            {c.content}
+                          </span>
+                        </CardContent>
+                      );
+                    })}
+                  </Card>
+
+                  <Card className="min-h-[350px] w-full p-4">
+                    <CardTitle className=" my-8   text-[22px] capitalize">
+                      {q.questionTitle}
+                    </CardTitle>
+
+                    {choices.map((c, index) => {
+                      let choiceLetter = String.fromCharCode(65 + index);
+
+                      let answer = c.answer;
+
+                      return (
+                        <CardContent
+                          key={c.id}
+                          className={`border-grey-600 relative my-2 flex min-h-[40px] items-center rounded-md border py-2  text-left hover:shadow-lg ${
+                            answer ? "hover:bg-green-50" : "hover:bg-red-100"
+                          }`}
+                        >
+                          <span>
+                            {choiceLetter + "."} &nbsp;&nbsp;
+                            {c.content}
+                          </span>
+                        </CardContent>
+                      );
+                    })}
+                  </Card>
+                </CarouselItem>
+              );
+            })}
+            {allQuestions.length == 0 && (
+              <Card className="flex min-h-[100px] w-full items-center justify-center border-none text-center">
+                <CardTitle>You have no questions in this note</CardTitle>
+              </Card>
+            )}
+          </CarouselContent> */
+}
