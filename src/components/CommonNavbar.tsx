@@ -126,7 +126,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
-              <NavigationMenuItem className="flex translate-x-3 md:translate-x-0 xl:hidden lg:hidden ">
+              <NavigationMenuItem className="flex xl:hidden lg:hidden ">
                 <Drawer isAdmin={isAdmin} userId={userId ?? ""} />
               </NavigationMenuItem>
               <NavigationMenuItem className="z-50  hidden  font-light  lg:flex ">
