@@ -110,7 +110,7 @@ const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
               <Button
                 type="submit"
                 // asChild
-                className="absolute bottom-0 right-0 top-0 z-10 bg-white   px-3 text-black hover:text-white"
+                className="absolute bottom-0 right-0 top-0 z-[1] bg-white   px-3 text-black hover:text-white"
               >
                 <Search size={25} />
               </Button>
