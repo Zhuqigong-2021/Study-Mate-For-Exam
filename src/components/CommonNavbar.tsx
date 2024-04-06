@@ -63,8 +63,8 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
             className="flex items-center gap-1 space-x-2"
           >
             {/* <Image src={logo} alt="logo" width={40} height={40} /> */}
-            <Globe className="flex rotate-45 scale-110 text-teal-500" />
-            <span className="scale-y-95 font-sans text-2xl font-black text-slate-800">
+            <Globe className=" hidden rotate-45 scale-110 text-teal-500 lg:block" />
+            <span className="-translate-x-2 scale-y-95 font-sans text-xl font-black text-slate-800 md:translate-x-0 md:text-2xl lg:text-2xl">
               Study Mate
             </span>
           </Link>
@@ -126,7 +126,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
-              <NavigationMenuItem className="flex  xl:hidden lg:hidden">
+              <NavigationMenuItem className="flex translate-x-3 md:translate-x-0 xl:hidden lg:hidden ">
                 <Drawer isAdmin={isAdmin} userId={userId ?? ""} />
               </NavigationMenuItem>
               <NavigationMenuItem className="z-50  hidden  font-light  lg:flex ">

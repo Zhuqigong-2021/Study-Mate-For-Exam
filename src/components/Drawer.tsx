@@ -55,7 +55,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
                 href="/admin/dashboard"
                 className="underline-offset-1 hover:scale-105 hover:text-teal-700"
               >
-                admin
+                Admin
               </Link>
             </SheetClose>
           )}
