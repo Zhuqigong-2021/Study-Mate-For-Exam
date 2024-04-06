@@ -58,7 +58,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
             </Link>
           )}
           <Link
-            href="/notes"
+            href="/notes/public"
             className="underline-offset-1 hover:scale-105 hover:text-teal-700"
           >
             Note
@@ -75,14 +75,13 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           >
             Exam
           </Link>
-          {isAdmin && (
-            <Link
-              href="/review"
-              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
-            >
-              Review
-            </Link>
-          )}
+
+          <Link
+            href="/review"
+            className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+          >
+            Review
+          </Link>
 
           {isAdmin && (
             <Link
