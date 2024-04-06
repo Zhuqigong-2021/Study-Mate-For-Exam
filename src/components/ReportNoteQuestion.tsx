@@ -62,7 +62,7 @@ const ReportNoteQuestion = ({ note, mappedData }: NoteProps) => {
           {note.questions.map((q: QuestionType, index: number) => {
             return (
               <CardContent key={q.id}>
-                <CardTitle className="mb-4">
+                <CardTitle className="mb-4 flex  text-[18px] lg:text-[22px]">
                   {index + 1 + ". " + q.questionTitle}
                 </CardTitle>
                 {q.choices.map((c: ChoiceType, index: number) => {

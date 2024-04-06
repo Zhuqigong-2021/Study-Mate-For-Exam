@@ -91,17 +91,17 @@ const MutipleChoiceQuestion = ({
 
   return (
     <CardContent>
-      <CardTitle className="relative mb-4">
+      <CardTitle className="relative mb-4 flex items-center text-[18px] lg:text-[22px]">
         {isAdmin && !isLoading && (
           <BookmarkCheck
             className={`${
               isFlagged ? " text-teal-600" : "text-black"
-            } absolute   -left-6 top-0 `}
+            } absolute   -left-6 top-1 `}
             onClick={() => bookMarked(question.id, isFlagged)}
           />
         )}
         {isLoading && (
-          <Loader2 className=" absolute -left-6 top-0 h-4   w-4 animate-spin " />
+          <Loader2 className=" absolute -left-6 top-2 h-4   w-4 animate-spin " />
         )}
         <span className=" pl-0">
           {index + 1 + ". " + question.questionTitle}

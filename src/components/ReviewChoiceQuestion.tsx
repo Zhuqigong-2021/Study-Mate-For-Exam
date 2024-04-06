@@ -42,20 +42,23 @@ const ReviewChoiceQuestion = ({ q, index, isSuperAdmin }: propType) => {
   };
   return (
     <>
-      <CardTitle className="relative mb-4">
+      <CardTitle className="relative mb-4 flex items-center  text-[18px] lg:text-[22px]">
         {isSuperAdmin && !isLoading && (
           <BookmarkCheck
             className={`${
               isFlagged ? " text-teal-600" : "text-black"
-            } absolute   -left-6 top-0 `}
+            } absolute   -left-6 top-1 `}
             onClick={() => bookMarked(q.id, isFlagged)}
           />
         )}
         {isLoading && (
-          <Loader2 className=" absolute -left-6 top-0 h-4   w-4 animate-spin " />
+          <Loader2 className=" absolute -left-6 top-2 h-4   w-4 animate-spin " />
         )}
-        {index + 1 + ". "}
-        {q.questionTitle}
+
+        <span>
+          {index + 1 + ". "}
+          {q.questionTitle}
+        </span>
       </CardTitle>
       {q.choices.map((c: ChoiceType, index: number) => {
         let choiceLetter = String.fromCharCode(65 + index);
