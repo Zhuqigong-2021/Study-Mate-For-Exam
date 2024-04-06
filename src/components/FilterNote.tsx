@@ -53,7 +53,8 @@ type allNotesProps = {
 
 const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
   const [userInput, setUserInput] = useState("");
-  const [link, setLink] = useState("/notes");
+  const [isSticky, setIsSticky] = useState(false);
+
   const pathname = usePathname();
   const router = useRouter();
   const selecedNotes = !userInput
@@ -80,8 +81,22 @@ const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
     setUserInput(data.searchParam);
   }
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 0);
+    };
+
+    // Register the event listener
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      // Cleanup the event listener
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
     <div>
+      {/* top-[4.6rem] */}
       <div className="absolute left-0 right-0 top-[4.6rem]   flex h-[24rem] w-full items-center justify-center bg-teal-500/40">
         <Image
           src={Notebackground}
@@ -118,7 +133,7 @@ const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
           </Form>
         </div>
       </div>
-      <div className="mt-[24rem] flex flex-col">
+      <div className={`${isSticky ? "mt-[29.6rem]" : "mt-[25rem]"} bg-white`}>
         {isAdmin && (
           <div className="my-5 flex items-center justify-between">
             <span className=" font-bold">

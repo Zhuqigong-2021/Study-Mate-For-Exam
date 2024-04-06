@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import logo from "@/assets/logo.png";
 import Image from "next/image";
@@ -33,14 +33,30 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
   const router = useRouter();
 
   let isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
-  // console.log("has: " + );
-  // const isAdmin = has && has({ role: "org:admin" });
-  // if (!isAdmin) return null;
-  // console.log(isAdmin);
+
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 0);
+    };
+
+    // Register the event listener
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      // Cleanup the event listener
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <>
-      <div className=" bg-white p-4 shadow">
+      <div
+        className={`bg-white p-4 shadow ${
+          isSticky ? "fixed left-0 top-0 z-50 w-full" : ""
+        }`}
+      >
         <div className="m-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
           <Link
             href={"/notes/public"}
