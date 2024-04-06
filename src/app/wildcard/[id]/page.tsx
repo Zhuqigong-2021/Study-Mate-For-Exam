@@ -60,7 +60,7 @@ const page = async ({ params }: idProps) => {
 
           <CardDescription>{note?.description}</CardDescription>
         </CardHeader>
-        <Carousel className="flex min-h-[400px] w-full max-w-[800px]">
+        <Carousel className="flex min-h-[400px] w-full max-w-[800px] flex-col p-2">
           <CarouselContent>
             {allQuestions.map((q, index) => {
               let questionPage =
@@ -68,7 +68,7 @@ const page = async ({ params }: idProps) => {
               return (
                 <CarouselItem
                   key={index}
-                  className="flex flex-col items-center "
+                  className="flex flex-col items-center   "
                 >
                   <div>
                     {index +
@@ -78,8 +78,8 @@ const page = async ({ params }: idProps) => {
                       "  " +
                       questionPage}
                   </div>
-                  <Card className="min-h-[350px] w-full p-4">
-                    <CardTitle className=" my-8  text-start text-[22px] capitalize">
+                  <Card className=" min-h-[350px] w-full  p-4">
+                    <CardTitle className=" my-8  pl-4 text-start text-[18px] capitalize lg:pl-0 lg:text-center  lg:text-[22px] ">
                       {q.questionTitle}
                     </CardTitle>
 
@@ -108,8 +108,8 @@ const page = async ({ params }: idProps) => {
             })}
           </CarouselContent>
 
-          <CarouselPrevious className="absolute -left-5 top-[20%] z-10" />
-          <CarouselNext className="absolute -right-5 top-[20%]" />
+          <CarouselPrevious className="absolute -left-3 top-[20%] z-10" />
+          <CarouselNext className="absolute -right-3 top-[20%]" />
         </Carousel>
 
         <CardFooter className="py-10"></CardFooter>
