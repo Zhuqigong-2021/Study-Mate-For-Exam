@@ -74,9 +74,9 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                 fill="#14b8a6"
                 // stroke="#0f766e"
                 stroke="white"
-                stroke-width="1"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 className="lucide lucide-leaf absolute -right-1 -top-2 -z-10 rotate-12"
               >
                 <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />

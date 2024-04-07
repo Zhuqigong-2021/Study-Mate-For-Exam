@@ -15,7 +15,6 @@ const NotesPage = async () => {
   const isAdmin = checkRole("admin");
   if (!userId) throw Error("userId undefined");
 
-  console.log("my current userId :" + userId);
   // const allNotes = await prisma.note.findMany({ where: { userId } });
   const allNotes = await prisma.note.findMany({
     where: { userId },

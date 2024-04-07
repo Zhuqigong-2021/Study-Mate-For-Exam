@@ -5,7 +5,7 @@ export async function DELETE(req: Request) {
   try {
     const body = await req.json();
     const { choiceId } = body;
-    console.log(choiceId);
+
     // Find the choice to be deleted
     const existingChoice = await prisma.choice.findUnique({
       where: {

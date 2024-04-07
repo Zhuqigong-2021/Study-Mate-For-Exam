@@ -42,7 +42,6 @@ const ExamNote = ({ note }: NoteProps) => {
       const userObj = await getUserObj();
       if (userObj) {
         setUser(userObj);
-        console.log(userObj);
       }
     };
 

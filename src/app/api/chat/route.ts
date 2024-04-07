@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       },
     });
 
-    console.log("Relevant notes found: ", JSON.stringify(relevantNotes));
+    // console.log("Relevant notes found: ", JSON.stringify(relevantNotes));
     const systemMessage: ChatCompletionMessage = {
       role: "assistant",
       // content: `Note Summaries:\n${relevantNotes
@@ -93,7 +93,7 @@ export async function POST(req: Request) {
       //   )
       //   .join("\n\n"),
     };
-    console.log(systemMessage);
+
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo-1106",
       stream: true,

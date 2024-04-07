@@ -55,7 +55,7 @@ export async function DELETE(req: Request, res: Response) {
 export async function POST(req: Request) {
   try {
     const { questionId, isFlagged } = await req.json();
-    console.log(questionId, isFlagged);
+
     if (typeof isFlagged !== "boolean") {
       return Response.json(
         { error: "the flag is not boolean type" },

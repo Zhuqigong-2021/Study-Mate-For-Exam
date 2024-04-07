@@ -227,9 +227,9 @@ export default function SetTimer({
                         );
                       })}
                     {/* {`${questions?.length}`} */}
-                    <SelectItem value="All">
+                    {/* <SelectItem value="All">
                       All Questions ({`${questions?.length}`})
-                    </SelectItem>
+                    </SelectItem> */}
                   </SelectContent>
                 </Select>
 
