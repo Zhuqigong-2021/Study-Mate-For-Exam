@@ -54,7 +54,7 @@ type allNotesProps = {
 const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
   const [userInput, setUserInput] = useState("");
   const [isSticky, setIsSticky] = useState(false);
-
+  
   const pathname = usePathname();
   const router = useRouter();
   const selecedNotes = !userInput
@@ -96,7 +96,6 @@ const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
   }, []);
   return (
     <div>
-      {/* top-[4.6rem] */}
       <div className="absolute left-0 right-0 top-[4.6rem]   flex h-[24rem] w-full items-center justify-center bg-teal-500/40">
         <Image
           src={Notebackground}
@@ -187,20 +186,6 @@ const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
                       </div>
                     </DropdownMenuItem>
                   )}
-                  {/* <div className="flex flex-col p-2">
-                    {isSuperAdmin && (
-                      <Link href="/notes/all">
-                        <div className="flex items-center justify-between">
-                          <span>all notes</span>{" "}
-                          {pathname && pathname === "/notes/all" ? (
-                            <Check size={15} />
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                      </Link>
-                    )}
-                  </div> */}
                 </DropdownMenuContent>
               </div>
             </DropdownMenu>

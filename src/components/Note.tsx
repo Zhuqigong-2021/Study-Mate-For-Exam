@@ -50,6 +50,11 @@ const Note = ({ note, isAdmin, index }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const [user, setUser] = useState<User>();
   const [isShared, setIsShared] = useState(note.isShared);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   const wasUpdated = note.updateAt > note.createdAt;
   const router = useRouter();
   const createdUpdatedAtTimestamp = (
@@ -95,13 +100,6 @@ const Note = ({ note, isAdmin, index }: NoteProps) => {
     "from-blue-600",
   ];
 
-  // useEffect(() => {
-  //   const user = getUserObj();
-  //   if (user) {
-  //     setUser(user);
-  //     console.log(user);
-  //   }
-  // }, [getUserObj]);
   const getUserObj = useCallback(async () => {
     const user = await getUser(note.userId);
     return user;
@@ -154,7 +152,7 @@ const Note = ({ note, isAdmin, index }: NoteProps) => {
           } h-14 rounded-b-xl  px-6 py-2`}
         >
           <span className="absolute bottom-4 left-6 flex items-center space-x-2">
-            {user ? (
+            {user && isClient ? (
               <Image
                 src={user.imageUrl}
                 alt="profile"

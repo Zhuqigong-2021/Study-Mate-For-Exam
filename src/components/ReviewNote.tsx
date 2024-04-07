@@ -43,7 +43,11 @@ export interface NoteProps {
 const ReviewNote = ({ note }: NoteProps) => {
   const router = useRouter();
   const [user, setUser] = useState<User>();
+  const [isClient, setIsClient] = useState(false);
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   const wasUpdated = note.updateAt > note.createdAt;
   const createdUpdatedAtTimestamp = (
     wasUpdated ? note.updateAt : note.createdAt
@@ -87,7 +91,7 @@ const ReviewNote = ({ note }: NoteProps) => {
 
         <CardContent className=" h-14 rounded-b-xl bg-teal-500/5 px-6 py-2">
           <span className="absolute bottom-4 left-6 flex items-center space-x-2">
-            {user ? (
+            {user && isClient ? (
               <Image
                 src={user.imageUrl}
                 alt="profile"

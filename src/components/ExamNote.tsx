@@ -25,7 +25,11 @@ const ExamNote = ({ note }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const [user, setUser] = useState<User>();
   const wasUpdated = note.updateAt > note.createdAt;
-  const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const createdUpdatedAtTimestamp = (
     wasUpdated ? note.updateAt : note.createdAt
@@ -70,7 +74,7 @@ const ExamNote = ({ note }: NoteProps) => {
 
         <CardContent className=" h-14 rounded-b-xl bg-rose-500/5 px-6 py-2">
           <span className="absolute bottom-4 left-6 flex items-center space-x-2">
-            {user ? (
+            {user && isClient ? (
               <Image
                 src={user.imageUrl}
                 alt="profile"
