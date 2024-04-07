@@ -118,79 +118,81 @@ const Note = ({ note, isAdmin, index }: NoteProps) => {
   }, [getUserObj]);
   return (
     <>
-      <Card
-        className="relative cursor-pointer  rounded-xl  shadow-gray-300 hover:shadow-gray-600 "
-        onClick={() => setShowAddEditNoteDialog(true)}
-      >
-        <CardHeader className="h-32 space-y-0">
-          <CardTitle className="scale-y-90  text-lg text-gray-800">
-            {note.title}
-          </CardTitle>
+      {isClient && (
+        <Card
+          className="relative cursor-pointer  rounded-xl  shadow-gray-300 hover:shadow-gray-600 "
+          onClick={() => setShowAddEditNoteDialog(true)}
+        >
+          <CardHeader className="h-32 space-y-0">
+            <CardTitle className="scale-y-90  text-lg text-gray-800">
+              {note.title}
+            </CardTitle>
 
-          <div
+            <div
+              className={`${
+                pathname == "/notes/public"
+                  ? colorClasses[9]
+                  : pathname == "/notes"
+                    ? colorClasses[1]
+                    : "from-slate-900"
+              } absolute  -left-1 -right-1 top-16 w-1/2 rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r to-transparent pl-6 text-sm text-white lg:w-1/3`}
+              style={{
+                clipPath: `polygon(100% 0%, 85% 48%, 100% 100%, 0.5% 100%, 0% 50%, 0.5% 0)`,
+              }}
+            >
+              {note.questions.length + " " + "items"}
+            </div>
+          </CardHeader>
+          <CardContent
             className={`${
               pathname == "/notes/public"
-                ? colorClasses[9]
+                ? "bg-amber-500/5"
                 : pathname == "/notes"
-                  ? colorClasses[1]
-                  : "from-slate-900"
-            } absolute  -left-1 -right-1 top-16 w-1/2 rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r to-transparent pl-6 text-sm text-white lg:w-1/3`}
-            style={{
-              clipPath: `polygon(100% 0%, 85% 48%, 100% 100%, 0.5% 100%, 0% 50%, 0.5% 0)`,
-            }}
+                  ? "bg-teal-500/5"
+                  : "bg-stone-500/5"
+            } h-14 rounded-b-xl  px-6 py-2`}
           >
-            {note.questions.length + " " + "items"}
-          </div>
-        </CardHeader>
-        <CardContent
-          className={`${
-            pathname == "/notes/public"
-              ? "bg-amber-500/5"
-              : pathname == "/notes"
-                ? "bg-teal-500/5"
-                : "bg-stone-500/5"
-          } h-14 rounded-b-xl  px-6 py-2`}
-        >
-          <span className="absolute bottom-4 left-6 flex items-center space-x-2">
-            {user && isClient ? (
-              <Image
-                src={user.imageUrl}
-                alt="profile"
-                width={24}
-                height={24}
-                className="rounded-full"
-              />
-            ) : (
-              <Loader2
-                size={23}
-                className="animate-spin rounded-full border border-white bg-gray-100 text-gray-600"
-              />
-            )}
-            <CardDescription className="text-xs">
-              {/* {createdUpdatedAtTimestamp}
+            <span className="absolute bottom-4 left-6 flex items-center space-x-2">
+              {user && isClient ? (
+                <Image
+                  src={user.imageUrl}
+                  alt="profile"
+                  width={24}
+                  height={24}
+                  className="rounded-full"
+                />
+              ) : (
+                <Loader2
+                  size={23}
+                  className="animate-spin rounded-full border border-white bg-gray-100 text-gray-600"
+                />
+              )}
+              <CardDescription className="text-xs">
+                {/* {createdUpdatedAtTimestamp}
               {wasUpdated && "( updated )"} */}
-              {user && user.firstName + " " + (user.lastName ?? "")}
-            </CardDescription>
-          </span>
+                {user && user.firstName + " " + (user.lastName ?? "")}
+              </CardDescription>
+            </span>
 
-          <CardDescription className="absolute bottom-4 right-6 text-xs ">
-            {createdUpdatedAtTimestamp}
-            {/* {wasUpdated && "( updated )"} */}
-          </CardDescription>
-        </CardContent>
-        {isAdmin && (
-          <Globe
-            size={15}
-            className={`absolute right-6 top-6 ${
-              isShared ? "text-teal-500" : ""
-            }`}
-            onClick={(e) => {
-              e.stopPropagation(); // This stops the click event from propagating to the parent
-              ToggleShare(note.id, isShared); // Assuming you want to toggle the current state
-            }}
-          />
-        )}
-      </Card>
+            <CardDescription className="absolute bottom-4 right-6 text-xs ">
+              {createdUpdatedAtTimestamp}
+              {/* {wasUpdated && "( updated )"} */}
+            </CardDescription>
+          </CardContent>
+          {isAdmin && (
+            <Globe
+              size={15}
+              className={`absolute right-6 top-6 ${
+                isShared ? "text-teal-500" : ""
+              }`}
+              onClick={(e) => {
+                e.stopPropagation(); // This stops the click event from propagating to the parent
+                ToggleShare(note.id, isShared); // Assuming you want to toggle the current state
+              }}
+            />
+          )}
+        </Card>
+      )}
 
       <AddEditNoteDialog
         open={showAddEditNoteDialog}

@@ -54,53 +54,55 @@ const ExamNote = ({ note }: NoteProps) => {
 
   return (
     <>
-      <Card
-        className="relative cursor-pointer rounded-xl  shadow-gray-300  transition-shadow hover:shadow-gray-600 "
-        onClick={() => setShowAddEditNoteDialog(true)}
-      >
-        <CardHeader className="relative h-32 ">
-          <CardTitle className="scale-y-90  text-lg text-gray-800">
-            {note.title}
-          </CardTitle>
-          <div
-            className="absolute  -left-1 -right-1 top-14 w-1/2 rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r from-red-500 to-transparent pl-6 text-sm text-white lg:w-1/3"
-            style={{
-              clipPath: `polygon(100% 0%, 85% 48%, 100% 100%, 0.5% 100%, 0% 50%, 0.5% 0)`,
-            }}
-          >
-            {note.questions.length + " " + "items"}
-          </div>
-        </CardHeader>
+      {isClient && (
+        <Card
+          className="relative cursor-pointer rounded-xl  shadow-gray-300  transition-shadow hover:shadow-gray-600 "
+          onClick={() => setShowAddEditNoteDialog(true)}
+        >
+          <CardHeader className="relative h-32 ">
+            <CardTitle className="scale-y-90  text-lg text-gray-800">
+              {note.title}
+            </CardTitle>
+            <div
+              className="absolute  -left-1 -right-1 top-14 w-1/2 rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r from-red-500 to-transparent pl-6 text-sm text-white lg:w-1/3"
+              style={{
+                clipPath: `polygon(100% 0%, 85% 48%, 100% 100%, 0.5% 100%, 0% 50%, 0.5% 0)`,
+              }}
+            >
+              {note.questions.length + " " + "items"}
+            </div>
+          </CardHeader>
 
-        <CardContent className=" h-14 rounded-b-xl bg-rose-500/5 px-6 py-2">
-          <span className="absolute bottom-4 left-6 flex items-center space-x-2">
-            {user && isClient ? (
-              <Image
-                src={user.imageUrl}
-                alt="profile"
-                width={24}
-                height={24}
-                className="rounded-full"
-              />
-            ) : (
-              <Loader2
-                size={23}
-                className="animate-spin rounded-full border border-white bg-gray-100 text-rose-600"
-              />
-            )}
-            <CardDescription className="text-xs">
-              {/* {createdUpdatedAtTimestamp}
+          <CardContent className=" h-14 rounded-b-xl bg-rose-500/5 px-6 py-2">
+            <span className="absolute bottom-4 left-6 flex items-center space-x-2">
+              {user && isClient ? (
+                <Image
+                  src={user.imageUrl}
+                  alt="profile"
+                  width={24}
+                  height={24}
+                  className="rounded-full"
+                />
+              ) : (
+                <Loader2
+                  size={23}
+                  className="animate-spin rounded-full border border-white bg-gray-100 text-rose-600"
+                />
+              )}
+              <CardDescription className="text-xs">
+                {/* {createdUpdatedAtTimestamp}
               {wasUpdated && "( updated )"} */}
-              {user && user.firstName + " " + (user.lastName ?? "")}
-            </CardDescription>
-          </span>
+                {user && user.firstName + " " + (user.lastName ?? "")}
+              </CardDescription>
+            </span>
 
-          <CardDescription className="absolute bottom-4 right-6 text-xs ">
-            {createdUpdatedAtTimestamp}
-            {/* {wasUpdated && "( updated )"} */}
-          </CardDescription>
-        </CardContent>
-      </Card>
+            <CardDescription className="absolute bottom-4 right-6 text-xs ">
+              {createdUpdatedAtTimestamp}
+              {/* {wasUpdated && "( updated )"} */}
+            </CardDescription>
+          </CardContent>
+        </Card>
+      )}
       <SetTimer
         open={showAddEditNoteDialog}
         setOpen={setShowAddEditNoteDialog}
