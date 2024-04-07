@@ -108,7 +108,7 @@ const CreateQuestion = ({ params }: idProps) => {
       //console.log("isLoading : " + form.formState.isSubmitting);
       if (!response.ok) throw Error("Status code: " + response.status);
       toast.success("You have submitted this question");
-      console.log(form);
+
       // form.reset({
       //   questionTitle: "",
       //   choices: [],

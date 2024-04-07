@@ -82,7 +82,7 @@ const page = async ({ params }: idProps) => {
                                         ? "G"
                                         : "H";
                         let answer = c.answer;
-                        console.log(c.answer);
+                        // console.log(c.answer);
                         return (
                           <CardContent
                             key={c.id}

@@ -82,7 +82,7 @@ const page = async ({ params }: idProps) => {
   });
 
   if (!singleNoteWithDetails) throw Error("Note Details not Found");
-  console.log(singleNoteWithDetails.questions[0]);
+
   return (
     <div className=" grid gap-3" suppressHydrationWarning={true}>
       {

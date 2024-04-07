@@ -46,7 +46,7 @@ interface NoteProps {
 
 const Note = ({ note, isAdmin, index }: NoteProps) => {
   const pathname = usePathname();
-  console.log(pathname);
+
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const [user, setUser] = useState<User>();
   const [isShared, setIsShared] = useState(note.isShared);
@@ -113,7 +113,6 @@ const Note = ({ note, isAdmin, index }: NoteProps) => {
       const userObj = await getUserObj();
       if (userObj) {
         setUser(userObj);
-        console.log(userObj);
       }
     };
 

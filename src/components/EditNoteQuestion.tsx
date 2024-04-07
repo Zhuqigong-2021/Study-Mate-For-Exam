@@ -123,7 +123,7 @@ const EditNoteQuestion = ({
   const deleteQuestion = async (questionId: string | undefined) => {
     try {
       if (questionId) {
-        console.log(questionId);
+        // console.log(questionId);
         const response = await fetch("/api/question", {
           method: "DELETE",
           body: JSON.stringify({ questionId }),
