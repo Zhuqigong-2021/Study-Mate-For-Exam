@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs";
 import prisma from "@/lib/db/prisma";
 import { Prisma } from "@prisma/client";
+import { ChoiceSchema } from "@/lib/validation/note";
 
 export async function DELETE(req: Request, res: Response) {
   try {
@@ -84,20 +85,33 @@ export async function POST(req: Request) {
 
 export async function PUT(req: Request) {
   try {
-    const { questionId, comment } = await req.json();
+    const { questionId, questionTitle, choices, comment } = await req.json();
     const existingQuestion = await prisma.question.findUnique({
       where: { id: questionId },
     });
     if (!existingQuestion) {
       return Response.json({ error: "Question not Found" }, { status: 404 });
     }
+    const updateData = {
+      questionTitle,
+      comment,
+      choices: {
+        // Assuming 'choices' is a related field and requires a nested update
+        upsert: choices.map((choice: ChoiceSchema) => ({
+          where: { id: choice.id || undefined },
+          update: { content: choice.content, answer: choice.answer },
+          create: { content: choice.content, answer: choice.answer },
+        })),
+      },
+    };
     const updatedQuestion = await prisma.question.update({
       where: { id: questionId },
-      data: { comment },
+      // data: { questionTitle, choices, comment },
+      data: updateData,
     });
     if (updatedQuestion) {
       return Response.json(
-        { message: "successfully updated comment in the question" },
+        { message: "successfully updated  the question" },
         { status: 200 },
       );
     }

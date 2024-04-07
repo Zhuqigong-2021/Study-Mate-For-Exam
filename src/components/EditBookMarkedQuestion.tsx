@@ -63,13 +63,16 @@ const EditBookMarkedQuestion = ({
         body: JSON.stringify({
           questionId: input.id,
           comment: input.comment,
+          ...input,
         }),
       });
       if (response.ok) {
         setOpen(false);
         toast.success("you successfully add a comment");
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error("your edit comment command failed !!");
+    }
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ChoiceSchema = z.object({
+export const choiceSchema = z.object({
   id: z.string().optional(),
   content: z.string().min(1, { message: "choice is required" }),
   answer: z.boolean().default(false),
@@ -12,12 +12,12 @@ export const ChoiceSchema = z.object({
 export const createQuestionSchema = z.object({
   // id: z.string().optional(),
   questionTitle: z.string().min(1, { message: "question  is required" }),
-  choices: z.array(ChoiceSchema),
+  choices: z.array(choiceSchema),
 });
 export const updateQuestionSchema = z.object({
   id: z.string().min(1, { message: "id  is required" }),
   questionTitle: z.string().min(1, { message: "question  is required" }),
-  choices: z.array(ChoiceSchema),
+  choices: z.array(choiceSchema),
   isFlagged: z.boolean(),
   comment: z.string().optional(),
 });
@@ -35,6 +35,8 @@ export const FormSchema = z.object({
 export type CreateNoteSchema = z.infer<typeof createNoteSchema>;
 
 export type UpdateQuestionSchema = z.infer<typeof updateQuestionSchema>;
+
+export type ChoiceSchema = z.infer<typeof choiceSchema>;
 
 export type CreateQuestionSchema = z.infer<typeof createQuestionSchema>;
 

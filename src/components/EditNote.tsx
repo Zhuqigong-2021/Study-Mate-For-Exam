@@ -59,10 +59,6 @@ const EditNote = ({ note }: NoteProps) => {
       >
         <CardHeader>
           <CardTitle>{note.title}</CardTitle>
-          {/* <CardDescription>
-            {createdUpdatedAtTimestamp}
-            {wasUpdated && "( updated )"}
-          </CardDescription> */}
         </CardHeader>
         <CardContent>
           <p className="flex flex-wrap ">{note.description}</p>
@@ -75,24 +71,9 @@ const EditNote = ({ note }: NoteProps) => {
                 <CardTitle className="mb-4">{q.questionTitle}</CardTitle>
                 {q.choices.map((c: ChoiceType, index: number) => {
                   let choiceLetter = String.fromCharCode(65 + index);
-                  // let choiceLetter =
-                  //   index === 0
-                  //     ? "A"
-                  //     : index === 1
-                  //       ? "B"
-                  //       : index === 2
-                  //         ? "C"
-                  //         : index === 3
-                  //           ? "D"
-                  //           : index === 4
-                  //             ? "E"
-                  //             : index === 5
-                  //               ? "F"
-                  //               : index === 6
-                  //                 ? "G"
-                  //                 : "H";
+
                   let answer = c.answer;
-                  // console.log(c.id);
+
                   return (
                     <CardContent
                       key={c?.id}

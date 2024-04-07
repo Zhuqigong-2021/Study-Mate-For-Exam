@@ -5,7 +5,7 @@ import logo from "@/assets/logo.png";
 import Image from "next/image";
 import { UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
-import { Globe, Leaf, Plus } from "lucide-react";
+import { Crown, Globe, Leaf, Plus } from "lucide-react";
 import AddEditNoteDialog from "@/components/AddEditNoteDialog";
 import Drawer from "@/components/Drawer";
 import { usePathname, useRouter } from "next/navigation";
@@ -21,6 +21,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "./ui/navigation-menu";
+import toast from "react-hot-toast";
 interface userType {
   userId: string;
   isAdmin: boolean;
@@ -179,7 +180,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                       {`You can take exams with notes in the system`}
                     </ListItem>
                     <ListItem href="/review" title="Review">
-                      Taking advantage of your down time , Review by cards
+                      You can review the whole note question by page
                     </ListItem>
                   </ul>
                 </NavigationMenuContent>
@@ -244,18 +245,106 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                 </button> */}
               </NavigationMenuItem>
 
-              <NavigationMenu className="hidden  font-light   lg:flex ">
-                <Link
-                  href="/bookmark"
-                  className="underline-offset-1 hover:scale-105 hover:text-teal-700"
-                  legacyBehavior
-                  passHref
-                >
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Bookmark
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenu>
+              <NavigationMenuItem className="hidden  font-light   lg:flex ">
+                <NavigationMenuTrigger>Operations</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[600px] lg:grid-cols-[1fr_1fr]">
+                    <ListItem href="/bookmark" title="Bookmark">
+                      {`Check All bookmarked Questions with proof to review more efficiently`}
+                    </ListItem>
+                    <ListItem
+                      href="/notes/edit"
+                      title="Edit Your questions"
+                      onClick={() => {
+                        if (isAdmin) {
+                          router.push("/notes/edit");
+                        } else {
+                          toast.error(
+                            "Sorry,You're not authroized to access this page",
+                          );
+                        }
+                      }}
+                    >
+                      {`If you are admin, you're able to modify the question.`}
+                    </ListItem>
+
+                    <ListItem
+                      // href="/notes"
+                      title="Add a note "
+                      onClick={() => {
+                        if (isAdmin) {
+                          setShowAddEditNoteDialog(true);
+                        } else {
+                          toast.error(
+                            "Sorry,You're not authroized to access this page",
+                          );
+                        }
+                      }}
+                    >
+                      {`if You're admin,You're able to add note to the system`}
+                    </ListItem>
+                    <ListItem href="#" title="Pro Status">
+                      {isSuperAdmin && (
+                        <div className="flex items-center space-x-2  py-2">
+                          <div className=" flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-indigo-500  to-violet-500 p-2">
+                            <Crown className="text-white" fill="#facc15" />
+                          </div>
+                          <div className="flex  flex-col justify-center space-y-0 text-xs">
+                            <span>Congratulations!</span>
+                            <span className=" space-x-2">
+                              <span>{"You're A Pro"}</span>
+                              <span className="rounded-md  bg-gradient-to-r from-indigo-500  to-violet-500 px-2 text-xs text-white ">
+                                Pro
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                      {isAdmin && !isSuperAdmin && (
+                        <div className="flex items-center space-x-2  py-2">
+                          <div className=" flex h-8 w-8 items-center justify-center rounded-full  bg-yellow-50 p-2">
+                            <Crown
+                              className="scale-110 text-yellow-500"
+                              fill="#facc15"
+                              size={20}
+                            />
+                          </div>
+                          <div className="flex  flex-col justify-center space-y-0 text-xs">
+                            <span>Congratulations!</span>
+                            <span className=" space-x-2">
+                              <span>{"You're Admin"}</span>
+                              <span className="rounded-md  border border-yellow-400 px-1 text-xs text-yellow-400 ">
+                                admin
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      {!isAdmin && !isSuperAdmin && (
+                        <div className="flex items-center space-x-2  py-2">
+                          <div className=" flex h-8 w-8 items-center justify-center rounded-full  bg-stone-50 p-2">
+                            <Crown
+                              className="scale-110 text-stone-500"
+                              fill="#a8a29e"
+                              size={20}
+                            />
+                          </div>
+                          <div className="flex  flex-col justify-center space-y-0 text-xs">
+                            <span>Hi,there!</span>
+                            <span className=" space-x-2">
+                              <span>{"You're a normal user"}</span>
+                              {/* <span className="rounded-md  border border-yellow-400 px-1 text-xs text-yellow-400 ">
+                                admin
+                              </span> */}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </ListItem>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
               <NavigationMenuItem className="hidden md:flex xl:flex lg:flex">
                 <UserButton
                   afterSignOutUrl="/"
@@ -266,7 +355,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                   }}
                 />
               </NavigationMenuItem>
-              {pathname == "/notes/public" && isAdmin && (
+              {/* {pathname == "/notes/public" && isAdmin && (
                 <NavigationMenuItem>
                   <Button
                     onClick={() => setShowAddEditNoteDialog(true)}
@@ -275,7 +364,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                     <Plus size={20} />
                   </Button>
                 </NavigationMenuItem>
-              )}
+              )} */}
               {pathname === "/" && (
                 //   bg-[#f3c46e]
                 <NavigationMenuItem>

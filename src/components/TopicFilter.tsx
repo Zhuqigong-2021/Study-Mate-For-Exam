@@ -28,7 +28,7 @@ const TopicFilter = ({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="mx-1 flex  items-center space-x-2 "
+          className="mx-1 mt-1  flex items-center space-x-2 md:mt-0 "
           size={"sm"}
           variant="outline"
         >
@@ -51,7 +51,9 @@ const TopicFilter = ({
                   <span
                     className={`${colorClasses[index]} mr-2 h-2 w-2 rounded-full`}
                   ></span>
-                  <span>{note}</span>
+                  <span>
+                    {note.length < 5 ? note : note.substring(0, 3) + "."}
+                  </span>
                 </div>
 
                 <span>

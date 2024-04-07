@@ -109,10 +109,6 @@ const CreateQuestion = ({ params }: idProps) => {
       if (!response.ok) throw Error("Status code: " + response.status);
       toast.success("You have submitted this question");
 
-      // form.reset({
-      //   questionTitle: "",
-      //   choices: [],
-      // });
       reset();
       router.replace(window.location.pathname);
       router.refresh();

@@ -139,7 +139,7 @@ const EditNoteQuestion = ({
       }
     } catch (error) {
       console.error(error);
-      alert("something went wrong. Please try again ");
+      toast.error("something went wrong. Please try again ");
     }
   };
 

@@ -1,5 +1,16 @@
 "use client";
 import React from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -25,8 +36,8 @@ import { DataTableColumnHeader } from "@/components/DataTableColumnHeader";
 import EditBookMarkedQuestion from "@/components/EditBookMarkedQuestion";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { DataTable } from "./data-table";
-import { useRouter } from "next/navigation";
+
+import { redirect, useRouter } from "next/navigation";
 import { Badge } from "./ui/badge";
 
 import {
@@ -36,17 +47,8 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "./ui/context-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "./ui/alert-dialog";
+import EditSelectQuestion from "./EditSelectQuestion";
+import { AllDataTable } from "./AllDataTable";
 
 export type Question = {
   id: string;
@@ -117,11 +119,13 @@ interface flaggedQuestionsType {
     }[];
   }[];
   isSuperAdmin: boolean;
+  isAdmin: boolean;
 }
 
-const ShowModal = ({
+const UpdateEditQuestions = ({
   flaggedQuestions,
   isSuperAdmin,
+  isAdmin,
 }: flaggedQuestionsType) => {
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
     null,
@@ -133,28 +137,57 @@ const ShowModal = ({
   const [showAddEditQuestionDialog, setShowAddEditQuestionDialog] =
     useState(false);
   const router = useRouter();
-  const bookMarked = async (questionId: string) => {
+
+  if (!isSuperAdmin && !isAdmin) {
+    // toast.error("Sorry,you're not authroized to access this page");
+
+    redirect("/notes/public");
+  }
+
+  const deleteQuestion = async (questionId: string | undefined) => {
     try {
-      if (!isSuperAdmin) {
-        toast.error("Sorry! You're not authorized to unbookmark a question ");
-        return;
-      }
-      const response = await fetch("/api/question", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ questionId, isFlagged: false }),
-      });
-      // setIsFlagged(!isFlagged);
-      if (response.ok) {
-        toast.success("you successfully unbookmarked a question");
+      if (questionId) {
+        // console.log(questionId);
+        const response = await fetch("/api/question", {
+          method: "DELETE",
+          body: JSON.stringify({ questionId }),
+        });
+        if (!response.ok) {
+          throw Error("Status code: " + response.status + "delete");
+        }
+
         router.refresh();
+        toast.success(
+          "you have successfully deleted a question with all the choices",
+        );
       }
     } catch (error) {
-      toast.error("your request is not successful");
+      console.error(error);
+      toast.error("something went wrong. Please try again ");
     }
   };
+  //   const bookMarked = async (questionId: string) => {
+  //     try {
+  //       if (!isSuperAdmin) {
+  //         toast.error("Sorry! You're not authorized to unbookmark a question ");
+  //         return;
+  //       }
+  //       const response = await fetch("/api/question", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ questionId, isFlagged: false }),
+  //       });
+  //       // setIsFlagged(!isFlagged);
+  //       if (response.ok) {
+  //         toast.success("you successfully unbookmarked a question");
+  //         router.refresh();
+  //       }
+  //     } catch (error) {
+  //       toast.error("your request is not successful");
+  //     }
+  //   };
 
   const columns: ColumnDef<Question>[] = [
     {
@@ -316,9 +349,32 @@ const ShowModal = ({
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuContent
+                align="end"
+                className="flex flex-col items-start"
+              >
+                <DropdownMenuLabel className="w-full">
+                  Actions
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="w-full"
+                  onClick={() => {
+                    navigator.clipboard.writeText(question.id);
+                    toast.success("You have copied this question id");
+                  }}
+                >
+                  Copy Question Id
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="w-full"
+                  onClick={() => {
+                    navigator.clipboard.writeText(question.comment);
+                    toast.success("You have copied this question id");
+                  }}
+                >
+                  Copy Comment
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   className="w-full"
                   onClick={() => {
@@ -336,18 +392,16 @@ const ShowModal = ({
                     setShowAddEditQuestionDialog(true);
                   }}
                 >
-                  View Questions
+                  Update Questions
                 </DropdownMenuItem>
-                {/* <DropdownMenuItem onClick={() => bookMarked(question.id)}>
-                  Unbookmark this question
-                </DropdownMenuItem> */}
+
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button
                       variant="outline"
                       className="inline w-full border-none p-0 px-2 text-left"
                     >
-                      <span>Unbookmark this question</span>
+                      <span>Delete this question</span>
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
@@ -367,10 +421,10 @@ const ShowModal = ({
                         className="bg-red-500 text-white"
                         onClick={() => {
                           if (isSuperAdmin) {
-                            bookMarked(question.id);
+                            deleteQuestion(question.id);
                           } else {
                             toast.error(
-                              "Sorry, you're not authorized to unbookmark a question",
+                              "Sorry, you're not authorized to delete a question",
                             );
                           }
                         }}
@@ -380,6 +434,7 @@ const ShowModal = ({
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
+                {/* </DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
           </>
@@ -387,7 +442,6 @@ const ShowModal = ({
       },
     },
   ];
-  // this is for auto-assigned different color to the tag
 
   const colorClasses = [
     "bg-red-400",
@@ -470,7 +524,7 @@ const ShowModal = ({
 
   return (
     <div>
-      <DataTable
+      <AllDataTable
         columns={columns}
         data={data}
         noteTitle={noteTitle}
@@ -480,7 +534,7 @@ const ShowModal = ({
         setFilterOutNote={setFilterOutNote}
       />
       {selectedQuestion && (
-        <EditBookMarkedQuestion
+        <EditSelectQuestion
           open={showAddEditQuestionDialog}
           setOpen={setShowAddEditQuestionDialog}
           question={selectedQuestion!}
@@ -490,4 +544,4 @@ const ShowModal = ({
   );
 };
 
-export default ShowModal;
+export default UpdateEditQuestions;

@@ -38,6 +38,7 @@ export default function RootLayout({
 }) {
   const { userId } = auth();
   const isAdmin = checkRole("admin");
+
   // console.log("isAdmin: " + isAdmin);
   // className={`${inter.variable} ${roboto_mono.variable}`}
   return (

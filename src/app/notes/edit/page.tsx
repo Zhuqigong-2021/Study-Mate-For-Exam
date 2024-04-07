@@ -2,60 +2,15 @@ import { auth } from "@clerk/nextjs";
 import React, { Fragment } from "react";
 import prisma from "@/lib/db/prisma";
 
-import { idProps } from "../page";
-
 import UpdateEditQuestions from "@/components/UpdateEditQuestions";
+import { redirect } from "next/dist/server/api-utils";
 import { checkRole } from "@/app/utils/roles/role";
 
-const page = async ({ params }: idProps) => {
-  const { id } = params;
+const page = async () => {
   const { userId } = auth();
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
   const isAdmin = checkRole("admin");
   if (!userId) throw Error("userId undefined");
-
-  // const allNotes = await prisma.note.findMany({ where: { userId } });
-  const note = await prisma.note.findUnique({ where: { id } });
-  if (!note) throw Error("Note not found");
-  const allQuestions = await prisma.question.findMany({
-    where: { noteId: id },
-  });
-
-  const singleNoteWithDetails = await prisma.note.findUnique({
-    where: {
-      id,
-    },
-    select: {
-      id: true,
-      title: true,
-      description: true,
-      questions: {
-        select: {
-          id: true,
-          questionTitle: true,
-          comment: true,
-          isFlagged: true,
-          choices: {
-            select: {
-              id: true,
-              content: true,
-              answer: true,
-            },
-          },
-        },
-
-        // include: {
-        //   choices: {
-        //     select: {
-        //       content: true,
-        //       answer: true,
-        //     },
-        //   },
-        // },
-      },
-    },
-  });
-  if (!singleNoteWithDetails) throw Error("Note Details not Found");
 
   const AllQuestions = await prisma.question.findMany({
     select: {

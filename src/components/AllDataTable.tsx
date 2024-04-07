@@ -53,7 +53,7 @@ interface DataTableProps<TData, TValue> {
   setFilterOutNote: Dispatch<SetStateAction<any[]>>;
 }
 
-export function DataTable<TData extends any, TValue>({
+export function AllDataTable<TData extends any, TValue>({
   columns,
   data,
   noteTitle,
@@ -108,9 +108,9 @@ export function DataTable<TData extends any, TValue>({
   return (
     <Card className="relative w-full">
       <CardHeader>
-        <CardTitle className="font-bold">All Bookmarked Questions</CardTitle>
+        <CardTitle className="font-bold">Edit All Your Questions</CardTitle>
         <CardDescription>
-          This table below show all bookmarked questions
+          This table below show all questions in the system to edit
         </CardDescription>
         <span className="absolute right-10 top-10 hidden scale-[1.6]  rounded-full bg-neutral-100 p-[0.3rem] text-neutral-800 drop-shadow-sm md:block lg:block">
           <BiSolidBookmarkAltPlus />

@@ -57,15 +57,6 @@ const BookMarkPage = async () => {
   return (
     // className="grid     gap-3  sm:grid-cols-2 lg:grid-cols-3"
     <div className="w-full max-w-[84rem]">
-      {/* {flaggedQuestions.map((question) => (
-        <BookMarkedQuestion question={question} key={question.id} />
-      ))}
-      {flaggedQuestions.length === 0 && (
-        <div className="col-span-full text-center">
-          {"You have no bookmarked questions yet"}
-        </div>
-      )} */}
-      {/* <DataTable columns={columns} data={flaggedQuestions} /> */}
       <ShowModal
         flaggedQuestions={flaggedQuestions}
         isSuperAdmin={isSuperAdmin}

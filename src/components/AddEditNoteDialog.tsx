@@ -72,9 +72,12 @@ export default function AddEditNoteDialog({
           method: "POST",
           body: JSON.stringify(input),
         });
-        if (!response.ok)
+        if (!response.ok) {
           throw Error("Status code: " + response.status + "post");
-        form.reset();
+        } else {
+          form.reset();
+          router.push("/notes");
+        }
       }
 
       router.refresh();
@@ -103,7 +106,7 @@ export default function AddEditNoteDialog({
     } catch (error) {
       console.error(error);
 
-      alert("something went wrong. Please try again ");
+      toast.error("This is not your note ! you can not delete other's note ");
     } finally {
       setDeleteInProgress(false);
     }
