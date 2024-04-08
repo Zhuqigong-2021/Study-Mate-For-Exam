@@ -33,7 +33,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="no-scrollbar overflow-y-scroll py-16">
         <SheetHeader className="flex flex-col items-center">
           <SheetTitle>Edit profile</SheetTitle>
           <UserButton
@@ -48,7 +48,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
             {"Make changes to your profile by clicking the icon above"}
           </SheetDescription>
         </SheetHeader>
-        <div className="absolute left-[50%] flex -translate-x-[50%] flex-col items-start space-y-10 py-10">
+        <div className="absolute left-[50%] flex -translate-x-[50%] flex-col items-start space-y-8 py-10">
           {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && (
             <SheetClose asChild>
               <Link
@@ -93,6 +93,14 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           </SheetClose>
           <SheetClose asChild>
             <Link
+              href="/bookmark"
+              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+            >
+              Preservation
+            </Link>
+          </SheetClose>
+          <SheetClose asChild>
+            <Link
               href="/review"
               className="underline-offset-1 hover:scale-105 hover:text-teal-700"
             >
@@ -100,19 +108,11 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
             </Link>
           </SheetClose>
 
-          {isAdmin && (
-            <SheetClose asChild>
-              <Link
-                href="/bookmark"
-                className="underline-offset-1 hover:scale-105 hover:text-teal-700"
-              >
-                Preservation
-              </Link>
-            </SheetClose>
-          )}
-
           {pathname.includes("/notes") && isAdmin && (
-            <Button onClick={() => setShowAddEditNoteDialog(true)} className="">
+            <Button
+              onClick={() => setShowAddEditNoteDialog(true)}
+              className="translate-y-8"
+            >
               Add a Note
             </Button>
           )}
