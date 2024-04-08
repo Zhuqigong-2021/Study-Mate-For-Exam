@@ -48,14 +48,14 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
             {"Make changes to your profile by clicking the icon above"}
           </SheetDescription>
         </SheetHeader>
-        <div className="flex flex-col items-center space-y-10 py-10">
+        <div className="absolute left-[50%] flex -translate-x-[50%] flex-col items-start space-y-10 py-10">
           {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && (
             <SheetClose asChild>
               <Link
                 href="/admin/dashboard"
                 className="underline-offset-1 hover:scale-105 hover:text-teal-700"
               >
-                Admin
+                Administration
               </Link>
             </SheetClose>
           )}
@@ -64,7 +64,15 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
               href="/notes/public"
               className="underline-offset-1 hover:scale-105 hover:text-teal-700"
             >
-              Note
+              Notes Taking
+            </Link>
+          </SheetClose>
+          <SheetClose asChild>
+            <Link
+              href="/notes/edit"
+              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+            >
+              Edit Question
             </Link>
           </SheetClose>
           <SheetClose asChild>
@@ -72,7 +80,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
               href="/wildcard"
               className="underline-offset-1 hover:scale-105 hover:text-teal-700"
             >
-              Wildcard
+              Flash Cards
             </Link>
           </SheetClose>
           <SheetClose asChild>
@@ -80,7 +88,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
               href="/exam"
               className="underline-offset-1 hover:scale-105 hover:text-teal-700"
             >
-              Exam
+              Evaluation
             </Link>
           </SheetClose>
           <SheetClose asChild>
@@ -88,7 +96,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
               href="/review"
               className="underline-offset-1 hover:scale-105 hover:text-teal-700"
             >
-              Review
+              Recapitulation
             </Link>
           </SheetClose>
 
@@ -98,16 +106,13 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
                 href="/bookmark"
                 className="underline-offset-1 hover:scale-105 hover:text-teal-700"
               >
-                Bookmark
+                Preservation
               </Link>
             </SheetClose>
           )}
 
           {pathname.includes("/notes") && isAdmin && (
-            <Button
-              onClick={() => setShowAddEditNoteDialog(true)}
-              className=" "
-            >
+            <Button onClick={() => setShowAddEditNoteDialog(true)} className="">
               Add a Note
             </Button>
           )}
