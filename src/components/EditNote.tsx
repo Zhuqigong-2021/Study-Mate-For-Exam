@@ -69,7 +69,9 @@ const EditNote = ({ note }: NoteProps) => {
           {note.questions.map((q: QuestionType, i: number) => {
             return (
               <CardContent key={q.id}>
-                <CardTitle className="mb-4">{q.questionTitle}</CardTitle>
+                <CardTitle className="mb-4">
+                  {processString(q.questionTitle)}
+                </CardTitle>
                 {q.choices.map((c: ChoiceType, index: number) => {
                   let choiceLetter = String.fromCharCode(65 + index);
 

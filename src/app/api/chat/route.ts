@@ -51,9 +51,9 @@ export async function POST(req: Request) {
       //     const questionsDetails = note.questions
       //       .map((q, idx) => {
       //         const questionSummary =
-      //           q.questionTitle.length > 30
-      //             ? `${q.questionTitle.substring(0, 30)}...`
-      //             : q.questionTitle; // Summarize question text
+      //
+      //
+      //             :
       //         const choicesSummary = q.choices
       //           .map((choice, cIdx) => `${cIdx + 1}: ${choice}`)
       //           .join(", "); // List choices
@@ -81,7 +81,7 @@ export async function POST(req: Request) {
       //         const choices = q.choices.map(
       //           (choice) => choice.content + choice.answer,
       //         );
-      //         return q.questionTitle + JSON.stringify(choices);
+      //
       //       });
 
       //       return `Title: ${note.title}\nDescription:\n${

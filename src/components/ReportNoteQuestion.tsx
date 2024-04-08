@@ -64,7 +64,7 @@ const ReportNoteQuestion = ({ note, mappedData }: NoteProps) => {
             return (
               <CardContent key={q.id}>
                 <CardTitle className="mb-4 flex  text-[18px] lg:text-[22px]">
-                  {index + 1 + ". " + q.questionTitle}
+                  {index + 1 + ". " + processString(q.questionTitle)}
                 </CardTitle>
                 {q.choices.map((c: ChoiceType, index: number) => {
                   let choiceLetter = String.fromCharCode(65 + index);

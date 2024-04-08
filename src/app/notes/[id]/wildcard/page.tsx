@@ -62,7 +62,7 @@ const page = async ({ params }: idProps) => {
                   <div className="w-full ">
                     <Card className="min-h-[350px] p-4">
                       <CardTitle className=" my-8  text-[22px] capitalize">
-                        {q.questionTitle}
+                        {processString(q.questionTitle)}
                       </CardTitle>
                       {/* <CardContent className="flex aspect-square items-center justify-center p-6"> */}
                       {choices.map((c, index) => {

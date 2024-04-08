@@ -84,7 +84,7 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
                     } absolute   -left-6 top-0 `}
                     // onClick={() => bookMarked(question.id, q.isFlagged)}
                   />{" "}
-                  {q.questionTitle}
+                  
                 </CardTitle> */}
                 {/* {q.choices.map((c: ChoiceType, index: number) => {
                   let choiceLetter = String.fromCharCode(65 + index);

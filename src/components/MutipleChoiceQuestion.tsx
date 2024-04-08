@@ -105,7 +105,7 @@ const MutipleChoiceQuestion = ({
           <Loader2 className=" absolute -left-6 top-2 h-4   w-4 animate-spin " />
         )}
         <span className=" pl-0">
-          {index + 1 + ". " + question.questionTitle}
+          {index + 1 + ". " + processString(question.questionTitle)}
         </span>
       </CardTitle>
       {/* question.choices */}

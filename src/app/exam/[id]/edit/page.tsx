@@ -92,7 +92,7 @@ const page = async ({ params }: idProps) => {
         //         <Fragment key={q.id}>
         //           <CardContent className="my-4">
         //             <CardTitle className="mb-4 text-[22px] capitalize">
-        //               {q.questionTitle}
+        //
         //             </CardTitle>
         //             {choices.map((c, index) => {
         //               let choiceLetter =

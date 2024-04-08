@@ -17,6 +17,7 @@ import { Input } from "./ui/input";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { processString } from "@/app/utils/processString";
 interface questionDataProps {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -80,7 +81,9 @@ const EditBookMarkedQuestion = ({
         <DialogHeader>
           <div className="py-4"></div>
           <DialogTitle>
-            <span className="text-xl font-bold ">{question.questionTitle}</span>
+            <span className="text-xl font-bold ">
+              {processString(question.questionTitle)}
+            </span>
           </DialogTitle>
         </DialogHeader>
         <div className="my-4">

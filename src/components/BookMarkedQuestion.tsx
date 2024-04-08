@@ -6,6 +6,7 @@ import { BookmarkCheck } from "lucide-react";
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "next/navigation";
 import EditBookMarkedQuestion from "./EditBookMarkedQuestion";
+import { processString } from "@/app/utils/processString";
 interface noteProps {
   id: string;
   title: string;
@@ -84,7 +85,7 @@ const BookMarkedQuestion = ({ question }: questionProps) => {
           onClick={(e) => bookMarked(e, question.id, isFlagged)}
         />
         <CardContent>
-          <span>{question.questionTitle}</span>
+          <span>{processString(question.questionTitle)}</span>
         </CardContent>
         <CardContent className="w-full text-end text-sm text-gray-500">
           {question.note.createdAt.toDateString()}

@@ -58,7 +58,7 @@ const ReviewChoiceQuestion = ({ q, index, isSuperAdmin }: propType) => {
 
         <span>
           {index + 1 + ". "}
-          {q.questionTitle}
+          {processString(q.questionTitle)}
         </span>
       </CardTitle>
       {q.choices.map((c: ChoiceType, index: number) => {

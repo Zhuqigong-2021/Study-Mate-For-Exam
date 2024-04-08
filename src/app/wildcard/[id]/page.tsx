@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 
 import Link from "next/link";
 import { idProps } from "@/app/notes/[id]/page";
+import { processString } from "@/app/utils/processString";
 
 const page = async ({ params }: idProps) => {
   const { id } = params;
@@ -80,7 +81,7 @@ const page = async ({ params }: idProps) => {
                   </div>
                   <Card className=" min-h-[350px] w-full  p-4">
                     <CardTitle className=" my-8  pl-4 text-start text-[18px] capitalize lg:pl-0 lg:text-center  lg:text-[22px] ">
-                      {q.questionTitle}
+                      {processString(q.questionTitle)}
                     </CardTitle>
 
                     {allQuestions[index].choices.map((c, index) => {
@@ -143,7 +144,7 @@ export default page;
                   </div>
                   <Card className=" min-h-[350px] w-full p-4">
                     <CardTitle className=" my-8   text-[22px] capitalize">
-                      {q.questionTitle}
+                      
                     </CardTitle>
 
                     {choices.map((c, index) => {
@@ -169,7 +170,7 @@ export default page;
 
                   <Card className="min-h-[350px] w-full p-4">
                     <CardTitle className=" my-8   text-[22px] capitalize">
-                      {q.questionTitle}
+                      
                     </CardTitle>
 
                     {choices.map((c, index) => {
