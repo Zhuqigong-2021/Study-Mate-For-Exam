@@ -67,14 +67,16 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
               Notes Taking
             </Link>
           </SheetClose>
-          <SheetClose asChild>
-            <Link
-              href="/notes/edit"
-              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
-            >
-              Edit Question
-            </Link>
-          </SheetClose>
+          {isAdmin && (
+            <SheetClose asChild>
+              <Link
+                href="/notes/edit"
+                className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+              >
+                Edit Question
+              </Link>
+            </SheetClose>
+          )}
           <SheetClose asChild>
             <Link
               href="/wildcard"
