@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import { processString } from "@/app/utils/processString";
 
 interface multipleProps {
   question: QuestionType;
@@ -126,12 +127,8 @@ const MutipleChoiceQuestion = ({
               checked={selectedChoices.includes(c.id as string)}
               onChange={() => handleCheckboxChange(c.id)}
             />
-            {/* <Input
-              // className="absolute left-0 top-[50%]  -translate-y-[50%] text-wrap"
-              value={choiceLetter + "." + c.content}
-              readOnly
-            /> */}
-            <span>{choiceLetter + "." + c.content}</span>
+
+            <span>{choiceLetter + "." + processString(c.content)}</span>
             {/* <input
               className="absolute top-[50%] -translate-y-[50%]"
               // className={`absolute  top-[50%] -translate-y-[50%] ${
@@ -139,7 +136,7 @@ const MutipleChoiceQuestion = ({
               // }`}
             >
               {choiceLetter + "."} &nbsp;&nbsp;
-              {c.content}
+            
              
             </input> */}
           </CardContent>

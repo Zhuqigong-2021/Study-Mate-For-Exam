@@ -15,6 +15,7 @@ import AddEditNoteDialog from "./AddEditNoteDialog";
 import EditNoteQuestion from "./EditNoteQuestion";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { processString } from "@/app/utils/processString";
 export interface NoteType {
   id: string;
   title: string;
@@ -81,7 +82,7 @@ const EditNote = ({ note }: NoteProps) => {
                     >
                       <span className="absolute top-[50%] -translate-y-[50%]">
                         {choiceLetter + "."} &nbsp;&nbsp;
-                        {c.content}
+                        {processString(c.content)}
                       </span>
                     </CardContent>
                   );

@@ -16,6 +16,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, XCircle } from "lucide-react";
+import { processString } from "@/app/utils/processString";
 export interface NoteType {
   id: string;
   title: string;
@@ -93,7 +94,7 @@ const ReportNoteQuestion = ({ note, mappedData }: NoteProps) => {
                       {/* className="absolute top-[50%] -translate-y-[50%] " */}
                       <span>
                         {choiceLetter + "."} &nbsp;&nbsp;
-                        {c.content}
+                        {processString(c.content)}
                       </span>
                       {c.answer && selectedChoiceIds?.includes(c.id) && (
                         <CheckCircle2 className="absolute right-2 top-[50%] -translate-y-[50%] rounded-full bg-green-400 text-white" />

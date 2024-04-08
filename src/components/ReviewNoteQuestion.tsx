@@ -114,7 +114,7 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
                     >
                       <span className="absolute top-[50%] -translate-y-[50%]">
                         {choiceLetter + "."} &nbsp;&nbsp;
-                        {c.content}
+                     
                       </span>
                     </CardContent>
                   );

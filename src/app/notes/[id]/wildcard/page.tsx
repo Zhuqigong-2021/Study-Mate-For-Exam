@@ -21,6 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 import Link from "next/link";
+import { processString } from "@/app/utils/processString";
 
 const page = async ({ params }: idProps) => {
   const { id } = params;
@@ -92,7 +93,7 @@ const page = async ({ params }: idProps) => {
                           >
                             <span className="absolute top-[50%] -translate-y-[50%]">
                               {choiceLetter + "."} &nbsp;&nbsp;
-                              {c.content}
+                              {processString(c.content)}
                             </span>
                           </CardContent>
                         );

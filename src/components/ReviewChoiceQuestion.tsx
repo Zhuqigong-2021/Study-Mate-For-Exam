@@ -5,6 +5,7 @@ import { CardContent, CardTitle } from "./ui/card";
 import { BookmarkCheck, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { QuestionType, ChoiceType } from "./ReviewNoteQuestion";
+import { processString } from "@/app/utils/processString";
 interface propType {
   q: QuestionType;
   index: number;
@@ -41,7 +42,7 @@ const ReviewChoiceQuestion = ({ q, index, isSuperAdmin }: propType) => {
     }
   };
   return (
-    <>
+    <div className="max-w-[1200px]">
       <CardTitle className="relative mb-4 flex items-center  text-[18px] lg:text-[22px]">
         {isSuperAdmin && !isLoading && (
           <BookmarkCheck
@@ -70,14 +71,14 @@ const ReviewChoiceQuestion = ({ q, index, isSuperAdmin }: propType) => {
               answer ? "hover:bg-green-50" : "hover:bg-red-100"
             }`}
           >
-            <span>
+            <span className="">
               {choiceLetter + "."} &nbsp;&nbsp;
-              {c.content}
+              {processString(c.content)}
             </span>
           </CardContent>
         );
       })}
-    </>
+    </div>
   );
 };
 
