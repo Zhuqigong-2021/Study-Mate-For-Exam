@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { ClerkProvider, auth } from "@clerk/nextjs";
 
 import "./globals.css";
@@ -10,6 +10,7 @@ import CommonNavbar from "@/components/CommonNavbar";
 import { checkRole } from "./utils/roles/role";
 
 export const metadata: Metadata = {
+  manifest: "/manifest.json",
   title: "Study Mate",
   description: "The intelligent note-taking app",
 };
@@ -31,6 +32,10 @@ const roboto_mono = Roboto_Mono({
   variable: "--font-roboto-mono",
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  themeColor: "#ccfbf1",
+};
 export default function RootLayout({
   children,
 }: {

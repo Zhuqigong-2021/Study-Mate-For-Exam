@@ -12,6 +12,7 @@
   "dependencies": {
     "@clerk/nextjs": "^4.29.3",
     "@clerk/themes": "^1.7.9",
+    "@ducanh2912/next-pwa": "^10.2.6",
     "@hookform/resolvers": "^3.3.3",
     "@pinecone-database/pinecone": "^1.1.2",
     "@prisma/client": "^5.7.1",
