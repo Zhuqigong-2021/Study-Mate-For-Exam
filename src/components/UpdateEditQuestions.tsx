@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -130,6 +130,11 @@ const UpdateEditQuestions = ({
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
     null,
   );
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   const [filterOutNote, setFilterOutNote] = useState<any[]>([]);
   const [showMatchingNote, setShowMatchingNote] = useState("");
   const [topicFilter, setTopicFilter] = useState("");
@@ -500,16 +505,18 @@ const UpdateEditQuestions = ({
 
   return (
     <div>
-      <AllDataTable
-        columns={columns}
-        data={data}
-        noteTitle={noteTitle}
-        topicFilter={topicFilter}
-        setTopicFilter={setTopicFilter}
-        setShowMatchingNote={setShowMatchingNote}
-        setFilterOutNote={setFilterOutNote}
-      />
-      {selectedQuestion && (
+      {isClient && (
+        <AllDataTable
+          columns={columns}
+          data={data}
+          noteTitle={noteTitle}
+          topicFilter={topicFilter}
+          setTopicFilter={setTopicFilter}
+          setShowMatchingNote={setShowMatchingNote}
+          setFilterOutNote={setFilterOutNote}
+        />
+      )}
+      {selectedQuestion && isClient && (
         <EditSelectQuestion
           open={showAddEditQuestionDialog}
           setOpen={setShowAddEditQuestionDialog}
