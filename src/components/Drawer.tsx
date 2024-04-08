@@ -33,7 +33,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent className="no-scrollbar overflow-y-scroll py-16">
+      <SheetContent className="no-scrollbar overflow-y-scroll py-16 text-stone-600">
         <SheetHeader className="flex flex-col items-center">
           <SheetTitle>Edit profile</SheetTitle>
           <UserButton
