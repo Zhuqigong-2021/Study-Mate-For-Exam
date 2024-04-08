@@ -54,7 +54,7 @@ type allNotesProps = {
 const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
   const [userInput, setUserInput] = useState("");
   const [isSticky, setIsSticky] = useState(false);
-  
+
   const pathname = usePathname();
   const router = useRouter();
   const selecedNotes = !userInput
@@ -95,7 +95,7 @@ const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
     };
   }, []);
   return (
-    <div>
+    <>
       <div className="absolute left-0 right-0 top-[4.6rem]   flex h-[24rem] w-full items-center justify-center bg-teal-500/40">
         <Image
           src={Notebackground}
@@ -203,7 +203,7 @@ const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

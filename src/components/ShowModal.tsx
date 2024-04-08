@@ -469,7 +469,7 @@ const ShowModal = ({
   }
 
   return (
-    <div>
+    <>
       <DataTable
         columns={columns}
         data={data}
@@ -486,7 +486,7 @@ const ShowModal = ({
           question={selectedQuestion!}
         />
       )}
-    </div>
+    </>
   );
 };
 

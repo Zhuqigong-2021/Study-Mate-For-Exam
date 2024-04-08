@@ -166,28 +166,6 @@ const UpdateEditQuestions = ({
       toast.error("something went wrong. Please try again ");
     }
   };
-  //   const bookMarked = async (questionId: string) => {
-  //     try {
-  //       if (!isSuperAdmin) {
-  //         toast.error("Sorry! You're not authorized to unbookmark a question ");
-  //         return;
-  //       }
-  //       const response = await fetch("/api/question", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({ questionId, isFlagged: false }),
-  //       });
-  //       // setIsFlagged(!isFlagged);
-  //       if (response.ok) {
-  //         toast.success("you successfully unbookmarked a question");
-  //         router.refresh();
-  //       }
-  //     } catch (error) {
-  //       toast.error("your request is not successful");
-  //     }
-  //   };
 
   const columns: ColumnDef<Question>[] = [
     {
@@ -271,9 +249,7 @@ const UpdateEditQuestions = ({
                   <span className="flex items-center space-x-2">
                     <RotateCw size={14} /> <span>Reload</span>
                   </span>
-                  {/* <span className="flex items-center space-x-1 text-xs">
-                    <LayoutGrid size={10} /> <span>R</span>
-                  </span> */}
+
                   <span className="text-[12px]">F5</span>
                 </span>
               </ContextMenuItem>
@@ -401,7 +377,7 @@ const UpdateEditQuestions = ({
                       variant="outline"
                       className="inline w-full border-none p-0 px-2 text-left"
                     >
-                      <span>Delete this question</span>
+                      Delete this question
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>

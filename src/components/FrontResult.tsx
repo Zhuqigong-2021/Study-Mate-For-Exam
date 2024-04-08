@@ -28,15 +28,8 @@ const FrontResult = () => {
 
       <Pie right={Number(searchParams.get("correct"))} wrong={wrong} />
       <h2 className="my-4 text-xl font-bold">Your Test Result</h2>
-      {/* <p>{id}</p>
-      <p>{"id:" + id}</p>
-      <p>{"choiceId :" + searchParams.get("choiceId")}</p> */}
-      <p className="text-red-500">
-        {/* {Math.round(
-          (Number(searchParams.correct) / Number(searchParams.total)) * 100,
-        ) + "%"} */}
-        {Number(searchParams.get("result")) + "%"}
-      </p>
+
+      <p className="text-red-500">{Number(searchParams.get("result")) + "%"}</p>
       <Button asChild className="mt-4">
         <Link
           href={{
