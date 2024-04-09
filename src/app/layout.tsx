@@ -48,6 +48,10 @@ export default function RootLayout({
   // className={`${inter.variable} ${roboto_mono.variable}`}
   return (
     <ClerkProvider>
+      <head>
+        <link rel="icon" href="/images/favicon.ico" sizes="any" />
+      </head>
+
       <html
         lang="en"
         className={`${open_sans.variable} ${roboto_mono.variable}`}
