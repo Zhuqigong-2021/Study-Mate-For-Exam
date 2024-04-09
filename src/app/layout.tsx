@@ -34,7 +34,7 @@ const roboto_mono = Roboto_Mono({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#ccfbf1",
+  themeColor: "#FFFFFF",
 };
 export default function RootLayout({
   children,
