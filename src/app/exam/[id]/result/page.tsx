@@ -4,7 +4,10 @@ import Link from "next/link";
 import React from "react";
 import { idProps } from "../page";
 import FrontResult from "@/components/FrontResult";
-
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Study Mate - Exam Result",
+};
 const page = ({
   searchParams,
 }: {

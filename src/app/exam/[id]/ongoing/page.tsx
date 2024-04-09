@@ -6,7 +6,11 @@ import { idProps } from "../page";
 
 import ExamNoteQuestion from "@/components/ExamNoteQuestion";
 import { checkRole } from "@/app/utils/roles/role";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Study Mate - Taking Exams",
+};
 const page = async ({ params }: idProps) => {
   const { id } = params;
   const { userId } = auth();

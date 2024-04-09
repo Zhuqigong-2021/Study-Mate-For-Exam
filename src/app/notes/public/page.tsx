@@ -4,6 +4,11 @@ import { auth } from "@clerk/nextjs";
 import React from "react";
 import prisma from "@/lib/db/prisma";
 import { checkRole } from "@/app/utils/roles/role";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Study Mate - Public Notes",
+};
 const page = async () => {
   const { userId } = auth();
   if (!userId) throw Error("userId undefined");
@@ -38,6 +43,7 @@ const page = async () => {
   });
   const isAdmin = checkRole("admin");
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
+
   return (
     <div>
       <FilterNote

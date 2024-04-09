@@ -4,6 +4,10 @@ import { auth } from "@clerk/nextjs";
 import React from "react";
 import prisma from "@/lib/db/prisma";
 import { checkRole } from "@/app/utils/roles/role";
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Study Mate - All Notes",
+};
 const page = async () => {
   const { userId } = auth();
   if (!userId) throw Error("userId undefined");

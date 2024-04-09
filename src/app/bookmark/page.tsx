@@ -11,7 +11,7 @@ import { columns } from "./columns";
 import ShowModal from "@/components/ShowModal";
 
 export const metadata: Metadata = {
-  title: "Study Mate - Exam",
+  title: "Study Mate - Bookmark",
 };
 const BookMarkPage = async () => {
   const { userId } = auth();

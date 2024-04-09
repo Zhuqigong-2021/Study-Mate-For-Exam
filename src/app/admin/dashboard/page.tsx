@@ -20,6 +20,11 @@ import { Crown } from "lucide-react";
 import GrantAdmin from "@/components/GrantAdmin";
 import Userdata from "@/components/Userdata";
 import { off } from "process";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Study Mate - Administration",
+};
 
 export default async function AdminDashboard(params: {
   searchParams: { search?: string; offset?: number; limit?: number };

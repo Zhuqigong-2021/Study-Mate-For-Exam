@@ -5,7 +5,10 @@ import prisma from "@/lib/db/prisma";
 import UpdateEditQuestions from "@/components/UpdateEditQuestions";
 import { redirect } from "next/dist/server/api-utils";
 import { checkRole } from "@/app/utils/roles/role";
-
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Study Mate - Edit Questions",
+};
 const page = async () => {
   const { userId } = auth();
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";

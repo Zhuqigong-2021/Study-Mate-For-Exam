@@ -8,7 +8,7 @@ import AIChatButton from "@/components/AIChatButton";
 import { checkRole } from "../utils/roles/role";
 
 export const metadata: Metadata = {
-  title: "Study Mate - Notes",
+  title: "Study Mate - My Notes",
 };
 const NotesPage = async () => {
   const { userId } = auth();

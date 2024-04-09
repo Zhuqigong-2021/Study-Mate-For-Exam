@@ -7,7 +7,7 @@ import ExamNote from "@/components/ExamNote";
 import WildCardNote from "@/components/WildCardNote";
 
 export const metadata: Metadata = {
-  title: "Study Mate- Wildcard",
+  title: "Study Mate- Flashcard",
 };
 const NotesPage = async () => {
   const { userId } = auth();

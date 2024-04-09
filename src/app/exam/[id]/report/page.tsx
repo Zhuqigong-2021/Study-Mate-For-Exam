@@ -3,10 +3,14 @@ import prisma from "@/lib/db/prisma";
 import React from "react";
 
 import ReportNoteQuestion from "@/components/ReportNoteQuestion";
+import { Metadata } from "next";
 export interface idProps {
   params: { id: string };
 }
 // { params }: idProps
+export const metadata: Metadata = {
+  title: "Study Mate - Exam Report",
+};
 const page = async ({
   searchParams,
 }: {
