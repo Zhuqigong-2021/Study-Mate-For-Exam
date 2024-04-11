@@ -49,7 +49,13 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <head>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="icon" href="/images/favicon.ico" sizes="any" />
+        <link
+          href="/img-512.png"
+          sizes="512x512"
+          rel="apple-touch-startup-image"
+        />
       </head>
 
       <html
