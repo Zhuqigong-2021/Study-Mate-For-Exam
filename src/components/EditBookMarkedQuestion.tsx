@@ -77,7 +77,7 @@ const EditBookMarkedQuestion = ({
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="no-scrollbar overflow-y-scroll">
+      <DialogContent className="no-scrollbar max-h-screen overflow-y-scroll">
         <DialogHeader>
           <div className="py-4"></div>
           <DialogTitle>
