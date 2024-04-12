@@ -10,8 +10,15 @@ interface propType {
   q: QuestionType;
   index: number;
   isSuperAdmin: boolean;
+  showAnswerOnly: boolean;
+  // setShowAnswerOnly:React.Dispatch<React.SetStateAction<boolean>>;
 }
-const ReviewChoiceQuestion = ({ q, index, isSuperAdmin }: propType) => {
+const ReviewChoiceQuestion = ({
+  q,
+  index,
+  isSuperAdmin,
+  showAnswerOnly,
+}: propType) => {
   const [isFlagged, setIsFlagged] = useState(q.isFlagged);
   const [isLoading, setIsLoading] = useState(false);
   const bookMarked = async (questionId: string, isFlagged: boolean) => {
@@ -73,7 +80,9 @@ const ReviewChoiceQuestion = ({ q, index, isSuperAdmin }: propType) => {
           >
             <span className="">
               {choiceLetter + "."} &nbsp;&nbsp;
-              {processString(c.content)}
+              {showAnswerOnly
+                ? c.answer && processString(c.content)
+                : processString(c.content)}
             </span>
           </CardContent>
         );

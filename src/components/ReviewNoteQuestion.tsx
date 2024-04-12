@@ -47,6 +47,7 @@ export interface NoteProps {
 
 const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
+  const [showAnswerOnly, setShowAnswerOnly] = useState(false);
   const router = useRouter();
 
   return (
@@ -65,6 +66,16 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
         <CardContent>
           <p className="flex flex-wrap ">{note.description}</p>
         </CardContent>
+        <CardContent>
+          <Button
+            variant="outline"
+            className="border border-stone-600 hover:bg-black hover:text-white"
+            onClick={() => setShowAnswerOnly((prev) => !prev)}
+          >
+            Toggle Show Answer Only
+          </Button>
+        </CardContent>
+
         <CardHeader>
           {note.questions.map((q: QuestionType, index: number) => {
             // const [isFlagged, setIsFlagged] = useState(question.isFlagged);
@@ -75,6 +86,8 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
                   q={q}
                   index={index}
                   isSuperAdmin={isSuperAdmin}
+                  showAnswerOnly={showAnswerOnly}
+                  // setShowAnswerOnly={setShowAnswerOnly}
                 />
                 {/* <CardTitle className="relative mb-4">
                   {" "}

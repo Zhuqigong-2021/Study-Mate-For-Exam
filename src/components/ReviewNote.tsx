@@ -15,6 +15,7 @@ import { Loader2 } from "lucide-react";
 import { getUser } from "@/app/notes/_actions";
 import { User } from "@clerk/nextjs/server";
 import Image from "next/image";
+import { Button } from "./ui/button";
 
 export interface NoteProps {
   note: {
@@ -79,6 +80,7 @@ const ReviewNote = ({ note }: NoteProps) => {
             <CardTitle className="scale-y-90  text-lg text-gray-800">
               {note.title}
             </CardTitle>
+
             <div
               className="absolute  -left-1 -right-1 top-14 w-1/2 rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r from-teal-500 to-transparent pl-6 text-sm text-white lg:w-1/3"
               style={{
