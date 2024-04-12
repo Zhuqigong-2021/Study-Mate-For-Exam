@@ -231,7 +231,7 @@ const CreateQuestion = ({ params }: idProps) => {
               </LoadingButton>
               <Button
                 type="button"
-                onClick={() => router.push(`/notes/${id}/edit`)}
+                onClick={() => router.push(`/review/${id}`)}
               >
                 <LuEye />
               </Button>

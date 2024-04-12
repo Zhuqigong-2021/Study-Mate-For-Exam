@@ -21,39 +21,70 @@ const BookMarkPage = async () => {
 
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
   // const allNotes = await prisma.note.findMany({ where: { userId } });
-  const flaggedQuestions = await prisma.question.findMany({
-    where: {
-      // note: {
-      //   userId: userId, // This assumes that the Note model has a userId field
-      // },
-      // Assuming direct relation to userId or use note: { userId } for indirect relation
-      isFlagged: true,
-    },
-    select: {
-      id: true, // Assuming you might need the ID as well
-      questionTitle: true,
-      comment: true,
-      isFlagged: true, // Include if needed
-      noteId: true,
-      note: {
-        select: {
-          id: true, // Include fields from Note you're interested in
-          title: true,
-          createdAt: true,
-          updateAt: true, // Adjust field names as per your Note model
-          // Any other fields from Note you need
+  let flaggedQuestions;
+  if (isSuperAdmin) {
+    flaggedQuestions = await prisma.question.findMany({
+      where: {
+        isFlagged: true,
+      },
+      select: {
+        id: true, // Assuming you might need the ID as well
+        questionTitle: true,
+        comment: true,
+        isFlagged: true, // Include if needed
+        noteId: true,
+        note: {
+          select: {
+            id: true, // Include fields from Note you're interested in
+            title: true,
+            createdAt: true,
+            updateAt: true, // Adjust field names as per your Note model
+            // Any other fields from Note you need
+          },
+        },
+        choices: {
+          select: {
+            id: true,
+            content: true,
+            answer: true,
+            // Include other fields from Choice you're interested in
+          },
         },
       },
-      choices: {
-        select: {
-          id: true,
-          content: true,
-          answer: true,
-          // Include other fields from Choice you're interested in
+    });
+  } else {
+    flaggedQuestions = await prisma.question.findMany({
+      where: {
+        isFlagged: true,
+        note: { isShared: true },
+      },
+      select: {
+        id: true, // Assuming you might need the ID as well
+        questionTitle: true,
+        comment: true,
+        isFlagged: true, // Include if needed
+        noteId: true,
+        note: {
+          select: {
+            id: true, // Include fields from Note you're interested in
+            title: true,
+            createdAt: true,
+            updateAt: true, // Adjust field names as per your Note model
+            // Any other fields from Note you need
+          },
+        },
+        choices: {
+          select: {
+            id: true,
+            content: true,
+            answer: true,
+            // Include other fields from Choice you're interested in
+          },
         },
       },
-    },
-  });
+    });
+  }
+
   return (
     // className="grid     gap-3  sm:grid-cols-2 lg:grid-cols-3"
     <div className="w-full max-w-[84rem]">
