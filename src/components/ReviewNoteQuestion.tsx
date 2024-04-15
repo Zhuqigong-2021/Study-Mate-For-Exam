@@ -124,7 +124,7 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
             <div className="flex w-full justify-center py-4 ">
               <Loader2
                 // size={40}
-                className="h-5 w-5 text-teal-500 lg:h-10 lg:w-10"
+                className="h-5 w-5 animate-spin text-teal-500 lg:h-10 lg:w-10"
 
                 // className="absolute -bottom-2 left-[50%] -translate-x-[50%]"
               />
