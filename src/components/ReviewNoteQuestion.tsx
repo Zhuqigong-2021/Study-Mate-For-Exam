@@ -143,9 +143,11 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
             }}
           />
         )}
-        <Button asChild className="absolute bottom-5 right-10">
-          <Link href="/notes/public">Back</Link>
-        </Button>
+        {!hasMore && (
+          <Button asChild className="absolute bottom-5 right-10">
+            <Link href="/review">Back</Link>
+          </Button>
+        )}
       </Card>
       {/* <EditNoteQuestion
         open={showAddEditNoteDialog}
