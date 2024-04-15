@@ -49,6 +49,7 @@ export interface NoteProps {
 const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const [showAnswerOnly, setShowAnswerOnly] = useState(false);
+  const [isLoadAll, setIsLoadAll] = useState(false);
   const router = useRouter();
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [page, setPage] = useState(0); // start from page 0 to handle the initial load correctly
@@ -92,18 +93,33 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
           <p className="flex flex-wrap ">{note.description}</p>
         </CardContent>
         <CardContent>
-          <Button
-            variant="outline"
-            className="border border-stone-600 hover:bg-black hover:text-white"
-            onClick={() => setShowAnswerOnly((prev) => !prev)}
-          >
-            Toggle Show Answer Only
-          </Button>
+          <div className="space-x-2  rounded-md border-b-0 border-black bg-gray-100 px-1 py-2">
+            <Button
+              variant="outline"
+              // className="border border-stone-600 hover:bg-black hover:text-white"
+              className={`${
+                showAnswerOnly ? " bg-transparent" : "bg-white"
+              }   border-none hover:bg-black hover:text-white`}
+              onClick={() => setShowAnswerOnly((prev) => !prev)}
+            >
+              {showAnswerOnly ? "Show All Options" : "Show Answer Only"}
+            </Button>
+            <Button
+              variant="outline"
+              className={`${
+                isLoadAll ? " bg-white " : " bg-transparent"
+              } hidden  border-none  hover:bg-black  hover:text-white lg:inline`}
+              onClick={() => setIsLoadAll((prev) => !prev)}
+            >
+              {isLoadAll ? "Priotize First Loading" : "Enable Page Search"}
+            </Button>
+          </div>
         </CardContent>
 
         <CardHeader className="relative">
           {/* note.questions */}
           {questions.length !== 0 &&
+            !isLoadAll &&
             questions.map((q: QuestionType, index: number) => {
               // const [isFlagged, setIsFlagged] = useState(question.isFlagged);
               //console.log(JSON.stringify(note.questions));
@@ -120,7 +136,7 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
               );
             })}
 
-          {isFetching && hasMore && (
+          {isFetching && hasMore && !isLoadAll && (
             <div className="flex w-full justify-center py-4 ">
               <Loader2
                 // size={40}
@@ -130,6 +146,23 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
               />
             </div>
           )}
+
+          {isLoadAll &&
+            note.questions.map((q: QuestionType, index: number) => {
+              // const [isFlagged, setIsFlagged] = useState(question.isFlagged);
+              //console.log(JSON.stringify(note.questions));
+              return (
+                // <CardContent key={q.id}>
+                <ReviewChoiceQuestion
+                  key={q.id}
+                  q={q}
+                  index={index}
+                  isSuperAdmin={isSuperAdmin}
+                  showAnswerOnly={showAnswerOnly}
+                  // setShowAnswerOnly={setShowAnswerOnly}
+                />
+              );
+            })}
         </CardHeader>
         <CardFooter className="py-4"></CardFooter>
         {/* <Button asChild className="right-30 absolute bottom-2 right-20 ">
