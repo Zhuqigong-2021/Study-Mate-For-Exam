@@ -1,6 +1,8 @@
 import prisma from "@/lib/db/prisma";
-import type { NextApiRequest, NextApiResponse } from "next";
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+// import type { NextApiRequest, NextApiResponse } from "next";
+
+import { NextRequest } from "next/server";
+export async function GET(req: NextRequest) {
   const url = new URL(req.url ?? "");
 
   const page = url.searchParams.get("page");
