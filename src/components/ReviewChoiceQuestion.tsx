@@ -61,7 +61,7 @@ const ReviewChoiceQuestion = ({
           />
         )}
         {isLoading && (
-          <Loader2 className=" absolute right-3 top-2 h-4   w-4 animate-spin " />
+          <Loader2 className=" absolute right-3 top-2 h-4   w-4 animate-spin text-teal-500 " />
         )}
       </div>
       <CardTitle className="relative mb-4 flex items-center  text-[18px] lg:text-[18px]">
