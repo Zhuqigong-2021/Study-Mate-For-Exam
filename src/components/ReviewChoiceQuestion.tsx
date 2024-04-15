@@ -50,12 +50,12 @@ const ReviewChoiceQuestion = ({
   };
   return (
     <Card className="max-w-[1200px] border-none pb-4 shadow-none">
-      <div className="relative mb-4 rounded-t-sm bg-teal-500 px-2 py-2 font-bold text-white">
+      <div className="relative mb-4 rounded-l-sm bg-gradient-to-r from-stone-300 via-stone-200 to-transparent px-2 py-2 font-bold text-white ">
         {"Question " + (index + 1)}
         {isSuperAdmin && !isLoading && (
           <BookmarkCheck
             className={`${
-              isFlagged ? "  text-teal-800" : "text-white"
+              isFlagged ? "text-teal-500  " : "text-stone-700"
             } absolute   right-2 top-2 `}
             onClick={() => bookMarked(q.id, isFlagged)}
           />

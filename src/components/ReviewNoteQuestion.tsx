@@ -93,7 +93,7 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
           <p className="flex flex-wrap ">{note.description}</p>
         </CardContent>
         <CardContent>
-          <div className="space-x-2  rounded-md border-b-0 border-black bg-gray-100 px-1 py-2">
+          <div className="space-x-2  rounded-md border-b-0 border-black bg-stone-100 px-1 py-2">
             <Button
               variant="outline"
               // className="border border-stone-600 hover:bg-black hover:text-white"
