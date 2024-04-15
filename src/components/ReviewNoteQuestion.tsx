@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
 import { Choice, Note as NoteModel, Question } from "@prisma/client";
 import { Question as QuestionModel } from "@prisma/client";
@@ -15,9 +15,10 @@ import {
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { BookmarkCheck } from "lucide-react";
+import { BookmarkCheck, Loader, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import ReviewChoiceQuestion from "./ReviewChoiceQuestion";
+import { useInfiniteScroll } from "@/app/utils/useInfiniteScroll";
 export interface NoteType {
   id: string;
   title: string;
@@ -49,6 +50,30 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const [showAnswerOnly, setShowAnswerOnly] = useState(false);
   const router = useRouter();
+  const [questions, setQuestions] = useState<QuestionType[]>([]);
+  const [page, setPage] = useState(0); // start from page 0 to handle the initial load correctly
+  const [hasMore, setHasMore] = useState(true);
+
+  const pageSize = 10;
+  const fetchMoreQuestions = useCallback(async () => {
+    if (!hasMore) return;
+    const nextPage = page + 1;
+    const response = await fetch(
+      `/api/questions?noteId=${note.id}&page=${nextPage}&pageSize=10`,
+    );
+    const newQuestions = await response.json();
+    if (newQuestions && newQuestions.questions.length > 0) {
+      setQuestions((prev) => [...prev, ...newQuestions.questions]);
+      setPage(nextPage);
+      setHasMore(newQuestions.questions.length === pageSize);
+    }
+  }, [note.id, page, hasMore]);
+
+  const [isFetching, setIsFetching] = useInfiniteScroll(fetchMoreQuestions);
+
+  useEffect(() => {
+    if (page === 0) fetchMoreQuestions(); // Initial load
+  }, [fetchMoreQuestions, page]);
 
   return (
     <>
@@ -76,22 +101,35 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
           </Button>
         </CardContent>
 
-        <CardHeader>
-          {note.questions.map((q: QuestionType, index: number) => {
-            // const [isFlagged, setIsFlagged] = useState(question.isFlagged);
-            //console.log(JSON.stringify(note.questions));
-            return (
-              // <CardContent key={q.id}>
-              <ReviewChoiceQuestion
-                key={q.id}
-                q={q}
-                index={index}
-                isSuperAdmin={isSuperAdmin}
-                showAnswerOnly={showAnswerOnly}
-                // setShowAnswerOnly={setShowAnswerOnly}
+        <CardHeader className="relative">
+          {/* note.questions */}
+          {questions.length !== 0 &&
+            questions.map((q: QuestionType, index: number) => {
+              // const [isFlagged, setIsFlagged] = useState(question.isFlagged);
+              //console.log(JSON.stringify(note.questions));
+              return (
+                // <CardContent key={q.id}>
+                <ReviewChoiceQuestion
+                  key={q.id}
+                  q={q}
+                  index={index}
+                  isSuperAdmin={isSuperAdmin}
+                  showAnswerOnly={showAnswerOnly}
+                  // setShowAnswerOnly={setShowAnswerOnly}
+                />
+              );
+            })}
+
+          {isFetching && hasMore && (
+            <div className="flex w-full justify-center py-4 ">
+              <Loader2
+                // size={40}
+                className="h-5 w-5 text-teal-500 lg:h-10 lg:w-10"
+
+                // className="absolute -bottom-2 left-[50%] -translate-x-[50%]"
               />
-            );
-          })}
+            </div>
+          )}
         </CardHeader>
         <CardFooter className="py-4"></CardFooter>
         {/* <Button asChild className="right-30 absolute bottom-2 right-20 ">
