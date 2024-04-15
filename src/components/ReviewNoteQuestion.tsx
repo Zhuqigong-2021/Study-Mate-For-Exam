@@ -81,58 +81,15 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
             // const [isFlagged, setIsFlagged] = useState(question.isFlagged);
             //console.log(JSON.stringify(note.questions));
             return (
-              <CardContent key={q.id}>
-                <ReviewChoiceQuestion
-                  q={q}
-                  index={index}
-                  isSuperAdmin={isSuperAdmin}
-                  showAnswerOnly={showAnswerOnly}
-                  // setShowAnswerOnly={setShowAnswerOnly}
-                />
-                {/* <CardTitle className="relative mb-4">
-                  {" "}
-                  <BookmarkCheck
-                    className={`${
-                      q.isFlagged ? " text-teal-600" : "text-black"
-                    } absolute   -left-6 top-0 `}
-                    // onClick={() => bookMarked(question.id, q.isFlagged)}
-                  />{" "}
-                  
-                </CardTitle> */}
-                {/* {q.choices.map((c: ChoiceType, index: number) => {
-                  let choiceLetter = String.fromCharCode(65 + index);
-                  // let choiceLetter =
-                  //   index === 0
-                  //     ? "A"
-                  //     : index === 1
-                  //       ? "B"
-                  //       : index === 2
-                  //         ? "C"
-                  //         : index === 3
-                  //           ? "D"
-                  //           : index === 4
-                  //             ? "E"
-                  //             : index === 5
-                  //               ? "F"
-                  //               : index === 6
-                  //                 ? "G"
-                  //                 : "H";
-                  let answer = c.answer;
-                  return (
-                    <CardContent
-                      key={c.id}
-                      className={`border-grey-600  relative my-2 flex h-[40px] items-center rounded-md border  text-left hover:shadow-lg ${
-                        answer ? "hover:bg-green-50" : "hover:bg-red-100"
-                      }`}
-                    >
-                      <span className="absolute top-[50%] -translate-y-[50%]">
-                        {choiceLetter + "."} &nbsp;&nbsp;
-                     
-                      </span>
-                    </CardContent>
-                  );
-                })} */}
-              </CardContent>
+              // <CardContent key={q.id}>
+              <ReviewChoiceQuestion
+                key={q.id}
+                q={q}
+                index={index}
+                isSuperAdmin={isSuperAdmin}
+                showAnswerOnly={showAnswerOnly}
+                // setShowAnswerOnly={setShowAnswerOnly}
+              />
             );
           })}
         </CardHeader>
