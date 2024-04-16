@@ -50,7 +50,7 @@ const ReviewChoiceQuestion = ({
   };
   return (
     <Card className="max-w-[1200px] border-none pb-4 shadow-none">
-      <div className="relative mb-4 rounded-l-sm bg-gradient-to-r from-stone-300 via-stone-200 to-transparent px-2 py-2 font-bold text-white ">
+      <div className="relative mb-4 rounded-l-sm bg-gradient-to-r from-teal-500 via-teal-200 to-transparent px-2 py-2 font-bold text-white ">
         {"Question " + (index + 1)}
         {isSuperAdmin && !isLoading && (
           <BookmarkCheck
