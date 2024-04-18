@@ -21,12 +21,15 @@ import GrantAdmin from "@/components/GrantAdmin";
 import Userdata from "@/components/Userdata";
 import { off } from "process";
 import { Metadata } from "next";
+import { AdminDashboard } from "@/components/AdminDashboard";
+import prisma from "@/lib/db/prisma";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Study Mate - Administration",
 };
 
-export default async function AdminDashboard(params: {
+export default async function Dashboard(params: {
   searchParams: { search?: string; offset?: number; limit?: number };
 }) {
   if (!checkRole("admin")) {
@@ -37,25 +40,68 @@ export default async function AdminDashboard(params: {
   const offset = params.searchParams.offset;
   const limit = params.searchParams.limit;
 
-  const users = query
-    ? await clerkClient.users.getUserList({ query })
-    : await clerkClient.users.getUserList({
-        offset: offset || 0,
-        limit: limit || 10,
-        orderBy: "-created_at",
-      });
+  // const users = query
+  //   ? await clerkClient.users.getUserList({ query })
+  //   : await clerkClient.users.getUserList({
+  //       offset: offset || 0,
+  //       limit: limit || 10,
+  //       orderBy: "-created_at",
+  //   });
+  const users = await clerkClient.users.getUserList({
+    limit: 1000000000,
+  });
   //   const users = await clerkClient.users.getUserList({});
   const totalUsersNumber = await clerkClient.users.getCount();
 
+  let allNotes = await prisma.note.findMany({
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      isShared: true,
+      updateAt: true,
+      createdAt: true,
+      userId: true,
+      questions: {
+        select: {
+          id: true,
+          questionTitle: true,
+          isFlagged: true,
+          comment: true,
+          noteId: true,
+          choices: {
+            select: {
+              id: true,
+              content: true,
+              answer: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  let notesTotal = await prisma.note.count({});
+
   return (
-    <div className="mt-5 flex  flex-col  items-center justify-center">
-      <SearchUsers />
+    <div className="flex flex-col items-center justify-center  ">
+      <AdminDashboard
+        users={JSON.stringify(users)}
+        userId={userId}
+        totalUsersNumber={totalUsersNumber}
+        notesTotal={notesTotal}
+      />
+      {/* <SearchUsers />
       <Userdata
         users={JSON.stringify(users)}
         userId={userId}
         totalUsersNumber={totalUsersNumber}
-      />
-      {/* <div className="my-10 flex w-full max-w-7xl items-center justify-center">
+      /> */}
+    </div>
+  );
+}
+
+{
+  /* <div className="my-10 flex w-full max-w-7xl items-center justify-center">
         <Table className="max-w-7xl">
           <TableCaption>All users in this app with details.</TableCaption>
           <TableHeader>
@@ -100,7 +146,5 @@ export default async function AdminDashboard(params: {
             ))}
           </TableBody>
         </Table>
-      </div> */}
-    </div>
-  );
+      </div> */
 }
