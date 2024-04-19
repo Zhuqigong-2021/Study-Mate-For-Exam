@@ -47,11 +47,12 @@ export default async function Dashboard(params: {
   //       limit: limit || 10,
   //       orderBy: "-created_at",
   //   });
-  const users = await clerkClient.users.getUserList({
-    limit: 1000000000,
-  });
-  //   const users = await clerkClient.users.getUserList({});
   const totalUsersNumber = await clerkClient.users.getCount();
+  const users = await clerkClient.users.getUserList({
+    limit: totalUsersNumber,
+  });
+
+  //   const users = await clerkClient.users.getUserList({});
 
   let allNotes = await prisma.note.findMany({
     select: {

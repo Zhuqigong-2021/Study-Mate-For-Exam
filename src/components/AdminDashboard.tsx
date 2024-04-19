@@ -51,6 +51,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
+import { Skeleton } from "./ui/skeleton";
 interface UserProps {
   users: string;
   userId: string | null;
@@ -416,15 +417,18 @@ export function AdminDashboard({
             </Card>
             <Card x-chunk="dashboard-01-chunk-5">
               <CardHeader>
-                <CardTitle>Recent Activities</CardTitle>
+                {isClient && <CardTitle>Recent Activities</CardTitle>}
+                {!isClient && (
+                  <Skeleton className="h-5 w-[150px]  bg-stone-200"></Skeleton>
+                )}
               </CardHeader>
-              <CardContent className="mt-4 grid gap-8">
+              <CardContent className="no-scrollbar mt-4 grid max-h-[480px] gap-8 overflow-scroll ">
                 {isClient &&
                   usersList
                     .sort(
                       (a, b) => Number(b.lastSignInAt) - Number(a.lastSignInAt),
                     ) // Sort users by last sign-in date in descending order
-                    .slice(0, 7)
+                    // .slice(0, 6)
                     .map((user, index: number) => {
                       const lastSignin = new Date(Number(user.lastSignInAt))
                         .toLocaleString("en-US", {
@@ -494,77 +498,21 @@ export function AdminDashboard({
                         </div>
                       );
                     })}
-                {/* <div className="flex items-center gap-4">
-                  <Avatar className="hidden h-9 w-9 sm:flex">
-                    <AvatarFallback>OM</AvatarFallback>
-                  </Avatar>
-                  <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">
-                      Olivia Martin
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      olivia.martin@email.com
-                    </p>
+                {!isClient && (
+                  <div>
+                    {Array.from({ length: 7 }, (_: any, index: number) => (
+                      <div className="mb-8 flex items-center gap-4" key={index}>
+                        <Skeleton className="hidden h-9 w-9 rounded-full bg-stone-200 sm:flex"></Skeleton>
+                        <div className="grid gap-y-2">
+                          <Skeleton className="h-4 w-[100px]"></Skeleton>
+
+                          <Skeleton className="h-3 w-[150px]"></Skeleton>
+                        </div>
+                        <Skeleton className="ml-auto h-4 w-[80px] font-medium"></Skeleton>
+                      </div>
+                    ))}
                   </div>
-                  <div className="ml-auto font-medium">+$1,999.00</div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <Avatar className="hidden h-9 w-9 sm:flex">
-                    <AvatarFallback>JL</AvatarFallback>
-                  </Avatar>
-                  <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">
-                      Jackson Lee
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      jackson.lee@email.com
-                    </p>
-                  </div>
-                  <div className="ml-auto font-medium">+$39.00</div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <Avatar className="hidden h-9 w-9 sm:flex">
-                    <AvatarFallback>IN</AvatarFallback>
-                  </Avatar>
-                  <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">
-                      Isabella Nguyen
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      isabella.nguyen@email.com
-                    </p>
-                  </div>
-                  <div className="ml-auto font-medium">+$299.00</div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <Avatar className="hidden h-9 w-9 sm:flex">
-                    <AvatarFallback>WK</AvatarFallback>
-                  </Avatar>
-                  <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">
-                      William Kim
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      will@email.com
-                    </p>
-                  </div>
-                  <div className="ml-auto font-medium">+$99.00</div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <Avatar className="hidden h-9 w-9 sm:flex">
-    
-                    <AvatarFallback>SD</AvatarFallback>
-                  </Avatar>
-                  <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">
-                      Sofia Davis
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      sofia.davis@email.com
-                    </p>
-                  </div>
-                  <div className="ml-auto font-medium">+$39.00</div>
-                </div> */}
+                )}
               </CardContent>
             </Card>
           </div>
@@ -573,3 +521,61 @@ export function AdminDashboard({
     </div>
   );
 }
+
+//  <div className="flex items-center gap-4">
+//                   <Avatar className="hidden h-9 w-9 sm:flex">
+//                     <AvatarFallback>JL</AvatarFallback>
+//                   </Avatar>
+//                   <div className="grid gap-1">
+//                     <p className="text-sm font-medium leading-none">
+//                       Jackson Lee
+//                     </p>
+//                     <p className="text-sm text-muted-foreground">
+//                       jackson.lee@email.com
+//                     </p>
+//                   </div>
+//                   <div className="ml-auto font-medium">+$39.00</div>
+//                 </div>
+//                 <div className="flex items-center gap-4">
+//                   <Avatar className="hidden h-9 w-9 sm:flex">
+//                     <AvatarFallback>IN</AvatarFallback>
+//                   </Avatar>
+//                   <div className="grid gap-1">
+//                     <p className="text-sm font-medium leading-none">
+//                       Isabella Nguyen
+//                     </p>
+//                     <p className="text-sm text-muted-foreground">
+//                       isabella.nguyen@email.com
+//                     </p>
+//                   </div>
+//                   <div className="ml-auto font-medium">+$299.00</div>
+//                 </div>
+//                 <div className="flex items-center gap-4">
+//                   <Avatar className="hidden h-9 w-9 sm:flex">
+//                     <AvatarFallback>WK</AvatarFallback>
+//                   </Avatar>
+//                   <div className="grid gap-1">
+//                     <p className="text-sm font-medium leading-none">
+//                       William Kim
+//                     </p>
+//                     <p className="text-sm text-muted-foreground">
+//                       will@email.com
+//                     </p>
+//                   </div>
+//                   <div className="ml-auto font-medium">+$99.00</div>
+//                 </div>
+//                 <div className="flex items-center gap-4">
+//                   <Avatar className="hidden h-9 w-9 sm:flex">
+
+//                     <AvatarFallback>SD</AvatarFallback>
+//                   </Avatar>
+//                   <div className="grid gap-1">
+//                     <p className="text-sm font-medium leading-none">
+//                       Sofia Davis
+//                     </p>
+//                     <p className="text-sm text-muted-foreground">
+//                       sofia.davis@email.com
+//                     </p>
+//                   </div>
+//                   <div className="ml-auto font-medium">+$39.00</div>
+//                 </div>

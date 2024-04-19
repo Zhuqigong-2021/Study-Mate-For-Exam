@@ -4,7 +4,7 @@ import prisma from "@/lib/db/prisma";
 
 import { idProps } from "../page";
 
-import ExamNoteQuestion from "@/components/ExamNoteQuestion";
+import ExamNoteQuestion from "@/components/Exam/ExamNoteQuestion";
 import { checkRole } from "@/app/utils/roles/role";
 import { Metadata } from "next";
 

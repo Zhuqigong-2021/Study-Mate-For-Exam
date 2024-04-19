@@ -10,14 +10,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./ui/card";
+} from "../ui/card";
 
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
-import { RadioGroupItem } from "./ui/radio-group";
-import MutipleChoiceQuestion from "./MutipleChoiceQuestion";
+import { RadioGroupItem } from "../ui/radio-group";
+import MutipleChoiceQuestion from "../MutipleChoiceQuestion";
 
 export interface NoteType {
   id: string;

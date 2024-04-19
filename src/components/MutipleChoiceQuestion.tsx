@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import { CardContent, CardTitle } from "./ui/card";
-import { ChoiceType, QuestionType } from "./ExamNoteQuestion";
+import { ChoiceType, QuestionType } from "./Exam/ExamNoteQuestion";
 import { Choice } from "@prisma/client";
 import { BookmarkCheck, Loader2 } from "lucide-react";
 import { auth } from "@clerk/nextjs";

@@ -7,38 +7,56 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
+} from "../ui/card";
 
 import { useRouter } from "next/navigation";
-import SetTimer from "./SetTimer";
-import { NoteType } from "./ExamNoteQuestion";
+import SetTimer from "../SetTimer";
 import { Loader2 } from "lucide-react";
-import { User } from "@clerk/nextjs/server";
 import { getUser } from "@/app/notes/_actions";
+import { User } from "@clerk/nextjs/server";
 import Image from "next/image";
+import { Button } from "../ui/button";
 
 export interface NoteProps {
-  note: NoteType;
+  note: {
+    userId: string;
+    id: string;
+    title: string;
+    description: string;
+    questions: {
+      id: string;
+      questionTitle: string;
+      noteId: string;
+      isFlagged: boolean;
+      comment: string;
+      choices: {
+        id: string;
+        content: string;
+        answer: boolean;
+      }[];
+    }[];
+    isShared: boolean;
+    createdAt: Date;
+    updateAt: Date;
+  };
 }
 
-const ExamNote = ({ note }: NoteProps) => {
-  const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
+const ReviewNote = ({ note }: NoteProps) => {
+  const router = useRouter();
   const [user, setUser] = useState<User>();
-  const wasUpdated = note.updateAt > note.createdAt;
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
-
+  const wasUpdated = note.updateAt > note.createdAt;
   const createdUpdatedAtTimestamp = (
     wasUpdated ? note.updateAt : note.createdAt
   ).toDateString();
-
   const getUserObj = useCallback(async () => {
     const user = await getUser(note.userId);
     return user;
-  }, [note.userId]);
+  }, [note.userId]); // Dependencies array, re-create getUserObj only when note.userId changes
 
   useEffect(() => {
     // Define an async function inside the useEffect to call getUserObj
@@ -51,20 +69,20 @@ const ExamNote = ({ note }: NoteProps) => {
 
     fetchUser();
   }, [getUserObj]);
-
   return (
     <>
       {isClient && (
         <Card
-          className="relative cursor-pointer rounded-xl  shadow-gray-300  transition-shadow hover:shadow-gray-600 "
-          onClick={() => setShowAddEditNoteDialog(true)}
+          className="relative cursor-pointer   rounded-xl  shadow-gray-300  transition-shadow hover:shadow-gray-600"
+          onClick={() => router.push(`/review/${note.id}`)}
         >
           <CardHeader className="relative h-32 ">
             <CardTitle className="scale-y-90  text-lg text-gray-800">
               {note.title}
             </CardTitle>
+
             <div
-              className="absolute  -left-1 -right-1 top-14 w-1/2 rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r from-red-500 to-transparent pl-6 text-sm text-white lg:w-1/3"
+              className="absolute  -left-1 -right-1 top-14 w-1/2 rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r from-teal-500 to-transparent pl-6 text-sm text-white lg:w-1/3"
               style={{
                 clipPath: `polygon(100% 0%, 85% 48%, 100% 100%, 0.5% 100%, 0% 50%, 0.5% 0)`,
               }}
@@ -73,7 +91,7 @@ const ExamNote = ({ note }: NoteProps) => {
             </div>
           </CardHeader>
 
-          <CardContent className=" h-14 rounded-b-xl bg-rose-500/5 px-6 py-2">
+          <CardContent className=" h-14 rounded-b-xl bg-teal-500/5 px-6 py-2">
             <span className="absolute bottom-4 left-6 flex items-center space-x-2">
               {user && isClient ? (
                 <Image
@@ -86,7 +104,7 @@ const ExamNote = ({ note }: NoteProps) => {
               ) : (
                 <Loader2
                   size={23}
-                  className="animate-spin rounded-full border border-white bg-gray-100 text-rose-600"
+                  className="animate-spin rounded-full border border-white bg-gray-100 text-teal-600"
                 />
               )}
               <CardDescription className="text-xs">
@@ -103,14 +121,8 @@ const ExamNote = ({ note }: NoteProps) => {
           </CardContent>
         </Card>
       )}
-      <SetTimer
-        open={showAddEditNoteDialog}
-        setOpen={setShowAddEditNoteDialog}
-        questions={note.questions}
-        noteToEdit={note}
-      />
     </>
   );
 };
 
-export default ExamNote;
+export default ReviewNote;

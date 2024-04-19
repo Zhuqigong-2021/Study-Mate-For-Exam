@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { QuestionType } from "./ExamNoteQuestion";
+import { QuestionType } from "./Exam/ExamNoteQuestion";
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from "./ui/dialog";
 import { Button } from "./ui/button";
 

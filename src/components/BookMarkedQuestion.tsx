@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { NoteProps } from "./ExamNoteQuestion";
+import { NoteProps } from "./Exam/ExamNoteQuestion";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { BookmarkCheck } from "lucide-react";
 import toast from "react-hot-toast";

@@ -1,5 +1,5 @@
 import AIChatButton from "@/components/AIChatButton";
-import FilterNote from "@/components/FilterNote";
+import FilterNote from "@/components/Note/FilterNote";
 import { auth } from "@clerk/nextjs";
 import React from "react";
 import prisma from "@/lib/db/prisma";

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Crown, Globe, Leaf, Plus } from "lucide-react";
-import AddEditNoteDialog from "@/components/AddEditNoteDialog";
+import AddEditNoteDialog from "@/components/Note/AddEditNoteDialog";
 import Drawer from "@/components/Drawer";
 import { usePathname, useRouter } from "next/navigation";
 

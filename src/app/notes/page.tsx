@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import React, { useState } from "react";
 import prisma from "@/lib/db/prisma";
 
-import FilterNote from "@/components/FilterNote";
+import FilterNote from "@/components/Note/FilterNote";
 import AIChatButton from "@/components/AIChatButton";
 import { checkRole } from "../utils/roles/role";
 

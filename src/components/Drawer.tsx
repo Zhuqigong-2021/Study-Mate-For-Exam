@@ -16,7 +16,7 @@ import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 
 import { usePathname } from "next/navigation";
-import AddEditNoteDialog from "./AddEditNoteDialog";
+import AddEditNoteDialog from "./Note/AddEditNoteDialog";
 import { Menu } from "lucide-react";
 interface roleType {
   isAdmin: boolean;

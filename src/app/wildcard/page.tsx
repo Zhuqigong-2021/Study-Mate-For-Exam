@@ -2,9 +2,11 @@ import { auth } from "@clerk/nextjs";
 import { Metadata } from "next";
 import React from "react";
 import prisma from "@/lib/db/prisma";
-import Note from "@/components/Note";
-import ExamNote from "@/components/ExamNote";
-import WildCardNote from "@/components/WildCardNote";
+import Note from "@/components/Note/Note";
+import ExamNote from "@/components/Exam/ExamNote";
+import WildCardNote from "@/components/Flashcard/WildCardNote";
+import FlashcardWrapper from "@/components/Flashcard/FlashcardWrapper";
+import { checkRole } from "../utils/roles/role";
 
 export const metadata: Metadata = {
   title: "Study Mate- Flashcard",
@@ -12,7 +14,7 @@ export const metadata: Metadata = {
 const NotesPage = async () => {
   const { userId } = auth();
   if (!userId) throw Error("userId undefined");
-
+  const isAdmin = checkRole("admin");
   // const allNotes = await prisma.note.findMany({ where: { userId } });
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
   let allNotes;
@@ -103,16 +105,19 @@ const NotesPage = async () => {
   //   },
   // });
   return (
-    <div className="grid     gap-3  sm:grid-cols-2 lg:grid-cols-3">
-      {allNotes.map((note) => (
-        <WildCardNote note={note} key={note.id} />
-      ))}
-      {allNotes.length === 0 && (
-        <div className="col-span-full text-center">
-          {"You have no note to review in wildcard"}
-        </div>
-      )}
+    <div>
+      <FlashcardWrapper allNotes={allNotes} />
     </div>
+    // <div className="grid     gap-3  sm:grid-cols-2 lg:grid-cols-3">
+    //   {allNotes.map((note) => (
+    //     <WildCardNote note={note} key={note.id} />
+    //   ))}
+    //   {allNotes.length === 0 && (
+    //     <div className="col-span-full text-center">
+    //       {"You have no note to review in wildcard"}
+    //     </div>
+    //   )}
+    // </div>
   );
 };
 

@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
+} from "../ui/card";
 
 import AddEditNoteDialog from "./AddEditNoteDialog";
 import { Globe, Loader2 } from "lucide-react";

@@ -2,16 +2,17 @@
 import React, { useEffect, useState } from "react";
 import Note from "./Note";
 import { Check, Filter, Search } from "lucide-react";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FormSchema, formSchema } from "@/lib/validation/note";
-import { Form, FormControl, FormField, FormItem } from "./ui/form";
+import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import Image from "next/image";
-import Notebackground from "../assets/notesearch.png";
-import NotFound from "../assets/NOTFOUNDFinal.png";
+import Notebackground from "../../assets/notesearch.png";
+import NotFound from "../../assets/NOTFOUNDFinal.png";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,9 +22,12 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { Skeleton } from "../ui/skeleton";
+import { Card } from "../ui/card";
+import { SkeletonCard } from "../SkeletonCard";
 type Note = {
   userId: string;
   id: string;
@@ -54,6 +58,10 @@ type allNotesProps = {
 const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
   const [userInput, setUserInput] = useState("");
   const [isSticky, setIsSticky] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -100,6 +108,7 @@ const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
         <Image
           src={Notebackground}
           alt="note background"
+          placeholder="blur"
           className=" absolute left-0 right-0   top-0 flex  h-[24rem] w-full items-center justify-center object-cover opacity-90 "
         />
         <div className="relative  mx-4 flex h-10 w-full justify-center  md:w-1/2">
@@ -192,9 +201,17 @@ const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
           </div>
         )}
         <div className=" grid  gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {selecedNotes.map((note, index) => (
-            <Note note={note} key={note.id} isAdmin={isAdmin} index={index} />
-          ))}
+          {isClient &&
+            selecedNotes.map((note, index) => (
+              <Note note={note} key={note.id} isAdmin={isAdmin} index={index} />
+            ))}
+          {!isClient && (
+            <>
+              {Array.from({ length: 6 }, (_: any, index: number) => (
+                <SkeletonCard key={index} />
+              ))}
+            </>
+          )}
           {selecedNotes.length === 0 && (
             <div className="col-span-full flex w-full flex-col items-center  justify-center text-center">
               <Image src={NotFound} alt="not found" />

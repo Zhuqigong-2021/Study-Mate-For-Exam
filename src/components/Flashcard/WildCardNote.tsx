@@ -7,17 +7,16 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
+} from "../ui/card";
 
 import { useRouter } from "next/navigation";
-import SetTimer from "./SetTimer";
-import { Loader2 } from "lucide-react";
+
 import { getUser } from "@/app/notes/_actions";
 import { User } from "@clerk/nextjs/server";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
-import { Button } from "./ui/button";
 
-export interface NoteProps {
+interface NoteProps {
   note: {
     userId: string;
     id: string;
@@ -41,7 +40,7 @@ export interface NoteProps {
   };
 }
 
-const ReviewNote = ({ note }: NoteProps) => {
+const WildCardNote = ({ note }: NoteProps) => {
   const router = useRouter();
   const [user, setUser] = useState<User>();
   const [isClient, setIsClient] = useState(false);
@@ -73,16 +72,16 @@ const ReviewNote = ({ note }: NoteProps) => {
     <>
       {isClient && (
         <Card
-          className="relative cursor-pointer   rounded-xl  shadow-gray-300  transition-shadow hover:shadow-gray-600"
-          onClick={() => router.push(`/review/${note.id}`)}
+          className="relative cursor-pointer rounded-xl  shadow-gray-300  transition-shadow hover:shadow-gray-600 "
+          onClick={() => router.push(`/wildcard/${note.id}`)}
+          // onClick={() => setShowAddEditNoteDialog(true)}
         >
           <CardHeader className="relative h-32 ">
             <CardTitle className="scale-y-90  text-lg text-gray-800">
               {note.title}
             </CardTitle>
-
             <div
-              className="absolute  -left-1 -right-1 top-14 w-1/2 rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r from-teal-500 to-transparent pl-6 text-sm text-white lg:w-1/3"
+              className="absolute  -left-1 -right-1 top-14 w-1/2 rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r from-black to-transparent pl-6 text-sm text-white lg:w-1/3"
               style={{
                 clipPath: `polygon(100% 0%, 85% 48%, 100% 100%, 0.5% 100%, 0% 50%, 0.5% 0)`,
               }}
@@ -91,7 +90,7 @@ const ReviewNote = ({ note }: NoteProps) => {
             </div>
           </CardHeader>
 
-          <CardContent className=" h-14 rounded-b-xl bg-teal-500/5 px-6 py-2">
+          <CardContent className=" h-14 rounded-b-xl bg-stone-500/5 px-6 py-2">
             <span className="absolute bottom-4 left-6 flex items-center space-x-2">
               {user && isClient ? (
                 <Image
@@ -104,7 +103,7 @@ const ReviewNote = ({ note }: NoteProps) => {
               ) : (
                 <Loader2
                   size={23}
-                  className="animate-spin rounded-full border border-white bg-gray-100 text-teal-600"
+                  className="animate-spin rounded-full border border-white bg-gray-100 text-gray-600"
                 />
               )}
               <CardDescription className="text-xs">
@@ -125,4 +124,4 @@ const ReviewNote = ({ note }: NoteProps) => {
   );
 };
 
-export default ReviewNote;
+export default WildCardNote;

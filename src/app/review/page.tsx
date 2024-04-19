@@ -2,14 +2,15 @@ import { auth } from "@clerk/nextjs";
 import { Metadata } from "next";
 import React from "react";
 import prisma from "@/lib/db/prisma";
-import Note from "@/components/Note";
-import ExamNote from "@/components/ExamNote";
-import WildCardNote from "@/components/WildCardNote";
+import Note from "@/components/Note/Note";
+import ExamNote from "@/components/Exam/ExamNote";
+import WildCardNote from "@/components/Flashcard/WildCardNote";
 
 import ReviewNoteQuestion from "@/components/ReviewNoteQuestion";
-import ReviewNote from "@/components/ReviewNote";
+import ReviewNote from "@/components/Review/ReviewNote";
 import { checkRole } from "../utils/roles/role";
 import { redirect } from "next/navigation";
+import ReviewWrapper from "@/components/Review/ReviewWrapper";
 
 export const metadata: Metadata = {
   title: "Study Mate - Review",
@@ -84,16 +85,19 @@ const NotesPage = async () => {
   }
 
   return (
-    <div className="grid     gap-3  sm:grid-cols-2 lg:grid-cols-3">
-      {allNotes.map((note) => (
-        <ReviewNote note={note} key={note.id} />
-      ))}
-      {allNotes.length === 0 && (
-        <div className="col-span-full text-center">
-          {"You have no note to review"}
-        </div>
-      )}
+    <div>
+      <ReviewWrapper allNotes={allNotes} />
     </div>
+    // <div className="grid     gap-3  sm:grid-cols-2 lg:grid-cols-3">
+    //   {allNotes.map((note) => (
+    //     <ReviewNote note={note} key={note.id} />
+    //   ))}
+    //   {allNotes.length === 0 && (
+    //     <div className="col-span-full text-center">
+    //       {"You have no note to review"}
+    //     </div>
+    //   )}
+    // </div>
   );
 };
 

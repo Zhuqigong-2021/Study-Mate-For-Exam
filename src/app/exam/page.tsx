@@ -2,8 +2,11 @@ import { auth } from "@clerk/nextjs";
 import { Metadata } from "next";
 import React from "react";
 import prisma from "@/lib/db/prisma";
-import Note from "@/components/Note";
-import ExamNote from "@/components/ExamNote";
+import Note from "@/components/Note/Note";
+import ExamNote from "@/components/Exam/ExamNote";
+import { SkeletonCard } from "@/components/SkeletonCard";
+import ExamWrapper from "@/components/Exam/ExamWrapper";
+import { checkRole } from "../utils/roles/role";
 
 export const metadata: Metadata = {
   title: "Study Mate - Exam",
@@ -79,16 +82,29 @@ const NotesPage = async () => {
   }
 
   return (
-    <div className="grid     gap-3  sm:grid-cols-2 lg:grid-cols-3">
-      {allNotes.map((note) => (
-        <ExamNote note={note} key={note.id} />
-      ))}
-      {allNotes.length === 0 && (
-        <div className="col-span-full text-center">
-          {"You have no note to take exam"}
-        </div>
-      )}
+    <div>
+      <ExamWrapper
+        allNotes={allNotes}
+        // isAdmin={isAdmin}
+        // isSuperAdmin={isSuperAdmin}
+      />
     </div>
+    // <div className="grid     gap-3  sm:grid-cols-2 lg:grid-cols-3">
+    //   {allNotes &&
+    //     allNotes.map((note) => <ExamNote note={note} key={note.id} />)}
+    //   {!allNotes && (
+    //     <>
+    //       {Array.from({ length: 9 }, (_: any, index: number) => (
+    //         <SkeletonCard key={index} />
+    //       ))}
+    //     </>
+    //   )}
+    //   {allNotes.length === 0 && (
+    //     <div className="col-span-full text-center">
+    //       {"You have no note to take exam"}
+    //     </div>
+    //   )}
+    // </div>
   );
 };
 

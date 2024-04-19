@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "./ui/card";
 
-import AddEditNoteDialog from "./AddEditNoteDialog";
+import AddEditNoteDialog from "./Note/AddEditNoteDialog";
 import EditNoteQuestion from "./EditNoteQuestion";
 import { Button } from "./ui/button";
 import Link from "next/link";
