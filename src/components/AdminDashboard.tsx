@@ -1,5 +1,7 @@
 "use client";
 import Link from "next/link";
+import CountUp from "react-countup";
+
 import {
   Activity,
   ArrowUpRight,
@@ -218,32 +220,43 @@ export function AdminDashboard({
               onClick={() => router.push("/admin/dashboard/users")}
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
+                <CardTitle className="text-sm font-medium ">
                   Total Subscribers
                 </CardTitle>
                 {/* <DollarSign className="h-4 w-4 text-muted-foreground" /> */}
                 <Sigma className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
-                  {totalUsersNumber ? totalUsersNumber : 0}
+                <div className="text-2xl font-bold ">
+                  <CountUp
+                    start={0}
+                    end={totalUsersNumber ? totalUsersNumber : 0}
+                    duration={3}
+                  />
+                  {/* {totalUsersNumber ? totalUsersNumber : 0} */}
                 </div>
                 <p className="text-xs text-muted-foreground">
                   +20.1% from last month
                 </p>
               </CardContent>
             </Card>
-            <Card x-chunk="dashboard-01-chunk-1">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <Card x-chunk=" dashboard-01-chunk-1">
+              <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   Subscriptions
                 </CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">+2350</div>
+                <div className="text-2xl font-bold">
+                  <CountUp
+                    start={0}
+                    end={totalUsersNumber ? +1000 : 0}
+                    duration={3}
+                  />
+                </div>
                 <p className="text-xs text-muted-foreground">
-                  +180.1% from last month
+                  daily subscriber increase
                 </p>
               </CardContent>
             </Card>
@@ -256,7 +269,10 @@ export function AdminDashboard({
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{notesTotal}</div>
+                <div className="text-2xl font-bold">
+                  <CountUp start={0} end={notesTotal} duration={1.5} />
+                  {/* {notesTotal} */}
+                </div>
                 <p className="text-xs text-muted-foreground">
                   +19% from last month
                 </p>
@@ -270,7 +286,10 @@ export function AdminDashboard({
                 <Activity className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">+573</div>
+                <div className="text-2xl font-bold">
+                  {" "}
+                  <CountUp start={0} end={573} duration={1.5} />
+                </div>
                 <p className="text-xs text-muted-foreground">
                   +201 since last hour
                 </p>

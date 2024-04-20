@@ -202,6 +202,7 @@ const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
         )}
         <div className=" grid  gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {isClient &&
+            selecedNotes &&
             selecedNotes.map((note, index) => (
               <Note note={note} key={note.id} isAdmin={isAdmin} index={index} />
             ))}

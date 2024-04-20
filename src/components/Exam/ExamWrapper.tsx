@@ -36,6 +36,7 @@ const ExamWrapper = ({ allNotes }: allNotesProps) => {
   return (
     <div className="grid     gap-3  sm:grid-cols-2 lg:grid-cols-3">
       {isClient &&
+        allNotes &&
         allNotes.map((note) => <ExamNote note={note} key={note.id} />)}
       {!isClient && (
         <>
