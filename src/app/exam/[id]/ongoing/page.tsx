@@ -63,6 +63,7 @@ const page = async ({ params }: idProps) => {
           noteId: true,
           userName: true,
           noteTitle: true,
+          time: true,
           result: true,
           batch: true,
           userId: true,

@@ -17,6 +17,7 @@ const page = async () => {
           noteId: true,
           noteTitle: true,
           userName: true,
+          time: true,
           result: true,
           batch: true,
           userId: true,
@@ -47,7 +48,7 @@ const page = async () => {
   const { userId } = auth();
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
   return (
-    <div className="mt-5 flex min-h-[850px] w-full flex-col items-center ">
+    <div className="mt-5 flex min-h-[450px] w-full flex-col items-center ">
       <div className="w-full max-w-7xl  ">
         <AllReport
           reports={reportList[0].reports}

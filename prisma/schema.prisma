@@ -54,6 +54,7 @@ model Report {
    batch Int
    userId String
    userName String
+   time String
    noteTitle String
    choiceId Json
    reportList ReportList @relation(fields: [reportListId],references: [id])

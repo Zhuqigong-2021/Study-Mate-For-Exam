@@ -10,7 +10,7 @@ import {
 } from "../ui/card";
 
 import { useRouter } from "next/navigation";
-import SetTimer from "../SetTimer";
+import SetTimer from "../Exam/SetTimer";
 import { Loader2 } from "lucide-react";
 import { getUser } from "@/app/notes/_actions";
 import { User } from "@clerk/nextjs/server";

@@ -316,6 +316,12 @@ const ExamNoteQuestion = ({
           body: JSON.stringify({
             noteId: id,
             noteTitle: note.title,
+            time:
+              Number(timer) / 60000 >= 1 && Number(timer) / 60000 <= 60
+                ? Number(timer) / 60000 + "min"
+                : Number(timer) / 60000 > 60
+                  ? Number(timer) / 3600000 + "h"
+                  : Number(timer) / 1000 + "s",
             userName: user?.firstName + " " + user?.lastName,
             result: Number(batch),
             choiceId: selectedChoices,
@@ -329,6 +335,22 @@ const ExamNoteQuestion = ({
           return;
         }
         toast.success("Congrats, You've finished your exam!");
+
+        router.push(
+          `/exam/${note.id}/result` +
+            "?" +
+            createQueryString("correct", correctNumber.toString()) +
+            "&" +
+            createQueryString("total", totalQuestionNumber.toString()) +
+            "&" +
+            createQueryString("result", result.toString()) +
+            "&" +
+            createQueryString("id", note.id) +
+            "&" +
+            createQueryString("batch", batch ? batch : "") +
+            "&" +
+            createQueryString("choiceId", JSON.stringify(selectedChoices)),
+        );
       } else {
         const response = await fetch("/api/report", {
           method: "POST",
@@ -336,6 +358,12 @@ const ExamNoteQuestion = ({
             noteId: id,
             noteTitle: note.title,
             userName: user?.firstName + " " + user?.lastName,
+            time:
+              Number(timer) / 60000 >= 1 && Number(timer) / 60000 <= 60
+                ? Number(timer) / 60000 + "min"
+                : Number(timer) / 60000 > 60
+                  ? Number(timer) / 3600000 + "h"
+                  : Number(timer) / 1000 + "s",
             result: Number(result),
             choiceId: selectedChoices,
             batch: Number(batch),
@@ -349,6 +377,21 @@ const ExamNoteQuestion = ({
           return;
         }
         toast.success("Congrats, You've finished your exam!");
+        router.push(
+          `/exam/${note.id}/result` +
+            "?" +
+            createQueryString("correct", correctNumber.toString()) +
+            "&" +
+            createQueryString("total", totalQuestionNumber.toString()) +
+            "&" +
+            createQueryString("result", result.toString()) +
+            "&" +
+            createQueryString("id", note.id) +
+            "&" +
+            createQueryString("batch", batch ? batch : "") +
+            "&" +
+            createQueryString("choiceId", JSON.stringify(selectedChoices)),
+        );
       }
     } catch (error) {
       toast.error("Sorry , something is wrong ");
@@ -396,9 +439,8 @@ const ExamNoteQuestion = ({
             handleSubmitReport();
             if (localStorage.getItem("timer")) localStorage.removeItem("timer");
           }}
-          asChild
         >
-          <Link
+          {/* <Link
             href={{
               pathname: `/exam/${id}/result`,
               query: {
@@ -410,9 +452,9 @@ const ExamNoteQuestion = ({
                 batch: batch,
               },
             }}
-          >
-            Confirm
-          </Link>
+          > */}
+          Submit
+          {/* </Link> */}
         </Button>
         <CardContent className="absolute right-5 top-5 text-teal-500">
           {convertMsToTime(Number(time))}

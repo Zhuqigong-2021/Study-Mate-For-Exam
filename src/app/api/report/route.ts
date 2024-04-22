@@ -10,19 +10,13 @@ export async function POST(req: Request) {
     if (!userId) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    //   console.log("noteId:" + id);
-    //   console.log("result:" + result);
-    //   console.log("choiceId:" + JSON.stringify(selectedChoices));
-    //   console.log("batch:" + batch);
-    //   console.log("userId:" + note.userId);
-    //   console.log("submitted:" + new Date());
     const {
       noteId,
       result,
       noteTitle,
       userName,
       choiceId,
+      time,
       batch,
       submittedAt,
       reportListId,
@@ -56,6 +50,7 @@ export async function POST(req: Request) {
         result,
         choiceId, // Assuming this is a valid JSON object
         batch,
+        time,
         userId,
         userName,
         noteTitle,
@@ -64,6 +59,39 @@ export async function POST(req: Request) {
       },
     });
     return Response.json({ reportList }, { status: 201 });
+  } catch (error) {
+    console.error(error);
+    return Response.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const { reportId } = await req.json();
+
+    // Check if a reportListId is provided and if it exists
+
+    let reportFound = await prisma.report.findUnique({
+      where: { id: reportId },
+    });
+
+    if (!reportFound) {
+      return Response.json({ error: "Report Not Found" }, { status: 404 });
+    }
+
+    // delete this report
+    await prisma.report.delete({
+      where: { id: reportId },
+    });
+
+    return Response.json(
+      { message: "Report is deleted successfully" },
+      { status: 200 },
+    );
   } catch (error) {
     console.error(error);
     return Response.json({ error: "Internal server error" }, { status: 500 });

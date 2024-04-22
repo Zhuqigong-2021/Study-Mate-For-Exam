@@ -137,6 +137,7 @@ type Report = {
   result: number;
   userId: string;
   noteTitle: string;
+  time: string;
   userName: string;
   noteId: string;
   choiceId: Prisma.JsonValue;
@@ -174,12 +175,12 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
     useState(false);
   const router = useRouter();
 
-  const deleteQuestion = async (questionId: string | undefined) => {
+  const deleteReport = async (reportId: string | undefined) => {
     try {
-      if (questionId) {
-        const response = await fetch("/api/question", {
+      if (reportId) {
+        const response = await fetch("/api/report", {
           method: "DELETE",
-          body: JSON.stringify({ questionId }),
+          body: JSON.stringify({ reportId }),
         });
         if (!response.ok) {
           throw Error("Status code: " + response.status + "delete");
@@ -284,6 +285,18 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
             </Badge>
           </div>
         );
+      },
+    },
+    {
+      accessorKey: "time",
+      size: 250,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="time" />
+      ),
+      cell: (props: any) => {
+        const time = props.row.original.time;
+
+        return <div>{time}</div>;
       },
     },
     {
@@ -492,7 +505,7 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
                         onClick={() => {
                           if (isSuperAdmin) {
                             // deleteQuestion(report.id);
-                            alert("You're deleting");
+                            deleteReport(report.id);
                           } else {
                             toast.error(
                               "Sorry, you're not authorized to delete this test report",
