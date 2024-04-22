@@ -65,7 +65,16 @@ export function ReportDataTable<TData extends any, TValue>({
   setShowMatchingNote,
   setFilterOutNote,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([
+    {
+      id: "submittedAt", //you should get autocomplete for the `id` and `desc` properties
+      desc: true,
+    },
+  ]);
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0, //initial page index
+    pageSize: 5, //default page size
+  });
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
@@ -73,9 +82,11 @@ export function ReportDataTable<TData extends any, TValue>({
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
+
   const table = useReactTable({
     data,
     columns,
+    sortDescFirst: true,
     getCoreRowModel: getCoreRowModel(),
     columnResizeMode: "onChange",
     getPaginationRowModel: getPaginationRowModel(),
@@ -85,6 +96,9 @@ export function ReportDataTable<TData extends any, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    initialState: {
+      pagination,
+    },
     state: {
       sorting,
       columnFilters,

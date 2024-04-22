@@ -47,7 +47,7 @@ const page = async () => {
   const { userId } = auth();
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
   return (
-    <div className="flex min-h-[850px] w-full flex-col items-center justify-center ">
+    <div className="mt-5 flex min-h-[850px] w-full flex-col items-center ">
       <div className="w-full max-w-7xl  ">
         <AllReport
           reports={reportList[0].reports}

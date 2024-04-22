@@ -223,7 +223,7 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
 
     {
       accessorKey: "result",
-      size: 450,
+      size: 200,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="result" />
       ),
@@ -259,7 +259,7 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
     },
     {
       accessorKey: "userName",
-      size: 1250,
+      size: 250,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="candidate" />
       ),
@@ -400,7 +400,7 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
     {
       accessorKey: "submittedAt",
       size: 150,
-
+      sortDescFirst: true,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="submit At" />
       ),
