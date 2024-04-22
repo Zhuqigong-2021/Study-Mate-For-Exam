@@ -18,9 +18,9 @@ const page = async ({ params }: idProps) => {
   if (!userId) throw Error("userId undefined");
   const note = await prisma.note.findUnique({ where: { id } });
   if (!note) throw Error("Note not found");
-  const allQuestions = await prisma.question.findMany({
-    where: { noteId: id },
-  });
+  // const allQuestions = await prisma.question.findMany({
+  //   where: { noteId: id },
+  // });
 
   const singleNoteWithDetails = await prisma.note.findUnique({
     where: {
@@ -54,6 +54,25 @@ const page = async ({ params }: idProps) => {
   });
 
   if (!singleNoteWithDetails) throw Error("Note Details not Found");
+  const reportList = await prisma.reportList.findMany({
+    select: {
+      id: true,
+      reports: {
+        select: {
+          id: true,
+          noteId: true,
+          userName: true,
+          noteTitle: true,
+          result: true,
+          batch: true,
+          userId: true,
+          choiceId: true,
+          reportListId: true,
+          submittedAt: true,
+        },
+      },
+    },
+  });
   return (
     <div className=" grid gap-3 " suppressHydrationWarning={true}>
       {
@@ -61,6 +80,7 @@ const page = async ({ params }: idProps) => {
           note={singleNoteWithDetails}
           id={id}
           isAdmin={isAdmin}
+          reportList={reportList[0]}
         />
       }
     </div>

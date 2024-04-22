@@ -336,10 +336,9 @@ export async function DELETE(req: Request) {
     const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
     const isAllowDeletion = userId == note.userId || isSuperAdmin;
     if (!userId || !isAllowDeletion) {
-      console.log("not good");
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-    console.log("we reach the normal line");
+
     // Use Prisma transaction to handle cascading deletes
     // await prisma.$transaction([
     //   // Delete associated choices first

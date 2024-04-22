@@ -23,6 +23,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -54,23 +55,31 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 import { Skeleton } from "./ui/skeleton";
+import UserAreaChart from "./UserChart/UserAreaChart";
+import UserBarChart from "./UserChart/UserBarChart";
+import UserPieChart from "./UserChart/UserPieChart";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Label } from "./ui/label";
 interface UserProps {
   users: string;
   userId: string | null;
   totalUsersNumber: number;
   notesTotal: number;
+  reportsNumber: number;
 }
 export function AdminDashboard({
   users,
   userId,
   totalUsersNumber,
   notesTotal,
+  reportsNumber,
 }: UserProps) {
   const router = useRouter();
   const pathname = usePathname();
 
   const [usersList, setUsersList] = useState<User[]>([]);
   const [isClient, setIsClient] = useState(false);
+  const [dataMode, setDataMode] = useState(false);
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -278,7 +287,10 @@ export function AdminDashboard({
                 </p>
               </CardContent>
             </Card>
-            <Card x-chunk="dashboard-01-chunk-3">
+            <Card
+              x-chunk="dashboard-01-chunk-3"
+              onClick={() => router.push("/report")}
+            >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   Test Report
@@ -288,7 +300,7 @@ export function AdminDashboard({
               <CardContent>
                 <div className="text-2xl font-bold">
                   {" "}
-                  <CountUp start={0} end={573} duration={1.5} />
+                  <CountUp start={0} end={reportsNumber} duration={1.5} />
                 </div>
                 <p className="text-xs text-muted-foreground">
                   +201 since last hour
@@ -298,140 +310,156 @@ export function AdminDashboard({
           </div>
           <div className="grid gap-4 md:grid-cols-2 md:gap-8 xl:grid-cols-3 lg:grid-cols-3">
             <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
-              <CardHeader className="flex flex-row items-center">
+              <CardHeader className="flex flex-row flex-wrap items-center">
                 <div className="grid gap-2">
-                  <CardTitle>Transactions</CardTitle>
+                  <CardTitle>Subscribers</CardTitle>
                   <CardDescription>
-                    Recent transactions from your store.
+                    User analysis based on month.
                   </CardDescription>
                 </div>
-                <Button asChild size="sm" className="ml-auto gap-1">
+                <Button
+                  asChild
+                  size="sm"
+                  className="ml-auto gap-1"
+                  onClick={() => setDataMode((prev) => !prev)}
+                >
                   <Link href="#">
-                    View All
+                    {!dataMode ? "View Data" : "View Trend"}
                     <ArrowUpRight className="h-4 w-4" />
                   </Link>
                 </Button>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Customer</TableHead>
-                      <TableHead className="hidden xl:table-column">
-                        Type
-                      </TableHead>
-                      <TableHead className="hidden xl:table-column">
-                        Status
-                      </TableHead>
-                      <TableHead className="hidden xl:table-column">
-                        Date
-                      </TableHead>
-                      <TableHead className="text-right">Amount</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          liam@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        <Badge className="text-xs" variant="outline">
-                          Approved
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
-                        2023-06-23
-                      </TableCell>
-                      <TableCell className="text-right">$250.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Olivia Smith</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          olivia@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        Refund
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        <Badge className="text-xs" variant="outline">
-                          Declined
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
-                        2023-06-24
-                      </TableCell>
-                      <TableCell className="text-right">$150.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Noah Williams</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          noah@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        Subscription
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        <Badge className="text-xs" variant="outline">
-                          Approved
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
-                        2023-06-25
-                      </TableCell>
-                      <TableCell className="text-right">$350.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Emma Brown</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          emma@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        <Badge className="text-xs" variant="outline">
-                          Approved
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
-                        2023-06-26
-                      </TableCell>
-                      <TableCell className="text-right">$450.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          liam@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        <Badge className="text-xs" variant="outline">
-                          Approved
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
-                        2023-06-27
-                      </TableCell>
-                      <TableCell className="text-right">$550.00</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                {dataMode && (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Users</TableHead>
+                        <TableHead className="hidden xl:table-column">
+                          Type
+                        </TableHead>
+                        <TableHead className="hidden xl:table-column">
+                          Status
+                        </TableHead>
+                        <TableHead className="hidden xl:table-column">
+                          Date
+                        </TableHead>
+                        <TableHead className="text-right">Role</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>
+                          <div className="font-medium">Liam Johnson</div>
+                          <div className="hidden text-sm text-muted-foreground md:inline">
+                            liam@example.com
+                          </div>
+                        </TableCell>
+                        <TableCell className="hidden xl:table-column">
+                          Sale
+                        </TableCell>
+                        <TableCell className="hidden xl:table-column">
+                          <Badge className="text-xs" variant="outline">
+                            Approved
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
+                          2023-06-23
+                        </TableCell>
+                        <TableCell className="text-right">$250.00</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>
+                          <div className="font-medium">Olivia Smith</div>
+                          <div className="hidden text-sm text-muted-foreground md:inline">
+                            olivia@example.com
+                          </div>
+                        </TableCell>
+                        <TableCell className="hidden xl:table-column">
+                          Refund
+                        </TableCell>
+                        <TableCell className="hidden xl:table-column">
+                          <Badge className="text-xs" variant="outline">
+                            Declined
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
+                          2023-06-24
+                        </TableCell>
+                        <TableCell className="text-right">$150.00</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>
+                          <div className="font-medium">Noah Williams</div>
+                          <div className="hidden text-sm text-muted-foreground md:inline">
+                            noah@example.com
+                          </div>
+                        </TableCell>
+                        <TableCell className="hidden xl:table-column">
+                          Subscription
+                        </TableCell>
+                        <TableCell className="hidden xl:table-column">
+                          <Badge className="text-xs" variant="outline">
+                            Approved
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
+                          2023-06-25
+                        </TableCell>
+                        <TableCell className="text-right">$350.00</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>
+                          <div className="font-medium">Emma Brown</div>
+                          <div className="hidden text-sm text-muted-foreground md:inline">
+                            emma@example.com
+                          </div>
+                        </TableCell>
+                        <TableCell className="hidden xl:table-column">
+                          Sale
+                        </TableCell>
+                        <TableCell className="hidden xl:table-column">
+                          <Badge className="text-xs" variant="outline">
+                            Approved
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
+                          2023-06-26
+                        </TableCell>
+                        <TableCell className="text-right">$450.00</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>
+                          <div className="font-medium">Liam Johnson</div>
+                          <div className="hidden text-sm text-muted-foreground md:inline">
+                            liam@example.com
+                          </div>
+                        </TableCell>
+                        <TableCell className="hidden xl:table-column">
+                          Sale
+                        </TableCell>
+                        <TableCell className="hidden xl:table-column">
+                          <Badge className="text-xs" variant="outline">
+                            Approved
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
+                          2023-06-27
+                        </TableCell>
+                        <TableCell className="text-right">$550.00</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                )}
+                {!dataMode && (
+                  <>
+                    <div className=" mb-10 md:flex md:justify-between">
+                      <UserBarChart />
+                      <UserPieChart />
+                    </div>
+                    <UserAreaChart />
+                  </>
+                )}
               </CardContent>
             </Card>
             <Card x-chunk="dashboard-01-chunk-5">
@@ -441,39 +469,59 @@ export function AdminDashboard({
                   <Skeleton className="h-5 w-[150px]  bg-stone-200"></Skeleton>
                 )}
               </CardHeader>
-              <CardContent className="no-scrollbar mt-4 grid max-h-[480px] gap-8 overflow-scroll ">
-                {isClient &&
-                  usersList
-                    .sort(
-                      (a, b) => Number(b.lastSignInAt) - Number(a.lastSignInAt),
-                    ) // Sort users by last sign-in date in descending order
-                    // .slice(0, 6)
-                    .map((user, index: number) => {
-                      const lastSignin = new Date(Number(user.lastSignInAt))
-                        .toLocaleString("en-US", {
-                          year: "numeric",
-                          month: "numeric",
-                          day: "numeric",
-                        })
-                        .toLocaleString();
-                      return (
-                        <div key={index} className="flex items-center gap-4">
-                          <Image
-                            src={user.imageUrl}
-                            alt=""
-                            width={40}
-                            height={40}
-                            //   className="rounded-full"
-                            className="hidden h-9 w-9 rounded-full sm:flex"
-                          />
-                          <div className="grid gap-1">
-                            <span className="text-sm font-medium leading-none">
-                              {user.firstName} {user.lastName}{" "}
-                              {user.passwordEnabled}
-                            </span>
-                            <span className="text-sm text-muted-foreground">
-                              {/* {shortenString()} */}
-                              {/* {shortenString(
+              <CardContent>
+                <Tabs defaultValue="users" className="w-full">
+                  {isClient && (
+                    <TabsList className="mb-10  grid w-full grid-cols-2 ">
+                      <TabsTrigger value="users">Users</TabsTrigger>
+                      <TabsTrigger value="results">Results</TabsTrigger>
+                    </TabsList>
+                  )}
+                  {!isClient && (
+                    <Skeleton className="mb-10 mt-1 grid h-10 w-full grid-cols-2" />
+                  )}
+                  {/* <CardContent className="no-scrollbar mt-4 grid max-h-[480px] gap-8 overflow-scroll "> */}
+
+                  <TabsContent
+                    value="users"
+                    className="no-scrollbar mt-4 grid max-h-[480px] gap-8 overflow-scroll px-2"
+                  >
+                    {isClient &&
+                      usersList
+                        .sort(
+                          (a, b) =>
+                            Number(b.lastSignInAt) - Number(a.lastSignInAt),
+                        ) // Sort users by last sign-in date in descending order
+                        // .slice(0, 6)
+                        .map((user, index: number) => {
+                          const lastSignin = new Date(Number(user.lastSignInAt))
+                            .toLocaleString("en-US", {
+                              year: "numeric",
+                              month: "numeric",
+                              day: "numeric",
+                            })
+                            .toLocaleString();
+                          return (
+                            <div
+                              key={index}
+                              className="flex flex-wrap items-center gap-4 md:flex-nowrap"
+                            >
+                              <Image
+                                src={user.imageUrl}
+                                alt=""
+                                width={40}
+                                height={40}
+                                //   className="rounded-full"
+                                className="hidden h-9 w-9 rounded-full sm:flex "
+                              />
+                              <div className="grid gap-1">
+                                <span className="text-sm font-medium leading-none">
+                                  {user.firstName} {user.lastName}{" "}
+                                  {user.passwordEnabled}
+                                </span>
+                                <span className="text-sm text-muted-foreground">
+                                  {/* {shortenString()} */}
+                                  {/* {shortenString(
                               user.emailAddresses
                                 .find(
                                   (email) =>
@@ -481,58 +529,88 @@ export function AdminDashboard({
                                 )
                                 ?.emailAddress.toString(),
                             )} */}
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <button className="m-0 inline rounded-none border-none  bg-transparent bg-white  p-0 text-sm text-muted-foreground shadow-none hover:bg-transparent hover:bg-white hover:text-sm hover:text-muted-foreground hover:shadow-none focus:outline-none focus:ring-0">
-                                      {" "}
-                                      {shortenString(
-                                        user.emailAddresses
-                                          .find(
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <button className="m-0 inline rounded-none border-none  bg-transparent bg-white  p-0 text-sm text-muted-foreground shadow-none hover:bg-transparent hover:bg-white hover:text-sm hover:text-muted-foreground hover:shadow-none focus:outline-none focus:ring-0">
+                                          {" "}
+                                          {shortenString(
+                                            user.emailAddresses
+                                              .find(
+                                                (email) =>
+                                                  email.id ===
+                                                  user.primaryEmailAddressId,
+                                              )
+                                              ?.emailAddress.toString(),
+                                          )}
+                                        </button>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        {
+                                          user.emailAddresses.find(
                                             (email) =>
                                               email.id ===
                                               user.primaryEmailAddressId,
-                                          )
-                                          ?.emailAddress.toString(),
-                                      )}
-                                    </button>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    {
-                                      user.emailAddresses.find(
-                                        (email) =>
-                                          email.id ===
-                                          user.primaryEmailAddressId,
-                                      )?.emailAddress
-                                    }
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            </span>
-                          </div>
-                          <div className="ml-auto  text-[16px] font-semibold">
-                            {" "}
-                            {lastSignin}
-                          </div>
-                        </div>
-                      );
-                    })}
-                {!isClient && (
-                  <div>
-                    {Array.from({ length: 7 }, (_: any, index: number) => (
-                      <div className="mb-8 flex items-center gap-4" key={index}>
-                        <Skeleton className="hidden h-9 w-9 rounded-full bg-stone-200 sm:flex"></Skeleton>
-                        <div className="grid gap-y-2">
-                          <Skeleton className="h-4 w-[100px]"></Skeleton>
+                                          )?.emailAddress
+                                        }
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+                                </span>
+                              </div>
+                              <div className="ml-auto  text-[16px] font-normal md:font-semibold">
+                                {" "}
+                                {lastSignin}
+                              </div>
+                            </div>
+                          );
+                        })}
+                    {!isClient && (
+                      <div>
+                        {Array.from({ length: 7 }, (_: any, index: number) => (
+                          <div
+                            className="mb-8 flex flex-wrap items-center gap-4"
+                            key={index}
+                          >
+                            <Skeleton className="hidden h-9 w-9 rounded-full bg-stone-200 sm:flex"></Skeleton>
+                            <div className="grid gap-y-2">
+                              <Skeleton className="h-4 w-[100px]"></Skeleton>
 
-                          <Skeleton className="h-3 w-[150px]"></Skeleton>
-                        </div>
-                        <Skeleton className="ml-auto h-4 w-[80px] font-medium"></Skeleton>
+                              <Skeleton className="h-3 w-[150px]"></Skeleton>
+                            </div>
+                            <Skeleton className="ml-auto h-4 w-[80px] font-medium"></Skeleton>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                )}
+                    )}
+                  </TabsContent>
+                  <TabsContent value="password">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Password</CardTitle>
+                        <CardDescription>
+                          Change your password here. After saving, youll be
+                          logged out.
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        <div className="space-y-1">
+                          <Label htmlFor="current">Current password</Label>
+                          <Input id="current" type="password" />
+                        </div>
+                        <div className="space-y-1">
+                          <Label htmlFor="new">New password</Label>
+                          <Input id="new" type="password" />
+                        </div>
+                      </CardContent>
+                      <CardFooter>
+                        <Button>Save password</Button>
+                      </CardFooter>
+                    </Card>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
+              {/* </CardContent> */}
             </Card>
           </div>
         </main>

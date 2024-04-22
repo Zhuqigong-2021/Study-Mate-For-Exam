@@ -82,7 +82,7 @@ export default async function Dashboard(params: {
     },
   });
   let notesTotal = await prisma.note.count({});
-
+  let reportsNumber = await prisma.report.count({});
   return (
     <div className="flex flex-col items-center justify-center ">
       <AdminDashboard
@@ -90,6 +90,7 @@ export default async function Dashboard(params: {
         userId={userId}
         totalUsersNumber={totalUsersNumber}
         notesTotal={notesTotal}
+        reportsNumber={reportsNumber}
       />
       {/* <SearchUsers />
       <Userdata

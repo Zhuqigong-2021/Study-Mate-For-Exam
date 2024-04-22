@@ -467,7 +467,7 @@ const ShowModal = ({
       data = flaggedQuestions;
     }
   }
-
+  // console.log(data);
   return (
     <>
       <DataTable

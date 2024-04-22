@@ -24,9 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
-import { Skeleton } from "../ui/skeleton";
-import { Card } from "../ui/card";
+
 import { SkeletonCard } from "../SkeletonCard";
 type Note = {
   userId: string;

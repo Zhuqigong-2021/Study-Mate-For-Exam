@@ -67,7 +67,7 @@ const page = async ({
   });
   if (!singleNoteWithDetails) throw Error("Note Details not Found");
   // console.log(searchParams.batch);
-  console.log("batch: " + searchParams.batch);
+  // console.log("batch: " + searchParams.batch);
   // let newQuestions = singleNoteWithDetails.questions.slice(0, 60);
   // let newNote = { ...singleNoteWithDetails, questions: newQuestions };
   // Assume batch is the batch number you received.
@@ -97,7 +97,8 @@ const page = async ({
     // Create a new note with the batch's questions
     newNote = { ...singleNoteWithDetails, questions: newQuestions };
   }
-
+  // console.log("mappedData" + JSON.stringify(mappedData));
+  console.log(searchParams.choiceId);
   return (
     <div className=" grid gap-3" suppressHydrationWarning={true}>
       <ReportNoteQuestion note={newNote} mappedData={mappedData} />

@@ -140,9 +140,9 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                       Taking Exams with all your input questions in proper
                       batch.
                     </ListItem>
-                    <ListItem href="/review" title="Review">
-                      Review questions by reading. when hovering ,you will know
-                      the answer.
+                    <ListItem href="/report" title="Report">
+                      Review all the history records of the exams that you have
+                      taken
                     </ListItem>
                   </ul>
                 </NavigationMenuContent>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
 import { Choice, Note as NoteModel, Question } from "@prisma/client";
 import { Question as QuestionModel } from "@prisma/client";
@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import { Report } from "@prisma/client";
 
 import { Button } from "../ui/button";
 import Link from "next/link";
@@ -18,6 +19,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { RadioGroupItem } from "../ui/radio-group";
 import MutipleChoiceQuestion from "../MutipleChoiceQuestion";
+import { User } from "@clerk/nextjs/server";
+import { getUser } from "@/app/notes/_actions";
 
 export interface NoteType {
   id: string;
@@ -49,8 +52,13 @@ export interface NoteProps {
   id: string;
   note: NoteType;
   isAdmin: boolean;
+  reportList: reportListType;
   // questions: QuestionModel[];
   // choices: Choice[][];
+}
+export interface reportListType {
+  id: string;
+  reports: Report[];
 }
 const shuffleArray = (array: any) => {
   let currentIndex = array.length,
@@ -72,9 +80,10 @@ const shuffleArray = (array: any) => {
   return array;
 };
 
-const ExamNoteQuestion = ({ id, note, isAdmin }: NoteProps) => {
+const ExamNoteQuestion = ({ id, note, isAdmin, reportList }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const [correctNumber, setCurrentNumber] = useState(0);
+  const [user, setUser] = useState<User>();
   const [totalQuestionNumber, setTotalQuestionNumber] = useState(
     note.questions.length,
   );
@@ -268,6 +277,76 @@ const ExamNoteQuestion = ({ id, note, isAdmin }: NoteProps) => {
     shuffledBatchQuestions.length,
   ]);
 
+  const getUserObj = useCallback(async () => {
+    const user = await getUser(note.userId);
+
+    return user;
+  }, [note.userId]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userObj = await getUserObj();
+      if (userObj) {
+        setUser(userObj);
+      }
+    };
+
+    fetchUser();
+  }, [getUserObj]);
+
+  // console.log("noteId:" + id);
+  // console.log("result:" + result);
+  // console.log("choiceId:" + JSON.stringify(selectedChoices));
+  // console.log("batch:" + batch);
+  // console.log("userId:" + note.userId);
+  // console.log("submitted:" + new Date());
+  async function handleSubmitReport() {
+    try {
+      if (!reportList) {
+        const response = await fetch("/api/report", {
+          method: "POST",
+          body: JSON.stringify({
+            noteId: id,
+            noteTitle: note.title,
+            userName: user?.firstName + " " + user?.lastName,
+            result: Number(batch),
+            choiceId: selectedChoices,
+            batch: Number(batch),
+            userId: note.userId,
+            submittedAt: new Date(),
+          }),
+        });
+        if (!response.ok) {
+          toast.error("Sorry , something is wrong ");
+          return;
+        }
+        toast.success("Congrats, You've finished your exam!");
+      } else {
+        const response = await fetch("/api/report", {
+          method: "POST",
+          body: JSON.stringify({
+            noteId: id,
+            noteTitle: note.title,
+            userName: user?.firstName + " " + user?.lastName,
+            result: Number(result),
+            choiceId: selectedChoices,
+            batch: Number(batch),
+            userId: note.userId,
+            submittedAt: new Date(),
+            reportListId: reportList.id,
+          }),
+        });
+        if (!response.ok) {
+          toast.error("Sorry , something is wrong ");
+          return;
+        }
+        toast.success("Congrats, You've finished your exam!");
+      }
+    } catch (error) {
+      toast.error("Sorry , something is wrong ");
+    }
+  }
+
   return (
     <>
       <Card
@@ -304,9 +383,12 @@ const ExamNoteQuestion = ({ id, note, isAdmin }: NoteProps) => {
           // onClick={() =>
           //   alert("result:" + `${(correctNumber / totalQuestionNumber) * 100}%`)
           // }
+
           onClick={() => {
+            handleSubmitReport();
             if (localStorage.getItem("timer")) localStorage.removeItem("timer");
           }}
+          asChild
         >
           <Link
             href={{

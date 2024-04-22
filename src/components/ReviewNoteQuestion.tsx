@@ -64,7 +64,13 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
     );
     const newQuestions = await response.json();
     if (newQuestions && newQuestions.questions.length > 0) {
-      setQuestions((prev) => [...prev, ...newQuestions.questions]);
+      setQuestions((prevQuestions) => {
+        const existingQuestionIds = new Set(prevQuestions.map((q) => q.id));
+        const uniqueNewQuestions = newQuestions.questions.filter(
+          (q: any) => !existingQuestionIds.has(q.id),
+        );
+        return [...prevQuestions, ...uniqueNewQuestions];
+      });
       setPage(nextPage);
       setHasMore(newQuestions.questions.length === pageSize);
     }
@@ -117,12 +123,12 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
         </CardContent>
 
         <CardHeader className="relative">
-          {/* note.questions */}
           {questions.length !== 0 &&
             !isLoadAll &&
             questions.map((q: QuestionType, index: number) => {
               // const [isFlagged, setIsFlagged] = useState(question.isFlagged);
               //console.log(JSON.stringify(note.questions));
+
               return (
                 // <CardContent key={q.id}>
                 <ReviewChoiceQuestion

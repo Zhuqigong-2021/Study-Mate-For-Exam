@@ -47,4 +47,26 @@ model Question {
 
 }
 
+model Report {
+   id String @id @default(auto()) @map("_id") @db.ObjectId
+   noteId String @unique @db.ObjectId
+   result Int
+   batch Int
+   userId String
+   userName String
+   noteTitle String
+   choiceId Json
+   reportList ReportList @relation(fields: [reportListId],references: [id])
+  reportListId String @unique @db.ObjectId
+  submittedAt DateTime @default(now())
+
+   @@map("reports")
+}
+
+model ReportList {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  reports Report[]
+}
+
+
 

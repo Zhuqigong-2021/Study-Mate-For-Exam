@@ -34,7 +34,7 @@ const page = async ({
   } else {
     mappedData = [];
   }
-  console.log(mappedData);
+  // console.log(mappedData);
 
   const { userId } = auth();
 
