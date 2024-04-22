@@ -81,6 +81,7 @@ const page = async ({ params }: idProps) => {
           id={id}
           isAdmin={isAdmin}
           reportList={reportList[0]}
+          userId={userId}
         />
       }
     </div>

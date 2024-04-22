@@ -19,7 +19,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { RadioGroupItem } from "../ui/radio-group";
 import MutipleChoiceQuestion from "../MutipleChoiceQuestion";
-import { User } from "@clerk/nextjs/server";
+import { User, auth } from "@clerk/nextjs/server";
 import { getUser } from "@/app/notes/_actions";
 
 export interface NoteType {
@@ -53,6 +53,7 @@ export interface NoteProps {
   note: NoteType;
   isAdmin: boolean;
   reportList: reportListType;
+  userId: string;
   // questions: QuestionModel[];
   // choices: Choice[][];
 }
@@ -80,13 +81,20 @@ const shuffleArray = (array: any) => {
   return array;
 };
 
-const ExamNoteQuestion = ({ id, note, isAdmin, reportList }: NoteProps) => {
+const ExamNoteQuestion = ({
+  id,
+  note,
+  isAdmin,
+  reportList,
+  userId,
+}: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const [correctNumber, setCurrentNumber] = useState(0);
   const [user, setUser] = useState<User>();
   const [totalQuestionNumber, setTotalQuestionNumber] = useState(
     note.questions.length,
   );
+
   const [result, setResult] = useState(0);
   const createQueryString = (name: string, value: string) => {
     const params = new URLSearchParams();
@@ -278,10 +286,10 @@ const ExamNoteQuestion = ({ id, note, isAdmin, reportList }: NoteProps) => {
   ]);
 
   const getUserObj = useCallback(async () => {
-    const user = await getUser(note.userId);
+    const user = await getUser(userId ?? "");
 
     return user;
-  }, [note.userId]);
+  }, [userId]);
 
   useEffect(() => {
     const fetchUser = async () => {
