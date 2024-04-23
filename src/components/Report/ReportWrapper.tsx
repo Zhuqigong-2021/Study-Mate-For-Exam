@@ -56,6 +56,7 @@ import { dateFormatter } from "@/app/utils/dateFormatter";
 import { getNote } from "@/app/report/_actions";
 import { report } from "process";
 import Link from "next/link";
+import { nameFormatter } from "@/app/utils/nameFormatter";
 
 export type Question = {
   id: string;
@@ -263,6 +264,10 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="candidate" />
       ),
+      cell: (props: any) => {
+        const username = props.row.original.userName;
+        return <div>{nameFormatter(username)}</div>;
+      },
     },
     {
       accessorKey: "noteTitle",
