@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import CountUp from "react-countup";
-
+import "react-circular-progressbar/dist/styles.css";
 import {
   Activity,
   ArrowUpRight,
@@ -60,24 +60,43 @@ import UserBarChart from "./UserChart/UserBarChart";
 import UserPieChart from "./UserChart/UserPieChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Label } from "./ui/label";
+import { Prisma, Report } from "@prisma/client";
+import { dateFormatter } from "@/app/utils/dateFormatter";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 interface UserProps {
   users: string;
   userId: string | null;
   totalUsersNumber: number;
   notesTotal: number;
   reportsNumber: number;
+  reports: string;
 }
+// {
+//     id: string;
+//     noteId: string;
+//     result: number;
+//     batch: number;
+//     userId: string;
+//     userName: string;
+//     time: string;
+//     noteTitle: string;
+//     choiceId: Prisma.JsonValue;
+//     reportListId: string;
+//     submittedAt: Date;
+//   }[];
 export function AdminDashboard({
   users,
   userId,
   totalUsersNumber,
   notesTotal,
   reportsNumber,
+  reports,
 }: UserProps) {
   const router = useRouter();
   const pathname = usePathname();
 
   const [usersList, setUsersList] = useState<User[]>([]);
+  const [reportsList, setReportsList] = useState<Report[]>([]);
   const [isClient, setIsClient] = useState(false);
   const [dataMode, setDataMode] = useState(false);
   useEffect(() => {
@@ -87,9 +106,12 @@ export function AdminDashboard({
   useEffect(() => {
     setUsersList(JSON.parse(users));
   }, [users]);
-
+  useEffect(() => {
+    setReportsList(JSON.parse(reports));
+  }, [reports]);
+  console.log(reportsList);
   function shortenString(email: any) {
-    const emailLength = 20; // Set the maximum length before shortening
+    const emailLength = 18; // Set the maximum length before shortening
     if (email.length > emailLength) {
       const atIndex = email.lastIndexOf("@");
       const domain = email.substring(atIndex); // Extract the domain part
@@ -480,7 +502,6 @@ export function AdminDashboard({
                   {!isClient && (
                     <Skeleton className="mb-10 mt-1 grid h-10 w-full grid-cols-2" />
                   )}
-                  {/* <CardContent className="no-scrollbar mt-4 grid max-h-[480px] gap-8 overflow-scroll "> */}
 
                   <TabsContent
                     value="users"
@@ -512,7 +533,8 @@ export function AdminDashboard({
                                 width={40}
                                 height={40}
                                 //   className="rounded-full"
-                                className="hidden h-9 w-9 rounded-full sm:flex "
+                                // className="hidden h-9 w-9 rounded-full sm:flex "
+                                className=" h-9 w-9 rounded-full  "
                               />
                               <div className="grid gap-1">
                                 <span className="text-sm font-medium leading-none">
@@ -584,29 +606,119 @@ export function AdminDashboard({
                       </div>
                     )}
                   </TabsContent>
-                  <TabsContent value="password">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>Password</CardTitle>
-                        <CardDescription>
-                          Change your password here. After saving, youll be
-                          logged out.
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-2">
-                        <div className="space-y-1">
-                          <Label htmlFor="current">Current password</Label>
-                          <Input id="current" type="password" />
-                        </div>
-                        <div className="space-y-1">
-                          <Label htmlFor="new">New password</Label>
-                          <Input id="new" type="password" />
-                        </div>
-                      </CardContent>
-                      <CardFooter>
-                        <Button>Save password</Button>
-                      </CardFooter>
-                    </Card>
+                  <TabsContent
+                    value="results"
+                    className="no-scrollbar -mt-1 grid max-h-[480px] gap-8 overflow-scroll px-2"
+                  >
+                    {isClient &&
+                      reportsList
+                        .sort(
+                          (a, b) =>
+                            new Date(b.submittedAt).getTime() -
+                            new Date(a.submittedAt).getTime(),
+                        )
+                        // .slice(0, 6)
+                        .map((report, index: number) => {
+                          const examTime = new Date(report.submittedAt)
+                            .toLocaleString("en-US", {
+                              month: "numeric", // 'numeric', '2-digit', 'short', 'long'
+                              day: "numeric", // 'numeric', '2-digit'
+                              hour: "numeric", // 'numeric', '2-digit'
+                              minute: "2-digit", // 'numeric', '2-digit'
+                              hour12: true, // Use 12-hour time (use `false` for 24-hour format)
+                            })
+                            .toLocaleString();
+                          return (
+                            <div
+                              key={index}
+                              className="flex flex-wrap items-center gap-4 md:flex-nowrap"
+                            >
+                              {/* <Image
+                                src={report.imageUrl}
+                                alt=""
+                                width={40}
+                                height={40}
+                               
+                                className="hidden h-9 w-9 rounded-full sm:flex "
+                              /> */}
+
+                              <div className="flex h-10 w-10 items-center justify-center font-semibold ">
+                                <CircularProgressbar
+                                  value={Number(report.result)}
+                                  text={`${report.result}%`}
+                                  strokeWidth={10}
+                                  styles={buildStyles({
+                                    textColor:
+                                      Number(report.result) == 100
+                                        ? "#14b8a6"
+                                        : Number(report.result) == 0
+                                          ? "#f87171"
+                                          : "#404040",
+                                    // rotation: 0.05,
+                                    textSize: "28px",
+                                    pathColor:
+                                      Number(report.result) >= 50
+                                        ? "#5eead4"
+                                        : "#f3f4f6",
+                                    trailColor:
+                                      Number(report.result) !== 0 &&
+                                      Number(report.result) >= 50
+                                        ? "#f3f4f6"
+                                        : Number(report.result) < 50
+                                          ? "#f87171"
+                                          : "#f87171",
+                                  })}
+                                />
+                              </div>
+                              <div className="grid gap-1">
+                                <span className="text-sm font-medium leading-none">
+                                  {report.userName}
+                                </span>
+                                <span className="text-sm text-muted-foreground">
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        {/* {report.userId} */}
+                                        <button className="m-0 inline rounded-none border-none  bg-transparent bg-white  p-0 text-sm text-muted-foreground shadow-none hover:bg-transparent hover:bg-white hover:text-sm hover:text-muted-foreground hover:shadow-none focus:outline-none focus:ring-0">
+                                          {shortenString(report.userEmail)}
+                                        </button>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        {report.userEmail}
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+                                </span>
+                              </div>
+                              <div className="ml-auto  text-[16px] font-normal md:font-semibold">
+                                {examTime}
+                                {/* {dateFormatter(
+                                  new Date(
+                                    report.submittedAt,
+                                  ).toLocaleDateString(),
+                                )} */}
+                              </div>
+                            </div>
+                          );
+                        })}
+                    {!isClient && (
+                      <div>
+                        {Array.from({ length: 7 }, (_: any, index: number) => (
+                          <div
+                            className="mb-8 flex flex-wrap items-center gap-4"
+                            key={index}
+                          >
+                            <Skeleton className="hidden h-9 w-9 rounded-full bg-stone-200 sm:flex"></Skeleton>
+                            <div className="grid gap-y-2">
+                              <Skeleton className="h-4 w-[100px]"></Skeleton>
+
+                              <Skeleton className="h-3 w-[150px]"></Skeleton>
+                            </div>
+                            <Skeleton className="ml-auto h-4 w-[80px] font-medium"></Skeleton>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </TabsContent>
                 </Tabs>
               </CardContent>

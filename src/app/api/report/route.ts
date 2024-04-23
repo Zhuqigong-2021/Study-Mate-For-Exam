@@ -16,6 +16,7 @@ export async function POST(req: Request) {
       noteTitle,
       userName,
       choiceId,
+      userEmail,
       time,
       batch,
       submittedAt,
@@ -53,6 +54,7 @@ export async function POST(req: Request) {
         time,
         userId,
         userName,
+        userEmail,
         noteTitle,
         submittedAt: submittedAt ? new Date(submittedAt) : new Date(), // Use provided submittedAt or the current date
         reportListId: reportList.id, // Link the report to the reportList

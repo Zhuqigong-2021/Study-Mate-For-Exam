@@ -323,6 +323,7 @@ const ExamNoteQuestion = ({
                   ? Number(timer) / 3600000 + "h"
                   : Number(timer) / 1000 + "s",
             userName: user?.firstName + " " + user?.lastName,
+            userEmail: user?.emailAddresses[0]?.emailAddress || "noEmail",
             result: Number(batch),
             choiceId: selectedChoices,
             batch: Number(batch),
@@ -358,6 +359,7 @@ const ExamNoteQuestion = ({
             noteId: id,
             noteTitle: note.title,
             userName: user?.firstName + " " + user?.lastName,
+            userEmail: user?.emailAddresses[0]?.emailAddress || "noEmail",
             time:
               Number(timer) / 60000 >= 1 && Number(timer) / 60000 <= 60
                 ? Number(timer) / 60000 + "min"
@@ -397,7 +399,7 @@ const ExamNoteQuestion = ({
       toast.error("Sorry , something is wrong ");
     }
   }
-
+  // console.log("emailASddress:" + user?.emailAddresses[0].emailAddress);
   return (
     <>
       <Card

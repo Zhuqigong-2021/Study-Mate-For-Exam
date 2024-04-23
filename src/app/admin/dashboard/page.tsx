@@ -51,6 +51,27 @@ export default async function Dashboard(params: {
   const users = await clerkClient.users.getUserList({
     limit: totalUsersNumber,
   });
+  const reportList = await prisma.reportList.findMany({
+    select: {
+      id: true,
+      reports: {
+        select: {
+          id: true,
+          noteId: true,
+          noteTitle: true,
+          userName: true,
+          time: true,
+          result: true,
+          batch: true,
+          userId: true,
+          choiceId: true,
+          reportListId: true,
+          submittedAt: true,
+        },
+      },
+    },
+  });
+  const reports = await prisma.report.findMany({});
 
   //   const users = await clerkClient.users.getUserList({});
 
@@ -91,6 +112,7 @@ export default async function Dashboard(params: {
         totalUsersNumber={totalUsersNumber}
         notesTotal={notesTotal}
         reportsNumber={reportsNumber}
+        reports={JSON.stringify(reports)}
       />
       {/* <SearchUsers />
       <Userdata

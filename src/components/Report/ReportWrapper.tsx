@@ -139,6 +139,7 @@ type Report = {
   noteTitle: string;
   time: string;
   userName: string;
+  userEmail: string;
   noteId: string;
   choiceId: Prisma.JsonValue;
   batch: number;

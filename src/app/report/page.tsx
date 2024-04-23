@@ -17,6 +17,7 @@ const page = async () => {
           noteId: true,
           noteTitle: true,
           userName: true,
+          userEmail: true,
           time: true,
           result: true,
           batch: true,

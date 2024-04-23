@@ -54,6 +54,7 @@ model Report {
    batch Int
    userId String
    userName String
+   userEmail String
    time String
    noteTitle String
    choiceId Json

@@ -11,6 +11,7 @@ interface ReportProps {
     userId: string;
     noteTitle: string;
     userName: string;
+    userEmail: string;
     time: string;
     noteId: string;
     choiceId: Prisma.JsonValue;
