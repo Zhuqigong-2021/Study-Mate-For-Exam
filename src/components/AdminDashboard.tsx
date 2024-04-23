@@ -580,7 +580,7 @@ export function AdminDashboard({
                                   </TooltipProvider>
                                 </span>
                               </div>
-                              <div className="ml-auto  text-[16px] font-normal md:font-semibold">
+                              <div className="ml-auto   text-[16px] font-normal md:font-semibold">
                                 {" "}
                                 {lastSignin}
                               </div>
@@ -690,13 +690,8 @@ export function AdminDashboard({
                                   </TooltipProvider>
                                 </span>
                               </div>
-                              <div className="ml-auto  text-[16px] font-normal md:font-semibold">
+                              <div className="ml-auto   text-[14px] font-normal md:font-semibold">
                                 {examTime}
-                                {/* {dateFormatter(
-                                  new Date(
-                                    report.submittedAt,
-                                  ).toLocaleDateString(),
-                                )} */}
                               </div>
                             </div>
                           );
