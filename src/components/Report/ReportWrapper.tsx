@@ -187,9 +187,7 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
         }
 
         router.refresh();
-        toast.success(
-          "you have successfully deleted a question with all the choices",
-        );
+        toast.success("you have successfully deleted a test report");
       }
     } catch (error) {
       console.error(error);

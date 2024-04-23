@@ -133,26 +133,6 @@ export function AllDataTable<TData extends any, TValue>({
             className="h-9 max-w-sm lg:mr-3"
           />
 
-          {/* <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <span className="flex items-center space-x-2">
-                <Filter size={20} />
-                <span>Filter</span>
-              </span>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-32">
-              {noteTitle.map((note, index) => {
-                return (
-                  <DropdownMenuItem className="w-full" key={index}>
-                    <span
-                      className={`${colorClasses[index]} mr-2 h-2 w-2 rounded-full`}
-                    ></span>{" "}
-                    <span>{note}</span>
-                  </DropdownMenuItem>
-                );
-              })}
-            </DropdownMenuContent>
-          </DropdownMenu> */}
           <TopicFilter
             colorClasses={colorClasses}
             noteTitle={noteTitle}
@@ -161,7 +141,7 @@ export function AllDataTable<TData extends any, TValue>({
             setShowMatchingNote={setShowMatchingNote}
             setFilterOutNote={setFilterOutNote}
           />
-          {/* Visibility */}
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
