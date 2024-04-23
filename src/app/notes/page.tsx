@@ -47,16 +47,17 @@ const NotesPage = async () => {
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
 
   return (
-    <div>
+    <>
       <FilterNote
         allNotes={allNotes}
         isAdmin={isAdmin}
         isSuperAdmin={isSuperAdmin}
       />
+
       <div className="fixed bottom-4 right-4  lg:right-20 ">
         {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && <AIChatButton />}
       </div>
-    </div>
+    </>
   );
 };
 

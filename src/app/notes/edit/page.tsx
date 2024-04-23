@@ -71,13 +71,18 @@ const page = async () => {
   }
 
   return (
-    <div className="w-full max-w-[84rem]" suppressHydrationWarning={true}>
+    <div
+      className="flex w-full  flex-col items-center "
+      suppressHydrationWarning={true}
+    >
       {/* <EditNote note={singleNoteWithDetails} /> */}
+      {/* <div className="w-full "> */}
       <UpdateEditQuestions
         flaggedQuestions={AllQuestions}
         isSuperAdmin={isSuperAdmin}
         isAdmin={isAdmin}
       />
+      {/* </div> */}
     </div>
   );
 };

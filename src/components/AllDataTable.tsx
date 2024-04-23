@@ -13,7 +13,7 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 
-import { BiSolidBookmarkAltPlus } from "react-icons/bi";
+import { MdOutlineEdit } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -113,7 +113,7 @@ export function AllDataTable<TData extends any, TValue>({
           This table below show all questions in the system to edit
         </CardDescription>
         <span className="absolute right-10 top-10 hidden scale-[1.6]  rounded-full bg-neutral-100 p-[0.3rem] text-neutral-800 drop-shadow-sm md:block lg:block">
-          <BiSolidBookmarkAltPlus />
+          <MdOutlineEdit />
         </span>
       </CardHeader>
       <CardContent>

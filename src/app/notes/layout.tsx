@@ -1,7 +1,7 @@
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <main className=" m-auto max-w-7xl p-4">{children}</main>
+      <main className=" m-auto max-w-[82rem]  p-4">{children}</main>
     </>
   );
 }

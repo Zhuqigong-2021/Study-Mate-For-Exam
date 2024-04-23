@@ -139,7 +139,11 @@ const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
           </Form>
         </div>
       </div>
-      <div className={`${isSticky ? "mt-[29.6rem]" : "mt-[25rem]"} bg-white`}>
+      <div
+        className={`${
+          isSticky ? "mt-[29.6rem]" : "mt-[25rem]"
+        } max-w-7xl  bg-white`}
+      >
         {isAdmin && (
           <div className="my-5 flex items-center justify-between">
             <span className=" font-bold">
