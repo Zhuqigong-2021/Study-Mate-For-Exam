@@ -322,7 +322,8 @@ const ExamNoteQuestion = ({
                 : Number(timer) / 60000 > 60
                   ? Number(timer) / 3600000 + "h"
                   : Number(timer) / 1000 + "s",
-            userName: user?.firstName + " " + user?.lastName,
+            userName:
+              (user?.firstName || "" + " " + user?.lastName || "") ?? "no name",
             userEmail: user?.emailAddresses[0]?.emailAddress || "noEmail",
             result: Number(batch),
             choiceId: selectedChoices,
