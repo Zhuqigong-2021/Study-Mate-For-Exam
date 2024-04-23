@@ -358,7 +358,8 @@ const ExamNoteQuestion = ({
           body: JSON.stringify({
             noteId: id,
             noteTitle: note.title,
-            userName: user?.firstName + " " + user?.lastName,
+            userName:
+              (user?.firstName || "" + " " + user?.lastName || "") ?? "no name",
             userEmail: user?.emailAddresses[0]?.emailAddress || "noEmail",
             time:
               Number(timer) / 60000 >= 1 && Number(timer) / 60000 <= 60
