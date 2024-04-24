@@ -89,6 +89,23 @@ const ExamNoteQuestion = ({
   userId,
 }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const [startTime, setStartTime] = useState(() => {
+    // Check if there's a start time in localStorage
+    const savedStartTime = localStorage.getItem("startTime");
+    if (savedStartTime) {
+      return Number(savedStartTime);
+    }
+    // If not, set the current time as the start time and save it
+    const now = Date.now();
+    localStorage.setItem("startTime", now.toString());
+    return now;
+  });
   const [correctNumber, setCurrentNumber] = useState(0);
   const [user, setUser] = useState<User>();
   const [totalQuestionNumber, setTotalQuestionNumber] = useState(
@@ -113,7 +130,7 @@ const ExamNoteQuestion = ({
   let batch = searchParams.get("batch");
   // console.log("batch: " + batch);
 
-  const timerFromStorage = localStorage.getItem("timer");
+  const timerFromStorage = window?.localStorage.getItem("timer");
   const [time, setTime] = useState(
     timerFromStorage ? Number(timerFromStorage) : Number(timer),
   );
@@ -308,20 +325,44 @@ const ExamNoteQuestion = ({
   // console.log("batch:" + batch);
   // console.log("userId:" + note.userId);
   // console.log("submitted:" + new Date());
-  async function handleSubmitReport() {
+  // useEffect(() => {
+  //   return () => {
+  //     // Clear any intervals or timeouts
+  //     localStorage.removeItem("startTime"); // Optional: Clear only if the exam is completed
+  //   };
+  // }, []);
+  const handleSubmitReport = useCallback(async () => {
     try {
+      const endTime = Date.now();
+      const timeSpent = endTime - startTime; // time spent in milliseconds
+
+      // Formatting time spent into the desired string format
+      const seconds = timeSpent / 1000;
+      const minutes = seconds / 60;
+      const hours = minutes / 60;
+
+      let timeString;
+      if (seconds < 60) {
+        timeString = `${Math.round(seconds)}s`;
+      } else if (minutes < 60) {
+        timeString = `${Math.round(minutes)}min`;
+      } else if (Math.floor(hours) === hours) {
+        timeString = `${Math.floor(hours)}h`; // No decimal for whole numbers
+      } else {
+        timeString = `${hours.toFixed(1)}h`; // One decimal place for partial hours
+      }
       if (!reportList) {
         const response = await fetch("/api/report", {
           method: "POST",
           body: JSON.stringify({
             noteId: id,
             noteTitle: note.title,
-            time:
-              Number(timer) / 60000 >= 1 && Number(timer) / 60000 <= 60
-                ? Number(timer) / 60000 + "min"
-                : Number(timer) / 60000 > 60
-                  ? Number(timer) / 3600000 + "h"
-                  : Number(timer) / 1000 + "s",
+            time: timeString,
+            // Number(timer) / 60000 >= 1 && Number(timer) / 60000 <= 60
+            //   ? Number(timer) / 60000 + "min"
+            //   : Number(timer) / 60000 > 60
+            //     ? Number(timer) / 3600000 + "h"
+            //     : Number(timer) / 1000 + "s",
             userName:
               (user?.firstName || "" + " " + user?.lastName || "") ?? "no name",
             userEmail: user?.emailAddresses[0]?.emailAddress || "noEmail",
@@ -362,12 +403,12 @@ const ExamNoteQuestion = ({
             userName:
               (user?.firstName || "" + " " + user?.lastName || "") ?? "no name",
             userEmail: user?.emailAddresses[0]?.emailAddress || "noEmail",
-            time:
-              Number(timer) / 60000 >= 1 && Number(timer) / 60000 <= 60
-                ? Number(timer) / 60000 + "min"
-                : Number(timer) / 60000 > 60
-                  ? Number(timer) / 3600000 + "h"
-                  : Number(timer) / 1000 + "s",
+            time: timeString,
+            // Number(timer) / 60000 >= 1 && Number(timer) / 60000 <= 60
+            //   ? Number(timer) / 60000 + "min"
+            //   : Number(timer) / 60000 > 60
+            //     ? Number(timer) / 3600000 + "h"
+            //     : Number(timer) / 1000 + "s",
             result: Number(result),
             choiceId: selectedChoices,
             batch: Number(batch),
@@ -397,54 +438,74 @@ const ExamNoteQuestion = ({
             createQueryString("choiceId", JSON.stringify(selectedChoices)),
         );
       }
+
+      localStorage.removeItem("startTime");
     } catch (error) {
       toast.error("Sorry , something is wrong ");
     }
-  }
+  }, [
+    batch,
+    correctNumber,
+    id,
+    note.id,
+    note.title,
+    note.userId,
+    reportList,
+    result,
+    router,
+    selectedChoices,
+    startTime,
+    totalQuestionNumber,
+    user?.emailAddresses,
+    user?.firstName,
+    user?.lastName,
+  ]);
   // console.log("emailASddress:" + user?.emailAddresses[0].emailAddress);
   return (
     <>
-      <Card
-        className="relative cursor-pointer  pb-10 transition-shadow hover:shadow-lg"
-        onClick={() => setShowAddEditNoteDialog(true)}
-      >
-        <CardHeader>
-          <CardTitle>{note.title}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="flex flex-wrap ">{note.description}</p>
-        </CardContent>
-        <CardHeader>
-          {shuffledBatchQuestions.map(
-            (question: QuestionType, index: number) => {
-              return (
-                <MutipleChoiceQuestion
-                  key={question.id}
-                  isAdmin={isAdmin}
-                  question={question}
-                  index={index}
-                  selectedChoices={selectedChoices[question.id] || []}
-                  onChange={handleChoiceChange}
-                />
-              );
-            },
-          )}
-        </CardHeader>
-        <CardFooter className="py-4"></CardFooter>
-
-        <Button
-          //   asChild
-          className="absolute bottom-5 right-5"
-          // onClick={() =>
-          //   alert("result:" + `${(correctNumber / totalQuestionNumber) * 100}%`)
-          // }
-
-          onClick={() => {
-            handleSubmitReport();
-            if (localStorage.getItem("timer")) localStorage.removeItem("timer");
-          }}
+      {isClient && (
+        <Card
+          className="relative cursor-pointer  pb-10 transition-shadow hover:shadow-lg"
+          onClick={() => setShowAddEditNoteDialog(true)}
         >
-          {/* <Link
+          <CardHeader>
+            <CardTitle>{note.title}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="flex flex-wrap ">{note.description}</p>
+          </CardContent>
+          <CardHeader>
+            {shuffledBatchQuestions.map(
+              (question: QuestionType, index: number) => {
+                return (
+                  <MutipleChoiceQuestion
+                    key={question.id}
+                    isAdmin={isAdmin}
+                    question={question}
+                    index={index}
+                    selectedChoices={selectedChoices[question.id] || []}
+                    onChange={handleChoiceChange}
+                  />
+                );
+              },
+            )}
+          </CardHeader>
+          <CardFooter className="py-4"></CardFooter>
+
+          <Button
+            //   asChild
+            className="absolute bottom-5 right-5"
+            // onClick={() =>
+            //   alert("result:" + `${(correctNumber / totalQuestionNumber) * 100}%`)
+            // }
+
+            onClick={() => {
+              handleSubmitReport();
+              if (localStorage.getItem("timer"))
+                localStorage.removeItem("timer");
+            }}
+          >
+            {/* <Link
             href={{
               pathname: `/exam/${id}/result`,
               query: {
@@ -457,13 +518,14 @@ const ExamNoteQuestion = ({
               },
             }}
           > */}
-          Submit
-          {/* </Link> */}
-        </Button>
-        <CardContent className="absolute right-5 top-5 text-teal-500">
-          {convertMsToTime(Number(time))}
-        </CardContent>
-      </Card>
+            Submit
+            {/* </Link> */}
+          </Button>
+          <CardContent className="absolute right-5 top-5 text-teal-500">
+            {convertMsToTime(Number(time))}
+          </CardContent>
+        </Card>
+      )}
     </>
   );
 };

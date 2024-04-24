@@ -109,7 +109,7 @@ export function AdminDashboard({
   useEffect(() => {
     setReportsList(JSON.parse(reports));
   }, [reports]);
-  console.log(reportsList);
+  // console.log(reportsList);
   function shortenString(email: any) {
     const emailLength = 18; // Set the maximum length before shortening
     if (email.length > emailLength) {
