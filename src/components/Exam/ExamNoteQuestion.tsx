@@ -21,6 +21,7 @@ import { RadioGroupItem } from "../ui/radio-group";
 import MutipleChoiceQuestion from "../MutipleChoiceQuestion";
 import { User, auth } from "@clerk/nextjs/server";
 import { getUser } from "@/app/notes/_actions";
+import { fullnameFormatter } from "@/app/utils/fullnameFormatter";
 
 export interface NoteType {
   id: string;
@@ -363,8 +364,7 @@ const ExamNoteQuestion = ({
             //   : Number(timer) / 60000 > 60
             //     ? Number(timer) / 3600000 + "h"
             //     : Number(timer) / 1000 + "s",
-            userName:
-              (user?.firstName || "" + " " + user?.lastName || "") ?? "no name",
+            userName: fullnameFormatter(user?.firstName, user?.lastName),
             userEmail: user?.emailAddresses[0]?.emailAddress || "noEmail",
             result: Number(batch),
             choiceId: selectedChoices,
@@ -400,8 +400,7 @@ const ExamNoteQuestion = ({
           body: JSON.stringify({
             noteId: id,
             noteTitle: note.title,
-            userName:
-              (user?.firstName || "" + " " + user?.lastName || "") ?? "no name",
+            userName: fullnameFormatter(user?.firstName, user?.lastName),
             userEmail: user?.emailAddresses[0]?.emailAddress || "noEmail",
             time: timeString,
             // Number(timer) / 60000 >= 1 && Number(timer) / 60000 <= 60
@@ -461,6 +460,7 @@ const ExamNoteQuestion = ({
     user?.lastName,
   ]);
   // console.log("emailASddress:" + user?.emailAddresses[0].emailAddress);
+  // console.log(fullnameFormatter(user?.firstName, user?.lastName));
   return (
     <>
       {isClient && (
