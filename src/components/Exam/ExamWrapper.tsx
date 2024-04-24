@@ -45,7 +45,7 @@ const ExamWrapper = ({ allNotes }: allNotesProps) => {
           ))}
         </>
       )}
-      {allNotes.length === 0 && (
+      {isClient && allNotes.length === 0 && (
         <div className="col-span-full text-center">
           {"You have no note to take exam"}
         </div>

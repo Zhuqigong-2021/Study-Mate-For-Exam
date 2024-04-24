@@ -103,12 +103,14 @@ const ExamNote = ({ note }: NoteProps) => {
           </CardContent>
         </Card>
       )}
-      <SetTimer
-        open={showAddEditNoteDialog}
-        setOpen={setShowAddEditNoteDialog}
-        questions={note.questions}
-        noteToEdit={note}
-      />
+      {isClient && (
+        <SetTimer
+          open={showAddEditNoteDialog}
+          setOpen={setShowAddEditNoteDialog}
+          questions={note.questions}
+          noteToEdit={note}
+        />
+      )}
     </>
   );
 };
