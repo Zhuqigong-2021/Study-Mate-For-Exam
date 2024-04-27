@@ -1,4 +1,5 @@
-import { auth } from "@clerk/nextjs";
+import { auth, useClerk } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { Metadata } from "next";
 import React, { useState } from "react";
 import prisma from "@/lib/db/prisma";
@@ -45,13 +46,20 @@ const NotesPage = async () => {
     },
   });
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
-
+  const user = await currentUser();
+  let banned = false;
+  if (user) {
+    if (user.privateMetadata.banned && user.privateMetadata.banned == true) {
+      banned = true;
+    }
+  }
   return (
     <>
       <FilterNote
         allNotes={allNotes}
         isAdmin={isAdmin}
         isSuperAdmin={isSuperAdmin}
+        banned={banned}
       />
 
       <div className="fixed bottom-4 right-4  lg:right-20 ">

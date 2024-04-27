@@ -23,6 +23,7 @@ const allUsers = async (params: {
         limit: limit || 10,
         orderBy: "-created_at",
       });
+
   //   const users = await clerkClient.users.getUserList({});
   const totalUsersNumber = await clerkClient.users.getCount();
   return (

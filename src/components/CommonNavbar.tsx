@@ -88,71 +88,70 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                 className="absolute -right-2  top-0 text-teal-500"
               /> */}
             </span>
-            {/* <Globe className=" rotate-45 scale-95 text-teal-500 lg:block lg:scale-110" /> */}
           </Link>
-          <NavigationMenu>
-            {/* className="flex items-center gap-2 space-x-5 font-semibold" */}
-            <NavigationMenuList className="flex items-center gap-2  font-semibold">
-              <NavigationMenu className="hidden  font-light   lg:flex ">
-                {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && (
-                  <Link
-                    href="/admin/dashboard"
-                    className="underline-offset-1 hover:scale-105 hover:text-teal-700"
-                    legacyBehavior
-                    passHref
-                  >
-                    <NavigationMenuLink
-                      className={navigationMenuTriggerStyle()}
+          {pathname !== "/" && !pathname.includes("sign-in") && (
+            <NavigationMenu>
+              <NavigationMenuList className="flex items-center gap-2  font-semibold">
+                <NavigationMenu className="hidden  font-light   lg:flex ">
+                  {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && (
+                    <Link
+                      href="/admin/dashboard"
+                      className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+                      legacyBehavior
+                      passHref
                     >
-                      Admin
-                    </NavigationMenuLink>
-                  </Link>
-                )}
-              </NavigationMenu>
-
-              <NavigationMenuItem className="hidden  font-light   lg:flex ">
-                <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
-                <NavigationMenuContent className="z-50">
-                  <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                    <li className="row-span-2">
-                      <NavigationMenuLink asChild>
-                        <a
-                          className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline  outline-none focus:shadow-md"
-                          href="/"
-                          style={{
-                            backgroundImage: `url(https://woodstoneseniorliving.com/wp-content/uploads/2021/07/sun-blog.png)`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center center",
-                            backgroundBlendMode: "multiply",
-                          }}
-                        >
-                          <div className="z-10 mb-2 mt-4 text-lg font-medium italic text-slate-900">
-                            Study Mate
-                          </div>
-                          <p className="text-sm leading-tight text-gray-600 text-muted-foreground">
-                            Beautifully designed study app for you to pass
-                            mutiple choice questions exams.
-                          </p>
-                        </a>
+                      <NavigationMenuLink
+                        className={navigationMenuTriggerStyle()}
+                      >
+                        Admin
                       </NavigationMenuLink>
-                    </li>
-                    <ListItem href="/exam" title="Exam">
-                      Taking Exams with all your input questions in proper
-                      batch.
-                    </ListItem>
-                    <ListItem href="/report" title="Report">
-                      Review all the history records of the exams that you have
-                      taken
-                    </ListItem>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
+                    </Link>
+                  )}
+                </NavigationMenu>
 
-              <NavigationMenuItem className="flex  xl:hidden lg:hidden">
-                <Drawer isAdmin={isAdmin} userId={userId ?? ""} />
-              </NavigationMenuItem>
-              <NavigationMenuItem className="z-50  hidden  font-light  lg:flex ">
-                {/* {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && (
+                <NavigationMenuItem className="hidden  font-light   lg:flex ">
+                  <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+                  <NavigationMenuContent className="z-50">
+                    <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                      <li className="row-span-2">
+                        <NavigationMenuLink asChild>
+                          <a
+                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline  outline-none focus:shadow-md"
+                            href="/"
+                            style={{
+                              backgroundImage: `url(https://woodstoneseniorliving.com/wp-content/uploads/2021/07/sun-blog.png)`,
+                              backgroundSize: "cover",
+                              backgroundPosition: "center center",
+                              backgroundBlendMode: "multiply",
+                            }}
+                          >
+                            <div className="z-10 mb-2 mt-4 text-lg font-medium italic text-slate-900">
+                              Study Mate
+                            </div>
+                            <p className="text-sm leading-tight text-gray-600 text-muted-foreground">
+                              Beautifully designed study app for you to pass
+                              mutiple choice questions exams.
+                            </p>
+                          </a>
+                        </NavigationMenuLink>
+                      </li>
+                      <ListItem href="/exam" title="Exam">
+                        Taking Exams with all your input questions in proper
+                        batch.
+                      </ListItem>
+                      <ListItem href="/report" title="Report">
+                        Review all the history records of the exams that you
+                        have taken
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem className="flex  xl:hidden lg:hidden">
+                  <Drawer isAdmin={isAdmin} userId={userId ?? ""} />
+                </NavigationMenuItem>
+                <NavigationMenuItem className="z-50  hidden  font-light  lg:flex ">
+                  {/* {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && (
                   <Link
                     href="/admin/dashboard"
                     className="underline-offset-1 hover:scale-105 hover:text-teal-700"
@@ -166,25 +165,25 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                     </NavigationMenuLink>
                   </Link>
                 )} */}
-                <NavigationMenuTrigger>Taking Notes</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[600px] lg:grid-cols-[1fr_1fr]">
-                    <ListItem href="/notes/public" title="Notes">
-                      {`You can check other's notes and take exams with their notes`}
-                    </ListItem>
-                    <ListItem href="/wildcard" title="Flashcard">
-                      Taking advantage of your down time , Review by cards
-                    </ListItem>
+                  <NavigationMenuTrigger>Taking Notes</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[600px] lg:grid-cols-[1fr_1fr]">
+                      <ListItem href="/notes/public" title="Notes">
+                        {`You can check other's notes and take exams with their notes`}
+                      </ListItem>
+                      <ListItem href="/wildcard" title="Flashcard">
+                        Taking advantage of your down time , Review by cards
+                      </ListItem>
 
-                    <ListItem href="/exam" title="Exams">
-                      {`You can take exams with notes in the system`}
-                    </ListItem>
-                    <ListItem href="/review" title="Review">
-                      You can review the whole note question by page
-                    </ListItem>
-                  </ul>
-                </NavigationMenuContent>
-                {/* <Link
+                      <ListItem href="/exam" title="Exams">
+                        {`You can take exams with notes in the system`}
+                      </ListItem>
+                      <ListItem href="/review" title="Review">
+                        You can review the whole note question by page
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                  {/* <Link
                   href="/notes/public"
                   className="underline-offset-1 hover:scale-105 hover:text-teal-700"
                   legacyBehavior
@@ -226,7 +225,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                   </NavigationMenuLink>
                 </Link> */}
 
-                {/* <button
+                  {/* <button
                   className="m-0 bg-transparent p-0"
                   onClick={() => router.refresh()}
                 >
@@ -243,119 +242,119 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                     </NavigationMenuLink>
                   </Link>
                 </button> */}
-              </NavigationMenuItem>
+                </NavigationMenuItem>
 
-              <NavigationMenuItem className="hidden  font-light   lg:flex ">
-                <NavigationMenuTrigger>Operations</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[600px] lg:grid-cols-[1fr_1fr]">
-                    <ListItem href="/bookmark" title="Bookmark">
-                      {`Check All bookmarked Questions with proof to review more efficiently`}
-                    </ListItem>
-                    <ListItem
-                      href="/notes/edit"
-                      title="Edit Your questions"
-                      onClick={() => {
-                        if (isAdmin) {
-                          router.push("/notes/edit");
-                        } else {
-                          toast.error(
-                            "Sorry,You're not authroized to access this page",
-                          );
-                        }
-                      }}
-                    >
-                      {`If you are admin, you're able to modify the question.`}
-                    </ListItem>
+                <NavigationMenuItem className="hidden  font-light   lg:flex ">
+                  <NavigationMenuTrigger>Operations</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[600px] lg:grid-cols-[1fr_1fr]">
+                      <ListItem href="/bookmark" title="Bookmark">
+                        {`Check All bookmarked Questions with proof to review more efficiently`}
+                      </ListItem>
+                      <ListItem
+                        href="/notes/edit"
+                        title="Edit Your questions"
+                        onClick={() => {
+                          if (isAdmin) {
+                            router.push("/notes/edit");
+                          } else {
+                            toast.error(
+                              "Sorry,You're not authroized to access this page",
+                            );
+                          }
+                        }}
+                      >
+                        {`If you are admin, you're able to modify the question.`}
+                      </ListItem>
 
-                    <ListItem
-                      // href="/notes"
-                      title="Add a note "
-                      onClick={() => {
-                        if (isAdmin) {
-                          setShowAddEditNoteDialog(true);
-                        } else {
-                          toast.error(
-                            "Sorry,You're not authroized to access this page",
-                          );
-                        }
-                      }}
-                    >
-                      {`if You're admin,You're able to add note to the system`}
-                    </ListItem>
-                    <ListItem href="#" title="Pro Status">
-                      {isSuperAdmin && (
-                        <div className="flex items-center space-x-2  py-2">
-                          <div className=" flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-indigo-500  to-violet-500 p-2">
-                            <Crown className="text-white" fill="#facc15" />
-                          </div>
-                          <div className="flex  flex-col justify-center space-y-0 text-xs">
-                            <span>Congratulations!</span>
-                            <span className=" space-x-2">
-                              <span>{"You're A Pro"}</span>
-                              <span className="rounded-md  bg-gradient-to-r from-indigo-500  to-violet-500 px-2 text-xs text-white ">
-                                Pro
+                      <ListItem
+                        // href="/notes"
+                        title="Add a note "
+                        onClick={() => {
+                          if (isAdmin) {
+                            setShowAddEditNoteDialog(true);
+                          } else {
+                            toast.error(
+                              "Sorry,You're not authroized to access this page",
+                            );
+                          }
+                        }}
+                      >
+                        {`if You're admin,You're able to add note to the system`}
+                      </ListItem>
+                      <ListItem href="#" title="Pro Status">
+                        {isSuperAdmin && (
+                          <div className="flex items-center space-x-2  py-2">
+                            <div className=" flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-indigo-500  to-violet-500 p-2">
+                              <Crown className="text-white" fill="#facc15" />
+                            </div>
+                            <div className="flex  flex-col justify-center space-y-0 text-xs">
+                              <span>Congratulations!</span>
+                              <span className=" space-x-2">
+                                <span>{"You're A Pro"}</span>
+                                <span className="rounded-md  bg-gradient-to-r from-indigo-500  to-violet-500 px-2 text-xs text-white ">
+                                  Pro
+                                </span>
                               </span>
-                            </span>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                      {isAdmin && !isSuperAdmin && (
-                        <div className="flex items-center space-x-2  py-2">
-                          <div className=" flex h-8 w-8 items-center justify-center rounded-full  bg-yellow-50 p-2">
-                            <Crown
-                              className="scale-110 text-yellow-500"
-                              fill="#facc15"
-                              size={20}
-                            />
-                          </div>
-                          <div className="flex  flex-col justify-center space-y-0 text-xs">
-                            <span>Congratulations!</span>
-                            <span className=" space-x-2">
-                              <span>{"You're Admin"}</span>
-                              <span className="rounded-md  border border-yellow-400 px-1 text-xs text-yellow-400 ">
-                                admin
+                        )}
+                        {isAdmin && !isSuperAdmin && (
+                          <div className="flex items-center space-x-2  py-2">
+                            <div className=" flex h-8 w-8 items-center justify-center rounded-full  bg-yellow-50 p-2">
+                              <Crown
+                                className="scale-110 text-yellow-500"
+                                fill="#facc15"
+                                size={20}
+                              />
+                            </div>
+                            <div className="flex  flex-col justify-center space-y-0 text-xs">
+                              <span>Congratulations!</span>
+                              <span className=" space-x-2">
+                                <span>{"You're Admin"}</span>
+                                <span className="rounded-md  border border-yellow-400 px-1 text-xs text-yellow-400 ">
+                                  admin
+                                </span>
                               </span>
-                            </span>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
-                      {!isAdmin && !isSuperAdmin && (
-                        <div className="flex items-center space-x-2  py-2">
-                          <div className=" flex h-8 w-8 items-center justify-center rounded-full  bg-stone-50 p-2">
-                            <Crown
-                              className="scale-110 text-stone-500"
-                              fill="#a8a29e"
-                              size={20}
-                            />
-                          </div>
-                          <div className="flex  flex-col justify-center space-y-0 text-xs">
-                            <span>Hi,there!</span>
-                            <span className=" space-x-2">
-                              <span>{"You're a normal user"}</span>
-                              {/* <span className="rounded-md  border border-yellow-400 px-1 text-xs text-yellow-400 ">
+                        {!isAdmin && !isSuperAdmin && (
+                          <div className="flex items-center space-x-2  py-2">
+                            <div className=" flex h-8 w-8 items-center justify-center rounded-full  bg-stone-50 p-2">
+                              <Crown
+                                className="scale-110 text-stone-500"
+                                fill="#a8a29e"
+                                size={20}
+                              />
+                            </div>
+                            <div className="flex  flex-col justify-center space-y-0 text-xs">
+                              <span>Hi,there!</span>
+                              <span className=" space-x-2">
+                                <span>{"You're a normal user"}</span>
+                                {/* <span className="rounded-md  border border-yellow-400 px-1 text-xs text-yellow-400 ">
                                 admin
                               </span> */}
-                            </span>
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </ListItem>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem className="hidden md:flex xl:flex lg:flex">
-                <UserButton
-                  afterSignOutUrl="/"
-                  appearance={{
-                    elements: {
-                      avatarBox: { width: "2.5rem", height: "2.5rem" },
-                    },
-                  }}
-                />
-              </NavigationMenuItem>
-              {/* {pathname == "/notes/public" && isAdmin && (
+                        )}
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+                <NavigationMenuItem className="hidden md:flex xl:flex lg:flex">
+                  <UserButton
+                    afterSignOutUrl="/"
+                    appearance={{
+                      elements: {
+                        avatarBox: { width: "2.5rem", height: "2.5rem" },
+                      },
+                    }}
+                  />
+                </NavigationMenuItem>
+                {/* {pathname == "/notes/public" && isAdmin && (
                 <NavigationMenuItem>
                   <Button
                     onClick={() => setShowAddEditNoteDialog(true)}
@@ -365,19 +364,20 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                   </Button>
                 </NavigationMenuItem>
               )} */}
-              {pathname === "/" && (
-                //   bg-[#f3c46e]
-                <NavigationMenuItem>
-                  <Button
-                    className="hidden   rounded-full bg-white px-8  py-4 text-slate-800 hover:text-white lg:flex"
-                    asChild
-                  >
-                    <Link href="/notes/public"> registration</Link>
-                  </Button>
-                </NavigationMenuItem>
-              )}
-            </NavigationMenuList>
-          </NavigationMenu>
+                {pathname === "/" && (
+                  //   bg-[#f3c46e]
+                  <NavigationMenuItem>
+                    <Button
+                      className="hidden   rounded-full bg-white px-8  py-4 text-slate-800 hover:text-white lg:flex"
+                      asChild
+                    >
+                      <Link href="/notes/public"> registration</Link>
+                    </Button>
+                  </NavigationMenuItem>
+                )}
+              </NavigationMenuList>
+            </NavigationMenu>
+          )}
         </div>
       </div>
       {/* <NavigationMenu>

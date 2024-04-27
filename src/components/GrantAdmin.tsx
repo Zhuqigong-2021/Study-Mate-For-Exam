@@ -17,6 +17,7 @@ const GrantAdmin = ({ userId, userRole, currentUserId }: userType) => {
   return (
     <form
       action={async (FormData) => {
+        // console.log(FormData);
         await setRole(FormData);
         router.refresh();
         if (currentUserId == "user_2aFBx8E20RdENmTS0CRlRej0Px4") {

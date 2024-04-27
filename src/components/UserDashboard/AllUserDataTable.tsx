@@ -177,7 +177,7 @@ export function AllUserDataTable<TData extends any, TValue>({
       <div className="flex w-full   overflow-x-auto rounded-md  border-2">
         <div className="max-w-full md:max-w-full ">
           <Table className="w-full">
-            <TableHeader>
+            <TableHeader className="bg-stone-50">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header, index) => {
@@ -215,10 +215,11 @@ export function AllUserDataTable<TData extends any, TValue>({
             </TableHeader>
             <TableBody>
               {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
+                table.getRowModel().rows.map((row, index) => (
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
+                    className={`${index % 2 == 0 ? "bg-white" : "bg-stone-50"}`}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>

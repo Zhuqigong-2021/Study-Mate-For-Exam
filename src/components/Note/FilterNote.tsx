@@ -23,9 +23,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { redirect, useParams, usePathname, useRouter } from "next/navigation";
 
 import { SkeletonCard } from "../SkeletonCard";
+import { useClerk } from "@clerk/nextjs";
 type Note = {
   userId: string;
   id: string;
@@ -51,12 +52,19 @@ type allNotesProps = {
   allNotes: Note[];
   isAdmin: boolean;
   isSuperAdmin: boolean;
+  banned: boolean;
 };
 
-const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
+const FilterNote = ({
+  allNotes,
+  isAdmin,
+  isSuperAdmin,
+  banned,
+}: allNotesProps) => {
   const [userInput, setUserInput] = useState("");
   const [isSticky, setIsSticky] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const { signOut } = useClerk();
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -77,6 +85,12 @@ const FilterNote = ({ allNotes, isAdmin, isSuperAdmin }: allNotesProps) => {
             .includes(userInput.toLowerCase().trim())
         );
       });
+  useEffect(() => {
+    router.refresh();
+    if (banned == true) {
+      signOut(() => router.push("/"));
+    }
+  }, [banned, router, signOut]);
   const form = useForm<formSchema>({
     resolver: zodResolver(FormSchema),
     defaultValues: {

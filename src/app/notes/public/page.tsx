@@ -5,12 +5,16 @@ import React from "react";
 import prisma from "@/lib/db/prisma";
 import { checkRole } from "@/app/utils/roles/role";
 import { Metadata } from "next";
+import { currentUser } from "@clerk/nextjs/server";
 
+import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
 export const metadata: Metadata = {
   title: "Study Mate - Public Notes",
 };
 const page = async () => {
   const { userId } = auth();
+
   if (!userId) throw Error("userId undefined");
   // const allNotes = await prisma.note.findMany({ where: { isShared: true } });
   const allNotes = await prisma.note.findMany({
@@ -44,12 +48,20 @@ const page = async () => {
   const isAdmin = checkRole("admin");
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
 
+  const user = await currentUser();
+  let banned = false;
+  if (user) {
+    if (user.privateMetadata.banned && user.privateMetadata.banned == true) {
+      banned = true;
+    }
+  }
   return (
     <div>
       <FilterNote
         allNotes={allNotes}
         isAdmin={isAdmin}
         isSuperAdmin={isSuperAdmin}
+        banned={banned}
       />
       <div className="fixed bottom-4 right-4  lg:right-20 ">
         {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && <AIChatButton />}

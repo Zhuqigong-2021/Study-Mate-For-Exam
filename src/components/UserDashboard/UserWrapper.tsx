@@ -51,7 +51,7 @@ import {
 import { Badge } from "../ui/badge";
 
 import { Note, Prisma } from "@prisma/client";
-import { User } from "@clerk/nextjs/server";
+
 import { dateFormatter } from "@/app/utils/dateFormatter";
 import { getNote } from "@/app/report/_actions";
 import { report } from "process";
@@ -64,6 +64,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import { User } from "@clerk/nextjs/server";
+import {
+  blockThisUser,
+  setUserRole,
+  unblockThisUser,
+} from "@/app/admin/dashboard/_actions";
 
 export type Question = {
   id: string;
@@ -148,6 +154,78 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
     useState(false);
   const router = useRouter();
 
+  const handleRole = async (user: User) => {
+    try {
+      console.log("userID:" + user.id);
+      console.log(
+        "role:" +
+          String(user.publicMetadata.role ? user.publicMetadata.role : ""),
+      );
+      if (!isSuperAdmin) {
+        toast.error("Sorry you're not authorized to do that");
+        return;
+      }
+      if (user.id == "user_2aFBx8E20RdENmTS0CRlRej0Px4") {
+        toast.error("You're superAdmin,please do not cancel your admin status");
+        return;
+      }
+      const response = await setUserRole(
+        user.id,
+        String(user.publicMetadata.role ? "" : "admin"),
+      );
+      if (!response) {
+        toast.error("Sorry you are not authorized");
+      }
+      toast.success("You authorize a role successfully");
+      router.refresh();
+    } catch (error) {
+      toast.error("Sorry, something went wrong");
+    }
+  };
+
+  async function handleBlock(user: User) {
+    try {
+      if (!isSuperAdmin) {
+        toast.error("Sorry you're not authorized to do that");
+        return;
+      }
+      if (user.id == "user_2aFBx8E20RdENmTS0CRlRej0Px4") {
+        toast.error("You're superAdmin,please do not block yourself");
+        return;
+      }
+      const response = await blockThisUser(user.id);
+      if (!response) {
+        toast.error(
+          "Sorry you are not authorized,or the user has been already blocked ,you can not block the same user twice",
+        );
+        return;
+      }
+      toast.success("You block this user successfully");
+    } catch (error) {
+      toast.error("Sorry, something went wrong ");
+    }
+  }
+
+  async function handleUnblock(user: User) {
+    try {
+      if (!isSuperAdmin) {
+        toast.error("Sorry you're not authorized to do that");
+        return;
+      }
+
+      const response = await unblockThisUser(user.id);
+      if (!response) {
+        toast.error(
+          "Sorry you are not authorized or the user has not been blocked yet",
+        );
+        return;
+      }
+      toast.success("You unblock this user successfully");
+    } catch (error) {
+      toast.error("Sorry, something went wrong");
+    }
+  }
+
   const deleteReport = async (reportId: string | undefined) => {
     try {
       if (reportId) {
@@ -168,7 +246,7 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
     }
   };
 
-  const columnHelper = createColumnHelper<User>();
+  // const columnHelper = createColumnHelper<User>();
   const columns: ColumnDef<User>[] = [
     {
       id: "fullName",
@@ -222,7 +300,21 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
           role = "user";
         }
 
-        return <div>{role}</div>;
+        return (
+          <div>
+            <Badge
+              variant="outline"
+              className={`${
+                role == "admin"
+                  ? " bg-gradient-to-r from-indigo-500 to-violet-400"
+                  : " bg-gradient-to-r from-teal-500 to-emerald-400"
+              }    border-none text-white outline-none`}
+            >
+              {role.length < 5 ? role : role.substring(0, 3) + "."}
+              {/* {role} */}
+            </Badge>
+          </div>
+        );
       },
     },
 
@@ -230,7 +322,8 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
       id: "actions",
       size: 15,
       cell: ({ row }) => {
-        // const report = row.original;
+        const user = row.original;
+
         return (
           <>
             <DropdownMenu>
@@ -250,37 +343,25 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="w-full"
-                  //   onClick={() => {
-                  //     navigator.clipboard.writeText(report.id);
-                  //     toast.success("You have copied this report id");
-                  //   }}
+                  onClick={() => handleRole(user)}
                 >
-                  Copy Report Id
+                  Authorirization
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
                   className="w-full"
-                  onClick={() => {
-                    // setSelectedQuestion(question);
-                    // setShowAddEditQuestionDialog(true);
-                  }}
+                  onClick={() => handleBlock(user)}
                 >
-                  {/* <Link
-                    href={{
-                      pathname: `/exam/${user.noteId}/report`,
-                      query: {
-                        noteId: `${report.noteId}`,
-                        choiceId: JSON.stringify(report.choiceId),
-                        batch: `${report.batch}`,
-                        // result: `${report.result}`,
-                      },
-                    }}
-                  > */}
-                  Check Report Details
-                  {/* </Link> */}
+                  block this user
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="w-full"
+                  onClick={() => handleUnblock(user)}
+                >
+                  unblock this user
                 </DropdownMenuItem>
 
-                <AlertDialog>
+                {/* <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button
                       variant="outline"
@@ -319,7 +400,7 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
-                </AlertDialog>
+                </AlertDialog> */}
                 {/* </DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
