@@ -63,6 +63,7 @@ import { Label } from "./ui/label";
 import { Prisma, Report } from "@prisma/client";
 import { dateFormatter } from "@/app/utils/dateFormatter";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import AllUsers from "./UserDashboard/AllUsers";
 interface UserProps {
   users: string;
   userId: string | null;
@@ -70,6 +71,7 @@ interface UserProps {
   notesTotal: number;
   reportsNumber: number;
   reports: string;
+  isSuperAdmin: boolean;
 }
 // {
 //     id: string;
@@ -91,6 +93,7 @@ export function AdminDashboard({
   notesTotal,
   reportsNumber,
   reports,
+  isSuperAdmin,
 }: UserProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -105,10 +108,12 @@ export function AdminDashboard({
 
   useEffect(() => {
     setUsersList(JSON.parse(users));
+    console.log(JSON.parse(users));
   }, [users]);
   useEffect(() => {
     setReportsList(JSON.parse(reports));
   }, [reports]);
+
   // console.log(reportsList);
   function shortenString(email: any) {
     const emailLength = 18; // Set the maximum length before shortening
@@ -264,7 +269,6 @@ export function AdminDashboard({
                     end={totalUsersNumber ? totalUsersNumber : 0}
                     duration={3}
                   />
-                  {/* {totalUsersNumber ? totalUsersNumber : 0} */}
                 </div>
                 <p className="text-xs text-muted-foreground">
                   +20.1% from last month
@@ -353,125 +357,132 @@ export function AdminDashboard({
               </CardHeader>
               <CardContent>
                 {dataMode && (
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Users</TableHead>
-                        <TableHead className="hidden xl:table-column">
-                          Type
-                        </TableHead>
-                        <TableHead className="hidden xl:table-column">
-                          Status
-                        </TableHead>
-                        <TableHead className="hidden xl:table-column">
-                          Date
-                        </TableHead>
-                        <TableHead className="text-right">Role</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Liam Johnson</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            liam@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          Sale
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          <Badge className="text-xs" variant="outline">
-                            Approved
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
-                          2023-06-23
-                        </TableCell>
-                        <TableCell className="text-right">$250.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Olivia Smith</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            olivia@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          Refund
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          <Badge className="text-xs" variant="outline">
-                            Declined
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
-                          2023-06-24
-                        </TableCell>
-                        <TableCell className="text-right">$150.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Noah Williams</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            noah@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          Subscription
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          <Badge className="text-xs" variant="outline">
-                            Approved
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
-                          2023-06-25
-                        </TableCell>
-                        <TableCell className="text-right">$350.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Emma Brown</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            emma@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          Sale
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          <Badge className="text-xs" variant="outline">
-                            Approved
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
-                          2023-06-26
-                        </TableCell>
-                        <TableCell className="text-right">$450.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Liam Johnson</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            liam@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          Sale
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          <Badge className="text-xs" variant="outline">
-                            Approved
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
-                          2023-06-27
-                        </TableCell>
-                        <TableCell className="text-right">$550.00</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+                  // <Table>
+                  //   <TableHeader>
+                  //     <TableRow>
+                  //       <TableHead>Users</TableHead>
+                  //       <TableHead className="hidden xl:table-column">
+                  //         Type
+                  //       </TableHead>
+                  //       <TableHead className="hidden xl:table-column">
+                  //         Status
+                  //       </TableHead>
+                  //       <TableHead className="hidden xl:table-column">
+                  //         Date
+                  //       </TableHead>
+                  //       <TableHead className="text-right">Role</TableHead>
+                  //     </TableRow>
+                  //   </TableHeader>
+                  //   <TableBody>
+                  //     <TableRow>
+                  //       <TableCell>
+                  //         <div className="font-medium">Liam Johnson</div>
+                  //         <div className="hidden text-sm text-muted-foreground md:inline">
+                  //           liam@example.com
+                  //         </div>
+                  //       </TableCell>
+                  //       <TableCell className="hidden xl:table-column">
+                  //         Sale
+                  //       </TableCell>
+                  //       <TableCell className="hidden xl:table-column">
+                  //         <Badge className="text-xs" variant="outline">
+                  //           Approved
+                  //         </Badge>
+                  //       </TableCell>
+                  //       <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
+                  //         2023-06-23
+                  //       </TableCell>
+                  //       <TableCell className="text-right">$250.00</TableCell>
+                  //     </TableRow>
+                  //     <TableRow>
+                  //       <TableCell>
+                  //         <div className="font-medium">Olivia Smith</div>
+                  //         <div className="hidden text-sm text-muted-foreground md:inline">
+                  //           olivia@example.com
+                  //         </div>
+                  //       </TableCell>
+                  //       <TableCell className="hidden xl:table-column">
+                  //         Refund
+                  //       </TableCell>
+                  //       <TableCell className="hidden xl:table-column">
+                  //         <Badge className="text-xs" variant="outline">
+                  //           Declined
+                  //         </Badge>
+                  //       </TableCell>
+                  //       <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
+                  //         2023-06-24
+                  //       </TableCell>
+                  //       <TableCell className="text-right">$150.00</TableCell>
+                  //     </TableRow>
+                  //     <TableRow>
+                  //       <TableCell>
+                  //         <div className="font-medium">Noah Williams</div>
+                  //         <div className="hidden text-sm text-muted-foreground md:inline">
+                  //           noah@example.com
+                  //         </div>
+                  //       </TableCell>
+                  //       <TableCell className="hidden xl:table-column">
+                  //         Subscription
+                  //       </TableCell>
+                  //       <TableCell className="hidden xl:table-column">
+                  //         <Badge className="text-xs" variant="outline">
+                  //           Approved
+                  //         </Badge>
+                  //       </TableCell>
+                  //       <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
+                  //         2023-06-25
+                  //       </TableCell>
+                  //       <TableCell className="text-right">$350.00</TableCell>
+                  //     </TableRow>
+                  //     <TableRow>
+                  //       <TableCell>
+                  //         <div className="font-medium">Emma Brown</div>
+                  //         <div className="hidden text-sm text-muted-foreground md:inline">
+                  //           emma@example.com
+                  //         </div>
+                  //       </TableCell>
+                  //       <TableCell className="hidden xl:table-column">
+                  //         Sale
+                  //       </TableCell>
+                  //       <TableCell className="hidden xl:table-column">
+                  //         <Badge className="text-xs" variant="outline">
+                  //           Approved
+                  //         </Badge>
+                  //       </TableCell>
+                  //       <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
+                  //         2023-06-26
+                  //       </TableCell>
+                  //       <TableCell className="text-right">$450.00</TableCell>
+                  //     </TableRow>
+                  //     <TableRow>
+                  //       <TableCell>
+                  //         <div className="font-medium">Liam Johnson</div>
+                  //         <div className="hidden text-sm text-muted-foreground md:inline">
+                  //           liam@example.com
+                  //         </div>
+                  //       </TableCell>
+                  //       <TableCell className="hidden xl:table-column">
+                  //         Sale
+                  //       </TableCell>
+                  //       <TableCell className="hidden xl:table-column">
+                  //         <Badge className="text-xs" variant="outline">
+                  //           Approved
+                  //         </Badge>
+                  //       </TableCell>
+                  //       <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
+                  //         2023-06-27
+                  //       </TableCell>
+                  //       <TableCell className="text-right">$550.00</TableCell>
+                  //     </TableRow>
+                  //   </TableBody>
+                  // </Table>
+                  // <div className="no-scrollbar w-full overflow-x-scroll">
+                  <>
+                    <AllUsers
+                      usersList={usersList}
+                      isSuperAdmin={isSuperAdmin}
+                    />
+                  </>
                 )}
                 {!dataMode && (
                   <>
@@ -532,8 +543,6 @@ export function AdminDashboard({
                                 alt=""
                                 width={40}
                                 height={40}
-                                //   className="rounded-full"
-                                // className="hidden h-9 w-9 rounded-full sm:flex "
                                 className=" h-9 w-9 rounded-full  "
                               />
                               <div className="grid gap-1">

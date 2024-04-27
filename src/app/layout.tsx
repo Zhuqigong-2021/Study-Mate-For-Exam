@@ -45,7 +45,7 @@ export default function RootLayout({
   const isAdmin = checkRole("admin");
 
   // console.log("isAdmin: " + isAdmin);
-  // className={`${inter.variable} ${roboto_mono.variable}`}
+  // className={`${inter.variable} ${open_sans.variable} ${roboto_mono.variable}`}
   return (
     <ClerkProvider>
       <head>
@@ -58,11 +58,8 @@ export default function RootLayout({
         />
       </head>
 
-      <html
-        lang="en"
-        className={`${open_sans.variable} ${roboto_mono.variable}`}
-      >
-        <body className="">
+      <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
+        <body className="font-sans">
           <CommonNavbar isAdmin={isAdmin} userId={userId ? userId : ""} />
           {children}
           <Toaster />

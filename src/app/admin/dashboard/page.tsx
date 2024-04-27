@@ -51,6 +51,7 @@ export default async function Dashboard(params: {
   const users = await clerkClient.users.getUserList({
     limit: totalUsersNumber,
   });
+  const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
   const reportList = await prisma.reportList.findMany({
     select: {
       id: true,
@@ -105,7 +106,7 @@ export default async function Dashboard(params: {
   let notesTotal = await prisma.note.count({});
   let reportsNumber = await prisma.report.count({});
   return (
-    <div className="flex flex-col items-center justify-center ">
+    <div className="flex w-full flex-col items-center justify-center">
       <AdminDashboard
         users={JSON.stringify(users)}
         userId={userId}
@@ -113,6 +114,7 @@ export default async function Dashboard(params: {
         notesTotal={notesTotal}
         reportsNumber={reportsNumber}
         reports={JSON.stringify(reports)}
+        isSuperAdmin={isSuperAdmin}
       />
       {/* <SearchUsers />
       <Userdata
