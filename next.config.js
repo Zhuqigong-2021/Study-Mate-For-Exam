@@ -11,6 +11,9 @@ const withPWA = require("@ducanh2912/next-pwa").default({
   },
 });
 const nextConfig = {
+  env: {
+    SOCKET_URL: process.env.NEXT_PUBLIC_SOCKET_URL,
+  },
   images: {
     remotePatterns: [
       {
