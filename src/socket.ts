@@ -4,4 +4,4 @@ import { io } from "socket.io-client";
 // const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3000";
 // const socketUrl = "http://localhost:3000";
 import { server } from "../config";
-export const socket = io(server);
+export const socket = io();
