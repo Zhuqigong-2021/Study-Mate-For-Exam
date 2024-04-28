@@ -5,6 +5,7 @@ import React from "react";
 import prisma from "@/lib/db/prisma";
 import { checkRole } from "@/app/utils/roles/role";
 import { Metadata } from "next";
+import { currentUser } from "@clerk/nextjs/server";
 export const metadata: Metadata = {
   title: "Study Mate - All Notes",
 };
@@ -40,6 +41,14 @@ const page = async () => {
     },
   });
 
+  const user = await currentUser();
+  let banned = false;
+  if (user) {
+    if (user.privateMetadata.banned && user.privateMetadata.banned == true) {
+      banned = true;
+    }
+  }
+
   const isAdmin = checkRole("admin");
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
   return (
@@ -48,6 +57,7 @@ const page = async () => {
         allNotes={allNotes}
         isAdmin={isAdmin}
         isSuperAdmin={isSuperAdmin}
+        banned={banned}
       />
       <div className="fixed bottom-4 right-4  lg:right-20 ">
         {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && <AIChatButton />}
