@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import logo from "@/assets/logo.png";
+
 import Image from "next/image";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, useClerk } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Crown, Globe, Leaf, Plus } from "lucide-react";
 import AddEditNoteDialog from "@/components/Note/AddEditNoteDialog";
@@ -11,7 +11,7 @@ import Drawer from "@/components/Drawer";
 import { usePathname, useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
-// import { Icons } from "@/components/icons";
+
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -22,6 +22,8 @@ import {
   navigationMenuTriggerStyle,
 } from "./ui/navigation-menu";
 import toast from "react-hot-toast";
+import { socket } from "@/socket";
+// import { setUserRole } from "@/app/admin/dashboard/_actions";
 interface userType {
   userId: string;
   isAdmin: boolean;
@@ -32,7 +34,8 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-
+  const [admin, setAdmin] = useState("");
+  const { signOut } = useClerk();
   let isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
 
   const [isSticky, setIsSticky] = useState(false);
@@ -51,6 +54,28 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
     };
   }, []);
 
+  socket.on("receive-role", (currentUserId, role: any) => {
+    if (userId == currentUserId) {
+      setAdmin(role);
+    }
+  });
+
+  socket.on("receive-banned", (currentUserId, bannedValue: boolean) => {
+    // console.log("user id from backend:" + currentUserId);
+    // console.log("userId:" + userId);
+    // console.log("compare userId and current" + userId == currentUserId);
+    // console.log("banned value from backend:" + bannedValue);
+    if (bannedValue && userId == currentUserId) {
+      // console.log("we can catch qigong2 user");
+      signOutUser();
+    }
+    // console.log("bannedValue has been received in the frontend " + bannedValue);
+  });
+  function signOutUser() {
+    signOut(() => router.push("/"));
+  }
+
+  console.log("admin now role:" + admin);
   return (
     <>
       <div
@@ -151,20 +176,6 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                   <Drawer isAdmin={isAdmin} userId={userId ?? ""} />
                 </NavigationMenuItem>
                 <NavigationMenuItem className="z-50  hidden  font-light  lg:flex ">
-                  {/* {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && (
-                  <Link
-                    href="/admin/dashboard"
-                    className="underline-offset-1 hover:scale-105 hover:text-teal-700"
-                    legacyBehavior
-                    passHref
-                  >
-                    <NavigationMenuLink
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      admin
-                    </NavigationMenuLink>
-                  </Link>
-                )} */}
                   <NavigationMenuTrigger>Taking Notes</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[600px] lg:grid-cols-[1fr_1fr]">
@@ -255,7 +266,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                         href="/notes/edit"
                         title="Edit Your questions"
                         onClick={() => {
-                          if (isAdmin) {
+                          if (isAdmin || admin) {
                             router.push("/notes/edit");
                           } else {
                             toast.error(
@@ -271,7 +282,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                         // href="/notes"
                         title="Add a note "
                         onClick={() => {
-                          if (isAdmin) {
+                          if (isAdmin || admin) {
                             setShowAddEditNoteDialog(true);
                           } else {
                             toast.error(
@@ -299,7 +310,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                             </div>
                           </div>
                         )}
-                        {isAdmin && !isSuperAdmin && (
+                        {(isAdmin || admin) && !isSuperAdmin && (
                           <div className="flex items-center space-x-2  py-2">
                             <div className=" flex h-8 w-8 items-center justify-center rounded-full  bg-yellow-50 p-2">
                               <Crown
@@ -320,7 +331,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                           </div>
                         )}
 
-                        {!isAdmin && !isSuperAdmin && (
+                        {!isAdmin && !admin && !isSuperAdmin && (
                           <div className="flex items-center space-x-2  py-2">
                             <div className=" flex h-8 w-8 items-center justify-center rounded-full  bg-stone-50 p-2">
                               <Crown

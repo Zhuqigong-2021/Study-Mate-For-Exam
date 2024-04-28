@@ -70,6 +70,7 @@ import {
   setUserRole,
   unblockThisUser,
 } from "@/app/admin/dashboard/_actions";
+import { socket } from "@/socket";
 
 export type Question = {
   id: string;
@@ -156,11 +157,11 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
 
   const handleRole = async (user: User) => {
     try {
-      console.log("userID:" + user.id);
-      console.log(
-        "role:" +
-          String(user.publicMetadata.role ? user.publicMetadata.role : ""),
-      );
+      // console.log("userID:" + user.id);
+      // console.log(
+      //   "role:" +
+      //     String(user.publicMetadata.role ? user.publicMetadata.role : ""),
+      // );
       if (!isSuperAdmin) {
         toast.error("Sorry you're not authorized to do that");
         return;
@@ -175,7 +176,15 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
       );
       if (!response) {
         toast.error("Sorry you are not authorized");
+        return;
       }
+      let userId: string = user.id;
+      let role: string = user.publicMetadata.role ? "" : "admin";
+      console.log("role:" + role);
+      if (socket.connected) {
+        socket.emit("authorize", userId, role);
+      }
+
       toast.success("You authorize a role successfully");
       router.refresh();
     } catch (error) {
@@ -189,10 +198,12 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
         toast.error("Sorry you're not authorized to do that");
         return;
       }
+
       if (user.id == "user_2aFBx8E20RdENmTS0CRlRej0Px4") {
         toast.error("You're superAdmin,please do not block yourself");
         return;
       }
+
       const response = await blockThisUser(user.id);
       if (!response) {
         toast.error(
@@ -200,11 +211,32 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
         );
         return;
       }
+      let bannedValue = user.privateMetadata.banned
+        ? user.privateMetadata.banned
+        : false;
+      // socket.on("connect", () => {
+      //   console.log("block user is connected");
+      //   socket.emit("banned", bannedValue);
+      // });
+
+      let currentUserId = user.id;
+      if (socket.connected) {
+        console.log("banned value from frontend dashboard" + bannedValue);
+        socket.emit("banned", currentUserId, bannedValue);
+      }
       toast.success("You block this user successfully");
     } catch (error) {
       toast.error("Sorry, something went wrong ");
     }
   }
+
+  // useEffect(() => {
+  //   if (socket.connected) {
+  //     let bannedValue = true;
+  //     socket.emit("banned", bannedValue);
+  //   }
+  //   console.log("socket connection status :" + socket.connected);
+  // });
 
   async function handleUnblock(user: User) {
     try {
