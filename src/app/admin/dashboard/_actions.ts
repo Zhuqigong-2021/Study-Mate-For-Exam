@@ -36,7 +36,7 @@ export async function setUserRole(currentUserId: string, role: string) {
     const res = await clerkClient.users.updateUser(currentUserId, {
       publicMetadata: { role: role },
     });
-    pusherServer.trigger("authorize", "user:authorize", {
+    await pusherServer.trigger("authorize", "user:authorize", {
       currentUserId: currentUserId,
       role: role,
     });
@@ -64,7 +64,7 @@ export async function blockThisUser(currentUserId: string) {
           return { message: "something went wrong" };
         }
 
-        pusherServer.trigger("ban-user", "user:banned", {
+        await pusherServer.trigger("ban-user", "user:banned", {
           currentUserId: currentUserId,
           banned: true,
         });
