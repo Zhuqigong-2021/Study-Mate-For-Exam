@@ -22,7 +22,7 @@ import {
   navigationMenuTriggerStyle,
 } from "./ui/navigation-menu";
 import toast from "react-hot-toast";
-import { socket } from "@/socket";
+
 // import { setUserRole } from "@/app/admin/dashboard/_actions";
 interface userType {
   userId: string;
@@ -54,28 +54,11 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
     };
   }, []);
 
-  socket.on("receive-role", (currentUserId, role: any) => {
-    if (userId == currentUserId) {
-      setAdmin(role);
-    }
-  });
-
-  socket.on("receive-banned", (currentUserId, bannedValue: boolean) => {
-    // console.log("user id from backend:" + currentUserId);
-    // console.log("userId:" + userId);
-    // console.log("compare userId and current" + userId == currentUserId);
-    // console.log("banned value from backend:" + bannedValue);
-    if (bannedValue && userId == currentUserId) {
-      // console.log("we can catch qigong2 user");
-      signOutUser();
-    }
-    // console.log("bannedValue has been received in the frontend " + bannedValue);
-  });
   function signOutUser() {
     signOut(() => router.push("/"));
   }
 
-  console.log("admin now role:" + admin);
+  // console.log("admin now role:" + admin);
   return (
     <>
       <div

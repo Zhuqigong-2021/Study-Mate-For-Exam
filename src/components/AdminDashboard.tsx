@@ -108,7 +108,7 @@ export function AdminDashboard({
 
   useEffect(() => {
     setUsersList(JSON.parse(users));
-    console.log(JSON.parse(users));
+    // console.log(JSON.parse(users));
   }, [users]);
   useEffect(() => {
     setReportsList(JSON.parse(reports));

@@ -27,7 +27,7 @@ import { redirect, useParams, usePathname, useRouter } from "next/navigation";
 
 import { SkeletonCard } from "../SkeletonCard";
 import { useClerk } from "@clerk/nextjs";
-import { socket } from "@/socket";
+
 type Note = {
   userId: string;
   id: string;
@@ -92,16 +92,6 @@ const FilterNote = ({
       signOut(() => router.push("/"));
     }
   }, [banned, router, signOut]);
-
-  // socket.on("receive-banned", (bannedValue: boolean) => {
-  //   if (bannedValue) {
-  //     signOutUser();
-  //   }
-  //   // console.log("bannedValue has been received in the frontend " + bannedValue);
-  // });
-  // function signOutUser() {
-  //   signOut(() => router.push("/"));
-  // }
 
   const form = useForm<formSchema>({
     resolver: zodResolver(FormSchema),
