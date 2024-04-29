@@ -22,6 +22,7 @@ import {
   navigationMenuTriggerStyle,
 } from "./ui/navigation-menu";
 import toast from "react-hot-toast";
+import { pusherClient } from "@/lib/pusher";
 
 // import { setUserRole } from "@/app/admin/dashboard/_actions";
 interface userType {
@@ -54,11 +55,57 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
     };
   }, []);
 
+  // console.log("admin now role:" + admin);
   function signOutUser() {
     signOut(() => router.push("/"));
   }
 
-  // console.log("admin now role:" + admin);
+  useEffect(() => {
+    pusherClient.subscribe("ban-user");
+    pusherClient.bind(
+      "user:banned",
+      ({
+        currentUserId,
+        banned,
+      }: {
+        currentUserId: string;
+        banned: boolean;
+      }) => {
+        if (currentUserId === userId && banned) {
+          signOutUser();
+        }
+      },
+    );
+    return () => {
+      pusherClient.unsubscribe("ban-user");
+    };
+  });
+
+  // await pusherServer.trigger("authorize", "user:authorize", {
+  //   currentUserId: currentUserId,
+  //   role: role,
+  // });
+  useEffect(() => {
+    pusherClient.subscribe("authorize");
+    pusherClient.bind(
+      "user:authorize",
+      ({
+        currentUserId,
+        role,
+      }: {
+        currentUserId: string;
+        role: string | null;
+      }) => {
+        if (currentUserId === userId) {
+          setAdmin(role ?? "");
+        }
+      },
+    );
+    return () => {
+      pusherClient.unsubscribe("authorize");
+    };
+  });
+
   return (
     <>
       <div

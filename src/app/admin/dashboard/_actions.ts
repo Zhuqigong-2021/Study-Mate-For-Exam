@@ -2,7 +2,7 @@
 
 import { checkRole } from "@/app/utils/roles/role";
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import toast from "react-hot-toast";
+import { pusherServer } from "@/lib/pusher";
 
 export async function setRole(formData: FormData) {
   const { userId } = auth();
@@ -36,7 +36,10 @@ export async function setUserRole(currentUserId: string, role: string) {
     const res = await clerkClient.users.updateUser(currentUserId, {
       publicMetadata: { role: role },
     });
-
+    pusherServer.trigger("authorize", "user:authorize", {
+      currentUserId: currentUserId,
+      role: role,
+    });
     return { message: res.publicMetadata };
   } catch (err) {
     return { message: err };
@@ -52,9 +55,18 @@ export async function blockThisUser(currentUserId: string) {
         foundUser.privateMetadata.banned == false
       ) {
         // await clerkClient.users.banUser(userId);
+
         const res = await clerkClient.users.updateUser(currentUserId, {
           // locked: true,
           privateMetadata: { banned: true },
+        });
+        if (!res) {
+          return { message: "something went wrong" };
+        }
+
+        pusherServer.trigger("ban-user", "user:banned", {
+          currentUserId: currentUserId,
+          banned: true,
         });
         return { message: res.privateMetadata };
       }

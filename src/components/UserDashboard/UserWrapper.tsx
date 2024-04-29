@@ -199,16 +199,26 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
         return;
       }
 
-      const response = await blockThisUser(user.id);
-      if (!response) {
-        toast.error(
-          "Sorry you are not authorized,or the user has been already blocked ,you can not block the same user twice",
-        );
-        return;
-      }
-      let bannedValue = user.privateMetadata.banned
-        ? user.privateMetadata.banned
-        : false;
+      const response = await fetch("/api/block", {
+        method: "POST",
+        body: JSON.stringify({
+          currentUserId: user.id,
+        }),
+      });
+      // router.reload();
+
+      if (!response.ok) throw Error("Status code: " + response.status);
+
+      // const response = await blockThisUser(user.id);
+      // if (!response) {
+      //   toast.error(
+      //     "Sorry you are not authorized,or the user has been already blocked ,you can not block the same user twice",
+      //   );
+      //   return;
+      // }
+      // let bannedValue = user.privateMetadata.banned
+      //   ? user.privateMetadata.banned
+      //   : false;
 
       toast.success("You block this user successfully");
     } catch (error) {
