@@ -105,6 +105,28 @@ export default async function Dashboard(params: {
   });
   let notesTotal = await prisma.note.count({});
   let reportsNumber = await prisma.report.count({});
+  console.log(allNotes);
+
+  // Helper function to determine if a date is in the current month
+  function isDateInCurrentMonth(date: Date) {
+    const now = new Date();
+    return (
+      date.getFullYear() === now.getFullYear() &&
+      date.getMonth() === now.getMonth()
+    );
+  }
+
+  // Function to count notes created in the current month
+  function countNotesCreatedThisMonth(notes: any[]) {
+    return notes.filter((note) => {
+      const createdAtDate = new Date(note.createdAt);
+      return isDateInCurrentMonth(createdAtDate);
+    }).length;
+  }
+
+  // Calculate the number of notes created this month
+  const numberOfNotesCreatedThisMonth = countNotesCreatedThisMonth(allNotes);
+
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <AdminDashboard
@@ -115,6 +137,7 @@ export default async function Dashboard(params: {
         reportsNumber={reportsNumber}
         reports={JSON.stringify(reports)}
         isSuperAdmin={isSuperAdmin}
+        numberOfNotesCreatedThisMonth={numberOfNotesCreatedThisMonth}
       />
       {/* <SearchUsers />
       <Userdata

@@ -9,12 +9,16 @@ import {
   CreditCard,
   Divide,
   DollarSign,
+  Mail,
   Menu,
   Package2,
+  PieChart,
   Search,
+  Settings,
   Sigma,
   Users,
 } from "lucide-react";
+
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -37,14 +41,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { RxDashboard } from "react-icons/rx";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { User } from "@clerk/nextjs/server";
@@ -64,6 +61,8 @@ import { Prisma, Report } from "@prisma/client";
 import { dateFormatter } from "@/app/utils/dateFormatter";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import AllUsers from "./UserDashboard/AllUsers";
+import { UserButton } from "@clerk/nextjs";
+
 interface UserProps {
   users: string;
   userId: string | null;
@@ -72,6 +71,7 @@ interface UserProps {
   reportsNumber: number;
   reports: string;
   isSuperAdmin: boolean;
+  numberOfNotesCreatedThisMonth: number;
 }
 // {
 //     id: string;
@@ -94,6 +94,7 @@ export function AdminDashboard({
   reportsNumber,
   reports,
   isSuperAdmin,
+  numberOfNotesCreatedThisMonth,
 }: UserProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -102,6 +103,8 @@ export function AdminDashboard({
   const [reportsList, setReportsList] = useState<Report[]>([]);
   const [isClient, setIsClient] = useState(false);
   const [dataMode, setDataMode] = useState(false);
+  const [currentTab, setCurrentTab] = useState("dashboard");
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -127,6 +130,50 @@ export function AdminDashboard({
     return email;
   }
 
+  // Function to get the timestamp for 30 days ago
+  function getThirtyDaysAgo() {
+    const now = new Date();
+    now.setDate(now.getDate() - 30); // Set the date to 30 days before today
+    now.setHours(0, 0, 0, 0); // Optional: Adjust this if you want the exact time 30 days ago
+    return now.getTime();
+  }
+
+  // Calculate the timestamp for 30 days ago
+  const thirtyDaysAgo = getThirtyDaysAgo();
+
+  // Filter the list to get users created in the last 30 days
+  const totalRecentUsers = usersList.filter((user) => {
+    const createdAtTimestamp = user.createdAt;
+    return createdAtTimestamp >= thirtyDaysAgo;
+  }).length;
+  const totalLastMonthUsers = totalUsersNumber - totalRecentUsers;
+  const totalMonthlyIncreaseUsers = Math.round(
+    (totalRecentUsers / totalLastMonthUsers) * 100,
+  );
+  const totalLastMonthNotes = notesTotal - numberOfNotesCreatedThisMonth;
+  const totalMonthlyIncreaseNotes = Math.round(
+    (numberOfNotesCreatedThisMonth / totalLastMonthNotes) * 100,
+  );
+
+  function isDateInCurrentMonth(date: Date) {
+    const now = new Date();
+    return (
+      date.getFullYear() === now.getFullYear() &&
+      date.getMonth() === now.getMonth()
+    );
+  }
+
+  // Function to count reports submitted in the current month
+  function countReportsThisMonth(reports: any[]) {
+    return reports.filter((report) => {
+      const submittedDate = new Date(report.submittedAt);
+      return isDateInCurrentMonth(submittedDate);
+    }).length;
+  }
+
+  // Calculate the number of reports generated this month
+  const reportsThisMonth = countReportsThisMonth(reportsList);
+
   return (
     <div className="my-5 flex min-h-[900px] w-full max-w-[84rem]  flex-col overflow-hidden rounded-2xl border shadow-md">
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -135,22 +182,58 @@ export function AdminDashboard({
             href="#"
             className="flex items-center gap-2 text-lg font-semibold md:text-base"
           >
-            <Package2 className="h-6 w-6" />
+            {(currentTab == "dashboard" || currentTab == "") && (
+              <RxDashboard className="h-6 w-6" />
+            )}
+            {currentTab == "notification" && <Mail className="h-6 w-6" />}
+            {currentTab == "statistics" && <PieChart className="h-6 w-6" />}
+            {currentTab == "settings" && <Settings className="h-6 w-6" />}
             <span className="sr-only">Acme Inc</span>
           </Link>
-          <Link
-            href="/admin/dashboard"
-            className="text-foreground transition-colors hover:text-foreground"
+          <button
+            className={`${
+              currentTab == "dashboard"
+                ? "text-foreground"
+                : "text-muted-foreground"
+            } transition-colors hover:text-foreground`}
+            onClick={() => setCurrentTab("dashboard")}
           >
             Dashboard
-          </Link>
-          <Link
-            href="/admin/dashboard/users"
-            className="text-muted-foreground transition-colors hover:text-foreground"
+          </button>
+          <button
+            // href="/admin/dashboard/users"
+            className={`${
+              currentTab == "notification"
+                ? "text-foreground"
+                : "text-muted-foreground"
+            } transition-colors hover:text-foreground`}
+            onClick={() => setCurrentTab("notification")}
           >
             Notifications
-          </Link>
-          <Link
+          </button>
+          <button
+            // href="/admin/dashboard/users"
+            onClick={() => setCurrentTab("statistics")}
+            className={`${
+              currentTab == "statistics"
+                ? "text-foreground"
+                : "text-muted-foreground"
+            } transition-colors hover:text-foreground`}
+          >
+            Statistics
+          </button>
+          <button
+            // href="/admin/dashboard/users"
+            onClick={() => setCurrentTab("settings")}
+            className={`${
+              currentTab == "settings"
+                ? "text-foreground"
+                : "text-muted-foreground"
+            } transition-colors hover:text-foreground`}
+          >
+            Settings
+          </button>
+          {/* <Link
             href="#"
             className="text-muted-foreground transition-colors hover:text-foreground"
           >
@@ -167,8 +250,28 @@ export function AdminDashboard({
             className="text-muted-foreground transition-colors hover:text-foreground"
           >
             Analytics
-          </Link>
+          </Link> */}
         </nav>
+        {/* <Tabs
+          defaultValue="dashboard"
+          className="hidden  flex-col gap-6 bg-transparent text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6"
+        >
+          <Link
+            href="#"
+            className="flex items-center gap-2 text-lg font-semibold md:text-base"
+          >
+            <RxDashboard className="h-6 w-6" />
+            <span className="sr-only">Acme Inc</span>
+          </Link>
+          <TabsList className="grid w-full grid-cols-3 space-x-5 bg-transparent">
+            <TabsTrigger value="dashboard" className="border-none">
+              Dashboard
+            </TabsTrigger>
+            <TabsTrigger value="notification">Notification</TabsTrigger>
+            <TabsTrigger value="users">Users</TabsTrigger>
+          </TabsList>
+          <TabsContent value="account"></TabsContent>
+        </Tabs> */}
         <Sheet>
           <SheetTrigger asChild>
             <Button
@@ -230,7 +333,15 @@ export function AdminDashboard({
               />
             </div>
           </form>
-          <DropdownMenu>
+          <UserButton
+            afterSignOutUrl="/"
+            appearance={{
+              elements: {
+                avatarBox: { width: "2rem", height: "2rem" },
+              },
+            }}
+          />
+          {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
                 <CircleUser className="h-5 w-5" />
@@ -245,10 +356,11 @@ export function AdminDashboard({
               <DropdownMenuSeparator />
               <DropdownMenuItem>Logout</DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
         </div>
       </header>
-      {pathname === "/admin/dashboard" && (
+
+      {currentTab === "dashboard" && (
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
           <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
             <Card
@@ -271,7 +383,7 @@ export function AdminDashboard({
                   />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  +20.1% from last month
+                  +{totalMonthlyIncreaseUsers}% since this month
                 </p>
               </CardContent>
             </Card>
@@ -284,14 +396,10 @@ export function AdminDashboard({
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  <CountUp
-                    start={0}
-                    end={totalUsersNumber ? +1000 : 0}
-                    duration={3}
-                  />
+                  <CountUp start={0} end={totalRecentUsers ?? 0} duration={3} />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  daily subscriber increase
+                  +{totalRecentUsers} new users from this month
                 </p>
               </CardContent>
             </Card>
@@ -309,7 +417,7 @@ export function AdminDashboard({
                   {/* {notesTotal} */}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  +19% from last month
+                  +{totalMonthlyIncreaseNotes}% from last month
                 </p>
               </CardContent>
             </Card>
@@ -329,7 +437,7 @@ export function AdminDashboard({
                   <CountUp start={0} end={reportsNumber} duration={1.5} />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  +201 since last hour
+                  +{reportsThisMonth} since this month
                 </p>
               </CardContent>
             </Card>
@@ -536,7 +644,7 @@ export function AdminDashboard({
                           return (
                             <div
                               key={index}
-                              className="flex flex-wrap items-center gap-4 md:flex-nowrap"
+                              className="relative flex flex-wrap items-center gap-4 md:flex-nowrap"
                             >
                               <Image
                                 src={user.imageUrl}
@@ -545,6 +653,13 @@ export function AdminDashboard({
                                 height={40}
                                 className=" h-9 w-9 rounded-full  "
                               />
+                              {/* <div
+                                className={`${
+                                  userId == user.id && userId
+                                    ? "bg-green-400"
+                                    : "bg-gray-300"
+                                } absolute left-[1.65rem] top-[0.15rem] h-[0.65rem] w-[0.65rem] rounded-full border border-white`}
+                              ></div> */}
                               <div className="grid gap-1">
                                 <span className="text-sm font-medium leading-none">
                                   {user.firstName} {user.lastName}{" "}
@@ -729,6 +844,21 @@ export function AdminDashboard({
               {/* </CardContent> */}
             </Card>
           </div>
+        </main>
+      )}
+      {currentTab === "notification" && (
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+          notification
+        </main>
+      )}
+      {currentTab === "statistics" && (
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+          statistics
+        </main>
+      )}
+      {currentTab === "settings" && (
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+          settings
         </main>
       )}
     </div>
