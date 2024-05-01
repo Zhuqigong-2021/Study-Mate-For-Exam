@@ -155,7 +155,7 @@ const UserBarChart = memo(({ data }: dataType) => {
           activeBar={<Rectangle fill="#14b8a6" stroke="white" />}
           barSize={80}
           radius={[10, 10, 10, 10]}
-          isAnimationActive={false}
+          // isAnimationActive={false}
           onMouseOver={(e) => {
             e.fill = "#14b8a6"; // Orange color on hover
           }}
