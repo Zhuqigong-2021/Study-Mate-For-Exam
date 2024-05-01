@@ -110,7 +110,7 @@ interface dataType {
   }[];
 }
 const UserBarChart = memo(({ data }: dataType) => {
-  console.log(data);
+  // console.log(data);
   // Find the index of the first non-zero 'new' value
   const firstNonZeroIndex = data.findIndex((item) => item.new > 0);
   const lastNonZeroIndex = data.reduce(
@@ -141,6 +141,12 @@ const UserBarChart = memo(({ data }: dataType) => {
           horizontal={false}
           vertical={false}
         /> */}
+        <defs>
+          <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="15%" stopOpacity={0.8} stopColor="#4f46e5" />
+            <stop offset="85%" stopColor="#a78bfa" stopOpacity={0.8} />
+          </linearGradient>
+        </defs>
         <XAxis dataKey="name" axisLine={false} tickLine={false} />
         <YAxis
           tickFormatter={(value) => Math.round(value).toString()}
@@ -151,10 +157,11 @@ const UserBarChart = memo(({ data }: dataType) => {
         {/* <Legend /> */}
         <Bar
           dataKey="new"
-          fill="#2dd4bf"
+          // fill="#2dd4bf"
           activeBar={<Rectangle fill="#14b8a6" stroke="white" />}
           barSize={80}
           radius={[10, 10, 10, 10]}
+          fill="url(#colorUv)"
           // isAnimationActive={false}
           onMouseOver={(e) => {
             e.fill = "#14b8a6"; // Orange color on hover

@@ -175,57 +175,61 @@ export function AdminDashboard({
 
   //handle bar chart for the users
   const DAY_IN_MS = 24 * 60 * 60 * 1000; // Milliseconds in a day
-  const today = new Date(); // Current system date
+  const today = new Date();
   today.setHours(0, 0, 0, 0); // Normalize today to midnight
-  const fiveDaysAgo = new Date(today.getTime() - 29 * DAY_IN_MS); // 4 days back from today
+  const startRangeDate = new Date(today.getTime() - 29 * DAY_IN_MS); // Starting from 30 days ago
 
-  // Convert UNIX timestamp to Date and format as 'YYYY-MM-DD'
   function formatDate(timestamp: any) {
     const date = new Date(timestamp);
-    // return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-    //   2,
-    //   "0",
-    // )}-${String(date.getDate()).padStart(2, "0")}`;
     return `${String(date.getMonth() + 1).padStart(2, "0")}-${String(
       date.getDate(),
     ).padStart(2, "0")}`;
   }
 
-  // Filter users and count new users within the last 5 days
   const usersPerDay: any = {};
-  let totalUsers = 0; // This will be calculated for dates before the 5-day period
+  let initialTotalUsers = 0; // Initial total users before the start of the date range
 
+  // Count users before the start of the date range
   usersList.forEach((user) => {
     const userDate = new Date(user.createdAt);
-    const dateKey = formatDate(user.createdAt);
-
-    // Count all users before the five-day period to set an initial total
-    if (userDate < fiveDaysAgo) {
-      totalUsers++;
-    }
-
-    // Initialize date keys in the range with the starting total
-    if (userDate >= fiveDaysAgo && userDate < today) {
-      if (!usersPerDay[dateKey]) {
-        usersPerDay[dateKey] = { new: 0, total: totalUsers };
-      }
-      usersPerDay[dateKey].new++;
-      usersPerDay[dateKey].total++;
-      totalUsers = usersPerDay[dateKey].total; // Update totalUsers to the last known total on a specific date
+    if (userDate < startRangeDate) {
+      initialTotalUsers++;
     }
   });
 
-  // Prepare data array for chart with accurate daily totals
-  const chartData = [];
-  for (let i = 0; i < 30; i++) {
-    const date = new Date(fiveDaysAgo.getTime() + i * DAY_IN_MS);
-    const dateKey = formatDate(date);
-    chartData.push({
-      name: dateKey,
-      new: usersPerDay[dateKey] ? usersPerDay[dateKey].new : 0,
-      total: usersPerDay[dateKey] ? usersPerDay[dateKey].total : totalUsers, // Use the last known total if no users were added that day
-    });
+  // Initialize each day with the correct starting total
+  for (let i = 0; i <= 30; i++) {
+    const currentDate = new Date(startRangeDate.getTime() + i * DAY_IN_MS);
+    if (currentDate > today) break; // Stop adding days beyond today
+    const dateKey = formatDate(currentDate);
+    usersPerDay[dateKey] = { new: 0, total: initialTotalUsers };
   }
+
+  // Populate the new and total counts
+  usersList.forEach((user) => {
+    const dateKey = formatDate(user.createdAt);
+    if (dateKey in usersPerDay) {
+      usersPerDay[dateKey].new++;
+      // Only increase the total for this day and subsequent days
+      for (let j = 0; j <= 30; j++) {
+        const futureDate = new Date(startRangeDate.getTime() + j * DAY_IN_MS);
+        if (futureDate > today) break; // Stop processing dates beyond today
+        const futureKey = formatDate(futureDate);
+        if (futureDate >= new Date(user.createdAt)) {
+          usersPerDay[futureKey].total++;
+        }
+      }
+    }
+  });
+
+  // Convert to array for charting
+  const chartData = Object.keys(usersPerDay).map((date) => ({
+    name: date,
+    new: usersPerDay[date].new,
+    total: usersPerDay[date].total,
+  }));
+
+  console.log(users);
   return (
     <div className="my-5 flex min-h-[900px] w-full max-w-[84rem]  flex-col overflow-hidden rounded-[1.5rem]  border shadow-md">
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -508,19 +512,23 @@ export function AdminDashboard({
                 className={`flex flex-row flex-wrap items-center rounded-[1rem] ${
                   dataMode
                     ? "border-none"
-                    : "border-none shadow-sm shadow-gray-300"
+                    : "border-none bg-gradient-to-r from-violet-400 to-indigo-400 text-white shadow-sm shadow-gray-300"
                 }  bg-white`}
               >
                 <div className="grid gap-2">
                   <CardTitle>Subscribers</CardTitle>
-                  <CardDescription>
+                  <CardDescription
+                    className={`${dataMode ? "" : "text-white"}`}
+                  >
                     User analysis based on month.
                   </CardDescription>
                 </div>
                 <Button
                   asChild
                   size="sm"
-                  className="ml-auto gap-1 rounded-full px-4"
+                  className={`ml-auto gap-1 rounded-full px-4 ${
+                    dataMode ? "" : "bg-white text-indigo-600"
+                  }`}
                   onClick={() => setDataMode((prev) => !prev)}
                 >
                   <Link href="#">
@@ -537,14 +545,14 @@ export function AdminDashboard({
               )}
               {!dataMode && (
                 <>
-                  <div className=" gap-2  py-4 md:flex md:justify-between">
+                  <div className=" gap-4  py-4 md:flex md:justify-between">
                     <div className="w-full rounded-[1rem]  border-none border-gray-300 bg-white p-2 py-4 text-left shadow-sm shadow-gray-300">
                       <h2 className="mb-2 pl-4 text-[15px] font-semibold">
                         New Users Increase Monthly
                       </h2>
                       <UserBarChart data={chartData} />
                     </div>
-                    <div className="w-full rounded-[1rem] border-none border-gray-300 bg-white p-2 py-4 text-left shadow-sm shadow-gray-300 ">
+                    <div className="mt-4 w-full rounded-[1rem] border-none border-gray-300 bg-white p-2 py-4 text-left shadow-sm shadow-gray-300 md:mt-0 ">
                       <h2 className="mb-2 pl-4 text-[15px] font-semibold">
                         Users Propertion in Each Month
                       </h2>
@@ -552,11 +560,11 @@ export function AdminDashboard({
                     </div>
                   </div>
 
-                  <div className="mt-4 w-full rounded-[1rem]   border-none border-gray-300 bg-white py-4 text-center shadow-sm shadow-gray-300">
-                    <h2 className="mb-2 pl-6 text-[15px] font-semibold">
+                  <div className=" w-full rounded-[1rem]   border-none border-gray-300 bg-white py-4 text-left shadow-sm shadow-gray-300">
+                    <h2 className="mb-2  pl-6 text-[15px] font-semibold">
                       New Users and Total Users trend
                     </h2>
-                    <UserAreaChart />
+                    <UserAreaChart data={chartData} />
                   </div>
                 </>
               )}
