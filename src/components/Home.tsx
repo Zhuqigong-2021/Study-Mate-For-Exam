@@ -52,7 +52,7 @@ export default function Home({ userId, isAdmin }: userIdProps) {
               <span className="scale-y-90 whitespace-nowrap">Learn Wise</span>
             </span>
           </div>
-          <p className=" max-w-[440px]  py-8  text-left font-sans leading-8   text-slate-800 md:items-start">
+          <p className=" max-w-[440px]  py-8  text-left font-sans text-lg leading-8 text-slate-800   md:items-start md:text-[1.25rem]">
             AI powered note-taking exam system which allows you to take notes ,
             review cards,insert questions, take exams and many more ...
           </p>
@@ -63,7 +63,7 @@ export default function Home({ userId, isAdmin }: userIdProps) {
             className="hover:white w-44 rounded-full bg-gradient-to-br from-teal-300 from-10% via-teal-400 via-30% to-teal-600 to-90% text-white shadow-lg shadow-[#9d824f]"
             // className="hover:white bg-gradient-to-bar   rounded-full from-teal-300 from-10% via-teal-400 via-30% to-teal-600 to-90% text-white shadow-lg shadow-[#9d824f]"
           >
-            <Link href="/notes/public"> start using now</Link>
+            <Link href="/notes/public"> Start using now</Link>
           </Button>
         </div>
 

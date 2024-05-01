@@ -32,7 +32,7 @@ const AllUsers = ({ usersList, isSuperAdmin }: usersListType) => {
   }
 
   return (
-    <div className="no-scrollbar  max-h-[520px] overflow-y-scroll ">
+    <div className="no-scrollbar mx-0 max-h-[520px] overflow-y-scroll md:px-6 ">
       {isClient && (
         <div>
           <UserWrapper usersList={usersList} isSuperAdmin={isSuperAdmin} />

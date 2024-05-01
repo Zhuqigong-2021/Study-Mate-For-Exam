@@ -62,6 +62,7 @@ import { dateFormatter } from "@/app/utils/dateFormatter";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import AllUsers from "./UserDashboard/AllUsers";
 import { UserButton } from "@clerk/nextjs";
+import ReportRadioChart from "./UserChart/ReportRadioChart";
 
 interface UserProps {
   users: string;
@@ -117,7 +118,6 @@ export function AdminDashboard({
     setReportsList(JSON.parse(reports));
   }, [reports]);
 
-  // console.log(reportsList);
   function shortenString(email: any) {
     const emailLength = 18; // Set the maximum length before shortening
     if (email.length > emailLength) {
@@ -174,8 +174,61 @@ export function AdminDashboard({
   // Calculate the number of reports generated this month
   const reportsThisMonth = countReportsThisMonth(reportsList);
 
+  //handle bar chart for the users
+  const DAY_IN_MS = 24 * 60 * 60 * 1000; // Milliseconds in a day
+  const today = new Date(); // Current system date
+  today.setHours(0, 0, 0, 0); // Normalize today to midnight
+  const fiveDaysAgo = new Date(today.getTime() - 29 * DAY_IN_MS); // 4 days back from today
+
+  // Convert UNIX timestamp to Date and format as 'YYYY-MM-DD'
+  function formatDate(timestamp: any) {
+    const date = new Date(timestamp);
+    // return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+    //   2,
+    //   "0",
+    // )}-${String(date.getDate()).padStart(2, "0")}`;
+    return `${String(date.getMonth() + 1).padStart(2, "0")}-${String(
+      date.getDate(),
+    ).padStart(2, "0")}`;
+  }
+
+  // Filter users and count new users within the last 5 days
+  const usersPerDay: any = {};
+  let totalUsers = 0; // This will be calculated for dates before the 5-day period
+
+  usersList.forEach((user) => {
+    const userDate = new Date(user.createdAt);
+    const dateKey = formatDate(user.createdAt);
+
+    // Count all users before the five-day period to set an initial total
+    if (userDate < fiveDaysAgo) {
+      totalUsers++;
+    }
+
+    // Initialize date keys in the range with the starting total
+    if (userDate >= fiveDaysAgo && userDate < today) {
+      if (!usersPerDay[dateKey]) {
+        usersPerDay[dateKey] = { new: 0, total: totalUsers };
+      }
+      usersPerDay[dateKey].new++;
+      usersPerDay[dateKey].total++;
+      totalUsers = usersPerDay[dateKey].total; // Update totalUsers to the last known total on a specific date
+    }
+  });
+
+  // Prepare data array for chart with accurate daily totals
+  const chartData = [];
+  for (let i = 0; i < 30; i++) {
+    const date = new Date(fiveDaysAgo.getTime() + i * DAY_IN_MS);
+    const dateKey = formatDate(date);
+    chartData.push({
+      name: dateKey,
+      new: usersPerDay[dateKey] ? usersPerDay[dateKey].new : 0,
+      total: usersPerDay[dateKey] ? usersPerDay[dateKey].total : totalUsers, // Use the last known total if no users were added that day
+    });
+  }
   return (
-    <div className="my-5 flex min-h-[900px] w-full max-w-[84rem]  flex-col overflow-hidden rounded-2xl border shadow-md">
+    <div className="my-5 flex min-h-[900px] w-full max-w-[84rem]  flex-col overflow-hidden rounded-[1.5rem]  border shadow-md">
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link
@@ -361,11 +414,12 @@ export function AdminDashboard({
       </header>
 
       {currentTab === "dashboard" && (
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-          <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+        <main className="flex flex-1 flex-col  gap-2  bg-neutral-50 p-4 md:gap-4 md:p-8">
+          <div className="grid gap-2 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
             <Card
               x-chunk="dashboard-01-chunk-0"
               onClick={() => router.push("/admin/dashboard/users")}
+              className="rounded-[1rem] "
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium ">
@@ -387,7 +441,7 @@ export function AdminDashboard({
                 </p>
               </CardContent>
             </Card>
-            <Card x-chunk=" dashboard-01-chunk-1">
+            <Card x-chunk=" dashboard-01-chunk-1" className="rounded-[1rem]">
               <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   Subscriptions
@@ -406,6 +460,7 @@ export function AdminDashboard({
             <Card
               x-chunk="dashboard-01-chunk-2"
               onClick={() => router.push("/notes/all")}
+              className="rounded-[1rem]"
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Notes</CardTitle>
@@ -424,6 +479,7 @@ export function AdminDashboard({
             <Card
               x-chunk="dashboard-01-chunk-3"
               onClick={() => router.push("/report")}
+              className="rounded-[1rem]"
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
@@ -442,9 +498,20 @@ export function AdminDashboard({
               </CardContent>
             </Card>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 md:gap-8 xl:grid-cols-3 lg:grid-cols-3">
-            <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
-              <CardHeader className="flex flex-row flex-wrap items-center">
+          <div className="grid gap-2    md:grid-cols-2 md:gap-4 xl:grid-cols-3 lg:grid-cols-3">
+            <Card
+              className={`overflow-hidden rounded-[1rem] border-none ${
+                dataMode ? "bg-white" : "bg-neutral-50"
+              }  xl:col-span-2`}
+              x-chunk="dashboard-01-chunk-4 "
+            >
+              <CardHeader
+                className={`flex flex-row flex-wrap items-center rounded-[1rem] ${
+                  dataMode
+                    ? "border-none"
+                    : "border-none shadow-sm shadow-gray-300"
+                }  bg-white`}
+              >
                 <div className="grid gap-2">
                   <CardTitle>Subscribers</CardTitle>
                   <CardDescription>
@@ -454,7 +521,7 @@ export function AdminDashboard({
                 <Button
                   asChild
                   size="sm"
-                  className="ml-auto gap-1"
+                  className="ml-auto gap-1 rounded-full px-4"
                   onClick={() => setDataMode((prev) => !prev)}
                 >
                   <Link href="#">
@@ -463,147 +530,40 @@ export function AdminDashboard({
                   </Link>
                 </Button>
               </CardHeader>
-              <CardContent>
-                {dataMode && (
-                  // <Table>
-                  //   <TableHeader>
-                  //     <TableRow>
-                  //       <TableHead>Users</TableHead>
-                  //       <TableHead className="hidden xl:table-column">
-                  //         Type
-                  //       </TableHead>
-                  //       <TableHead className="hidden xl:table-column">
-                  //         Status
-                  //       </TableHead>
-                  //       <TableHead className="hidden xl:table-column">
-                  //         Date
-                  //       </TableHead>
-                  //       <TableHead className="text-right">Role</TableHead>
-                  //     </TableRow>
-                  //   </TableHeader>
-                  //   <TableBody>
-                  //     <TableRow>
-                  //       <TableCell>
-                  //         <div className="font-medium">Liam Johnson</div>
-                  //         <div className="hidden text-sm text-muted-foreground md:inline">
-                  //           liam@example.com
-                  //         </div>
-                  //       </TableCell>
-                  //       <TableCell className="hidden xl:table-column">
-                  //         Sale
-                  //       </TableCell>
-                  //       <TableCell className="hidden xl:table-column">
-                  //         <Badge className="text-xs" variant="outline">
-                  //           Approved
-                  //         </Badge>
-                  //       </TableCell>
-                  //       <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
-                  //         2023-06-23
-                  //       </TableCell>
-                  //       <TableCell className="text-right">$250.00</TableCell>
-                  //     </TableRow>
-                  //     <TableRow>
-                  //       <TableCell>
-                  //         <div className="font-medium">Olivia Smith</div>
-                  //         <div className="hidden text-sm text-muted-foreground md:inline">
-                  //           olivia@example.com
-                  //         </div>
-                  //       </TableCell>
-                  //       <TableCell className="hidden xl:table-column">
-                  //         Refund
-                  //       </TableCell>
-                  //       <TableCell className="hidden xl:table-column">
-                  //         <Badge className="text-xs" variant="outline">
-                  //           Declined
-                  //         </Badge>
-                  //       </TableCell>
-                  //       <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
-                  //         2023-06-24
-                  //       </TableCell>
-                  //       <TableCell className="text-right">$150.00</TableCell>
-                  //     </TableRow>
-                  //     <TableRow>
-                  //       <TableCell>
-                  //         <div className="font-medium">Noah Williams</div>
-                  //         <div className="hidden text-sm text-muted-foreground md:inline">
-                  //           noah@example.com
-                  //         </div>
-                  //       </TableCell>
-                  //       <TableCell className="hidden xl:table-column">
-                  //         Subscription
-                  //       </TableCell>
-                  //       <TableCell className="hidden xl:table-column">
-                  //         <Badge className="text-xs" variant="outline">
-                  //           Approved
-                  //         </Badge>
-                  //       </TableCell>
-                  //       <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
-                  //         2023-06-25
-                  //       </TableCell>
-                  //       <TableCell className="text-right">$350.00</TableCell>
-                  //     </TableRow>
-                  //     <TableRow>
-                  //       <TableCell>
-                  //         <div className="font-medium">Emma Brown</div>
-                  //         <div className="hidden text-sm text-muted-foreground md:inline">
-                  //           emma@example.com
-                  //         </div>
-                  //       </TableCell>
-                  //       <TableCell className="hidden xl:table-column">
-                  //         Sale
-                  //       </TableCell>
-                  //       <TableCell className="hidden xl:table-column">
-                  //         <Badge className="text-xs" variant="outline">
-                  //           Approved
-                  //         </Badge>
-                  //       </TableCell>
-                  //       <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
-                  //         2023-06-26
-                  //       </TableCell>
-                  //       <TableCell className="text-right">$450.00</TableCell>
-                  //     </TableRow>
-                  //     <TableRow>
-                  //       <TableCell>
-                  //         <div className="font-medium">Liam Johnson</div>
-                  //         <div className="hidden text-sm text-muted-foreground md:inline">
-                  //           liam@example.com
-                  //         </div>
-                  //       </TableCell>
-                  //       <TableCell className="hidden xl:table-column">
-                  //         Sale
-                  //       </TableCell>
-                  //       <TableCell className="hidden xl:table-column">
-                  //         <Badge className="text-xs" variant="outline">
-                  //           Approved
-                  //         </Badge>
-                  //       </TableCell>
-                  //       <TableCell className="hidden md:table-cell xl:table-column lg:hidden">
-                  //         2023-06-27
-                  //       </TableCell>
-                  //       <TableCell className="text-right">$550.00</TableCell>
-                  //     </TableRow>
-                  //   </TableBody>
-                  // </Table>
-                  // <div className="no-scrollbar w-full overflow-x-scroll">
-                  <>
-                    <AllUsers
-                      usersList={usersList}
-                      isSuperAdmin={isSuperAdmin}
-                    />
-                  </>
-                )}
-                {!dataMode && (
-                  <>
-                    <div className=" mb-10 md:flex md:justify-between">
-                      <UserBarChart />
+              {/* <CardContent> */}
+              {dataMode && (
+                <>
+                  <AllUsers usersList={usersList} isSuperAdmin={isSuperAdmin} />
+                </>
+              )}
+              {!dataMode && (
+                <>
+                  <div className=" gap-2  py-4 md:flex md:justify-between">
+                    <div className="w-full rounded-[1rem]  border-none border-gray-300 bg-white p-2 py-4 text-left shadow-sm shadow-gray-300">
+                      <h2 className="mb-2 pl-4 text-[15px] font-semibold">
+                        New Users Increase Monthly
+                      </h2>
+                      <UserBarChart data={chartData} />
+                    </div>
+                    <div className="w-full rounded-[1rem] border-none border-gray-300 bg-white p-2 py-4 text-left shadow-sm shadow-gray-300 ">
+                      <h2 className="mb-2 pl-4 text-[15px] font-semibold">
+                        Users Propertion in Each Month
+                      </h2>
                       <UserPieChart />
                     </div>
+                  </div>
+
+                  <div className="mt-4 w-full rounded-[1rem]   border-none border-gray-300 bg-white py-4 text-center shadow-sm shadow-gray-300">
+                    <h2 className="mb-2 pl-6 text-[15px] font-semibold">
+                      New Users and Total Users trend
+                    </h2>
                     <UserAreaChart />
-                  </>
-                )}
-              </CardContent>
+                  </div>
+                </>
+              )}
+              {/* </CardContent> */}
             </Card>
-            <Card x-chunk="dashboard-01-chunk-5">
+            <Card x-chunk="dashboard-01-chunk-5 " className="rounded-[1rem]">
               <CardHeader>
                 {isClient && <CardTitle>Recent Activities</CardTitle>}
                 {!isClient && (
@@ -624,7 +584,9 @@ export function AdminDashboard({
 
                   <TabsContent
                     value="users"
-                    className="no-scrollbar mt-4 grid max-h-[480px] gap-8 overflow-scroll px-2"
+                    className={`no-scrollbar mt-4 grid ${
+                      dataMode ? "max-h-[480px]" : "max-h-[530px]"
+                    } gap-8 overflow-scroll px-2`}
                   >
                     {isClient &&
                       usersList

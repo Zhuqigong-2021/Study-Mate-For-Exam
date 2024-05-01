@@ -126,9 +126,9 @@ export default async function Dashboard(params: {
 
   // Calculate the number of notes created this month
   const numberOfNotesCreatedThisMonth = countNotesCreatedThisMonth(allNotes);
-
+  // console.log(JSON.stringify(users));
   return (
-    <div className="flex w-full flex-col items-center justify-center">
+    <div className="flex w-full flex-col items-center justify-center bg-slate-50">
       <AdminDashboard
         users={JSON.stringify(users)}
         userId={userId}

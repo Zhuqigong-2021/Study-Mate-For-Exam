@@ -174,7 +174,7 @@ export function AllUserDataTable<TData extends any, TValue>({
         </DropdownMenu>
       </div>
       {/* table */}
-      <div className="flex w-full   overflow-x-auto rounded-md  border-2">
+      <div className="flex w-full   overflow-x-auto rounded-md  border">
         <div className="max-w-full md:max-w-full ">
           <Table className="w-full">
             <TableHeader className="bg-stone-50">

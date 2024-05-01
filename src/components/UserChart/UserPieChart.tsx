@@ -59,7 +59,7 @@ const renderCustomizedLabel = ({
 export default class UserPieChart extends PureComponent {
   render() {
     return (
-      <ResponsiveContainer width={"100%"} height={250}>
+      <ResponsiveContainer width={"100%"} height={200}>
         <PieChart width={400} height={400}>
           <Pie
             data={data}

@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { memo } from "react";
 import {
   AreaChart,
   Area,
@@ -43,49 +43,42 @@ const data = [
   },
 ];
 
-export default class UserAreaChart extends PureComponent {
-  //   static demoUrl = "https://codesandbox.io/s/stacked-area-chart-ix341";
-
-  render() {
-    return (
-      <ResponsiveContainer
-        className="h-full w-1/2 "
-        width={"100%"}
-        height={250}
+const UserAreaChart = memo(() => {
+  return (
+    <ResponsiveContainer className="h-full w-1/2" width="100%" height={250}>
+      <AreaChart
+        className="h-[400px] w-full"
+        data={data}
+        margin={{
+          top: 0,
+          right: 30,
+          left: -20,
+          bottom: 0,
+        }}
       >
-        <AreaChart
-          className="h-[400px] w-full"
-          data={data}
-          margin={{
-            top: 10,
-            right: 30,
-            left: 0,
-            bottom: 0,
-          }}
-        >
-          {/* <CartesianGrid strokeDasharray="3 3" /> */}
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Area
-            // type="monotone"
-            type="natural"
-            dataKey="new"
-            stackId="1"
-            strokeWidth={3}
-            stroke="#84cc16"
-            fill="#bef264"
-          />
-          <Area
-            type="monotone"
-            dataKey="total"
-            stackId="1"
-            stroke="#fb7185"
-            strokeWidth={3}
-            fill="#ffe4e6"
-          />
-        </AreaChart>
-      </ResponsiveContainer>
-    );
-  }
-}
+        {/* <CartesianGrid strokeDasharray="3 3" /> */}
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Area
+          type="monotone"
+          dataKey="new"
+          stackId="1"
+          strokeWidth={3}
+          stroke="#84cc16"
+          fill="#bef264"
+        />
+        <Area
+          type="monotone"
+          dataKey="total"
+          stackId="1"
+          stroke="#6366f1"
+          strokeWidth={3}
+          fill="#4f46e5"
+        />
+      </AreaChart>
+    </ResponsiveContainer>
+  );
+});
+
+export default UserAreaChart;
