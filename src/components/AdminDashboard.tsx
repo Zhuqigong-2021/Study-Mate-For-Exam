@@ -62,7 +62,6 @@ import { dateFormatter } from "@/app/utils/dateFormatter";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import AllUsers from "./UserDashboard/AllUsers";
 import { UserButton } from "@clerk/nextjs";
-import ReportRadioChart from "./UserChart/ReportRadioChart";
 
 interface UserProps {
   users: string;
