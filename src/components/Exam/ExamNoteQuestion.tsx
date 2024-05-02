@@ -22,6 +22,8 @@ import MutipleChoiceQuestion from "../MutipleChoiceQuestion";
 import { User, auth } from "@clerk/nextjs/server";
 import { getUser } from "@/app/notes/_actions";
 import { fullnameFormatter } from "@/app/utils/fullnameFormatter";
+import { Span } from "next/dist/trace";
+import { Loader2 } from "lucide-react";
 
 export interface NoteType {
   id: string;
@@ -91,7 +93,7 @@ const ExamNoteQuestion = ({
 }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const [isClient, setIsClient] = useState(false);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -334,9 +336,9 @@ const ExamNoteQuestion = ({
   // }, []);
   const handleSubmitReport = useCallback(async () => {
     try {
+      setIsSubmitting(true);
       const endTime = Date.now();
       const timeSpent = endTime - startTime; // time spent in milliseconds
-
       // Formatting time spent into the desired string format
       const seconds = timeSpent / 1000;
       const minutes = seconds / 60;
@@ -377,6 +379,7 @@ const ExamNoteQuestion = ({
           toast.error("Sorry , something is wrong ");
           return;
         }
+
         toast.success("Congrats, You've finished your exam!");
 
         router.push(
@@ -420,6 +423,7 @@ const ExamNoteQuestion = ({
           toast.error("Sorry , something is wrong ");
           return;
         }
+        setIsSubmitting(false);
         toast.success("Congrats, You've finished your exam!");
         router.push(
           `/exam/${note.id}/result` +
@@ -493,7 +497,7 @@ const ExamNoteQuestion = ({
           <CardFooter className="py-4"></CardFooter>
 
           <Button
-            //   asChild
+            disabled={isSubmitting}
             className="absolute bottom-5 right-5"
             // onClick={() =>
             //   alert("result:" + `${(correctNumber / totalQuestionNumber) * 100}%`)
@@ -518,8 +522,14 @@ const ExamNoteQuestion = ({
               },
             }}
           > */}
-            Submit
-            {/* </Link> */}
+            {isSubmitting ? (
+              <span className="flex items-center space-x-2">
+                <Loader2 className=" h-4 w-4 animate-spin" />{" "}
+                <span>Submit</span>
+              </span>
+            ) : (
+              <span>Submit</span>
+            )}
           </Button>
           <CardContent className="absolute right-5 top-5 text-teal-500">
             {convertMsToTime(Number(time))}

@@ -562,7 +562,7 @@ export function AdminDashboard({
 
                   <div className=" w-full rounded-[1rem]   border-none border-gray-300 bg-white py-4 text-left shadow-sm shadow-gray-300">
                     <h2 className="mb-2  pl-6 text-[15px] font-semibold">
-                      New Users and Total Users trend
+                      Total Users Monthly trend
                     </h2>
                     <UserAreaChart data={chartData} />
                   </div>
