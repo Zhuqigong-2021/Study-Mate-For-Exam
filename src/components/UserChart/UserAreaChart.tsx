@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import {
   AreaChart,
   Area,
@@ -50,6 +50,20 @@ interface dataType {
   }[];
 }
 const UserAreaChart = memo(({ data }: dataType) => {
+  const [tickCount, setTickCount] = useState(8); // Default tick count for smaller screens
+
+  useEffect(() => {
+    function handleResize() {
+      // Set tick count based on window width
+      setTickCount(window.innerWidth > 768 ? 8 : 5); // Less ticks on smaller screens
+      console.log(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Initial setup
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   return (
     <ResponsiveContainer className="h-full w-1/2" width="100%" height={250}>
       <AreaChart
@@ -67,11 +81,20 @@ const UserAreaChart = memo(({ data }: dataType) => {
           vertical={true}
           horizontal={false}
         />
-        <XAxis dataKey="name" axisLine={false} tickLine={false} />
+        <XAxis
+          dataKey="name"
+          axisLine={false}
+          tickLine={false}
+          // tickCount={tickCount}
+          // interval="preserveStartEnd"
+          tickCount={5}
+          minTickGap={30}
+        />
         <YAxis
           axisLine={false}
           tickLine={false}
           tickFormatter={(value) => Math.round(value).toString()}
+
           // tick={(props) => {
           //   if (props.index === 0) return "";
           //   else {

@@ -89,7 +89,7 @@
 //   }
 // }
 
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -119,6 +119,26 @@ const UserBarChart = memo(({ data }: dataType) => {
   );
   // Slice the data from the first non-zero index
   const filteredData = data.slice(firstNonZeroIndex, lastNonZeroIndex + 1);
+
+  const getMaxValue = () => {
+    return Math.max(...data.map((item: any) => item.value));
+  };
+
+  const calculateTickCount = (maxValue: number) => {
+    // For integers, the count will be the maximum value plus one (for zero)
+    return maxValue + 1;
+  };
+
+  const [maxValue, setMaxValue] = useState(getMaxValue());
+  const [tickCount, setTickCount] = useState(calculateTickCount(maxValue));
+
+  useEffect(() => {
+    const calculatedMaxValue = getMaxValue();
+    if (calculatedMaxValue !== maxValue) {
+      setMaxValue(calculatedMaxValue);
+      setTickCount(calculateTickCount(calculatedMaxValue));
+    }
+  }, [data]);
   return (
     <ResponsiveContainer
       width="100%"
@@ -147,11 +167,20 @@ const UserBarChart = memo(({ data }: dataType) => {
             <stop offset="85%" stopColor="#a78bfa" stopOpacity={0.8} />
           </linearGradient>
         </defs>
-        <XAxis dataKey="name" axisLine={false} tickLine={false} />
-        <YAxis
-          tickFormatter={(value) => Math.round(value).toString()}
+        <XAxis
+          dataKey="name"
           axisLine={false}
           tickLine={false}
+          tickCount={6}
+          minTickGap={20}
+        />
+        <YAxis
+          // tickFormatter={(value) => Math.round(value).toString()}
+          axisLine={false}
+          tickLine={false}
+          allowDecimals={false}
+          domain={[0, "dataMax"]}
+          ticks={Array.from({ length: tickCount }, (_, i) => i)}
         />
         <Tooltip />
         {/* <Legend /> */}

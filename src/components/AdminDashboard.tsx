@@ -54,7 +54,7 @@ import {
 import { Skeleton } from "./ui/skeleton";
 import UserAreaChart from "./UserChart/UserAreaChart";
 import UserBarChart from "./UserChart/UserBarChart";
-import UserPieChart from "./UserChart/UserPieChart";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Label } from "./ui/label";
 import { Prisma, Report } from "@prisma/client";
@@ -62,6 +62,7 @@ import { dateFormatter } from "@/app/utils/dateFormatter";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import AllUsers from "./UserDashboard/AllUsers";
 import { UserButton } from "@clerk/nextjs";
+import ReportPieChart from "./UserChart/ReportPieChart";
 
 interface UserProps {
   users: string;
@@ -239,7 +240,7 @@ export function AdminDashboard({
             className="flex items-center gap-2 text-lg font-semibold md:text-base"
           >
             {(currentTab == "dashboard" || currentTab == "") && (
-              <RxDashboard className="h-6 w-6" />
+              <RxDashboard className="h-6 w-6 " />
             )}
             {currentTab == "notification" && <Mail className="h-6 w-6" />}
             {currentTab == "statistics" && <PieChart className="h-6 w-6" />}
@@ -429,7 +430,7 @@ export function AdminDashboard({
                   Total Subscribers
                 </CardTitle>
                 {/* <DollarSign className="h-4 w-4 text-muted-foreground" /> */}
-                <Sigma className="h-4 w-4 text-muted-foreground" />
+                <Sigma className="h-4 w-4  text-indigo-500" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold ">
@@ -440,7 +441,10 @@ export function AdminDashboard({
                   />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  +{totalMonthlyIncreaseUsers}% since this month
+                  <span className="font-semibold text-green-500">
+                    +{totalMonthlyIncreaseUsers}%{" "}
+                  </span>
+                  since this month
                 </p>
               </CardContent>
             </Card>
@@ -449,14 +453,17 @@ export function AdminDashboard({
                 <CardTitle className="text-sm font-medium">
                   Subscriptions
                 </CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
+                <Users className="h-4 w-4 text-indigo-500 " />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
                   <CountUp start={0} end={totalRecentUsers ?? 0} duration={3} />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  +{totalRecentUsers} new users from this month
+                  <span className="font-semibold text-green-500">
+                    +{totalRecentUsers}
+                  </span>{" "}
+                  new users from this month
                 </p>
               </CardContent>
             </Card>
@@ -467,7 +474,7 @@ export function AdminDashboard({
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Notes</CardTitle>
-                <CreditCard className="h-4 w-4 text-muted-foreground" />
+                <CreditCard className="h-4 w-4 text-indigo-500" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
@@ -475,7 +482,10 @@ export function AdminDashboard({
                   {/* {notesTotal} */}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  +{totalMonthlyIncreaseNotes}% from last month
+                  <span className="font-semibold text-green-500">
+                    +{totalMonthlyIncreaseNotes}%
+                  </span>{" "}
+                  from last month
                 </p>
               </CardContent>
             </Card>
@@ -488,7 +498,7 @@ export function AdminDashboard({
                 <CardTitle className="text-sm font-medium">
                   Test Report
                 </CardTitle>
-                <Activity className="h-4 w-4 text-muted-foreground" />
+                <Activity className="h-4 w-4 text-indigo-500 " />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
@@ -496,7 +506,10 @@ export function AdminDashboard({
                   <CountUp start={0} end={reportsNumber} duration={1.5} />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  +{reportsThisMonth} since this month
+                  <span className="font-semibold text-green-500">
+                    +{reportsThisMonth}
+                  </span>{" "}
+                  since this month
                 </p>
               </CardContent>
             </Card>
@@ -554,9 +567,10 @@ export function AdminDashboard({
                     </div>
                     <div className="mt-4 w-full rounded-[1rem] border-none border-gray-300 bg-white p-2 py-4 text-left shadow-sm shadow-gray-300 md:mt-0 ">
                       <h2 className="mb-2 pl-4 text-[15px] font-semibold">
-                        Users Propertion in Each Month
+                        Users Test Performance Distribution
                       </h2>
-                      <UserPieChart />
+
+                      <ReportPieChart />
                     </div>
                   </div>
 
