@@ -191,10 +191,12 @@ const UserBarChart = memo(({ data }: dataType) => {
           barSize={80}
           radius={[10, 10, 10, 10]}
           fill="url(#colorUv)"
-          // isAnimationActive={false}
           onMouseOver={(e) => {
             e.fill = "#14b8a6"; // Orange color on hover
           }}
+          isAnimationActive={true}
+          animationBegin={0}
+          animationDuration={1000}
         />
         {/* <Bar
           dataKey="total"

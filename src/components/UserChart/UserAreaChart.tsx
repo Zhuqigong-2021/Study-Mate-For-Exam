@@ -121,6 +121,9 @@ const UserAreaChart = memo(({ data }: dataType) => {
           strokeWidth={3}
           // fill="#4f46e5"
           fill="url(#colorTotal)"
+          isAnimationActive={true}
+          animationBegin={0}
+          animationDuration={1000}
         />
         <defs>
           <linearGradient id="colorNew" x1="0" y1="0" x2="0" y2="1">

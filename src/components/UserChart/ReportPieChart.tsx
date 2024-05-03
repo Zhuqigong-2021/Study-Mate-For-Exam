@@ -92,11 +92,14 @@ export default function ReportPieChart({ width, data }: dataProps) {
         height={200}
       >
         <Pie
+          //   isAnimationActive={true}
+          //   animationBegin={0}
+          //   animationDuration={1500}
           data={data}
           cx={"50%"} // Half of the width
           cy={"50%"} // Half of the height
-          innerRadius={width < 350 ? 40 : 60}
-          outerRadius={width < 350 ? 60 : 80}
+          innerRadius={width < 350 ? (width > 0 ? 40 : 60) : 60}
+          outerRadius={width < 350 ? (width > 0 ? 60 : 80) : 80}
           fill="#8884d8"
           paddingAngle={5}
           dataKey="value"
@@ -116,9 +119,19 @@ export default function ReportPieChart({ width, data }: dataProps) {
                     ? "44%"
                     : "47%"
                   : "40%"
+              : width == 0
+                ? "51%"
+                : "50%"
+          }
+          y={
+            width < 350
+              ? width > 292
+                ? "45%"
+                : width == 0
+                  ? "45%"
+                  : "36%"
               : "50%"
           }
-          y={width < 350 ? (width > 292 ? "45%" : "36%") : "50%"}
           //   x={centerX}
           //   y={centerY}
           textAnchor="middle"
@@ -130,8 +143,6 @@ export default function ReportPieChart({ width, data }: dataProps) {
         </text>
         {width > 350 && (
           <Legend
-            //   x={"0%"}
-            //   y={"0%"}
             align="right"
             verticalAlign="middle"
             layout="vertical"

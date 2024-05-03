@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+
 import CountUp from "react-countup";
 import "react-circular-progressbar/dist/styles.css";
 import {
@@ -120,10 +121,12 @@ export function AdminDashboard({
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        // Assuming you want to track the width of the component
-        setWidth(entry.contentRect.width);
-      }
+      setTimeout(() => {
+        for (let entry of entries) {
+          // Assuming you want to track the width of the component
+          setWidth(entry.contentRect.width);
+        }
+      }, 2000);
     });
 
     if (elementRef.current) {
@@ -290,7 +293,13 @@ export function AdminDashboard({
     value: Math.round((ranges[key].count / totalCount) * 100), // Format the percentage to two decimal places
   }));
 
-  console.log(reportData);
+  // const reportData = [
+  //   { name: "90-100", value: 25 },
+  //   { name: "80-90", value: 35 },
+  //   { name: "75-80", value: 20 },
+  //   { name: "0-75", value: 10 },
+  // ];
+  // console.log(reportData);
 
   return (
     <div className="my-5 flex min-h-[900px] w-full max-w-[84rem]  flex-col overflow-hidden rounded-[1.5rem]  border shadow-md">
