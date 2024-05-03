@@ -43,7 +43,7 @@ import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { RxDashboard } from "react-icons/rx";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { User } from "@clerk/nextjs/server";
 import {
   Tooltip,
@@ -63,7 +63,15 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import AllUsers from "./UserDashboard/AllUsers";
 import { UserButton } from "@clerk/nextjs";
 import ReportPieChart from "./UserChart/ReportPieChart";
+interface Range {
+  min: number;
+  max: number;
+  count: number;
+}
 
+interface RangeDictionary {
+  [key: string]: Range;
+}
 interface UserProps {
   users: string;
   userId: string | null;
@@ -105,6 +113,33 @@ export function AdminDashboard({
   const [isClient, setIsClient] = useState(false);
   const [dataMode, setDataMode] = useState(false);
   const [currentTab, setCurrentTab] = useState("dashboard");
+  // const reportRef = useRef<HTMLDivElement>(null);
+
+  const elementRef = useRef(null); // Creates a ref object
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        // Assuming you want to track the width of the component
+        setWidth(entry.contentRect.width);
+      }
+    });
+
+    if (elementRef.current) {
+      resizeObserver.observe(elementRef.current);
+    }
+
+    return () => {
+      if (elementRef.current) {
+        resizeObserver.unobserve(elementRef.current);
+      }
+    };
+  }, [dataMode]);
+
+  // useEffect(() => {
+  //   console.log(width);
+  // }, [width]);
 
   useEffect(() => {
     setIsClient(true);
@@ -112,7 +147,6 @@ export function AdminDashboard({
 
   useEffect(() => {
     setUsersList(JSON.parse(users));
-    // console.log(JSON.parse(users));
   }, [users]);
   useEffect(() => {
     setReportsList(JSON.parse(reports));
@@ -230,7 +264,34 @@ export function AdminDashboard({
     total: usersPerDay[date].total,
   }));
 
-  console.log(users);
+  const ranges: RangeDictionary = {
+    "90-100": { min: 90, max: 100, count: 0 },
+    "80-90": { min: 80, max: 90, count: 0 },
+    "75-80": { min: 75, max: 80, count: 0 },
+    "0-75": { min: 0, max: 75, count: 0 },
+  };
+  // Calculate the count for each range
+  reportsList.forEach((report) => {
+    for (const rangeKey in ranges) {
+      const range = ranges[rangeKey];
+      if (report.result >= range.min && report.result <= range.max) {
+        range.count++;
+        break; // Stop checking once the correct range is found
+      }
+    }
+  });
+
+  // Calculate total count of all reports
+  const totalCount = reportsList.length;
+
+  // Calculate the percentage for each range
+  const reportData = Object.keys(ranges).map((key) => ({
+    name: key,
+    value: Math.round((ranges[key].count / totalCount) * 100), // Format the percentage to two decimal places
+  }));
+
+  console.log(reportData);
+
   return (
     <div className="my-5 flex min-h-[900px] w-full max-w-[84rem]  flex-col overflow-hidden rounded-[1.5rem]  border shadow-md">
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -479,7 +540,6 @@ export function AdminDashboard({
               <CardContent>
                 <div className="text-2xl font-bold">
                   <CountUp start={0} end={notesTotal} duration={1.5} />
-                  {/* {notesTotal} */}
                 </div>
                 <p className="text-xs text-muted-foreground">
                   <span className="font-semibold text-green-500">
@@ -565,12 +625,15 @@ export function AdminDashboard({
                       </h2>
                       <UserBarChart data={chartData} />
                     </div>
-                    <div className="mt-4 w-full rounded-[1rem] border-none border-gray-300 bg-white p-2 py-4 text-left shadow-sm shadow-gray-300 md:mt-0 ">
+                    <div
+                      className="mt-4 w-full rounded-[1rem] border-none border-gray-300 bg-white p-2 py-4 text-left shadow-sm shadow-gray-300 md:mt-0 "
+                      ref={elementRef}
+                    >
                       <h2 className="mb-2 pl-4 text-[15px] font-semibold">
                         Users Test Performance Distribution
                       </h2>
 
-                      <ReportPieChart />
+                      <ReportPieChart width={width} data={reportData} />
                     </div>
                   </div>
 

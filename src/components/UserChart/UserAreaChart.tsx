@@ -56,7 +56,7 @@ const UserAreaChart = memo(({ data }: dataType) => {
     function handleResize() {
       // Set tick count based on window width
       setTickCount(window.innerWidth > 768 ? 8 : 5); // Less ticks on smaller screens
-      console.log(window.innerWidth);
+      // console.log(window.innerWidth);
     }
 
     window.addEventListener("resize", handleResize);

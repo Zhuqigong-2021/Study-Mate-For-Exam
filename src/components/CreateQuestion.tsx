@@ -104,8 +104,7 @@ const CreateQuestion = ({ params }: idProps) => {
           questions: [{ ...data }],
         }),
       });
-      // router.reload();
-      //console.log("isLoading : " + form.formState.isSubmitting);
+
       if (!response.ok) throw Error("Status code: " + response.status);
       toast.success("You have submitted this question");
 
@@ -113,7 +112,7 @@ const CreateQuestion = ({ params }: idProps) => {
       router.replace(window.location.pathname);
       router.refresh();
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       toast.error("Something went wront. Please try again .");
     } finally {
       setIsFormSubmitting(false);
