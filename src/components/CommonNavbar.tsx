@@ -148,7 +148,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
             <NavigationMenu>
               <NavigationMenuList className="flex items-center gap-2  font-semibold">
                 <NavigationMenu className="hidden  font-light   lg:flex ">
-                  {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && (
+                  {(isAdmin || admin) && (
                     <Link
                       href="/admin/dashboard"
                       className="underline-offset-1 hover:scale-105 hover:text-teal-700"
