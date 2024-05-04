@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 import Image from "next/image";
@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Crown, Globe, Leaf, Plus } from "lucide-react";
 import AddEditNoteDialog from "@/components/Note/AddEditNoteDialog";
 import Drawer from "@/components/Drawer";
-import { usePathname, useRouter } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
@@ -33,6 +33,8 @@ interface userType {
 
 const CommonNavbar = ({ userId, isAdmin }: userType) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
+  const [isRedirect, setIsRedirect] = useState(false);
+
   const pathname = usePathname();
   const router = useRouter();
   const [admin, setAdmin] = useState("");
@@ -81,10 +83,6 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
     };
   });
 
-  // await pusherServer.trigger("authorize", "user:authorize", {
-  //   currentUserId: currentUserId,
-  //   role: role,
-  // });
   useEffect(() => {
     pusherClient.subscribe("authorize");
     pusherClient.bind(
@@ -105,6 +103,32 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
       pusherClient.unsubscribe("authorize");
     };
   });
+
+  function redirectUser() {
+    router.push("/notes/public");
+  }
+  useEffect(() => {
+    pusherClient.subscribe("authorize");
+    pusherClient.bind(
+      "user:authorize",
+      ({
+        currentUserId,
+        role,
+      }: {
+        currentUserId: string;
+        role: string | null;
+      }) => {
+        if (currentUserId === userId) {
+          if (!admin) {
+            redirectUser();
+          }
+        }
+      },
+    );
+    return () => {
+      pusherClient.unsubscribe("authorize");
+    };
+  }, [admin]);
 
   return (
     <>

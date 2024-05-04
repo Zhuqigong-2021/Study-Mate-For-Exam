@@ -3,7 +3,7 @@
 import { checkRole } from "@/app/utils/roles/role";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { pusherServer } from "@/lib/pusher";
-
+import { Roles } from "@/types/globals";
 export async function setRole(formData: FormData) {
   const { userId } = auth();
   // Check that the user trying to set the role is an admin

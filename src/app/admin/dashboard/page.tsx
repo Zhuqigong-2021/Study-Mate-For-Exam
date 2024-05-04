@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { SearchUsers } from "./_search-users";
 import { auth, clerkClient } from "@clerk/nextjs";
 import { setRole } from "./_actions";
-import { checkRole } from "@/app/utils/roles/role";
+import { checkMetaDataRole, checkRole } from "@/app/utils/roles/role";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -24,21 +24,23 @@ import { Metadata } from "next";
 import { AdminDashboard } from "@/components/AdminDashboard";
 import prisma from "@/lib/db/prisma";
 import Link from "next/link";
+import { pusherServer } from "@/lib/pusher";
 
 export const metadata: Metadata = {
   title: "Study Mate - Administration",
 };
 
-export default async function Dashboard(params: {
-  searchParams: { search?: string; offset?: number; limit?: number };
-}) {
-  if (!checkRole("admin")) {
-    redirect("/");
-  }
+export default async function Dashboard() {
   const { userId } = auth();
-  const query = params.searchParams.search;
-  const offset = params.searchParams.offset;
-  const limit = params.searchParams.limit;
+  const isAdmin = await checkMetaDataRole("admin");
+
+  // if (!checkRole("admin")) {
+  //   redirect("/notes/public");
+  // }
+
+  if (!isAdmin) {
+    redirect("/notes/public");
+  }
 
   // const users = query
   //   ? await clerkClient.users.getUserList({ query })
@@ -105,7 +107,7 @@ export default async function Dashboard(params: {
   });
   let notesTotal = await prisma.note.count({});
   let reportsNumber = await prisma.report.count({});
-  console.log(allNotes);
+  // console.log(allNotes);
 
   // Helper function to determine if a date is in the current month
   function isDateInCurrentMonth(date: Date) {
@@ -138,6 +140,7 @@ export default async function Dashboard(params: {
         reports={JSON.stringify(reports)}
         isSuperAdmin={isSuperAdmin}
         numberOfNotesCreatedThisMonth={numberOfNotesCreatedThisMonth}
+        isAdmin={isAdmin}
       />
       {/* <SearchUsers />
       <Userdata

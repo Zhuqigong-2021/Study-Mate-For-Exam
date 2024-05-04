@@ -43,7 +43,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { RxDashboard } from "react-icons/rx";
-import { usePathname, useRouter } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { User } from "@clerk/nextjs/server";
 import {
@@ -82,6 +82,7 @@ interface UserProps {
   reports: string;
   isSuperAdmin: boolean;
   numberOfNotesCreatedThisMonth: number;
+  isAdmin: boolean;
 }
 // {
 //     id: string;
@@ -105,6 +106,7 @@ export function AdminDashboard({
   reports,
   isSuperAdmin,
   numberOfNotesCreatedThisMonth,
+  isAdmin,
 }: UserProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -118,6 +120,10 @@ export function AdminDashboard({
 
   const elementRef = useRef(null); // Creates a ref object
   const [width, setWidth] = useState(0);
+
+  if (!isAdmin) {
+    redirect("/notes/public");
+  }
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
