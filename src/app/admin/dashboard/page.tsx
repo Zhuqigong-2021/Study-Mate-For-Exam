@@ -32,7 +32,7 @@ export const metadata: Metadata = {
 
 export default async function Dashboard() {
   const { userId } = auth();
-  const isAdmin = await checkMetaDataRole("admin");
+  let isAdmin = await checkMetaDataRole("admin");
 
   // if (!checkRole("admin")) {
   //   redirect("/notes/public");

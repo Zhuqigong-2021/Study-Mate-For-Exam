@@ -724,7 +724,7 @@ export function AdminDashboard({
                               <div className="grid gap-1">
                                 <span className="text-sm font-medium leading-none">
                                   {user.firstName} {user.lastName}{" "}
-                                  {user.passwordEnabled}
+                                  {/* {user.passwordEnabled} */}
                                 </span>
                                 <span className="text-sm text-muted-foreground">
                                   {/* {shortenString()} */}

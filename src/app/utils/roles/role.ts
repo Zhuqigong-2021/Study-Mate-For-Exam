@@ -24,5 +24,5 @@ export const checkMetaDataRole = async (role: Roles) => {
   //   "comparison result:",
   //   String(user.publicMetadata.role) === String(role),
   // );
-  return String(user.publicMetadata.role) === String(role);
+  return String(user?.publicMetadata.role) === String(role);
 };
