@@ -218,15 +218,18 @@ const UpdateEditQuestions = ({
 
         return (
           <ContextMenu>
-            <ContextMenuTrigger className="h-full w-full">
+            <ContextMenuTrigger className="h-full w-full ">
               <Badge
                 className={
-                  colorClass + " " + "flex w-12 justify-center text-white"
+                  colorClass +
+                  " flex w-12 items-center justify-center   text-white"
                 }
               >
-                {noteTitle.length < 5
-                  ? noteTitle
-                  : noteTitle.substring(0, 3) + "."}
+                {noteTitle.length < 5 ? (
+                  <span className="m-0 p-0">{noteTitle}</span>
+                ) : (
+                  noteTitle.substring(0, 3) + "."
+                )}
               </Badge>
             </ContextMenuTrigger>
 

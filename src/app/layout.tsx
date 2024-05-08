@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 import { Inter, Roboto_Mono, Open_Sans } from "next/font/google";
 
 import CommonNavbar from "@/components/CommonNavbar";
-import { checkRole } from "./utils/roles/role";
+import { checkMetaDataRole, checkRole } from "./utils/roles/role";
 
 export const metadata: Metadata = {
   manifest: "/manifest.json",
@@ -36,14 +36,14 @@ const roboto_mono = Roboto_Mono({
 export const viewport: Viewport = {
   themeColor: "#f5f5f4",
 };
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const { userId } = auth();
-  const isAdmin = checkRole("admin");
-
+  // const isAdmin = checkRole("admin");
+  let isAdmin = await checkMetaDataRole("admin");
   // console.log("isAdmin: " + isAdmin);
   // className={`${inter.variable} ${open_sans.variable} ${roboto_mono.variable}`}
   return (

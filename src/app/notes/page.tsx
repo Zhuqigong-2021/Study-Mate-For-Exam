@@ -6,14 +6,15 @@ import prisma from "@/lib/db/prisma";
 
 import FilterNote from "@/components/Note/FilterNote";
 import AIChatButton from "@/components/AIChatButton";
-import { checkRole } from "../utils/roles/role";
+import { checkMetaDataRole, checkRole } from "../utils/roles/role";
 
 export const metadata: Metadata = {
   title: "Study Mate - My Notes",
 };
 const NotesPage = async () => {
   const { userId } = auth();
-  const isAdmin = checkRole("admin");
+  // const isAdmin = checkRole("admin");
+  const isAdmin = await checkMetaDataRole("admin");
   if (!userId) throw Error("userId undefined");
 
   // const allNotes = await prisma.note.findMany({ where: { userId } });

@@ -125,23 +125,46 @@ export function AdminDashboard({
     redirect("/notes/public");
   }
 
+  // useEffect(() => {
+  //   const resizeObserver = new ResizeObserver((entries) => {
+  //     setTimeout(() => {
+  //       for (let entry of entries) {
+  //         // Assuming you want to track the width of the component
+  //         setWidth(entry.contentRect.width);
+  //       }
+  //     }, 2000);
+  //   });
+
+  //   if (elementRef.current) {
+  //     resizeObserver.observe(elementRef.current);
+  //   }
+
+  //   return () => {
+  //     if (elementRef.current) {
+  //       resizeObserver.unobserve(elementRef.current);
+  //     }
+  //   };
+  // }, [dataMode]);
+
   useEffect(() => {
+    const element = elementRef.current; // Capture the current ref value
     const resizeObserver = new ResizeObserver((entries) => {
       setTimeout(() => {
         for (let entry of entries) {
-          // Assuming you want to track the width of the component
+          // Update width based on the observed entry
           setWidth(entry.contentRect.width);
         }
       }, 2000);
     });
 
-    if (elementRef.current) {
-      resizeObserver.observe(elementRef.current);
+    if (element) {
+      resizeObserver.observe(element);
     }
 
     return () => {
-      if (elementRef.current) {
-        resizeObserver.unobserve(elementRef.current);
+      // Use the captured ref value in the cleanup function
+      if (element) {
+        resizeObserver.unobserve(element);
       }
     };
   }, [dataMode]);

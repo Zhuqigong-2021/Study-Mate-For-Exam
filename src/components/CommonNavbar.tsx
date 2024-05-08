@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 import Image from "next/image";
@@ -33,7 +33,6 @@ interface userType {
 
 const CommonNavbar = ({ userId, isAdmin }: userType) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
-  const [isRedirect, setIsRedirect] = useState(false);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -57,8 +56,8 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
     };
   }, []);
 
-  // console.log("admin now role:" + admin);
   function signOutUser() {
+    router.refresh();
     signOut(() => router.push("/"));
   }
 
@@ -95,7 +94,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
         role: string | null;
       }) => {
         if (currentUserId === userId) {
-          setAdmin(role ?? "");
+          setAdmin(role ? role : "");
         }
       },
     );
@@ -104,9 +103,9 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
     };
   });
 
-  function redirectUser() {
+  const redirectUser = useCallback(() => {
     router.push("/notes/public");
-  }
+  }, [router]);
   useEffect(() => {
     pusherClient.subscribe("authorize");
     pusherClient.bind(
@@ -119,7 +118,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
         role: string | null;
       }) => {
         if (currentUserId === userId) {
-          if (!admin) {
+          if (!role) {
             redirectUser();
           }
         }
@@ -128,7 +127,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
     return () => {
       pusherClient.unsubscribe("authorize");
     };
-  }, [admin]);
+  }, [admin, redirectUser, userId]);
 
   return (
     <>
@@ -320,6 +319,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                         href="/notes/edit"
                         title="Edit Your questions"
                         onClick={() => {
+                          // router.refresh();
                           if (isAdmin || admin) {
                             router.push("/notes/edit");
                           } else {
@@ -336,6 +336,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                         // href="/notes"
                         title="Add a note "
                         onClick={() => {
+                          // router.refresh();
                           if (isAdmin || admin) {
                             setShowAddEditNoteDialog(true);
                           } else {

@@ -4,7 +4,7 @@ import prisma from "@/lib/db/prisma";
 
 import UpdateEditQuestions from "@/components/UpdateEditQuestions";
 import { redirect } from "next/dist/server/api-utils";
-import { checkRole } from "@/app/utils/roles/role";
+import { checkMetaDataRole, checkRole } from "@/app/utils/roles/role";
 import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Study Mate - Edit Questions",
@@ -12,7 +12,8 @@ export const metadata: Metadata = {
 const page = async () => {
   const { userId } = auth();
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
-  const isAdmin = checkRole("admin");
+  // const isAdmin = checkRole("admin");
+  const isAdmin = await checkMetaDataRole("admin");
   if (!userId) throw Error("userId undefined");
   let AllQuestions;
   if (isSuperAdmin) {

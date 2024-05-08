@@ -364,7 +364,7 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
                   className="w-full"
                   onClick={() => handleRole(user)}
                 >
-                  Authorirization
+                  Authorization
                 </DropdownMenuItem>
 
                 <DropdownMenuItem

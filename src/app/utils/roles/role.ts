@@ -16,13 +16,6 @@ export const checkRole = (role: Roles) => {
 export const checkMetaDataRole = async (role: Roles) => {
   const { userId } = auth();
   const user = await clerkClient.users.getUser(userId ?? "");
-  // console.log(
-  //   "role from metadata:",
-  //   String(user.publicMetadata.role),
-  //   "role to check:",
-  //   String(role),
-  //   "comparison result:",
-  //   String(user.publicMetadata.role) === String(role),
-  // );
+
   return String(user?.publicMetadata.role) === String(role);
 };
