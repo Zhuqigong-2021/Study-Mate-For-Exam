@@ -3,7 +3,7 @@ import FilterNote from "@/components/Note/FilterNote";
 import { auth } from "@clerk/nextjs";
 import React from "react";
 import prisma from "@/lib/db/prisma";
-import { checkRole } from "@/app/utils/roles/role";
+import { checkMetaDataRole, checkRole } from "@/app/utils/roles/role";
 import { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 
@@ -45,7 +45,8 @@ const page = async () => {
       },
     },
   });
-  const isAdmin = checkRole("admin");
+  // const isAdmin = checkRole("admin");
+  const isAdmin = await checkMetaDataRole("admin");
   const isSuperAdmin = userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4";
 
   const user = await currentUser();

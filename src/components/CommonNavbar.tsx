@@ -319,7 +319,6 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                         href="/notes/edit"
                         title="Edit Your questions"
                         onClick={() => {
-                          // router.refresh();
                           if (isAdmin || admin) {
                             router.push("/notes/edit");
                           } else {
@@ -336,7 +335,6 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                         // href="/notes"
                         title="Add a note "
                         onClick={() => {
-                          // router.refresh();
                           if (isAdmin || admin) {
                             setShowAddEditNoteDialog(true);
                           } else {

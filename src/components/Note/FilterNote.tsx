@@ -27,6 +27,7 @@ import { redirect, useParams, usePathname, useRouter } from "next/navigation";
 
 import { SkeletonCard } from "../SkeletonCard";
 import { useClerk } from "@clerk/nextjs";
+import { pusherClient } from "@/lib/pusher";
 
 type Note = {
   userId: string;
@@ -65,10 +66,15 @@ const FilterNote = ({
   const [userInput, setUserInput] = useState("");
   const [isSticky, setIsSticky] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [admin, setAdmin] = useState("");
   const { signOut } = useClerk();
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    console.log("isAdmin Value:", isAdmin);
+  }, [isAdmin]);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -116,6 +122,25 @@ const FilterNote = ({
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    pusherClient.subscribe("authorize");
+    pusherClient.bind(
+      "user:authorize",
+      ({
+        currentUserId,
+        role,
+      }: {
+        currentUserId: string;
+        role: string | null;
+      }) => {
+        setAdmin(role ? role : "");
+      },
+    );
+    return () => {
+      pusherClient.unsubscribe("authorize");
+    };
+  });
   return (
     <>
       <div className="absolute left-0 right-0 top-[4.6rem]   flex h-[24rem] w-full items-center justify-center bg-teal-500/40">
@@ -160,7 +185,7 @@ const FilterNote = ({
           isSticky ? "mt-[29.6rem]" : "mt-[25rem]"
         } max-w-7xl  bg-white`}
       >
-        {isAdmin && (
+        {(isAdmin || admin) && (
           <div className="my-5 flex items-center justify-between">
             <span className=" font-bold">
               {pathname && pathname === "/notes"
@@ -180,7 +205,10 @@ const FilterNote = ({
                   <DropdownMenuLabel>Filter Notes</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    onClick={() => router.push("/notes/public")}
+                    onClick={() => {
+                      router.refresh();
+                      router.push("/notes/public");
+                    }}
                   >
                     <div className="flex w-full items-center justify-between">
                       <span>public</span>{" "}
