@@ -43,7 +43,12 @@ export default async function RootLayout({
 }) {
   const { userId } = auth();
   // const isAdmin = checkRole("admin");
-  let isAdmin = await checkMetaDataRole("admin");
+  let isAdmin;
+  if (userId) {
+    isAdmin = await checkMetaDataRole("admin");
+  } else {
+    isAdmin = checkRole("admin");
+  }
   // console.log("isAdmin: " + isAdmin);
   // className={`${inter.variable} ${open_sans.variable} ${roboto_mono.variable}`}
   return (
