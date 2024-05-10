@@ -120,9 +120,19 @@ const Note = ({ note, isAdmin, index }: NoteProps) => {
     <>
       {isClient && (
         <Card
-          className="relative cursor-pointer  rounded-xl  border-none bg-white shadow-sm shadow-gray-400 hover:shadow-gray-600"
+          className="relative cursor-pointer   rounded-xl border-none bg-white shadow-sm shadow-gray-400 hover:shadow-gray-600"
           onClick={() => setShowAddEditNoteDialog(true)}
         >
+          {isAdmin && (
+            <div className="w-18 absolute -right-1 bottom-16 flex h-5 flex-col justify-center rounded-r-sm border-r border-red-600 bg-gradient-to-l  from-red-500   via-red-400 to-orange-100  px-2 py-1 pl-5 text-center  text-white shadow-sm">
+              <span className="font-normal">100%</span>
+            </div>
+          )}
+          {!isAdmin && (
+            <div className="w-18 absolute -right-1 top-5 flex h-5 flex-col justify-center rounded-r-sm border-r border-red-600 bg-gradient-to-l  from-red-500   via-red-400 to-orange-100  px-2 py-1 pl-5 text-center  text-white shadow-sm">
+              <span className="font-normal">100%</span>
+            </div>
+          )}
           <CardHeader className="h-32 space-y-0">
             <CardTitle className="scale-y-90  text-lg text-gray-800">
               {note.title}
