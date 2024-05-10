@@ -73,7 +73,7 @@ const ReviewNote = ({ note }: NoteProps) => {
     <>
       {isClient && (
         <Card
-          className="relative cursor-pointer   rounded-xl  shadow-gray-300  transition-shadow hover:shadow-gray-600"
+          className="relative cursor-pointer   rounded-xl border-none bg-white shadow-gray-400  transition-shadow hover:shadow-gray-600"
           onClick={() => router.push(`/review/${note.id}`)}
         >
           <CardHeader className="relative h-32 ">

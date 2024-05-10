@@ -120,7 +120,7 @@ const Note = ({ note, isAdmin, index }: NoteProps) => {
     <>
       {isClient && (
         <Card
-          className="relative cursor-pointer  rounded-xl  shadow-gray-300 hover:shadow-gray-600 "
+          className="relative cursor-pointer  rounded-xl  border-none bg-white shadow-sm shadow-gray-400 hover:shadow-gray-600"
           onClick={() => setShowAddEditNoteDialog(true)}
         >
           <CardHeader className="h-32 space-y-0">

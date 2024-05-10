@@ -72,7 +72,7 @@ const WildCardNote = ({ note }: NoteProps) => {
     <>
       {isClient && (
         <Card
-          className="relative cursor-pointer rounded-xl  shadow-gray-300  transition-shadow hover:shadow-gray-600 "
+          className="relative cursor-pointer rounded-xl  border-none bg-white shadow-gray-400  transition-shadow hover:shadow-gray-600 "
           onClick={() => router.push(`/wildcard/${note.id}`)}
           // onClick={() => setShowAddEditNoteDialog(true)}
         >

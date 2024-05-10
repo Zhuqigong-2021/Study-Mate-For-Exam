@@ -64,7 +64,7 @@ export default async function RootLayout({
       </head>
 
       <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
-        <body className="font-sans">
+        <body className="bg-slate-50 font-sans">
           <CommonNavbar isAdmin={isAdmin} userId={userId ? userId : ""} />
           {children}
           <Toaster />

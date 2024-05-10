@@ -183,7 +183,7 @@ const FilterNote = ({
       <div
         className={`${
           isSticky ? "mt-[29.6rem]" : "mt-[25rem]"
-        } max-w-7xl  bg-white`}
+        } max-w-7xl  bg-slate-50 `}
       >
         {(isAdmin || admin) && (
           <div className="my-5 flex items-center justify-between">
