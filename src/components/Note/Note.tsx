@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-
+import { PiMedalFill } from "react-icons/pi";
 import AddEditNoteDialog from "./AddEditNoteDialog";
 import { Globe, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
@@ -125,13 +125,21 @@ const Note = ({ note, isAdmin, index }: NoteProps) => {
         >
           {isAdmin && (
             <div className="w-18 absolute -right-1 bottom-16 flex h-5 flex-col justify-center rounded-r-sm border-r border-red-600 bg-gradient-to-l  from-red-500   via-red-400 to-orange-100  px-2 py-1 pl-5 text-center  text-white shadow-sm">
-              <span className="font-normal">100%</span>
+              <span className="flex items-center space-x-[4px] font-normal">
+                <PiMedalFill className=" text-yellow-50" size={14} />{" "}
+                <span>100%</span>
+              </span>
             </div>
           )}
           {!isAdmin && (
-            <div className="w-18 absolute -right-1 top-5 flex h-5 flex-col justify-center rounded-r-sm border-r border-red-600 bg-gradient-to-l  from-red-500   via-red-400 to-orange-100  px-2 py-1 pl-5 text-center  text-white shadow-sm">
-              <span className="font-normal">100%</span>
-            </div>
+            <>
+              <div className="w-18 absolute -right-1 top-5 flex h-5 flex-col justify-center rounded-r-sm border-r border-red-600 bg-gradient-to-l  from-red-500   via-red-400 to-orange-100  px-2 py-1 pl-5 text-center  text-white shadow-sm">
+                <span className="flex items-center space-x-[4px] font-normal">
+                  <PiMedalFill className=" text-yellow-50" size={14} />{" "}
+                  <span>100%</span>
+                </span>
+              </div>
+            </>
           )}
           <CardHeader className="h-32 space-y-0">
             <CardTitle className="scale-y-90  text-lg text-gray-800">
