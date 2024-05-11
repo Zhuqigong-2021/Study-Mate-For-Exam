@@ -124,18 +124,18 @@ const Note = ({ note, isAdmin, index }: NoteProps) => {
           onClick={() => setShowAddEditNoteDialog(true)}
         >
           {isAdmin && (
-            <div className="w-18 absolute -right-1 bottom-16 flex h-5 flex-col justify-center rounded-r-sm border-r border-red-600 bg-gradient-to-l  from-red-500   via-red-400 to-orange-100  px-2 py-1 pl-5 text-center  text-white shadow-sm">
+            <div className="w-18 absolute -right-1 bottom-16 flex h-5 flex-col justify-center rounded-r-sm border-r border-red-600 bg-gradient-to-l  from-red-500   via-red-400 to-orange-100  px-2 py-1 pl-3 text-center text-xs font-light text-white shadow-sm">
               <span className="flex items-center space-x-[4px] font-normal">
-                <PiMedalFill className=" text-yellow-50" size={14} />{" "}
+                <PiMedalFill className=" text-yellow-50" size={12} />{" "}
                 <span>100%</span>
               </span>
             </div>
           )}
           {!isAdmin && (
             <>
-              <div className="w-18 absolute -right-1 top-5 flex h-5 flex-col justify-center rounded-r-sm border-r border-red-600 bg-gradient-to-l  from-red-500   via-red-400 to-orange-100  px-2 py-1 pl-5 text-center  text-white shadow-sm">
+              <div className="w-18 absolute -right-1 top-5 flex h-5 flex-col justify-center rounded-r-sm border-r border-red-600 bg-gradient-to-l from-red-500  via-red-400   to-orange-100 px-2  py-1 pl-3 text-center text-xs font-light text-white shadow-sm">
                 <span className="flex items-center space-x-[4px] font-normal">
-                  <PiMedalFill className=" text-yellow-50" size={14} />{" "}
+                  <PiMedalFill className=" text-yellow-50" size={12} />{" "}
                   <span>100%</span>
                 </span>
               </div>
