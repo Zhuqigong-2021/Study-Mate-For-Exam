@@ -28,7 +28,7 @@ const TopicFilter = ({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="mx-1 mt-1  flex items-center space-x-2 md:mt-0 "
+          className="mx-1 mt-1  flex items-center space-x-2 outline-none focus:border-none active:border-none md:mt-0"
           size={"sm"}
           variant="outline"
         >
