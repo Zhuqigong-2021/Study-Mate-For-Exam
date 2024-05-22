@@ -69,7 +69,7 @@ const FilterNote = ({
   const [isClient, setIsClient] = useState(false);
   const [admin, setAdmin] = useState("");
   const { signOut } = useClerk();
-  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE"));
+  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
 
   const h = useTranslations("Homepage");
 

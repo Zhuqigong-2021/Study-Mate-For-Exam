@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 import { UserButton, auth } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import yellowbook from "@/assets/neatperson.png";
 import Drawer from "@/components/Navbar/Drawer";
 import Cookie from "js-cookie";
@@ -18,7 +18,9 @@ interface userIdProps {
 export default function Home({ userId, isAdmin }: userIdProps) {
   // const { userId } = auth();
   // if (userId) redirect("/notes/public");
-  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
+  const pathname = usePathname();
+  const pathParts = pathname.split("/");
+  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? pathParts[1]);
   return (
     <main
       className="-z-30 m-auto flex h-screen  justify-center gap-5 overflow-hidden  "

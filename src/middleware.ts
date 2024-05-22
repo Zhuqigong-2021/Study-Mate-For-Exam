@@ -34,5 +34,4 @@ export const config = {
     "/",
     "/(api|trpc)(.*),'/(fr|en)/:path*'",
   ],
-  // matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };

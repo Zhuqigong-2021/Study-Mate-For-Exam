@@ -57,8 +57,8 @@ export default async function RootLayout({
   // className={`${inter.variable} ${open_sans.variable} ${roboto_mono.variable}`}
   const messages = await getMessages();
   return (
-    <NextIntlClientProvider messages={messages} locale={locale}>
-      <ClerkProvider>
+    <ClerkProvider>
+      <NextIntlClientProvider messages={messages} locale={locale}>
         <Head>
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="google" content="notranslate" />
@@ -83,7 +83,7 @@ export default async function RootLayout({
             <Toaster />
           </body>
         </html>
-      </ClerkProvider>
-    </NextIntlClientProvider>
+      </NextIntlClientProvider>
+    </ClerkProvider>
   );
 }
