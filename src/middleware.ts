@@ -16,11 +16,12 @@ export default authMiddleware({
   beforeAuth: (req) => {
     return ItlMiddleware(req);
   },
-  ignoredRoutes: ["/((?!api|trpc))(_next.*|.+.[w]+$)"],
+
   publicRoutes: [
     "/",
     "/en",
     "/fr",
+    "/:locale",
     "/:locale/sign-in",
     "/en/sign-in",
     "/fr/sign-in",
