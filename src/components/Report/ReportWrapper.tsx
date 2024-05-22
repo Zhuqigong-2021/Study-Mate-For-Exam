@@ -36,27 +36,22 @@ import {
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/DataTableColumnHeader";
-import EditBookMarkedQuestion from "@/components/EditBookMarkedQuestion";
+import EditBookMarkedQuestion from "@/components/Bookmark/EditBookMarkedQuestion";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import Cookie from "js-cookie";
+import { useRouter } from "next/navigation";
 
-import { redirect, useRouter } from "next/navigation";
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuTrigger,
-} from "../ui/context-menu";
 import { Badge } from "../ui/badge";
 import { ReportDataTable } from "./ReportDataTable";
 import { Note, Prisma } from "@prisma/client";
-import { User } from "@clerk/nextjs/server";
-import { dateFormatter } from "@/app/utils/dateFormatter";
-import { getNote } from "@/app/report/_actions";
-import { report } from "process";
+
+// import { dateFormatter } from "@/app/utils/dateFormatter";
+
 import Link from "next/link";
-import { nameFormatter } from "@/app/utils/nameFormatter";
+import { nameFormatter } from "@/app/[locale]/utils/nameFormatter";
+import { dateFormatter } from "@/app/[locale]/utils/dateFormatter";
+import { useTranslations } from "next-intl";
 
 export type Question = {
   id: string;
@@ -165,6 +160,8 @@ const colorClasses = [
 
 const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
   const [isClient, setIsClient] = useState(false);
+  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
+  const r = useTranslations("Report");
 
   useEffect(() => {
     setIsClient(true);
@@ -189,11 +186,11 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
         }
 
         router.refresh();
-        toast.success("you have successfully deleted a test report");
+        toast.success(r("table.action.toast.success"));
       }
     } catch (error) {
       console.error(error);
-      toast.error("something went wrong. Please try again ");
+      toast.error(r("table.action.toast.server"));
     }
   };
 
@@ -226,7 +223,7 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
       accessorKey: "result",
       size: 200,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="result" />
+        <DataTableColumnHeader column={column} title={r("table.result")} />
       ),
       cell: (props: any) => {
         const score = props.row.original.result;
@@ -262,7 +259,7 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
       accessorKey: "userName",
       size: 250,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="candidate" />
+        <DataTableColumnHeader column={column} title={r("table.candidate")} />
       ),
       cell: (props: any) => {
         const username = props.row.original.userName;
@@ -273,7 +270,7 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
       accessorKey: "noteTitle",
       size: 1250,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="note" />
+        <DataTableColumnHeader column={column} title={r("table.note")} />
       ),
       cell: (props: any) => {
         const noteTitle = props.row.original.noteTitle;
@@ -295,7 +292,7 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
       accessorKey: "time",
       size: 250,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="time" />
+        <DataTableColumnHeader column={column} title={r("table.time")} />
       ),
       cell: (props: any) => {
         const time = props.row.original.time;
@@ -307,7 +304,7 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
       accessorKey: "batch",
       size: 150,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="batch" />
+        <DataTableColumnHeader column={column} title={r("table.batch")} />
       ),
       cell: (props: any) => {
         const batch = props.row.original.batch;
@@ -315,111 +312,13 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
         return <div>{Number(batch + 1)}</div>;
       },
     },
-    // {
-    //   accessorKey: "username",
-    //   size: 130,
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title="username" />
-    //   ),
-    //   cell: (props: any) => {
-    //     const noteTitle = props.row.original.note.title;
-
-    //     const question = props.row.original;
-
-    //     return (
-    //       <ContextMenu>
-    //         <ContextMenuTrigger className="h-full w-full">
-    //           <Badge
-    //           // className={
-    //           //   colorClass + " " + "flex w-12 justify-center text-white"
-    //           // }
-    //           >
-    //             {noteTitle.length < 5
-    //               ? noteTitle
-    //               : noteTitle.substring(0, 3) + "."}
-    //           </Badge>
-    //         </ContextMenuTrigger>
-
-    //         <ContextMenuContent className="w-full">
-    //           <ContextMenuItem
-    //             className="p-2"
-    //             onClick={() => {
-    //               setSelectedQuestion(question);
-    //               setShowAddEditQuestionDialog(true);
-    //             }}
-    //           >
-    //             <span className="flex items-center space-x-2">
-    //               <SkipForward size={14} /> <span>Forward</span>
-    //             </span>{" "}
-    //           </ContextMenuItem>
-    //           <ContextMenuItem
-    //             className="p-2"
-    //             onClick={() => {
-    //               setFilterOutNote([]);
-    //               setShowMatchingNote("");
-    //               setTopicFilter("");
-    //             }}
-    //           >
-    //             <span className="flex w-full items-center justify-between">
-    //               <span className="flex items-center space-x-2">
-    //                 <RotateCw size={14} /> <span>Reload</span>
-    //               </span>
-
-    //               <span className="text-[12px]">F5</span>
-    //             </span>
-    //           </ContextMenuItem>
-    //           <ContextMenuSeparator />
-    //           <ContextMenuItem
-    //             className="p-2"
-    //             onClick={() => {
-    //               setFilterOutNote([...filterOutNote, noteTitle.trim()]);
-    //               setShowMatchingNote("");
-    //             }}
-    //           >
-    //             <span className="flex items-center space-x-2">
-    //               <Filter size={14} /> <span>Filter out</span>
-    //             </span>
-    //           </ContextMenuItem>
-    //           <ContextMenuItem
-    //             className="p-2"
-    //             onClick={() => {
-    //               setShowMatchingNote(noteTitle.trim());
-    //               setFilterOutNote([]);
-    //             }}
-    //           >
-    //             <span className="flex items-center space-x-2">
-    //               <Waypoints size={14} /> <span>Show matching</span>
-    //             </span>
-    //           </ContextMenuItem>
-    //           <ContextMenuItem
-    //             className="p-2"
-    //             onClick={() => {
-    //               setFilterOutNote([]);
-    //               setShowMatchingNote("");
-    //               setTopicFilter("");
-    //             }}
-    //           >
-    //             <span className="flex items-center space-x-40">
-    //               <span className="flex items-center space-x-2">
-    //                 <LayoutGrid size={14} /> <span>Show All records</span>
-    //               </span>
-    //               <span className="flex items-center space-x-1 text-xs">
-    //                 <LayoutGrid size={10} /> <span>A</span>
-    //               </span>
-    //             </span>
-    //           </ContextMenuItem>
-    //         </ContextMenuContent>
-    //       </ContextMenu>
-    //     );
-    //   },
-    // },
 
     {
       accessorKey: "submittedAt",
       size: 150,
       sortDescFirst: true,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="submit At" />
+        <DataTableColumnHeader column={column} title={r("table.submit")} />
       ),
 
       cell: ({ row }) => {
@@ -447,17 +346,17 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
                 className="flex flex-col items-start"
               >
                 <DropdownMenuLabel className="w-full">
-                  Actions
+                  {r("table.action.title")}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="w-full"
                   onClick={() => {
                     navigator.clipboard.writeText(report.id);
-                    toast.success("You have copied this report id");
+                    toast.success(r("table.action.toast.copyId"));
                   }}
                 >
-                  Copy Report Id
+                  {r("table.action.copy")}
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
@@ -469,16 +368,15 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
                 >
                   <Link
                     href={{
-                      pathname: `/exam/${report.noteId}/report`,
+                      pathname: `/${lang}/exam/${report.noteId}/report`,
                       query: {
                         noteId: `${report.noteId}`,
                         choiceId: JSON.stringify(report.choiceId),
                         batch: `${report.batch}`,
-                        // result: `${report.result}`,
                       },
                     }}
                   >
-                    Check Report Details
+                    {r("table.action.check")}
                   </Link>
                 </DropdownMenuItem>
 
@@ -488,41 +386,37 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
                       variant="outline"
                       className="inline w-full border-none p-0 px-2 text-left"
                     >
-                      Delete Report
+                      {r("table.action.delete")}
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>
-                        Are you absolutely sure?
+                        {r("table.action.verify.title")}
                       </AlertDialogTitle>
                       <AlertDialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete your question and remove your data from our
-                        servers.
+                        {r("table.action.verify.description")}
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogCancel>
+                        {r("table.action.verify.cancel")}
+                      </AlertDialogCancel>
                       <AlertDialogAction
                         className="bg-red-500 text-white"
                         onClick={() => {
                           if (isSuperAdmin) {
-                            // deleteQuestion(report.id);
                             deleteReport(report.id);
                           } else {
-                            toast.error(
-                              "Sorry, you're not authorized to delete this test report",
-                            );
+                            toast.error(r("table.action.toast.deleteErr"));
                           }
                         }}
                       >
-                        Continue
+                        {r("table.action.verify.continue")}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
-                {/* </DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
           </>

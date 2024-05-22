@@ -218,7 +218,6 @@ const EditNoteQuestion = ({
                                     control={form.control}
                                     name={`questions.${index}.choices.${i}.content`}
                                     render={({ field }) => {
-                                      // console.log(field);
                                       return (
                                         <FormItem className="relative">
                                           <FormControl>

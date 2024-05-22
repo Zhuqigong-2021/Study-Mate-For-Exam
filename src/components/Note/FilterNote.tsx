@@ -23,11 +23,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { redirect, useParams, usePathname, useRouter } from "next/navigation";
-
+import { usePathname, useRouter } from "next/navigation";
+import Cookie from "js-cookie";
 import { SkeletonCard } from "../SkeletonCard";
 import { useClerk } from "@clerk/nextjs";
 import { pusherClient } from "@/lib/pusher";
+import { useTranslations } from "next-intl";
 
 type Note = {
   userId: string;
@@ -68,13 +69,17 @@ const FilterNote = ({
   const [isClient, setIsClient] = useState(false);
   const [admin, setAdmin] = useState("");
   const { signOut } = useClerk();
+  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE"));
+
+  const h = useTranslations("Homepage");
+
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    console.log("isAdmin Value:", isAdmin);
-  }, [isAdmin]);
+  // useEffect(() => {
+  //   console.log("isAdmin Value:", isAdmin);
+  // }, [isAdmin]);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -160,7 +165,7 @@ const FilterNote = ({
                   <FormItem>
                     <FormControl>
                       <Input
-                        placeholder="search your note "
+                        placeholder={h("search.placeholder")}
                         className=" absolute bottom-0 left-0 right-0 top-0  bg-white"
                         {...field}
                       />
@@ -185,44 +190,51 @@ const FilterNote = ({
           isSticky ? "mt-[29.6rem]" : "mt-[25rem]"
         } max-w-7xl  bg-slate-50 `}
       >
-        {(isAdmin || admin) && (
+        {(isAdmin || admin) && isClient && (
           <div className="my-5 flex items-center justify-between">
             <span className=" font-bold">
-              {pathname && pathname === "/notes"
-                ? "My Notes"
-                : pathname && pathname === "/notes/public"
-                  ? "Public Notes"
-                  : "All Notes"}
+              {pathname && pathname === `/${lang}/notes`
+                ? h("card.cardTitle.title.mine")
+                : pathname && pathname === `/${lang}/notes/public`
+                  ? h("card.cardTitle.title.public")
+                  : h("card.cardTitle.title.all")}
             </span>
             <DropdownMenu>
               <div className="flex flex-col items-end">
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline">
+                  <Button
+                    variant="outline"
+                    className="border-none shadow-sm shadow-stone-400"
+                  >
                     <Filter size={15} />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="mr-4 w-48  lg:mr-24">
-                  <DropdownMenuLabel>Filter Notes</DropdownMenuLabel>
+                  <DropdownMenuLabel>
+                    {h("card.cardTitle.filter.title")}
+                  </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={() => {
                       router.refresh();
-                      router.push("/notes/public");
+                      router.push(`/${lang}/notes/public`);
                     }}
                   >
                     <div className="flex w-full items-center justify-between">
-                      <span>public</span>{" "}
-                      {pathname && pathname === "/notes/public" ? (
+                      <span>{h("card.cardTitle.filter.options.public")}</span>{" "}
+                      {pathname && pathname === `/${lang}/notes/public` ? (
                         <Check size={15} />
                       ) : (
                         ""
                       )}
                     </div>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push("/notes")}>
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/${lang}/notes`)}
+                  >
                     <div className="flex w-full items-center justify-between">
-                      <span>my notes</span>{" "}
-                      {pathname && pathname === "/notes" ? (
+                      <span>{h("card.cardTitle.filter.options.mine")}</span>{" "}
+                      {pathname && pathname === `/${lang}/notes` ? (
                         <Check size={15} />
                       ) : (
                         ""
@@ -230,10 +242,12 @@ const FilterNote = ({
                     </div>
                   </DropdownMenuItem>
                   {isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push("/notes/all")}>
+                    <DropdownMenuItem
+                      onClick={() => router.push(`/${lang}/notes/all`)}
+                    >
                       <div className="flex w-full items-center justify-between">
-                        <span>all notes</span>{" "}
-                        {pathname && pathname === "/notes/all" ? (
+                        <span>{h("card.cardTitle.filter.options.all")}</span>{" "}
+                        {pathname && pathname === `/${lang}/notes/all` ? (
                           <Check size={15} />
                         ) : (
                           ""
@@ -250,7 +264,13 @@ const FilterNote = ({
           {isClient &&
             selecedNotes &&
             selecedNotes.map((note, index) => (
-              <Note note={note} key={note.id} isAdmin={isAdmin} index={index} />
+              <Note
+                note={note}
+                key={note.id}
+                isAdmin={isAdmin}
+                index={index}
+                lang={lang ?? "en"}
+              />
             ))}
           {!isClient && (
             <>
@@ -272,3 +292,16 @@ const FilterNote = ({
 };
 
 export default FilterNote;
+
+interface localeType {
+  locale: string;
+}
+export function getStaticProps({ locale }: localeType) {
+  return {
+    props: {
+      messages: {
+        ...require(`../../../messages/${locale}.json`),
+      },
+    },
+  };
+}

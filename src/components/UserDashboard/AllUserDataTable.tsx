@@ -45,6 +45,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { useTranslations } from "next-intl";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -72,7 +73,7 @@ export function AllUserDataTable<TData extends any, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-
+  const d = useTranslations("Dashboard");
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -120,7 +121,7 @@ export function AllUserDataTable<TData extends any, TValue>({
       {/* <CardContent className="border-none px-0"> */}
       <div className="flex flex-wrap items-center py-4">
         <Input
-          placeholder="Filter username..."
+          placeholder={d("data.table.filter")}
           value={
             (table.getColumn("fullName")?.getFilterValue() as string) ?? ""
           }
@@ -149,7 +150,7 @@ export function AllUserDataTable<TData extends any, TValue>({
               <span className="scale-[0.8] text-sm font-thin">
                 <Settings2 />
               </span>
-              <span>Views</span>
+              <span>{d("data.table.views")}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -166,7 +167,11 @@ export function AllUserDataTable<TData extends any, TValue>({
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {column.id}
+                    {column.id == "fullName"
+                      ? d("data.table.column.full-name")
+                      : column.id == "publicMetadata"
+                        ? d("data.table.column.role")
+                        : column.id}
                   </DropdownMenuCheckboxItem>
                 );
               })}
@@ -237,7 +242,7 @@ export function AllUserDataTable<TData extends any, TValue>({
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    {d("data.table.result")}
                   </TableCell>
                 </TableRow>
               )}

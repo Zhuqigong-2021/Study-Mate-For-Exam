@@ -36,27 +36,15 @@ import {
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/DataTableColumnHeader";
-import EditBookMarkedQuestion from "@/components/EditBookMarkedQuestion";
+import EditBookMarkedQuestion from "@/components/Bookmark/EditBookMarkedQuestion";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-import { redirect, useRouter } from "next/navigation";
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuTrigger,
-} from "../ui/context-menu";
+import { useRouter } from "next/navigation";
+
 import { Badge } from "../ui/badge";
 
-import { Note, Prisma } from "@prisma/client";
-
-import { dateFormatter } from "@/app/utils/dateFormatter";
-import { getNote } from "@/app/report/_actions";
-import { report } from "process";
-import Link from "next/link";
-import { nameFormatter } from "@/app/utils/nameFormatter";
+// import { nameFormatter } from "@/app/utils/nameFormatter";
 import { AllUserDataTable } from "./AllUserDataTable";
 import {
   Tooltip,
@@ -69,7 +57,9 @@ import {
   blockThisUser,
   setUserRole,
   unblockThisUser,
-} from "@/app/admin/dashboard/_actions";
+} from "@/app/[locale]/admin/dashboard/_actions";
+import { nameFormatter } from "@/app/[locale]/utils/nameFormatter";
+import { useTranslations } from "next-intl";
 
 export type Question = {
   id: string;
@@ -142,7 +132,7 @@ const colorClasses = [
 
 const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
   const [isClient, setIsClient] = useState(false);
-
+  const d = useTranslations("Dashboard");
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -156,17 +146,12 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
 
   const handleRole = async (user: User) => {
     try {
-      // console.log("userID:" + user.id);
-      // console.log(
-      //   "role:" +
-      //     String(user.publicMetadata.role ? user.publicMetadata.role : ""),
-      // );
       if (!isSuperAdmin) {
-        toast.error("Sorry you're not authorized to do that");
+        toast.error(d("data.table.toast.auth-err"));
         return;
       }
       if (user.id == "user_2aFBx8E20RdENmTS0CRlRej0Px4") {
-        toast.error("You're superAdmin,please do not cancel your admin status");
+        toast.error(d("data.table.toast.admin-err"));
         return;
       }
       const response = await setUserRole(
@@ -174,28 +159,28 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
         String(user.publicMetadata.role ? "" : "admin"),
       );
       if (!response) {
-        toast.error("Sorry you are not authorized");
+        toast.error(d("data.table.toast.auth-err"));
         return;
       }
       let userId: string = user.id;
       let role: string = user.publicMetadata.role ? "" : "admin";
 
-      toast.success("You authorize a role successfully");
+      toast.success(d("data.table.toast.role-suc"));
       router.refresh();
     } catch (error) {
-      toast.error("Sorry, something went wrong");
+      toast.error(d("data.table.toast.server"));
     }
   };
 
   async function handleBlock(user: User) {
     try {
       if (!isSuperAdmin) {
-        toast.error("Sorry you're not authorized to do that");
+        toast.error(d("data.table.toast.auth-err"));
         return;
       }
 
       if (user.id == "user_2aFBx8E20RdENmTS0CRlRej0Px4") {
-        toast.error("You're superAdmin,please do not block yourself");
+        toast.error(d("data.table.toast.super-block-err"));
         return;
       }
 
@@ -210,66 +195,41 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
 
       const response = await blockThisUser(user.id);
       if (!response) {
-        toast.error(
-          "Sorry you are not authorized,or the user has been already blocked ,you can not block the same user twice",
-        );
+        toast.error(d("data.table.toast.block-twice"));
         return;
       }
       // let bannedValue = user.privateMetadata.banned
       //   ? user.privateMetadata.banned
       //   : false;
 
-      toast.success("You block this user successfully");
+      toast.success(d("data.table.toast.block-suc"));
     } catch (error) {
-      toast.error("Sorry, something went wrong ");
+      toast.error(d("data.table.toast.server"));
     }
   }
 
   async function handleUnblock(user: User) {
     try {
       if (!isSuperAdmin) {
-        toast.error("Sorry you're not authorized to do that");
+        toast.error(d("data.table.toast.auth-err"));
         return;
       }
 
       const response = await unblockThisUser(user.id);
       if (!response) {
-        toast.error(
-          "Sorry you are not authorized or the user has not been blocked yet",
-        );
+        toast.error(d("data.table.toast.unblock-err"));
         return;
       }
-      toast.success("You unblock this user successfully");
+      toast.success(d("data.table.toast.unblock-suc"));
     } catch (error) {
-      toast.error("Sorry, something went wrong");
+      toast.error(d("data.table.toast.server"));
     }
   }
 
-  const deleteReport = async (reportId: string | undefined) => {
-    try {
-      if (reportId) {
-        const response = await fetch("/api/report", {
-          method: "DELETE",
-          body: JSON.stringify({ reportId }),
-        });
-        if (!response.ok) {
-          throw Error("Status code: " + response.status + "delete");
-        }
-
-        router.refresh();
-        toast.success("you have successfully deleted a test report");
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("something went wrong. Please try again ");
-    }
-  };
-
-  // const columnHelper = createColumnHelper<User>();
   const columns: ColumnDef<User>[] = [
     {
       id: "fullName",
-      header: "full Name",
+      header: d("data.table.column.full-name"),
       size: 1250,
       accessorFn: (row) => {
         return (
@@ -309,7 +269,10 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
       accessorKey: "publicMetadata",
       size: 5,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="role" />
+        <DataTableColumnHeader
+          column={column}
+          title={d("data.table.column.role")}
+        />
       ),
       cell: (props: any) => {
         let role = props.row.original.publicMetadata.role;
@@ -357,70 +320,28 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
                 className="flex flex-col items-start"
               >
                 <DropdownMenuLabel className="w-full">
-                  Actions
+                  {d("data.table.actions.title")}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="w-full"
                   onClick={() => handleRole(user)}
                 >
-                  Authorization
+                  {d("data.table.actions.authorization")}
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
                   className="w-full"
                   onClick={() => handleBlock(user)}
                 >
-                  block this user
+                  {d("data.table.actions.block")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="w-full"
                   onClick={() => handleUnblock(user)}
                 >
-                  unblock this user
+                  {d("data.table.actions.unblock")}
                 </DropdownMenuItem>
-
-                {/* <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="inline w-full border-none p-0 px-2 text-left"
-                    >
-                      Delete Report
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you absolutely sure?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete your question and remove your data from our
-                        servers.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        className="bg-red-500 text-white"
-                        // onClick={() => {
-                        //   if (isSuperAdmin) {
-                        //     // deleteQuestion(report.id);
-                        //     deleteReport(report.id);
-                        //   } else {
-                        //     toast.error(
-                        //       "Sorry, you're not authorized to delete this test report",
-                        //     );
-                        //   }
-                        // }}
-                      >
-                        Continue
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog> */}
-                {/* </DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
           </>

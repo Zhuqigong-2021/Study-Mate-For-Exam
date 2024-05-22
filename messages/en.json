@@ -1,5 +1,485 @@
 {
-  "Index": {
-    "title": "Hello world!"
+  "Navbar": {
+    "about-us": {
+      "title": "About Us",
+      "admin": {
+        "title": "Admin Portal",
+        "description": "This is the place to click into admin dashboard if you're admin"
+      },
+      "contact-info": {
+        "title": "Contact Info",
+        "description": "If you want to report a bug ,contact us phil.zhu3@gmail.com"
+      },
+      "about": {
+        "title": "About",
+        "description": "Check All Website Features in the User Manual"
+      },
+      "statement": {
+        "title": "Statement",
+        "description": "Check All Website Features in the User Manual"
+      }
+    },
+    "operations": {
+      "title": "Operations",
+      "bookmark": {
+        "title": "Bookmark",
+        "description": "Check All bookmarked Questions with proof to review more efficiently"
+      },
+      "add-a-note": {
+        "title": "Add a note",
+        "description": "if You're admin,You're able to add note to the system",
+        "error": "Sorry,You're not authroized to access this page"
+      },
+      "edit-your-questions": {
+        "title": "Edit your questions",
+        "description": "If you are admin, you're able to modify the question.",
+        "error": "Sorry,You're not authroized to access this page"
+      },
+      "pro-status": {
+        "title": "Pro Status",
+        "superAdmin": {
+          "greeting": "Congratulations!",
+          "description": "You're A Pro",
+          "role": "Pro"
+        },
+        "admin": {
+          "greeting": "Congratulations!",
+          "description": "You're Admin",
+          "role": "admin"
+        },
+        "user": {
+          "greeting": "Hi,there!",
+          "description": "You're a normal user"
+        }
+      }
+    },
+    "taking-notes": {
+      "title": "Taking Notes",
+      "notes": {
+        "title": "Notes",
+        "description": "You can check other's notes and take exams with their notes"
+      },
+      "flashcard": {
+        "title": "Flashcard",
+        "description": "Taking advantage of your down time , Review by cards"
+      },
+      "exams": {
+        "title": "Exams",
+        "description": "You can take exams with notes in the system"
+      },
+      "review": {
+        "title": "Review",
+        "description": " You can review the whole note question by page"
+      }
+    },
+    "getting-started": {
+      "title": "Getting started",
+      "photo": {
+        "title": "Study Mate",
+        "description": "Beautifully designed study app for you to pass mutiple choice questions exams."
+      },
+      "exam": {
+        "title": "Exam",
+        "description": "Taking Exams with all your input questions in proper batch."
+      },
+      "report": {
+        "title": "Report",
+        "description": "Review all the history records of the exams that you have taken"
+      }
+    }
+  },
+  "Drawer": {
+    "title": "Edit profile",
+    "description": "Make changes to your profile by clicking the icon above",
+    "admin": "Administration",
+    "note": "Notes Taking",
+    "edit": "Edit Question",
+    "flashcard": "Flash Cards",
+    "reports": "Test Reports",
+    "exam": "Evaluation",
+    "bookmark": "Preservation",
+    "review": "Review Notes"
+  },
+  "Homepage": {
+    "search": {
+      "placeholder": "search your note"
+    },
+    "card": {
+      "cardTitle": {
+        "title": {
+          "public": "Public Notes",
+          "mine": "My Notes",
+          "all": "All Notes"
+        },
+        "filter": {
+          "title": "Filter Notes",
+          "options": {
+            "public": "public",
+            "mine": "my notes",
+            "all": "all notes"
+          }
+        },
+        "toast": {
+          "public": "you have successfully public a note",
+          "unpublic": "you have successfully unpublic a note",
+          "server": "something is wrong"
+        }
+      },
+      "content": {
+        "number": "{count,plural,=0 {no item} =1 {1 item} other {# items}}"
+      }
+    },
+    "note": {
+      "title": {
+        "edit": "Edit Note",
+        "add": "Add Note"
+      },
+      "note-title": "Note title",
+      "title-placeholder": "Note title",
+      "description": "Description",
+      "description-placeholder": "Note description",
+      "delete": "Delete note",
+      "review": "Review",
+      "action": {
+        "update": "Update",
+        "submit": "Submit"
+      },
+      "toast": {
+        "suc": "You have just deleted a note !",
+        "err": "This is not your note ! you can not delete other's note"
+      }
+    },
+    "add-question": {
+      "title": "Create A New Question",
+      "description": "Create your next question in one-click. Click Submit when you finish !!!",
+      "question-title": "Question Title",
+      "question-placeholder": "Input your question",
+      "choice": "Choices",
+      "option": "choice",
+      "cancel": "Cancel",
+      "next": "Next",
+      "toast": {
+        "suc": "You have submitted this question",
+        "err": "Something went wrong. Please try again ."
+      }
+    },
+    "metaData": {
+      "public": "Study Mate - Public Notes",
+      "mine": "Study Mate - My Notes",
+      "all": "Study Mate - All Notes"
+    }
+  },
+  "Exam": {
+    "card": {
+      "content": {
+        "number": "{count,plural,=0 {no item} =1 {1 item} other {# items}}"
+      }
+    },
+    "timer": {
+      "title": "Set Timer",
+      "card-title": "Exam Topic",
+      "description": "Start your exam in one-click.",
+      "name": "Name",
+      "action": {
+        "timer": {
+          "title": "Set your timer",
+          "err": "You have not set your timer",
+          "option": {
+            "30s": {
+              "title": "30 s",
+              "value": "30000"
+            },
+            "05min": {
+              "title": "05 min",
+              "value": "300000"
+            },
+            "10min": {
+              "title": "10 min",
+              "value": "600000"
+            },
+            "15min": {
+              "title": "15 min",
+              "value": "900000"
+            },
+            "20min": {
+              "title": "20 min",
+              "value": "1200000"
+            },
+            "30min": {
+              "title": "30 min",
+              "value": "1800000"
+            },
+            "60min": {
+              "title": "60 min",
+              "value": "3600000"
+            },
+            "90min": {
+              "title": "1.5 h",
+              "value": "5400000"
+            },
+            "2h": {
+              "title": "2 h",
+              "value": "7200000"
+            }
+          }
+        },
+        "batch": {
+          "title": "Set your batch",
+          "batch": "batch",
+          "err": "You have not set your batch"
+        },
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+      }
+    },
+    "ongoing": {
+      "submit": "Submit",
+      "toast": {
+        "err": "Time is up!!!",
+        "server": "Sorry , something is wrong",
+        "suc": "Congrats, You've finished your exam!"
+      },
+      "metadata": "Study Mate - Taking Exams"
+    },
+    "result": {
+      "fullmark": "Congratulations you got full mark !!!",
+      "title": "Your Test Result",
+      "button": "get details report",
+      "metadata": "Study Mate - Result"
+    },
+    "report": {
+      "back": "Back",
+      "metadata": "Study Mate -Exam Report"
+    },
+    "metadata": "Study Mate - Exam"
+  },
+  "Review": {
+    "card": {
+      "content": {
+        "number": "{count,plural,=0 {no item} =1 {1 item} other {# items}}"
+      }
+    },
+    "metadata": "Study Mate - Review"
+  },
+  "Flashcard": {
+    "card": {
+      "content": {
+        "number": "{count,plural,=0 {no item} =1 {1 item} other {# items}}"
+      }
+    },
+
+    "metadata": "Study Mate - Flashcard"
+  },
+  "Report": {
+    "metadata": "Study Mate - Report",
+    "title": "Check Your Test Report",
+    "description": "This table below will show all test data",
+    "view": "Views",
+    "filter": {
+      "button": "filter",
+      "placeholder": "filter username ...",
+      "clear": "clear",
+      "result": "No results"
+    },
+    "table": {
+      "result": "result",
+      "candidate": "candidate",
+      "note": "note",
+      "time": "time",
+      "batch": "batch",
+      "submit": "submit At",
+      "action": {
+        "title": "Actions",
+        "copy": "Copy Report Id",
+        "check": "Check Report Details",
+        "delete": "Delete Report",
+        "verify": {
+          "title": "Are you absolutely sure?",
+          "description": "This action cannot be undone. This will permanently delete your question and remove your data from our servers.",
+          "cancel": "Cancel",
+          "continue": "Continue"
+        },
+        "toast": {
+          "success": "you have successfully deleted a test report",
+          "server": "something went wrong. Please try again",
+          "copyId": "You have copied this report id",
+          "deleteErr": "Sorry, you're not authorized to delete this test report"
+        }
+      }
+    },
+    "pagination": {
+      "select": {
+        "of": "of",
+        "row": "rows(s) selected"
+      },
+      "page": "Rows per page"
+    }
+  },
+  "Bookmark": {
+    "metadata": "Study Mate - Bookmark",
+    "title": "All Bookmarked Questions",
+    "description": "This table below show all bookmarked questions",
+    "view": "Views",
+    "filter": {
+      "placeholder": "filter question ...",
+      "result": "No results"
+    },
+    "table": {
+      "title": "Question Title",
+      "note": "Note",
+      "update": "Update At",
+      "action": {
+        "copy": "Copy Question Title",
+        "view": "View Question",
+        "unbookmark": "Unbookmark this question",
+        "verify": {
+          "title": "Are you absolutely sure?",
+          "description": "This action cannot be undone. This will permanently delete your question and remove your data from our servers.",
+          "cancel": "Cancel",
+          "continue": "Continue"
+        },
+        "toast": {
+          "copy-title": "You have copied this question title",
+          "server": "your request is not successful",
+          "unbook-err": "Sorry! You're not authorized to unbookmark a question",
+          "unbook-suc": "you successfully unbookmarked a question"
+        },
+        "rightclick": {
+          "forward": "Forward",
+          "reload": "Reload",
+          "filterout": "Filter out",
+          "showmatching": "Show matching",
+          "show-all": "Show All records"
+        },
+        "edit": {
+          "comment": "Comments",
+          "save": "Save"
+        }
+      }
+    }
+  },
+  "Editquestion": {
+    "metadata": "Study Mate - Edit Questions",
+    "title": "Edit All Your Questions",
+    "description": "This table below show all questions in the system to edit",
+    "view": "Views",
+    "filter": {
+      "placeholder": "filter question ...",
+      "result": "No results"
+    },
+    "table": {
+      "title": "Question Title",
+      "note": "Note",
+      "update": "Update At",
+      "action": {
+        "copyId": "Copy Question Id",
+        "copy-comment": "Copy Comment",
+        "copy-title": "Copy Question Title",
+        "update": "Update Question",
+        "delete": "Delete this question",
+        "verify": {
+          "title": "Are you absolutely sure?",
+          "description": "This action cannot be undone. This will permanently delete your question and remove your data from our servers.",
+          "cancel": "Cancel",
+          "continue": "Continue"
+        },
+        "toast": {
+          "copyId": "You have copied this question id",
+          "copy-comment": "You have copied this question comment",
+          "copy-title": "You have copied this question title",
+          "server": "something went wrong. Please try again",
+          "delete-err": "Sorry! You're not authorized to delete a question",
+          "delete-suc": "you have successfully deleted a question with all the choices"
+        },
+        "rightclick": {
+          "forward": "Forward",
+          "reload": "Reload",
+          "filterout": "Filter out",
+          "showmatching": "Show matching",
+          "show-all": "Show All records"
+        },
+        "edit": {
+          "update": "Update Your Question",
+          "title": "Question Title",
+          "choices": "Choices",
+          "comment": "Comments",
+          "save": "Save",
+          "suc": "you successfully update this question",
+          "err": "Sorry you failed updating your question"
+        }
+      }
+    }
+  },
+  "Dashboard": {
+    "menu": {
+      "dashboard": "Dashboard",
+      "notification": "Notification",
+      "stats": "Statistics",
+      "settings": "Settings"
+    },
+    "pannel": {
+      "all-users": {
+        "title": "Total Subscribers",
+        "description": "since this month"
+      },
+      "users": {
+        "title": "Subscriptions",
+        "description": "new users from this month"
+      },
+      "notes": {
+        "title": "Notes",
+        "description": "from last month"
+      },
+      "report": {
+        "title": "Test Report",
+        "description": "since this month"
+      }
+    },
+    "recent": {
+      "title": "Recent Activities",
+      "users": "Users",
+      "results": "Results"
+    },
+    "data": {
+      "header": {
+        "title": "Subscribers",
+        "description": "User analysis based on month",
+        "view": {
+          "data": "View Data",
+          "trend": "View Trend"
+        }
+      },
+      "charts": {
+        "user-increase": "New Users Increase Monthly",
+        "user-test": "Users Test Performance Distribution",
+        "total-users": "Total Users Monthly Trend"
+      },
+      "table": {
+        "filter": "Filter username",
+        "views": "Views",
+        "result": "No results",
+        "column": {
+          "full-name": "full name",
+          "role": "role"
+        },
+        "actions": {
+          "title": "Actions",
+          "authorization": "authorization",
+          "block": "block this user",
+          "unblock": "unblock this user"
+        },
+        "toast": {
+          "admin-err": "You're superAdmin,please do not cancel your admin status",
+          "auth-err": "Sorry you are not authorized",
+          "server": "Sorry, something went wrong",
+          "role-suc": "You authorize a role successfully",
+          "super-block-err": "You're superAdmin,please do not block yourself",
+          "block-twice": "Sorry you are not authorized,or the user has been already blocked ,you can not block the same user twice",
+          "block-suc": "You block this user successfully",
+          "unblock-err": "Sorry you are not authorized or the user has not been blocked yet",
+          "unblock-suc": "You unblock this user successfully"
+        }
+      }
+    }
   }
 }

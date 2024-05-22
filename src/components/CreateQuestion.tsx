@@ -37,13 +37,14 @@ import {
   CreateQuestionSchema,
   createQuestionSchema,
 } from "@/lib/validation/note";
-import { idProps } from "@/app/notes/[id]/page";
+import { idProps } from "@/app/[locale]/notes/[id]/page";
 import { number } from "zod";
 import LoadingButton from "./ui/loading-button";
-
+import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import { Control, useFieldArray, useForm, useWatch } from "react-hook-form";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { useTranslations } from "next-intl";
 
 type FormValues = {
   id: string;
@@ -58,7 +59,7 @@ const CreateQuestion = ({ params }: idProps) => {
   const { id } = params;
   const router = useRouter();
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
-
+  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
   const {
     register,
     reset,
@@ -72,6 +73,7 @@ const CreateQuestion = ({ params }: idProps) => {
       choices: [{ content: "", answer: false }],
     },
   });
+  const a = useTranslations("Homepage");
   const { fields, append, prepend, remove } = useFieldArray({
     name: "choices",
     control,
@@ -82,7 +84,6 @@ const CreateQuestion = ({ params }: idProps) => {
   const form = useForm<CreateQuestionSchema>({
     resolver: zodResolver(createQuestionSchema),
     defaultValues: {
-      // id: id,
       questionTitle: "",
       choices: [
         {
@@ -92,6 +93,7 @@ const CreateQuestion = ({ params }: idProps) => {
       ],
     },
   });
+
   async function onSubmit(data: CreateQuestionSchema) {
     setIsFormSubmitting(true);
     try {
@@ -99,21 +101,20 @@ const CreateQuestion = ({ params }: idProps) => {
         method: "PUT",
         body: JSON.stringify({
           id,
-          // title: "CSA 123",
-          // description: "OK",
+
           questions: [{ ...data }],
         }),
       });
 
       if (!response.ok) throw Error("Status code: " + response.status);
-      toast.success("You have submitted this question");
+      toast.success(a("add-question.toast.suc"));
 
       reset();
       router.replace(window.location.pathname);
       router.refresh();
     } catch (error) {
       // console.error(error);
-      toast.error("Something went wront. Please try again .");
+      toast.error(a("add-question.toast.err"));
     } finally {
       setIsFormSubmitting(false);
     }
@@ -122,11 +123,8 @@ const CreateQuestion = ({ params }: idProps) => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Create A New Question</CardTitle>
-        <CardDescription>
-          Create your next question in one-click. Click Submit when you finish
-          !!!
-        </CardDescription>
+        <CardTitle>{a("add-question.title")}</CardTitle>
+        <CardDescription>{a("add-question.description")}</CardDescription>
       </CardHeader>
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
@@ -136,11 +134,10 @@ const CreateQuestion = ({ params }: idProps) => {
               name="questionTitle"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Question Title</FormLabel>
+                  <FormLabel>{a("add-question.question-title")}</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Input your question"
-                      // {...field}
+                      placeholder={a("add-question.question-placeholder")}
                       {...register(`questionTitle`, {
                         required: true,
                       })}
@@ -165,7 +162,9 @@ const CreateQuestion = ({ params }: idProps) => {
                           className="my-4 flex items-end space-x-2"
                         >
                           <label className="flex w-full flex-col">
-                            <span>choice {index + 1}</span>
+                            <span>
+                              {a("add-question.option")} {index + 1}
+                            </span>
                             <Input
                               {...register(`choices.${index}.content`, {
                                 required: true,
@@ -175,7 +174,7 @@ const CreateQuestion = ({ params }: idProps) => {
                           <label className="flex flex-col items-center justify-center">
                             <Input
                               type="checkbox"
-                              className="relative "
+                              className="relative"
                               defaultChecked={false}
                               {...register(`choices.${index}.answer`)}
                             />
@@ -214,10 +213,10 @@ const CreateQuestion = ({ params }: idProps) => {
               type="button"
               variant="outline"
               onClick={() => {
-                router.back();
+                router.replace(`/${lang}/notes/public`);
               }}
             >
-              Cancel
+              {a("add-question.cancel")}
             </Button>
             <div className="flex gap-2">
               <LoadingButton
@@ -226,11 +225,11 @@ const CreateQuestion = ({ params }: idProps) => {
                 loading={isFormSubmitting}
                 disabled={form.formState.isSubmitting}
               >
-                {!isSubmitting && "Next"}
+                {!isSubmitting && a("add-question.next")}
               </LoadingButton>
               <Button
                 type="button"
-                onClick={() => router.push(`/review/${id}`)}
+                onClick={() => router.replace(`/${lang}/review/${id}`)}
               >
                 <LuEye />
               </Button>

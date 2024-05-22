@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Image from "next/image";
-import logo from "@/assets/logo.png";
+
 import { UserButton, auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import yellowbook from "@/assets/neatperson.png";
-import Drawer from "@/components/Drawer";
-import { checkRole } from "../app/utils/roles/role";
+import Drawer from "@/components/Navbar/Drawer";
+import Cookie from "js-cookie";
+
 interface userIdProps {
   userId: string | null;
   isAdmin: boolean;
@@ -18,7 +18,7 @@ interface userIdProps {
 export default function Home({ userId, isAdmin }: userIdProps) {
   // const { userId } = auth();
   // if (userId) redirect("/notes/public");
-
+  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
   return (
     <main
       className="-z-30 m-auto flex h-screen  justify-center gap-5 overflow-hidden  "
@@ -63,7 +63,7 @@ export default function Home({ userId, isAdmin }: userIdProps) {
             className="hover:white w-44 rounded-full bg-gradient-to-br from-teal-300 from-10% via-teal-400 via-30% to-teal-600 to-90% text-white shadow-lg shadow-[#9d824f]"
             // className="hover:white bg-gradient-to-bar   rounded-full from-teal-300 from-10% via-teal-400 via-30% to-teal-600 to-90% text-white shadow-lg shadow-[#9d824f]"
           >
-            <Link href="/notes/public"> Start using now</Link>
+            <Link href={`${lang}/notes/public`}> Start using now</Link>
           </Button>
         </div>
 
@@ -140,4 +140,18 @@ export default function Home({ userId, isAdmin }: userIdProps) {
       </div>
     </main>
   );
+}
+
+interface localeType {
+  locale: string;
+}
+
+export function getStaticProps({ locale }: localeType) {
+  return {
+    props: {
+      messages: {
+        ...require(`../../messages/${locale}.json`),
+      },
+    },
+  };
 }

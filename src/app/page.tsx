@@ -1,12 +1,20 @@
 import React from "react";
-import Home from "../components/Home";
+
+// import Home from "../../components/Home";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import { checkMetaDataRole, checkRole } from "./utils/roles/role";
+import { checkMetaDataRole, checkRole } from "./[locale]/utils/roles/role";
+import Home from "@/components/Home";
+// import { checkMetaDataRole, checkRole } from "./utils/roles/role";
 
-const page = async () => {
+interface localeType {
+  params: {
+    locale: string;
+  };
+}
+const page = async ({ params: { locale } }: localeType) => {
   const { userId } = auth();
-  if (userId) redirect("/notes/public");
+  if (userId) redirect(`/${locale}/notes/public`);
 
   // const isAdmin = await checkMetaDataRole("admin");
   let isAdmin;
@@ -16,7 +24,11 @@ const page = async () => {
     isAdmin = checkRole("admin");
   }
 
-  return <Home userId={userId} isAdmin={isAdmin} />;
+  return (
+    <>
+      <Home userId={userId} isAdmin={isAdmin} />
+    </>
+  );
 };
 
 export default page;

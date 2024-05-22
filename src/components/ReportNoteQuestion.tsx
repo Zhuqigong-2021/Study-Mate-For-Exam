@@ -11,12 +11,14 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-
+import Cookie from "js-cookie";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, XCircle } from "lucide-react";
-import { processString } from "@/app/utils/processString";
+import { processString } from "@/app/[locale]/utils/processString";
+import { useTranslations } from "next-intl";
+// import { processString } from "@/app/utils/processString";
 export interface NoteType {
   id: string;
   title: string;
@@ -46,6 +48,8 @@ interface mappedDataType {
 const ReportNoteQuestion = ({ note, mappedData }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const router = useRouter();
+  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE"));
+  const e = useTranslations("Exam");
 
   return (
     <>
@@ -112,7 +116,7 @@ const ReportNoteQuestion = ({ note, mappedData }: NoteProps) => {
         <CardFooter className="py-4"></CardFooter>
 
         <Button asChild className="absolute bottom-5 right-10">
-          <Link href="/exam">Back</Link>
+          <Link href={`/${lang}/exam`}>{e("report.back")}</Link>
         </Button>
       </Card>
     </>

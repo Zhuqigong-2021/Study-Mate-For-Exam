@@ -14,10 +14,13 @@ import { Globe, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "next/navigation";
 
-import { getUser } from "@/app/notes/_actions";
+// import { getUser } from "@/app/notes/_actions";
 import { User } from "@clerk/nextjs/server";
 import Image from "next/image";
-import { percentageGetter } from "@/app/utils/percentageGetter";
+import { getUser } from "@/app/[locale]/notes/_actions";
+import { percentageGetter } from "@/app/[locale]/utils/percentageGetter";
+import { useTranslations } from "next-intl";
+import { useFormatter } from "next-intl";
 
 interface NoteProps {
   note: {
@@ -43,27 +46,36 @@ interface NoteProps {
   };
   isAdmin: boolean;
   index: number;
+  lang: string;
 }
 
-const Note = ({ note, isAdmin, index }: NoteProps) => {
+const Note = ({ note, isAdmin, index, lang }: NoteProps) => {
   const pathname = usePathname();
-
+  const format = useFormatter();
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const [user, setUser] = useState<User>();
   const [isShared, setIsShared] = useState(note.isShared);
   const [isClient, setIsClient] = useState(false);
+  const h = useTranslations("Homepage");
 
   useEffect(() => {
     setIsClient(true);
   }, []);
   const wasUpdated = note.updateAt > note.createdAt;
   const router = useRouter();
-  const createdUpdatedAtTimestamp = (
-    wasUpdated ? note.updateAt : note.createdAt
-  ).toDateString();
+  // const createdUpdatedAtTimestamp = (
+  //   wasUpdated ? note.updateAt : note.createdAt
+  // ).toDateString();
+  const createdUpdatedAtTimestamp = wasUpdated ? note.updateAt : note.createdAt;
 
+  // Using `format.dateTime` to format the date based on locale
+  const formattedDate = format.dateTime(createdUpdatedAtTimestamp, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    weekday: "short",
+  });
   async function ToggleShare(noteId: string, isShared: boolean) {
-    // toast.custom("you got click");
     // Use the PUT method and include the 'action' parameter in the body
     const response = await fetch("/api/notes/share", {
       method: "PUT",
@@ -76,13 +88,13 @@ const Note = ({ note, isAdmin, index }: NoteProps) => {
       setIsShared(!isShared);
 
       if (!isShared) {
-        toast.success("you have successfully public a note");
+        toast.success(h("card.cardTitle.toast.public"));
       } else {
-        toast.success("you have successfully unpublic a note");
+        toast.success(h("card.cardTitle.toast.unpublic"));
       }
       router.refresh();
     } else {
-      toast.error("something is wrong");
+      toast.error(h("card.cardTitle.toast.server"));
     }
   }
 
@@ -149,24 +161,27 @@ const Note = ({ note, isAdmin, index }: NoteProps) => {
 
             <div
               className={`${
-                pathname == "/notes/public"
+                pathname == `/${lang}/notes/public`
                   ? colorClasses[9]
-                  : pathname == "/notes"
+                  : pathname == `/${lang}/notes`
                     ? colorClasses[1]
                     : "from-slate-900"
-              } absolute  -left-1 -right-1 top-16 w-1/2 rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r to-transparent pl-6 text-sm text-white lg:w-1/3`}
+              } absolute  -left-1 -right-1 top-16 w-[55%] rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r to-transparent pl-6 text-sm text-white ${
+                lang == "en" ? "lg:w-1/3" : "lg:w-[38%]"
+              }`}
               style={{
                 clipPath: `polygon(100% 0%, 85% 48%, 100% 100%, 0.5% 100%, 0% 50%, 0.5% 0)`,
               }}
             >
-              {note.questions.length + " " + "items"}
+              {/* {note.questions.length + " " + h("card.content.number")} */}
+              {h("card.content.number", { count: note.questions.length })}
             </div>
           </CardHeader>
           <CardContent
             className={`${
-              pathname == "/notes/public"
+              pathname == `/${lang}/notes/public`
                 ? "bg-amber-500/5"
-                : pathname == "/notes"
+                : pathname == `/${lang}/notes`
                   ? "bg-teal-500/5"
                   : "bg-stone-500/5"
             } h-14 rounded-b-xl  px-6 py-2`}
@@ -194,8 +209,8 @@ const Note = ({ note, isAdmin, index }: NoteProps) => {
             </span>
 
             <CardDescription className="absolute bottom-4 right-6 text-xs ">
-              {createdUpdatedAtTimestamp}
-              {/* {wasUpdated && "( updated )"} */}
+              {/* {createdUpdatedAtTimestamp} */}
+              {formattedDate}
             </CardDescription>
           </CardContent>
           {isAdmin && (
@@ -224,3 +239,16 @@ const Note = ({ note, isAdmin, index }: NoteProps) => {
 };
 
 export default Note;
+
+interface localeType {
+  locale: string;
+}
+export function getStaticProps({ locale }: localeType) {
+  return {
+    props: {
+      messages: {
+        ...require(`../../../messages/${locale}.json`),
+      },
+    },
+  };
+}

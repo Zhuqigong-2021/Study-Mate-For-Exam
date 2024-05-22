@@ -18,7 +18,9 @@ import { useRouter } from "next/navigation";
 import { BookmarkCheck, Loader, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import ReviewChoiceQuestion from "./ReviewChoiceQuestion";
-import { useInfiniteScroll } from "@/app/utils/useInfiniteScroll";
+import Cookie from "js-cookie";
+import { useInfiniteScroll } from "@/app/[locale]/utils/useInfiniteScroll";
+// import { useInfiniteScroll } from "@/app/utils/useInfiniteScroll";
 export interface NoteType {
   id: string;
   title: string;
@@ -54,13 +56,15 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [page, setPage] = useState(0); // start from page 0 to handle the initial load correctly
   const [hasMore, setHasMore] = useState(true);
+  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
 
   const pageSize = 10;
   const fetchMoreQuestions = useCallback(async () => {
     if (!hasMore) return;
+
     const nextPage = page + 1;
     const response = await fetch(
-      `/api/questions?noteId=${note.id}&page=${nextPage}&pageSize=10`,
+      `/${lang}/api/questions?noteId=${note.id}&page=${nextPage}&pageSize=10`,
     );
     const newQuestions = await response.json();
     if (newQuestions && newQuestions.questions.length > 0) {
@@ -74,13 +78,19 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
       setPage(nextPage);
       setHasMore(newQuestions.questions.length === pageSize);
     }
-  }, [note.id, page, hasMore]);
+  }, [hasMore, page, lang, note.id]);
 
   const [isFetching, setIsFetching] = useInfiniteScroll(fetchMoreQuestions);
 
   useEffect(() => {
     if (page === 0) fetchMoreQuestions(); // Initial load
   }, [fetchMoreQuestions, page]);
+
+  useEffect(() => {
+    if (hasMore && isFetching) {
+      fetchMoreQuestions();
+    }
+  }, [fetchMoreQuestions, hasMore, isFetching]);
 
   return (
     <>
@@ -184,7 +194,9 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
         )}
         {!hasMore && (
           <Button asChild className="absolute bottom-5 right-10">
-            <Link href="/review">Back</Link>
+            <Link href={`/${lang}/review`}>
+              {lang == "fr" ? "Retour" : "Back"}
+            </Link>
           </Button>
         )}
       </Card>

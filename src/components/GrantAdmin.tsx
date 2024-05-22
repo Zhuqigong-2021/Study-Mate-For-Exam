@@ -2,10 +2,11 @@
 import React from "react";
 import { Button } from "./ui/button";
 import { Crown } from "lucide-react";
-import { setRole } from "@/app/admin/dashboard/_actions";
+// import { setRole } from "@/app/admin/dashboard/_actions";
 import { User } from "@clerk/nextjs/server";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { setRole } from "@/app/[locale]/admin/dashboard/_actions";
 
 interface userType {
   userId: string;

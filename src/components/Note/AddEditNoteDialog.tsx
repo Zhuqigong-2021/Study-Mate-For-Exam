@@ -27,6 +27,8 @@ import { Router } from "next/router";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import Cookie from "js-cookie";
+import { useTranslations } from "next-intl";
 
 interface AddEditNoteDialogProps {
   open: boolean;
@@ -44,8 +46,9 @@ export default function AddEditNoteDialog({
   // questions,
 }: AddEditNoteDialogProps) {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
-
+  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
   const router = useRouter();
+  const h = useTranslations("Homepage");
   const form = useForm<CreateNoteSchema>({
     resolver: zodResolver(createNoteSchema),
     defaultValues: {
@@ -58,17 +61,16 @@ export default function AddEditNoteDialog({
     //alert(JSON.stringify(input));
     try {
       if (noteToEdit) {
-        const response = await fetch("/api/notes", {
+        const response = await fetch(`/${lang}/api/notes`, {
           method: "PUT",
           body: JSON.stringify({ id: noteToEdit.id, ...input }),
         });
         if (!response.ok) {
           throw Error("Status code: " + response.status + "edit");
         }
-        router.push(`/notes/${noteToEdit.id}`);
-        //if (response.ok) redirect("/");
+        router.push(`/${lang}/notes/${noteToEdit.id}`);
       } else {
-        const response = await fetch("/api/notes", {
+        const response = await fetch(`/${lang}/api/notes`, {
           method: "POST",
           body: JSON.stringify(input),
         });
@@ -76,7 +78,7 @@ export default function AddEditNoteDialog({
           throw Error("Status code: " + response.status + "post");
         } else {
           form.reset();
-          router.push("/notes");
+          router.replace(`/${lang}/notes`);
         }
       }
 
@@ -92,7 +94,7 @@ export default function AddEditNoteDialog({
     if (!noteToEdit) return;
     setDeleteInProgress(true);
     try {
-      const response = await fetch("/api/notes", {
+      const response = await fetch(`/${lang}/api/notes`, {
         method: "DELETE",
         body: JSON.stringify({
           id: noteToEdit.id,
@@ -102,11 +104,11 @@ export default function AddEditNoteDialog({
       router.refresh();
 
       setOpen(false);
-      toast.success("You have just deleted a note !");
+      toast.success(h("note.toast.suc"));
     } catch (error) {
       console.error(error);
 
-      toast.error("This is not your note ! you can not delete other's note ");
+      toast.error(h("note.toast.err"));
     } finally {
       setDeleteInProgress(false);
     }
@@ -116,7 +118,9 @@ export default function AddEditNoteDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{noteToEdit ? "Edit Note" : "Add Note"}</DialogTitle>
+          <DialogTitle>
+            {noteToEdit ? h("note.title.edit") : h("note.title.add")}
+          </DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -126,9 +130,12 @@ export default function AddEditNoteDialog({
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Note title</FormLabel>
+                  <FormLabel>{h("note.note-title")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Note title" {...field} />
+                    <Input
+                      placeholder={h("note.title-placeholder")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,9 +147,12 @@ export default function AddEditNoteDialog({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>description</FormLabel>
+                  <FormLabel>{h("note.description")}</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Note description" {...field} />
+                    <Textarea
+                      placeholder={h("note.description-placeholder")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -158,12 +168,14 @@ export default function AddEditNoteDialog({
                   onClick={deleteNote}
                   type="button"
                 >
-                  Delete note
+                  {h("note.delete")}
                 </LoadingButton>
               )}
               {noteToEdit && (
                 <Button asChild variant="outline">
-                  <Link href={`/notes/${noteToEdit.id}/review `}>Review</Link>
+                  <Link href={`/${lang}/notes/${noteToEdit.id}/review `}>
+                    {h("note.review")}
+                  </Link>
                 </Button>
               )}
               {isAdmin && (
@@ -172,7 +184,9 @@ export default function AddEditNoteDialog({
                   loading={form.formState.isSubmitting}
                   disabled={deleteInProgress}
                 >
-                  {noteToEdit ? "Update" : "Submit"}
+                  {noteToEdit
+                    ? h("note.action.update")
+                    : h("note.action.submit")}
                 </LoadingButton>
               )}
             </DialogFooter>

@@ -1,5 +1,487 @@
 {
-  "Index": {
-    "title": "Hello world!"
+  "Navbar": {
+    "about-us": {
+      "title": "À propos de nous",
+      "admin": {
+        "title": "Portail administrateur",
+        "description": "Ceci est l'endroit où cliquer pour accéder au tableau de bord administrateur si vous êtes administrateur."
+      },
+      "contact-info": {
+        "title": "Informations de contact",
+        "description": "Si vous souhaitez signaler un bug,  phil.zhu3@gmail.com."
+      },
+      "about": {
+        "title": "À propos",
+        "description": "Vérifiez toutes les fonctionnalités du site dans le manuel d'utilisation."
+      },
+      "statement": {
+        "title": "Déclaration",
+        "description": "Ceci est un système d'apprentissage conçu pour aider la mémoire et l'auto-évaluation, actuellement destiné aux examens liés à ServiceNow."
+      }
+    },
+    "operations": {
+      "title": "Opérations",
+      "bookmark": {
+        "title": "Signet",
+        "description": "Vérifiez toutes les questions mises en signet avec preuve pour une révision plus efficace"
+      },
+      "add-a-note": {
+        "title": "Ajouter une note",
+        "description": "Si vous êtes administrateur, vous pouvez ajouter une note au système",
+        "error": "Désolé, vous n'êtes pas autorisé à accéder à cette page."
+      },
+      "edit-your-questions": {
+        "title": "Éditez vos questions",
+        "description": "Si vous êtes administrateur, vous avez la possibilité de modifier la question.",
+        "error": "Désolé, vous n'êtes pas autorisé à accéder à cette page."
+      },
+      "pro-status": {
+        "title": "Statut Pro",
+        "superAdmin": {
+          "greeting": "Félicitations!",
+          "description": "Vous êtes un pro",
+          "role": "Pro"
+        },
+        "admin": {
+          "greeting": "Félicitations!",
+          "description": "Vous êtes l'administrateur",
+          "role": "admin"
+        },
+        "user": {
+          "greeting": "Salut!",
+          "description": "Vous êtes un utilisateur normal."
+        }
+      }
+    },
+    "taking-notes": {
+      "title": "Prendre des notes",
+      "notes": {
+        "title": "Notes",
+        "description": "Vous pouvez consulter les notes des autres et passer des examens avec leurs notes"
+      },
+      "flashcard": {
+        "title": "Fiche de révision",
+        "description": "Profitez de votre temps libre pour réviser avec des fiches"
+      },
+      "exams": {
+        "title": "Examens",
+        "description": "Vous pouvez passer des examens avec les notes dans le système"
+      },
+      "review": {
+        "title": "Révision",
+        "description": "Vous pouvez réviser toute la question de la note page par page"
+      }
+    },
+    "getting-started": {
+      "title": "Commencer",
+      "photo": {
+        "title": "Study Mate",
+        "description": "Application d'étude magnifiquement conçue pour vous aider "
+      },
+      "exam": {
+        "title": "Examen",
+        "description": "Passage des examens avec toutes vos questions saisies en lot approprié."
+      },
+      "report": {
+        "title": "Rapport",
+        "description": "Révisez tous les historiques des examens que vous avez passés"
+      }
+    }
+  },
+  "Drawer": {
+    "title": "Modifier profil",
+    "description": "Modifiez votre profil via l'icône ci-dessus",
+    "admin": "Administration",
+    "note": "Prise de notes",
+    "edit": "Modifier question",
+    "flashcard": "Fiches",
+    "reports": "Rapports de tests",
+    "exam": "Évaluation",
+    "bookmark": "Conservation",
+    "review": "Réviser notes"
+  },
+
+  "Homepage": {
+    "search": {
+      "placeholder": "cherchez votre note"
+    },
+    "card": {
+      "cardTitle": {
+        "title": {
+          "public": "Notes Publiques",
+          "mine": "Mes Notes",
+          "all": "Toutes les Notes"
+        },
+        "filter": {
+          "title": "Filtrer les Notes",
+          "options": {
+            "public": "public",
+            "mine": "mes notes",
+            "all": "toutes les notes"
+          }
+        },
+        "toast": {
+          "public": "Vous avez publié une note ",
+          "unpublic": "Vous avez depublié une note ",
+          "server": "Il y a un problème"
+        }
+      },
+      "content": {
+        "number": "{count,plural,=0 {pas d'article} =1 {1 article} other {# articles}}"
+      }
+    },
+    "note": {
+      "title": {
+        "edit": "Modifier la note",
+        "add": "Ajouter une note"
+      },
+      "note-title": "Titre de la note",
+      "title-placeholder": "Titre de la note",
+      "description": "Description",
+      "description-placeholder": "Description de la note",
+      "delete": "Supprimer",
+      "review": "Réviser",
+      "action": {
+        "update": "Mettre à jour",
+        "submit": "Soumettre"
+      },
+      "toast": {
+        "suc": "Vous avez supprimé une note !",
+        "err": "Ce n'est pas votre note ! Vous ne pouvez pas supprimer la note de quelqu'un d'autre"
+      }
+    },
+    "add-question": {
+      "title": "Créer une nouvelle question",
+      "description": "Créez votre prochaine question en un clic. Cliquez sur Soumettre lorsque vous avez terminé !!!",
+      "question-title": "Titre de la question",
+      "question-placeholder": "Saisissez votre question",
+      "choice": "Choix",
+      "option": "choix",
+      "cancel": "Annuler",
+      "next": "Suivant",
+      "toast": {
+        "suc": "Vous avez soumis cette question",
+        "err": "Une erreur s'est produite. Veuillez réessayer."
+      }
+    },
+    "metaData": {
+      "public": "Study Mate - Notes Publiques",
+      "mine": "Study Mate - Mes Notes",
+      "all": "Study Mate - Toutes les Notes"
+    }
+  },
+  "Exam": {
+    "card": {
+      "content": {
+        "number": "{count,plural,=0 {pas d'article} =1 {1 article} other {# articles}}"
+      }
+    },
+    "timer": {
+      "title": "Régler le Minuteur",
+      "card-title": "Sujet de l'Examen",
+      "description": "Démarrez votre examen en un clic.",
+      "name": "Nom",
+      "action": {
+        "timer": {
+          "title": "Paramétrez votre minuteur",
+          "err": "Vous n'avez pas réglé votre minuteur",
+          "option": {
+            "30s": {
+              "title": "30 s",
+              "value": "30000"
+            },
+            "05min": {
+              "title": "05 min",
+              "value": "300000"
+            },
+            "10min": {
+              "title": "10 min",
+              "value": "600000"
+            },
+            "15min": {
+              "title": "15 min",
+              "value": "900000"
+            },
+            "20min": {
+              "title": "20 min",
+              "value": "1200000"
+            },
+            "30min": {
+              "title": "30 min",
+              "value": "1800000"
+            },
+            "60min": {
+              "title": "60 min",
+              "value": "3600000"
+            },
+            "90min": {
+              "title": "1.5 h",
+              "value": "5400000"
+            },
+            "2h": {
+              "title": "2 h",
+              "value": "7200000"
+            }
+          }
+        },
+        "batch": {
+          "title": "Paramétrez votre lot",
+          "batch": "lot",
+          "err": "Vous n'avez pas défini votre lot"
+        },
+        "cancel": "Annuler",
+        "confirm": "Confirmer"
+      }
+    },
+    "ongoing": {
+      "submit": "Soumettre",
+      "toast": {
+        "err": "Le temps est écoulé !!!",
+        "server": "Désolé, quelque chose ne va pas",
+        "suc": "Félicitations, vous avez terminé votre examen !"
+      },
+      "metadata": "Study Mate - Passer des Examens"
+    },
+    "result": {
+      "fullmark": "Félicitations, vous avez obtenu la note maximale !!!",
+      "title": "Votre Résultat d'Examen",
+      "button": "obtenir le rapport détaillé",
+      "metadata": "Study Mate - Résultat"
+    },
+    "report": {
+      "back": "Retour",
+      "metadata": "Study Mate -Examen Rapport"
+    },
+
+    "metadata": "Study Mate - Examen"
+  },
+  "Review": {
+    "card": {
+      "content": {
+        "number": "{count,plural,=0 {pas d'article} =1 {1 article} other {# articles}}"
+      }
+    },
+    "metadata": "Study Mate - Révision"
+  },
+  "Flashcard": {
+    "card": {
+      "content": {
+        "number": "{count,plural,=0 {pas d'article} =1 {1 article} other {# articles}}"
+      }
+    },
+
+    "metadata": "Study Mate - Fiche de révision"
+  },
+  "Report": {
+    "metadata": "Study Mate - Rapport",
+    "title": "Consultez votre rapport de test",
+    "description": "Le tableau ci-dessous affichera toutes les données de test",
+    "view": "Vues",
+    "filter": {
+      "button": "filtre",
+      "placeholder": "filtrer le nom d'utilisateur ...",
+      "clear": "effacer",
+      "result": "Aucun résultat"
+    },
+    "table": {
+      "result": "résultat",
+      "candidate": "candidat",
+      "note": "note",
+      "time": "temps",
+      "batch": "lot",
+      "submit": "soumis à",
+      "action": {
+        "title": "Actions",
+        "copy": "Copier l'ID du rapport",
+        "check": "Vérifier les détails du rapport",
+        "delete": "Supprimer le rapport",
+        "verify": {
+          "title": "Êtes-vous absolument sûr ?",
+          "description": "Cette action est irréversible. Cela supprimera définitivement votre question et retirera vos données de nos serveurs.",
+          "cancel": "Annuler",
+          "continue": "Continuer"
+        },
+        "toast": {
+          "success": "Vous avez supprimé un rapport de test avec succès",
+          "server": "Une erreur s'est produite. Veuillez réessayer",
+          "copyId": "Vous avez copié cet identifiant de rapport",
+          "deleteErr": "Désolé, vous n'êtes pas autorisé à supprimer ce rapport de test"
+        }
+      }
+    },
+    "pagination": {
+      "select": {
+        "of": "de",
+        "row": "ligne(s) sélectionnée(s)"
+      },
+      "page": "Lignes par page"
+    }
+  },
+  "Bookmark": {
+    "metadata": "Study Mate - Signet",
+    "title": "Toutes les questions mises en signet",
+    "description": "Le tableau ci-dessous montre toutes les questions mises en signet",
+    "view": "Vues",
+    "filter": {
+      "placeholder": "filtrer la question...",
+      "result": "Aucun résultat"
+    },
+    "table": {
+      "title": "Titre de la question",
+      "note": "Note",
+      "update": "Mis à jour le",
+      "action": {
+        "copy": "Copier le titre de la question",
+        "view": "Voir la question",
+        "unbookmark": "Retirer le signet de cette question",
+        "verify": {
+          "title": "Êtes-vous absolument sûr ?",
+          "description": "Cette action est irréversible. Cela supprimera définitivement votre question et retirera vos données de nos serveurs.",
+          "cancel": "Annuler",
+          "continue": "Continuer"
+        },
+        "toast": {
+          "copy-title": "Vous avez copié le titre de cette question",
+          "server": "votre demande n'a pas abouti",
+          "unbook-err": "Désolé ! Vous n'êtes pas autorisé à retirer le signet d'une question",
+          "unbook-suc": "vous avez réussi à retirer le signet d'une question"
+        },
+        "rightclick": {
+          "forward": "Transférer",
+          "reload": "Recharger",
+          "filterout": "Filtrer",
+          "showmatching": "Afficher les correspondances",
+          "show-all": "Afficher tous les enregistrements"
+        },
+        "edit": {
+          "comment": "Commentaires",
+          "save": "Sauvegarder"
+        }
+      }
+    }
+  },
+  "Editquestion": {
+    "metadata": "Study Mate - Modifier les Questions",
+    "title": "Modifier Toutes Vos Questions",
+    "description": "Le tableau ci-dessous montre toutes les questions dans le système à modifier",
+    "view": "Vues",
+    "filter": {
+      "placeholder": "filtrer la question...",
+      "result": "Aucun résultat"
+    },
+    "table": {
+      "title": "Titre de la Question",
+      "note": "Note",
+      "update": "Mis à jour le",
+      "action": {
+        "copyId": "Copier l'ID de la Question",
+        "copy-comment": "Copier le Commentaire",
+        "copy-title": "Copier le Titre de la Question",
+        "update": "Mettre à jour la Question",
+        "delete": "Supprimer cette question",
+        "verify": {
+          "title": "Êtes-vous absolument sûr ?",
+          "description": "Cette action est irréversible. Cela supprimera définitivement votre question et retirera vos données de nos serveurs.",
+          "cancel": "Annuler",
+          "continue": "Continuer"
+        },
+        "toast": {
+          "copyId": "Vous avez copié cet ID de question",
+          "copy-comment": "Vous avez copié ce commentaire de question",
+          "copy-title": "Vous avez copié le titre de cette question",
+          "server": "un problème est survenu. Veuillez réessayer",
+          "delete-err": "Désolé ! Vous n'êtes pas autorisé à supprimer une question",
+          "delete-suc": "vous avez réussi à supprimer une question avec toutes les choix"
+        },
+        "rightclick": {
+          "forward": "Transférer",
+          "reload": "Recharger",
+          "filterout": "Filtrer",
+          "showmatching": "Afficher les correspondances",
+          "show-all": "Afficher tous les enregistrements"
+        },
+        "edit": {
+          "update": "Mettez à jour votre question",
+          "title": "Titre de la Question",
+          "choices": "Choix",
+          "comment": "Commentaires",
+          "save": "Sauvegarder",
+          "suc": "Vous avez mis à jour cette question avec succès",
+          "err": "Désolé, la mise à jour de votre question a échoué"
+        }
+      }
+    }
+  },
+  "Dashboard": {
+    "menu": {
+      "dashboard": "Tableau de bord",
+      "notification": "Notification",
+      "stats": "Statistiques",
+      "settings": "Paramètres"
+    },
+    "pannel": {
+      "all-users": {
+        "title": "Total des abonnés",
+        "description": "depuis ce mois"
+      },
+      "users": {
+        "title": "Abonnements",
+        "description": "nouveaux utilisateurs depuis ce mois"
+      },
+      "notes": {
+        "title": "Notes",
+        "description": "du mois dernier"
+      },
+      "report": {
+        "title": "Rapport de test",
+        "description": "depuis ce mois"
+      }
+    },
+    "recent": {
+      "title": "Activités récentes",
+      "users": "Utilisateurs",
+      "results": "Résultats"
+    },
+    "data": {
+      "header": {
+        "title": "Abonnés",
+        "description": "Analyse des utilisateurs basée sur le mois",
+        "view": {
+          "data": "Voir les données",
+          "trend": "Voir la tendance"
+        }
+      },
+      "charts": {
+        "user-increase": "Croissance mensuelle des utilisateurs",
+        "user-test": "Performances des tests",
+        "total-users": "Tendance mensuelle des utilisateurs totaux"
+      },
+      "table": {
+        "filter": "Filtrer par nom d'utilisateur",
+        "views": "Vues",
+        "result": "Aucun résultat",
+        "column": {
+          "full-name": "nom complet",
+          "role": "rôle"
+        },
+        "actions": {
+          "title": "Actions",
+          "authorization": "autorisation",
+          "block": "bloquer cet utilisateur",
+          "unblock": "débloquer cet utilisateur"
+        },
+        "toast": {
+          "admin-err": "Vous êtes superAdmin, veuillez ne pas annuler votre statut d'administrateur",
+          "auth-err": "Désolé, vous n'êtes pas autorisé",
+          "server": "Désolé, quelque chose a mal tourné",
+          "role-suc": "Vous avez autorisé un rôle avec succès",
+          "super-block-err": "Vous êtes superAdmin, veuillez ne pas vous bloquer vous-même",
+          "block-twice": "Désolé, vous n'êtes pas autorisé ou l'utilisateur a déjà été bloqué, vous ne pouvez pas bloquer le même utilisateur deux fois",
+          "block-suc": "Vous avez bloqué cet utilisateur avec succès",
+          "unblock-err": "Désolé, vous n'êtes pas autorisé ou l'utilisateur n'a pas encore été bloqué",
+          "unblock-suc": "Vous avez débloqué cet utilisateur avec succès"
+        }
+      }
+    }
   }
 }

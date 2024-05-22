@@ -1,12 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { User } from "@clerk/nextjs/server";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
+
 interface usersListType {
   usersList: User[];
   isSuperAdmin: boolean;

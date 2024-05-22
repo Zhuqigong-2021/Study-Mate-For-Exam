@@ -59,11 +59,12 @@ import UserBarChart from "./UserChart/UserBarChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Label } from "./ui/label";
 import { Prisma, Report } from "@prisma/client";
-import { dateFormatter } from "@/app/utils/dateFormatter";
+import Cookie from "js-cookie";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import AllUsers from "./UserDashboard/AllUsers";
 import { UserButton } from "@clerk/nextjs";
 import ReportPieChart from "./UserChart/ReportPieChart";
+import { useTranslations } from "next-intl";
 interface Range {
   min: number;
   max: number;
@@ -116,35 +117,15 @@ export function AdminDashboard({
   const [isClient, setIsClient] = useState(false);
   const [dataMode, setDataMode] = useState(false);
   const [currentTab, setCurrentTab] = useState("dashboard");
-  // const reportRef = useRef<HTMLDivElement>(null);
+  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
+  const d = useTranslations("Dashboard");
 
   const elementRef = useRef(null); // Creates a ref object
   const [width, setWidth] = useState(0);
 
   if (!isAdmin) {
-    redirect("/notes/public");
+    redirect(`/${lang}/notes/public`);
   }
-
-  // useEffect(() => {
-  //   const resizeObserver = new ResizeObserver((entries) => {
-  //     setTimeout(() => {
-  //       for (let entry of entries) {
-  //         // Assuming you want to track the width of the component
-  //         setWidth(entry.contentRect.width);
-  //       }
-  //     }, 2000);
-  //   });
-
-  //   if (elementRef.current) {
-  //     resizeObserver.observe(elementRef.current);
-  //   }
-
-  //   return () => {
-  //     if (elementRef.current) {
-  //       resizeObserver.unobserve(elementRef.current);
-  //     }
-  //   };
-  // }, [dataMode]);
 
   useEffect(() => {
     const element = elementRef.current; // Capture the current ref value
@@ -351,10 +332,10 @@ export function AdminDashboard({
               currentTab == "dashboard"
                 ? "text-foreground"
                 : "text-muted-foreground"
-            } transition-colors hover:text-foreground`}
+            }    transition-colors hover:text-foreground`}
             onClick={() => setCurrentTab("dashboard")}
           >
-            Dashboard
+            <span className="text-nowrap">{d("menu.dashboard")}</span>
           </button>
           <button
             // href="/admin/dashboard/users"
@@ -365,7 +346,7 @@ export function AdminDashboard({
             } transition-colors hover:text-foreground`}
             onClick={() => setCurrentTab("notification")}
           >
-            Notifications
+            {d("menu.notification")}
           </button>
           <button
             // href="/admin/dashboard/users"
@@ -376,7 +357,7 @@ export function AdminDashboard({
                 : "text-muted-foreground"
             } transition-colors hover:text-foreground`}
           >
-            Statistics
+            {d("menu.stats")}
           </button>
           <button
             // href="/admin/dashboard/users"
@@ -387,47 +368,10 @@ export function AdminDashboard({
                 : "text-muted-foreground"
             } transition-colors hover:text-foreground`}
           >
-            Settings
+            {d("menu.settings")}
           </button>
-          {/* <Link
-            href="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Products
-          </Link>
-          <Link
-            href="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Customers
-          </Link>
-          <Link
-            href="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Analytics
-          </Link> */}
         </nav>
-        {/* <Tabs
-          defaultValue="dashboard"
-          className="hidden  flex-col gap-6 bg-transparent text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6"
-        >
-          <Link
-            href="#"
-            className="flex items-center gap-2 text-lg font-semibold md:text-base"
-          >
-            <RxDashboard className="h-6 w-6" />
-            <span className="sr-only">Acme Inc</span>
-          </Link>
-          <TabsList className="grid w-full grid-cols-3 space-x-5 bg-transparent">
-            <TabsTrigger value="dashboard" className="border-none">
-              Dashboard
-            </TabsTrigger>
-            <TabsTrigger value="notification">Notification</TabsTrigger>
-            <TabsTrigger value="users">Users</TabsTrigger>
-          </TabsList>
-          <TabsContent value="account"></TabsContent>
-        </Tabs> */}
+
         <Sheet>
           <SheetTrigger asChild>
             <Button
@@ -441,45 +385,73 @@ export function AdminDashboard({
           </SheetTrigger>
           <SheetContent side="left">
             <nav className="grid gap-6 text-lg font-medium">
-              <Link
+              {/* <Link
                 href="#"
                 className="flex items-center gap-2 text-lg font-semibold"
               >
                 <Package2 className="h-6 w-6" />
                 <span className="sr-only">Acme Inc</span>
-              </Link>
-              <Link href="/admin/dashboard" className="hover:text-foreground">
-                Dashboard
-              </Link>
-              <Link
-                href="/admin/dashboard/users"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Notifications
-              </Link>
+              </Link> */}
               <Link
                 href="#"
-                className="text-muted-foreground hover:text-foreground"
+                className="flex items-center gap-2 text-lg font-semibold md:text-base"
               >
-                Products
+                {(currentTab == "dashboard" || currentTab == "") && (
+                  <RxDashboard className="h-6 w-6 " />
+                )}
+                {currentTab == "notification" && <Mail className="h-6 w-6" />}
+                {currentTab == "statistics" && <PieChart className="h-6 w-6" />}
+                {currentTab == "settings" && <Settings className="h-6 w-6" />}
+                <span className="sr-only">Acme Inc</span>
               </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
+              <button
+                className={`${
+                  currentTab == "dashboard"
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                }   text-left transition-colors hover:text-foreground`}
+                onClick={() => setCurrentTab("dashboard")}
               >
-                Customers
-              </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
+                <span className="text-nowrap">{d("menu.dashboard")}</span>
+              </button>
+              <button
+                // href="/admin/dashboard/users"
+                className={`${
+                  currentTab == "notification"
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                } text-left transition-colors hover:text-foreground`}
+                onClick={() => setCurrentTab("notification")}
               >
-                Analytics
-              </Link>
+                {d("menu.notification")}
+              </button>
+              <button
+                // href="/admin/dashboard/users"
+                onClick={() => setCurrentTab("statistics")}
+                className={`${
+                  currentTab == "statistics"
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                } text-left transition-colors hover:text-foreground`}
+              >
+                {d("menu.stats")}
+              </button>
+              <button
+                // href="/admin/dashboard/users"
+                onClick={() => setCurrentTab("settings")}
+                className={`${
+                  currentTab == "settings"
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                } text-left transition-colors hover:text-foreground`}
+              >
+                {d("menu.settings")}
+              </button>
             </nav>
           </SheetContent>
         </Sheet>
-        <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-          <form className="ml-auto flex-1 sm:flex-initial">
+        <div className=" flex w-full flex-grow items-center justify-end gap-4  md:ml-auto md:gap-2 lg:gap-4">
+          {/* <form className="ml-auto flex-1 sm:flex-initial">
             <div className="relative">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
@@ -488,7 +460,7 @@ export function AdminDashboard({
                 className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
               />
             </div>
-          </form>
+          </form> */}
           <UserButton
             afterSignOutUrl="/"
             appearance={{
@@ -497,22 +469,6 @@ export function AdminDashboard({
               },
             }}
           />
-          {/* <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon" className="rounded-full">
-                <CircleUser className="h-5 w-5" />
-                <span className="sr-only">Toggle user menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu> */}
         </div>
       </header>
 
@@ -521,12 +477,12 @@ export function AdminDashboard({
           <div className="grid gap-2 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
             <Card
               x-chunk="dashboard-01-chunk-0"
-              onClick={() => router.push("/admin/dashboard/users")}
+              onClick={() => router.push(`/${lang}/admin/dashboard/users`)}
               className="rounded-[1rem] "
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium ">
-                  Total Subscribers
+                  {d("pannel.all-users.title")}
                 </CardTitle>
                 {/* <DollarSign className="h-4 w-4 text-muted-foreground" /> */}
                 <Sigma className="h-4 w-4  text-indigo-500" />
@@ -543,14 +499,14 @@ export function AdminDashboard({
                   <span className="font-semibold text-green-500">
                     +{totalMonthlyIncreaseUsers}%{" "}
                   </span>
-                  since this month
+                  {d("pannel.all-users.description")}
                 </p>
               </CardContent>
             </Card>
             <Card x-chunk=" dashboard-01-chunk-1" className="rounded-[1rem]">
               <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Subscriptions
+                  {d("pannel.users.title")}
                 </CardTitle>
                 <Users className="h-4 w-4 text-indigo-500 " />
               </CardHeader>
@@ -562,17 +518,19 @@ export function AdminDashboard({
                   <span className="font-semibold text-green-500">
                     +{totalRecentUsers}
                   </span>{" "}
-                  new users from this month
+                  {d("pannel.users.description")}
                 </p>
               </CardContent>
             </Card>
             <Card
               x-chunk="dashboard-01-chunk-2"
-              onClick={() => router.push("/notes/all")}
+              onClick={() => router.push(`/${lang}/notes/all`)}
               className="rounded-[1rem]"
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Notes</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  {d("pannel.notes.title")}
+                </CardTitle>
                 <CreditCard className="h-4 w-4 text-indigo-500" />
               </CardHeader>
               <CardContent>
@@ -583,18 +541,18 @@ export function AdminDashboard({
                   <span className="font-semibold text-green-500">
                     +{totalMonthlyIncreaseNotes}%
                   </span>{" "}
-                  from last month
+                  {d("pannel.notes.description")}
                 </p>
               </CardContent>
             </Card>
             <Card
               x-chunk="dashboard-01-chunk-3"
-              onClick={() => router.push("/report")}
+              onClick={() => router.push(`/${lang}/report`)}
               className="rounded-[1rem]"
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Test Report
+                  {d("pannel.report.title")}
                 </CardTitle>
                 <Activity className="h-4 w-4 text-indigo-500 " />
               </CardHeader>
@@ -607,7 +565,7 @@ export function AdminDashboard({
                   <span className="font-semibold text-green-500">
                     +{reportsThisMonth}
                   </span>{" "}
-                  since this month
+                  {d("pannel.report.description")}
                 </p>
               </CardContent>
             </Card>
@@ -627,11 +585,11 @@ export function AdminDashboard({
                 }  bg-white`}
               >
                 <div className="grid gap-2">
-                  <CardTitle>Subscribers</CardTitle>
+                  <CardTitle>{d("data.header.title")}</CardTitle>
                   <CardDescription
                     className={`${dataMode ? "" : "text-white"}`}
                   >
-                    User analysis based on month.
+                    {d("data.header.description")}
                   </CardDescription>
                 </div>
                 <Button
@@ -643,7 +601,9 @@ export function AdminDashboard({
                   onClick={() => setDataMode((prev) => !prev)}
                 >
                   <Link href="#">
-                    {!dataMode ? "View Data" : "View Trend"}
+                    {!dataMode
+                      ? d("data.header.view.data")
+                      : d("data.header.view.trend")}
                     <ArrowUpRight className="h-4 w-4" />
                   </Link>
                 </Button>
@@ -659,7 +619,7 @@ export function AdminDashboard({
                   <div className=" gap-4  py-4 md:flex md:justify-between">
                     <div className="w-full rounded-[1rem]  border-none border-gray-300 bg-white p-2 py-4 text-left shadow-sm shadow-gray-300">
                       <h2 className="mb-2 pl-4 text-[15px] font-semibold">
-                        New Users Increase Monthly
+                        {d("data.charts.user-increase")}
                       </h2>
                       <UserBarChart data={chartData} />
                     </div>
@@ -668,7 +628,7 @@ export function AdminDashboard({
                       ref={elementRef}
                     >
                       <h2 className="mb-2 pl-4 text-[15px] font-semibold">
-                        Users Test Performance Distribution
+                        {d("data.charts.user-test")}
                       </h2>
 
                       <ReportPieChart width={width} data={reportData} />
@@ -677,7 +637,7 @@ export function AdminDashboard({
 
                   <div className=" w-full rounded-[1rem]   border-none border-gray-300 bg-white py-4 text-left shadow-sm shadow-gray-300">
                     <h2 className="mb-2  pl-6 text-[15px] font-semibold">
-                      Total Users Monthly trend
+                      {d("data.charts.total-users")}
                     </h2>
                     <UserAreaChart data={chartData} />
                   </div>
@@ -687,7 +647,7 @@ export function AdminDashboard({
             </Card>
             <Card x-chunk="dashboard-01-chunk-5 " className="rounded-[1rem]">
               <CardHeader>
-                {isClient && <CardTitle>Recent Activities</CardTitle>}
+                {isClient && <CardTitle>{d("recent.title")}</CardTitle>}
                 {!isClient && (
                   <Skeleton className="h-5 w-[150px]  bg-stone-200"></Skeleton>
                 )}
@@ -696,8 +656,12 @@ export function AdminDashboard({
                 <Tabs defaultValue="users" className="w-full">
                   {isClient && (
                     <TabsList className="mb-10  grid w-full grid-cols-2 ">
-                      <TabsTrigger value="users">Users</TabsTrigger>
-                      <TabsTrigger value="results">Results</TabsTrigger>
+                      <TabsTrigger value="users">
+                        {d("recent.users")}
+                      </TabsTrigger>
+                      <TabsTrigger value="results">
+                        {d("recent.results")}
+                      </TabsTrigger>
                     </TabsList>
                   )}
                   {!isClient && (

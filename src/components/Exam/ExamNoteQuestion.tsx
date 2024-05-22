@@ -20,10 +20,14 @@ import toast from "react-hot-toast";
 import { RadioGroupItem } from "../ui/radio-group";
 import MutipleChoiceQuestion from "../MutipleChoiceQuestion";
 import { User, auth } from "@clerk/nextjs/server";
-import { getUser } from "@/app/notes/_actions";
-import { fullnameFormatter } from "@/app/utils/fullnameFormatter";
+import Cookie from "js-cookie";
+// import { getUser } from "@/app/notes/_actions";
+// import { fullnameFormatter } from "@/app/utils/fullnameFormatter";
 import { Span } from "next/dist/trace";
 import { Loader2 } from "lucide-react";
+import { getUser } from "@/app/[locale]/notes/_actions";
+import { fullnameFormatter } from "@/app/[locale]/utils/fullnameFormatter";
+import { useTranslations } from "next-intl";
 
 export interface NoteType {
   id: string;
@@ -94,6 +98,8 @@ const ExamNoteQuestion = ({
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE"));
+  const e = useTranslations("Exam");
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -176,7 +182,7 @@ const ExamNoteQuestion = ({
     if (time === 0) {
       localStorage.removeItem("timer");
       router.push(
-        `/exam/${note.id}/result` +
+        `/${lang}/exam/${note.id}/result` +
           "?" +
           createQueryString("correct", correctNumber.toString()) +
           "&" +
@@ -191,7 +197,7 @@ const ExamNoteQuestion = ({
           createQueryString("choiceId", JSON.stringify(selectedChoices)),
       );
 
-      toast.error("Time is up !!!");
+      toast.error(e("ongoing.toast.err"));
     }
     return () => {
       clearInterval(timer);
@@ -205,6 +211,8 @@ const ExamNoteQuestion = ({
     result,
     selectedChoices,
     batch,
+    lang,
+    e,
   ]);
 
   // Save the current timer value to localStorage whenever it changes
@@ -322,18 +330,6 @@ const ExamNoteQuestion = ({
     fetchUser();
   }, [getUserObj]);
 
-  // console.log("noteId:" + id);
-  // console.log("result:" + result);
-  // console.log("choiceId:" + JSON.stringify(selectedChoices));
-  // console.log("batch:" + batch);
-  // console.log("userId:" + note.userId);
-  // console.log("submitted:" + new Date());
-  // useEffect(() => {
-  //   return () => {
-  //     // Clear any intervals or timeouts
-  //     localStorage.removeItem("startTime"); // Optional: Clear only if the exam is completed
-  //   };
-  // }, []);
   const handleSubmitReport = useCallback(async () => {
     try {
       setIsSubmitting(true);
@@ -376,14 +372,14 @@ const ExamNoteQuestion = ({
           }),
         });
         if (!response.ok) {
-          toast.error("Sorry , something is wrong ");
+          toast.error(e("ongoing.toast.server"));
           return;
         }
 
-        toast.success("Congrats, You've finished your exam!");
+        toast.success(e("ongoing.toast.suc"));
 
         router.push(
-          `/exam/${note.id}/result` +
+          `/${lang}/exam/${note.id}/result` +
             "?" +
             createQueryString("correct", correctNumber.toString()) +
             "&" +
@@ -420,13 +416,13 @@ const ExamNoteQuestion = ({
           }),
         });
         if (!response.ok) {
-          toast.error("Sorry , something is wrong ");
+          toast.error(e("ongoing.toast.server"));
           return;
         }
         setIsSubmitting(false);
-        toast.success("Congrats, You've finished your exam!");
+        toast.success(e("ongoing.toast.suc"));
         router.push(
-          `/exam/${note.id}/result` +
+          `/${lang}/exam/${note.id}/result` +
             "?" +
             createQueryString("correct", correctNumber.toString()) +
             "&" +
@@ -444,24 +440,26 @@ const ExamNoteQuestion = ({
 
       localStorage.removeItem("startTime");
     } catch (error) {
-      toast.error("Sorry , something is wrong ");
+      toast.error(e("ongoing.toast.server"));
     }
   }, [
-    batch,
-    correctNumber,
+    startTime,
+    reportList,
     id,
-    note.id,
     note.title,
     note.userId,
-    reportList,
-    result,
-    router,
-    selectedChoices,
-    startTime,
-    totalQuestionNumber,
-    user?.emailAddresses,
+    note.id,
     user?.firstName,
     user?.lastName,
+    user?.emailAddresses,
+    batch,
+    selectedChoices,
+    e,
+    router,
+    lang,
+    correctNumber,
+    totalQuestionNumber,
+    result,
   ]);
   // console.log("emailASddress:" + user?.emailAddresses[0].emailAddress);
   // console.log(fullnameFormatter(user?.firstName, user?.lastName));
@@ -499,10 +497,6 @@ const ExamNoteQuestion = ({
           <Button
             disabled={isSubmitting}
             className="absolute bottom-5 right-5"
-            // onClick={() =>
-            //   alert("result:" + `${(correctNumber / totalQuestionNumber) * 100}%`)
-            // }
-
             onClick={() => {
               handleSubmitReport();
               if (localStorage.getItem("timer"))
@@ -525,10 +519,10 @@ const ExamNoteQuestion = ({
             {isSubmitting ? (
               <span className="flex items-center space-x-2">
                 <Loader2 className=" h-4 w-4 animate-spin" />{" "}
-                <span>Submit</span>
+                <span>{e("ongoing.submit")}</span>
               </span>
             ) : (
-              <span>Submit</span>
+              <span>{e("ongoing.submit")}</span>
             )}
           </Button>
           <CardContent className="absolute right-5 top-5 text-teal-500">

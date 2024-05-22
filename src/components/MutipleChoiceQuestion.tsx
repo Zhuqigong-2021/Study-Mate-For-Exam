@@ -9,7 +9,8 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { processString } from "@/app/utils/processString";
+import { processString } from "@/app/[locale]/utils/processString";
+// import { processString } from "@/app/utils/processString";
 
 interface multipleProps {
   question: QuestionType;

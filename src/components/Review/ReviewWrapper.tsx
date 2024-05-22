@@ -57,3 +57,17 @@ const ReviewWrapper = ({ allNotes }: allNotesProps) => {
 };
 
 export default ReviewWrapper;
+
+interface localeType {
+  locale: string;
+}
+export function getStaticProps({ locale }: localeType) {
+  return {
+    props: {
+      messages: {
+        // ...require(`../../../messages/${locale}.json`),
+        ...require(`../../../messages/${locale}.json`),
+      },
+    },
+  };
+}

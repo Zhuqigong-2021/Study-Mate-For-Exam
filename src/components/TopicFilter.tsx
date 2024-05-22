@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useTransition } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,6 +7,7 @@ import {
 } from "./ui/dropdown-menu";
 import { Check, Eraser, Filter } from "lucide-react";
 import { Button } from "./ui/button";
+import { useTranslations } from "next-intl";
 interface props {
   noteTitle: string[];
   colorClasses: string[];
@@ -24,6 +25,7 @@ const TopicFilter = ({
   setShowMatchingNote,
   setFilterOutNote,
 }: props) => {
+  const r = useTranslations("Report");
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -33,7 +35,7 @@ const TopicFilter = ({
           variant="outline"
         >
           <Filter size={20} />
-          <span>Filter</span>
+          <span>{r("filter.button")}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32">
@@ -73,7 +75,7 @@ const TopicFilter = ({
         >
           <span className="flex items-center space-x-2">
             <Eraser size={12} />
-            <span>clear</span>
+            <span>{r("filter.clear")}</span>
           </span>
         </DropdownMenuItem>
       </DropdownMenuContent>

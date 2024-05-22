@@ -5,7 +5,8 @@ import { Card, CardContent, CardTitle } from "./ui/card";
 import { BookmarkCheck, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { QuestionType, ChoiceType } from "./ReviewNoteQuestion";
-import { processString } from "@/app/utils/processString";
+import { processString } from "@/app/[locale]/utils/processString";
+// import { processString } from "@/app/utils/processString";
 interface propType {
   q: QuestionType;
   index: number;

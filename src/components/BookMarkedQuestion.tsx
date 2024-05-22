@@ -5,8 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { BookmarkCheck } from "lucide-react";
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "next/navigation";
-import EditBookMarkedQuestion from "./EditBookMarkedQuestion";
-import { processString } from "@/app/utils/processString";
+import EditBookMarkedQuestion from "./Bookmark/EditBookMarkedQuestion";
+import { processString } from "@/app/[locale]/utils/processString";
+// import { processString } from "@/app/utils/processString";
 interface noteProps {
   id: string;
   title: string;

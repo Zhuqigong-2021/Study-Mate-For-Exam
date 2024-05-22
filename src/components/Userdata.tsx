@@ -48,9 +48,6 @@ const Userdata = ({ users, userId, totalUsersNumber }: queryProps) => {
   const [offset, setOffset] = useState(0);
   const [limit, setLimit] = useState(10);
   const searchParams = useSearchParams();
-  //   const [currentPage, setCurrentPage] = useState(
-  //     Math.floor(offset / limit) + 1,
-  //   );
 
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();

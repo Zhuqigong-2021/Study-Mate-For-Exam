@@ -45,6 +45,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { useTranslations } from "next-intl";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -78,7 +79,7 @@ export function ReportDataTable<TData extends any, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-
+  const r = useTranslations("Report");
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -124,10 +125,8 @@ export function ReportDataTable<TData extends any, TValue>({
   return (
     <Card className="relative w-full">
       <CardHeader>
-        <CardTitle className="font-bold">Check Your Test Report</CardTitle>
-        <CardDescription>
-          This table below will show all test data
-        </CardDescription>
+        <CardTitle className="font-bold">{r("title")}</CardTitle>
+        <CardDescription>{r("description")}</CardDescription>
         <span className="absolute right-10 top-10 hidden scale-[1.6]  rounded-full bg-neutral-100 p-[0.3rem] font-bold text-teal-500 drop-shadow-sm md:block lg:block">
           <IoMdCheckmarkCircleOutline />
         </span>
@@ -135,7 +134,7 @@ export function ReportDataTable<TData extends any, TValue>({
       <CardContent>
         <div className="flex flex-wrap items-center py-4">
           <Input
-            placeholder="Filter username..."
+            placeholder={r("filter.placeholder")}
             value={
               (table.getColumn("userName")?.getFilterValue() as string) ?? ""
             }
@@ -164,7 +163,7 @@ export function ReportDataTable<TData extends any, TValue>({
                 <span className="scale-[0.8] text-sm font-thin">
                   <Settings2 />
                 </span>
-                <span>Views</span>
+                <span>{r("view")}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -181,7 +180,19 @@ export function ReportDataTable<TData extends any, TValue>({
                         column.toggleVisibility(!!value)
                       }
                     >
-                      {column.id}
+                      {column.id == "result"
+                        ? r("table.result")
+                        : column.id == "userName"
+                          ? r("table.candidate")
+                          : column.id == "noteTitle"
+                            ? r("table.note")
+                            : column.id == "time"
+                              ? r("table.time")
+                              : column.id == "batch"
+                                ? r("table.batch")
+                                : column.id == "submittedAt"
+                                  ? r("table.submit")
+                                  : column.id}
                     </DropdownMenuCheckboxItem>
                   );
                 })}
@@ -250,7 +261,7 @@ export function ReportDataTable<TData extends any, TValue>({
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    {r("filter.result")}
                   </TableCell>
                 </TableRow>
               )}

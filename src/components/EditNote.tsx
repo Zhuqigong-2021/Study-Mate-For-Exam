@@ -15,7 +15,8 @@ import AddEditNoteDialog from "./Note/AddEditNoteDialog";
 import EditNoteQuestion from "./EditNoteQuestion";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { processString } from "@/app/utils/processString";
+import { processString } from "@/app/[locale]/utils/processString";
+// import { processString } from "@/app/utils/processString";
 export interface NoteType {
   id: string;
   title: string;
