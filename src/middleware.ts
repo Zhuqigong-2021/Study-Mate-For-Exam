@@ -16,7 +16,15 @@ export default authMiddleware({
   beforeAuth: (req) => {
     return ItlMiddleware(req);
   },
-  publicRoutes: ["/", "/en", "/fr", "/:locale/sign-in"],
+  ignoredRoutes: ["/((?!api|trpc))(_next.*|.+.[w]+$)"],
+  publicRoutes: [
+    "/",
+    "/en",
+    "/fr",
+    "/:locale/sign-in",
+    "/en/sign-in",
+    "/fr/sign-in",
+  ],
 });
 
 export const config = {
