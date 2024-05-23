@@ -20,8 +20,9 @@ interface ReportProps {
     submittedAt: Date;
   }[];
   isSuperAdmin: boolean;
+  isAdmin: boolean;
 }
-const AllReport = ({ reports, isSuperAdmin }: ReportProps) => {
+const AllReport = ({ reports, isSuperAdmin, isAdmin }: ReportProps) => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -31,7 +32,11 @@ const AllReport = ({ reports, isSuperAdmin }: ReportProps) => {
   return (
     <div>
       {isClient && (
-        <ReportWrapper reports={reports} isSuperAdmin={isSuperAdmin} />
+        <ReportWrapper
+          reports={reports}
+          isSuperAdmin={isSuperAdmin}
+          isAdmin={isAdmin}
+        />
       )}
     </div>
   );

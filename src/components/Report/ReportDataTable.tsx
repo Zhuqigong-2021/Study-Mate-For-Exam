@@ -55,6 +55,7 @@ interface DataTableProps<TData, TValue> {
   setTopicFilter: Dispatch<SetStateAction<any>>;
   setShowMatchingNote: Dispatch<SetStateAction<any>>;
   setFilterOutNote: Dispatch<SetStateAction<any[]>>;
+  isAdmin: boolean;
 }
 
 export function ReportDataTable<TData extends any, TValue>({
@@ -65,6 +66,7 @@ export function ReportDataTable<TData extends any, TValue>({
   setTopicFilter,
   setShowMatchingNote,
   setFilterOutNote,
+  isAdmin,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([
     {
@@ -133,16 +135,18 @@ export function ReportDataTable<TData extends any, TValue>({
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap items-center py-4">
-          <Input
-            placeholder={r("filter.placeholder")}
-            value={
-              (table.getColumn("userName")?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table.getColumn("userName")?.setFilterValue(event.target.value)
-            }
-            className="h-9 max-w-sm lg:mr-3"
-          />
+          {isAdmin && (
+            <Input
+              placeholder={r("filter.placeholder")}
+              value={
+                (table.getColumn("userName")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("userName")?.setFilterValue(event.target.value)
+              }
+              className="h-9 max-w-sm lg:mr-3"
+            />
+          )}
 
           <TopicFilter
             colorClasses={colorClasses}

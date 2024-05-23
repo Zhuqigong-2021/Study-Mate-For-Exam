@@ -58,8 +58,7 @@ export default async function RootLayout({
   } else {
     isAdmin = checkRole("admin");
   }
-  // console.log("isAdmin: " + isAdmin);
-  // className={`${inter.variable} ${open_sans.variable} ${roboto_mono.variable}`}
+
   const messages = await getMessages();
   return (
     <ClerkProvider>

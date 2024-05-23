@@ -38,7 +38,6 @@ export async function POST(req: Request) {
       },
     });
 
-    // console.log("Relevant notes found: ", JSON.stringify(relevantNotes));
     const systemMessage: ChatCompletionMessage = {
       role: "assistant",
       // content: `Note Summaries:\n${relevantNotes

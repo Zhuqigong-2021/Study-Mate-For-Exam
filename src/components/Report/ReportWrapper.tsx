@@ -127,6 +127,7 @@ interface flaggedQuestionsType {
 interface reportProps {
   reports: Report[];
   isSuperAdmin: boolean;
+  isAdmin: boolean;
 }
 type Report = {
   id: string;
@@ -158,7 +159,7 @@ const colorClasses = [
   "bg-blue-400",
 ];
 
-const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
+const ReportWrapper = ({ reports, isSuperAdmin, isAdmin }: reportProps) => {
   const [isClient, setIsClient] = useState(false);
 
   const r = useTranslations("Report");
@@ -505,6 +506,7 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
           setTopicFilter={setTopicFilter}
           setShowMatchingNote={setShowMatchingNote}
           setFilterOutNote={setFilterOutNote}
+          isAdmin={isAdmin}
         />
       )}
     </div>
