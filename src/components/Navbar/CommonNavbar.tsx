@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
+
 import Cookie from "js-cookie";
 import Image from "next/image";
 import { UserButton, useClerk } from "@clerk/nextjs";
@@ -8,12 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Circle, Crown, Globe, Leaf, Moon, Sun } from "lucide-react";
 import AddEditNoteDialog from "@/components/Note/AddEditNoteDialog";
 import Drawer from "./Drawer";
-import {
-  redirect,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { cn } from "@/lib/utils";
 
@@ -39,6 +34,9 @@ import {
 } from "../ui/dropdown-menu";
 
 import { useTranslations } from "next-intl";
+import { Link, redirect } from "@/navigation";
+// import { Link, useRouter } from "@/navigation";
+// import { Link, useRouter, redirect } from "../../navigation";
 // import { setUserRole } from "@/app/admin/dashboard/_actions";
 interface userType {
   userId: string;
@@ -52,6 +50,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
   const [mode, setMode] = useState(false);
   const pathname = usePathname();
   const searchParam = useSearchParams();
+  // alert(pathname);
   // console.log("pathname:" + pathname);
   // console.log("searchParam:" + searchParam);
   const pathParts = pathname.split("/");
@@ -131,8 +130,8 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
   });
 
   const redirectUser = useCallback(() => {
-    router.push(`/${lang}/notes/public`);
-  }, [router, lang]);
+    router.push(`/notes/public`);
+  }, [router]);
   useEffect(() => {
     pusherClient.subscribe("authorize");
     pusherClient.bind(
@@ -168,12 +167,13 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
 
     if (pathParts[1].match(/^[a-z]{2}$/)) {
       // This regex checks if the segment is a two-letter language code
-      pathParts[1] = newLocale; // Change the locale
+      pathParts[1] = newLocale;
+      // Change the locale
     }
-
+    console.log(pathParts);
     // Join the parts back into a new path
     const newPath = pathParts.join("/");
-
+    // alert(newPath);
     return newPath;
   }
 
@@ -192,7 +192,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
       >
         <div className="m-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 ">
           <Link
-            href={`/${lang}/notes/public`}
+            href={`/notes/public`}
             className="flex items-center gap-1 space-x-2"
           >
             <span className="relative flex scale-y-95 font-sans  text-2xl font-black text-slate-800  lg:text-2xl">
@@ -251,13 +251,13 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                             </NavigationMenuLink>
                           </li>
                           <ListItem
-                            href={`/${lang}/exam`}
+                            href={`/exam`}
                             title={t("getting-started.exam.title")}
                           >
                             {t("getting-started.exam.description")}
                           </ListItem>
                           <ListItem
-                            href={`/${lang}/report`}
+                            href={`/report`}
                             title={t("getting-started.report.title")}
                           >
                             {t("getting-started.report.description")}
@@ -273,26 +273,26 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                       <NavigationMenuContent>
                         <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[600px] lg:grid-cols-[1fr_1fr]">
                           <ListItem
-                            href={`/${lang}/notes/public`}
+                            href={`/notes/public`}
                             title={t("taking-notes.notes.title")}
                           >
                             {t("taking-notes.notes.description")}
                           </ListItem>
                           <ListItem
-                            href={`/${lang}/wildcard`}
+                            href={`/wildcard`}
                             title={t("taking-notes.flashcard.title")}
                           >
                             {t("taking-notes.flashcard.description")}
                           </ListItem>
 
                           <ListItem
-                            href={`/${lang}/exam`}
+                            href={`/exam`}
                             title={t("taking-notes.exams.title")}
                           >
                             {t("taking-notes.exams.description")}
                           </ListItem>
                           <ListItem
-                            href={`/${lang}/review`}
+                            href={`/review`}
                             title={t("taking-notes.review.title")}
                           >
                             {t("taking-notes.review.description")}
@@ -303,7 +303,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
 
                     {(isAdmin || admin) && (
                       <Link
-                        href={`/${lang}/admin/dashboard`}
+                        href={`/admin/dashboard`}
                         className="hidden rounded-full bg-teal-50 p-2 shadow-inner  shadow-teal-500   lg:flex "
                       >
                         <svg
@@ -331,19 +331,17 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                       <NavigationMenuContent>
                         <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[600px] lg:grid-cols-[1fr_1fr]">
                           <ListItem
-                            href={`/${lang}/bookmark`}
+                            href={`/bookmark`}
                             title={t("operations.bookmark.title")}
                           >
                             {t("operations.bookmark.description")}
                           </ListItem>
                           <ListItem
-                            href={`${
-                              isAdmin || admin ? `/${lang}/notes/edit` : "#"
-                            }`}
+                            href={`${isAdmin || admin ? `/notes/edit` : "#"}`}
                             title={t("operations.edit-your-questions.title")}
                             onClick={() => {
                               if (isAdmin || admin) {
-                                router.push(`/${lang}/notes/edit`);
+                                router.push(`/notes/edit`);
                               } else {
                                 toast.error(
                                   t("operations.edit-your-questions.error"),
@@ -465,7 +463,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                           } lg:grid-cols-[1fr_1fr]`}
                         >
                           <ListItem
-                            href={`/${lang}/bookmark`}
+                            href={`/bookmark`}
                             title={t("about-us.about.title")}
                           >
                             {t("about-us.about.description")}
@@ -479,7 +477,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                           </ListItem>
                           {(isAdmin || admin) && (
                             <ListItem
-                              href={`/${lang}/admin/dashboard`}
+                              href={`/admin/dashboard`}
                               title={t("about-us.admin.title")}
                               className="shadow-sm shadow-violet-500 "
                             >
@@ -574,6 +572,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                               setLang("en");
 
                               setLocale("en");
+                              // () => router.replace(pathname);
                             }}
                           >
                             <Image
@@ -588,9 +587,15 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
 
                           <DropdownMenuItem
                             className="flex w-full justify-between space-x-2"
+                            // onClick={() => {
+                            //   // setLang("fr");
+                            //   // setLocale("fr");
+
+                            // }}
                             onClick={() => {
                               setLang("fr");
                               setLocale("fr");
+                              // router.replace("/fr/" + pathname);
                             }}
                           >
                             <Image
@@ -612,10 +617,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                           className="hidden   rounded-full bg-white px-8  py-4 text-slate-800 hover:text-white lg:flex"
                           asChild
                         >
-                          <Link href={`/${lang}/notes/public`}>
-                            {" "}
-                            registration
-                          </Link>
+                          <Link href={`/notes/public`}> registration</Link>
                         </Button>
                       </NavigationMenuItem>
                     )}

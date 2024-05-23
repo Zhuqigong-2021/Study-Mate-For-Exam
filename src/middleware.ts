@@ -1,13 +1,14 @@
 import { authMiddleware } from "@clerk/nextjs";
 import createMiddleware from "next-intl/middleware";
-
+import { locales, localePrefix } from "./config";
 const ItlMiddleware = createMiddleware({
   // A list of all locales that are supported
-  locales: ["en", "fr"],
 
+  locales,
+  localePrefix,
   // Used when no locale matches
   defaultLocale: "en",
-  localeDetection: false,
+  localeDetection: true,
 });
 // This example protects all routes including api/trpc routes
 // Please edit this to allow other routes to be public as needed.
@@ -19,8 +20,8 @@ export default authMiddleware({
 
   publicRoutes: [
     "/",
-    "/en",
-    "/fr",
+    // "/en",
+    // "/fr",
     "/:locale",
     "/:locale/sign-in",
     "/en/sign-in",
@@ -35,3 +36,7 @@ export const config = {
     "/(api|trpc)(.*),'/(fr|en)/:path*'",
   ],
 };
+
+// export const config = {
+//   matcher: ["/((?!api|_next|.*\\..*).*)"],
+// };

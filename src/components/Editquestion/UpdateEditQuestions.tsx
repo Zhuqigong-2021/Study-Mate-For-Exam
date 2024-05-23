@@ -134,7 +134,7 @@ const UpdateEditQuestions = ({
   );
   const [isClient, setIsClient] = useState(false);
   const e = useTranslations("Editquestion");
-  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -147,7 +147,7 @@ const UpdateEditQuestions = ({
   const router = useRouter();
 
   if (!isSuperAdmin && !isAdmin) {
-    redirect(`/${lang}/notes/public`);
+    redirect(`/notes/public`);
   }
 
   const deleteQuestion = async (questionId: string | undefined) => {

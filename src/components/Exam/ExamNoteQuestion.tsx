@@ -98,7 +98,7 @@ const ExamNoteQuestion = ({
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE"));
+
   const e = useTranslations("Exam");
   useEffect(() => {
     setIsClient(true);
@@ -182,7 +182,7 @@ const ExamNoteQuestion = ({
     if (time === 0) {
       localStorage.removeItem("timer");
       router.push(
-        `/${lang}/exam/${note.id}/result` +
+        `/exam/${note.id}/result` +
           "?" +
           createQueryString("correct", correctNumber.toString()) +
           "&" +
@@ -211,7 +211,6 @@ const ExamNoteQuestion = ({
     result,
     selectedChoices,
     batch,
-    lang,
     e,
   ]);
 
@@ -379,7 +378,7 @@ const ExamNoteQuestion = ({
         toast.success(e("ongoing.toast.suc"));
 
         router.push(
-          `/${lang}/exam/${note.id}/result` +
+          `/exam/${note.id}/result` +
             "?" +
             createQueryString("correct", correctNumber.toString()) +
             "&" +
@@ -422,7 +421,7 @@ const ExamNoteQuestion = ({
         setIsSubmitting(false);
         toast.success(e("ongoing.toast.suc"));
         router.push(
-          `/${lang}/exam/${note.id}/result` +
+          `/exam/${note.id}/result` +
             "?" +
             createQueryString("correct", correctNumber.toString()) +
             "&" +
@@ -456,7 +455,7 @@ const ExamNoteQuestion = ({
     selectedChoices,
     e,
     router,
-    lang,
+
     correctNumber,
     totalQuestionNumber,
     result,

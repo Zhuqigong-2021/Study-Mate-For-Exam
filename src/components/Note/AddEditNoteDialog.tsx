@@ -20,15 +20,16 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LoadingButton from "../ui/loading-button";
-import { redirect, useRouter } from "next/navigation";
+// import { redirect, useRouter } from "next/navigation";
 import { Note, Question } from "@prisma/client";
 import { useState } from "react";
 import { Router } from "next/router";
 import { Button } from "../ui/button";
-import Link from "next/link";
+
 import toast from "react-hot-toast";
-import Cookie from "js-cookie";
+
 import { useTranslations } from "next-intl";
+import { Link, useRouter } from "@/navigation";
 
 interface AddEditNoteDialogProps {
   open: boolean;
@@ -46,7 +47,7 @@ export default function AddEditNoteDialog({
   // questions,
 }: AddEditNoteDialogProps) {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
-  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
+
   const router = useRouter();
   const h = useTranslations("Homepage");
   const form = useForm<CreateNoteSchema>({
@@ -61,16 +62,16 @@ export default function AddEditNoteDialog({
     //alert(JSON.stringify(input));
     try {
       if (noteToEdit) {
-        const response = await fetch(`/${lang}/api/notes`, {
+        const response = await fetch(`/api/notes`, {
           method: "PUT",
           body: JSON.stringify({ id: noteToEdit.id, ...input }),
         });
         if (!response.ok) {
           throw Error("Status code: " + response.status + "edit");
         }
-        router.push(`/${lang}/notes/${noteToEdit.id}`);
+        router.push(`/notes/${noteToEdit.id}`);
       } else {
-        const response = await fetch(`/${lang}/api/notes`, {
+        const response = await fetch(`/api/notes`, {
           method: "POST",
           body: JSON.stringify(input),
         });
@@ -78,7 +79,7 @@ export default function AddEditNoteDialog({
           throw Error("Status code: " + response.status + "post");
         } else {
           form.reset();
-          router.replace(`/${lang}/notes`);
+          router.replace(`/notes`);
         }
       }
 
@@ -94,7 +95,7 @@ export default function AddEditNoteDialog({
     if (!noteToEdit) return;
     setDeleteInProgress(true);
     try {
-      const response = await fetch(`/${lang}/api/notes`, {
+      const response = await fetch(`/api/notes`, {
         method: "DELETE",
         body: JSON.stringify({
           id: noteToEdit.id,
@@ -173,7 +174,7 @@ export default function AddEditNoteDialog({
               )}
               {noteToEdit && (
                 <Button asChild variant="outline">
-                  <Link href={`/${lang}/notes/${noteToEdit.id}/review `}>
+                  <Link href={`/notes/${noteToEdit.id}/review `}>
                     {h("note.review")}
                   </Link>
                 </Button>

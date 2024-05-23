@@ -261,6 +261,7 @@
         "number": "{count,plural,=0 {pas d'article} =1 {1 article} other {# articles}}"
       }
     },
+    "back": "Retour",
     "metadata": "Study Mate - Révision"
   },
   "Flashcard": {

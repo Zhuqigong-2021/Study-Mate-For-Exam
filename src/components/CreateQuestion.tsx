@@ -12,13 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import React, { useState } from "react";
@@ -59,7 +53,7 @@ const CreateQuestion = ({ params }: idProps) => {
   const { id } = params;
   const router = useRouter();
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
-  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
+
   const {
     register,
     reset,
@@ -213,7 +207,7 @@ const CreateQuestion = ({ params }: idProps) => {
               type="button"
               variant="outline"
               onClick={() => {
-                router.replace(`/${lang}/notes/public`);
+                router.replace(`/notes/public`);
               }}
             >
               {a("add-question.cancel")}
@@ -229,7 +223,7 @@ const CreateQuestion = ({ params }: idProps) => {
               </LoadingButton>
               <Button
                 type="button"
-                onClick={() => router.replace(`/${lang}/review/${id}`)}
+                onClick={() => router.replace(`/review/${id}`)}
               >
                 <LuEye />
               </Button>

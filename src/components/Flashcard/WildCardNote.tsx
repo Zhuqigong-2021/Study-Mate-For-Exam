@@ -47,7 +47,7 @@ const WildCardNote = ({ note }: NoteProps) => {
   const [user, setUser] = useState<User>();
   const [isClient, setIsClient] = useState(false);
   const format = useFormatter();
-  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE"));
+
   const f = useTranslations("Flashcard");
   useEffect(() => {
     setIsClient(true);
@@ -87,7 +87,7 @@ const WildCardNote = ({ note }: NoteProps) => {
       {isClient && (
         <Card
           className="relative cursor-pointer rounded-xl  border-none bg-white shadow-gray-400  transition-shadow hover:shadow-gray-600 "
-          onClick={() => router.push(`/${lang}/wildcard/${note.id}`)}
+          onClick={() => router.push(`/wildcard/${note.id}`)}
         >
           <CardHeader className="relative h-32 ">
             <CardTitle className="scale-y-90  text-lg text-gray-800">

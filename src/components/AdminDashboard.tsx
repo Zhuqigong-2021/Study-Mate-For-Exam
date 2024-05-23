@@ -117,14 +117,14 @@ export function AdminDashboard({
   const [isClient, setIsClient] = useState(false);
   const [dataMode, setDataMode] = useState(false);
   const [currentTab, setCurrentTab] = useState("dashboard");
-  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
+  // const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
   const d = useTranslations("Dashboard");
 
   const elementRef = useRef(null); // Creates a ref object
   const [width, setWidth] = useState(0);
 
   if (!isAdmin) {
-    redirect(`/${lang}/notes/public`);
+    redirect(`/notes/public`);
   }
 
   useEffect(() => {
@@ -477,7 +477,7 @@ export function AdminDashboard({
           <div className="grid gap-2 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
             <Card
               x-chunk="dashboard-01-chunk-0"
-              onClick={() => router.push(`/${lang}/admin/dashboard/users`)}
+              onClick={() => router.push(`/admin/dashboard/users`)}
               className="rounded-[1rem] "
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -524,7 +524,7 @@ export function AdminDashboard({
             </Card>
             <Card
               x-chunk="dashboard-01-chunk-2"
-              onClick={() => router.push(`/${lang}/notes/all`)}
+              onClick={() => router.push(`/notes/all`)}
               className="rounded-[1rem]"
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -547,7 +547,7 @@ export function AdminDashboard({
             </Card>
             <Card
               x-chunk="dashboard-01-chunk-3"
-              onClick={() => router.push(`/${lang}/report`)}
+              onClick={() => router.push(`/report`)}
               className="rounded-[1rem]"
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

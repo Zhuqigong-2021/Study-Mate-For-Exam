@@ -71,7 +71,7 @@ export default function SetTimer({
   const [timeValue, setTimeValue] = useState<number>(0);
   const [batchValue, setBatchValue] = useState<number | string>(-1);
   const [error, setError] = useState("");
-  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE"));
+
   const e = useTranslations("Exam");
   const divideIntoBatches = (questionsCopy: any, batchSize: number) => {
     const batches: any[] = [];
@@ -226,7 +226,7 @@ export default function SetTimer({
             >
               <Link
                 href={{
-                  pathname: `/${lang}/exam/${noteToEdit?.id}/ongoing`,
+                  pathname: `/exam/${noteToEdit?.id}/ongoing`,
                   query: {
                     timer: timeValue,
                     batch:

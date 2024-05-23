@@ -23,12 +23,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Cookie from "js-cookie";
 import { SkeletonCard } from "../SkeletonCard";
 import { useClerk } from "@clerk/nextjs";
 import { pusherClient } from "@/lib/pusher";
 import { useTranslations } from "next-intl";
+import { usePathname } from "@/navigation";
 
 type Note = {
   userId: string;
@@ -82,6 +83,7 @@ const FilterNote = ({
   // }, [isAdmin]);
 
   const pathname = usePathname();
+  console.log("path:" + pathname);
   const router = useRouter();
   const selecedNotes = !userInput
     ? allNotes
@@ -193,9 +195,9 @@ const FilterNote = ({
         {(isAdmin || admin) && isClient && (
           <div className="my-5 flex items-center justify-between">
             <span className=" font-bold">
-              {pathname && pathname === `/${lang}/notes`
+              {pathname && pathname === `/notes`
                 ? h("card.cardTitle.title.mine")
-                : pathname && pathname === `/${lang}/notes/public`
+                : pathname && pathname === `/notes/public`
                   ? h("card.cardTitle.title.public")
                   : h("card.cardTitle.title.all")}
             </span>
@@ -217,24 +219,22 @@ const FilterNote = ({
                   <DropdownMenuItem
                     onClick={() => {
                       router.refresh();
-                      router.push(`/${lang}/notes/public`);
+                      router.push(`/notes/public`);
                     }}
                   >
                     <div className="flex w-full items-center justify-between">
                       <span>{h("card.cardTitle.filter.options.public")}</span>{" "}
-                      {pathname && pathname === `/${lang}/notes/public` ? (
+                      {pathname && pathname === `/notes/public` ? (
                         <Check size={15} />
                       ) : (
                         ""
                       )}
                     </div>
                   </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => router.push(`/${lang}/notes`)}
-                  >
+                  <DropdownMenuItem onClick={() => router.push(`/notes`)}>
                     <div className="flex w-full items-center justify-between">
                       <span>{h("card.cardTitle.filter.options.mine")}</span>{" "}
-                      {pathname && pathname === `/${lang}/notes` ? (
+                      {pathname && pathname === `/notes` ? (
                         <Check size={15} />
                       ) : (
                         ""
@@ -242,12 +242,10 @@ const FilterNote = ({
                     </div>
                   </DropdownMenuItem>
                   {isSuperAdmin && (
-                    <DropdownMenuItem
-                      onClick={() => router.push(`/${lang}/notes/all`)}
-                    >
+                    <DropdownMenuItem onClick={() => router.push(`/notes/all`)}>
                       <div className="flex w-full items-center justify-between">
                         <span>{h("card.cardTitle.filter.options.all")}</span>{" "}
-                        {pathname && pathname === `/${lang}/notes/all` ? (
+                        {pathname && pathname === `/notes/all` ? (
                           <Check size={15} />
                         ) : (
                           ""

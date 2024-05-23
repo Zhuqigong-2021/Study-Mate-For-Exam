@@ -8,7 +8,7 @@ import Cookie from "js-cookie";
 import { useTranslations } from "next-intl";
 const FrontResult = () => {
   const searchParams = useSearchParams();
-  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE"));
+
   const e = useTranslations("Exam");
   let wrong =
     Number(searchParams.get("total")) - Number(searchParams.get("correct"));
@@ -33,7 +33,7 @@ const FrontResult = () => {
       <Button asChild className="mt-4">
         <Link
           href={{
-            pathname: `/${lang}/exam/${searchParams.get("id")}/report`,
+            pathname: `/exam/${searchParams.get("id")}/report`,
             query: {
               noteId: `${id}`,
               choiceId: `${searchParams.get("choiceId")}`,

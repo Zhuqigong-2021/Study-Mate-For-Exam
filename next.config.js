@@ -25,4 +25,3 @@ const nextConfig = {
 };
 
 module.exports = withPWA(withNextIntl(nextConfig));
-// module.exports = withNextIntl(withPWA(nextConfig));

@@ -10,6 +10,8 @@ import { checkMetaDataRole, checkRole } from "./utils/roles/role";
 import { getMessages } from "next-intl/server";
 import CommonNavbar from "@/components/Navbar/CommonNavbar";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { locales } from "@/navigation";
 
 export const metadata: Metadata = {
   manifest: "/manifest.json",
@@ -46,6 +48,9 @@ export default async function RootLayout({
   params: { locale: string };
 }) {
   const { userId } = auth();
+  if (!locales.includes(locale)) {
+    notFound();
+  }
   // const isAdmin = checkRole("admin");
   let isAdmin;
   if (userId) {
@@ -57,23 +62,23 @@ export default async function RootLayout({
   // className={`${inter.variable} ${open_sans.variable} ${roboto_mono.variable}`}
   const messages = await getMessages();
   return (
-    <NextIntlClientProvider messages={messages} locale={locale}>
-      <ClerkProvider>
-        <Head>
-          <meta name="apple-mobile-web-app-capable" content="yes" />
-          <meta name="google" content="notranslate" />
-          <link rel="icon" href="/images/favicon.ico" sizes="any" />
-          <link
-            href="/img-512.png"
-            sizes="512x512"
-            rel="apple-touch-startup-image"
-          />
-        </Head>
+    <ClerkProvider>
+      <Head>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="google" content="notranslate" />
+        <link rel="icon" href="/images/favicon.ico" sizes="any" />
+        <link
+          href="/img-512.png"
+          sizes="512x512"
+          rel="apple-touch-startup-image"
+        />
+      </Head>
 
-        <html
-          lang={locale}
-          className={`${inter.variable} ${roboto_mono.variable}`}
-        >
+      <html
+        lang={locale}
+        className={`${inter.variable} ${roboto_mono.variable}`}
+      >
+        <NextIntlClientProvider messages={messages} locale={locale}>
           <body
             className="bg-slate-50 font-sans"
             suppressHydrationWarning={true}
@@ -82,8 +87,8 @@ export default async function RootLayout({
             {children}
             <Toaster />
           </body>
-        </html>
-      </ClerkProvider>
-    </NextIntlClientProvider>
+        </NextIntlClientProvider>
+      </html>
+    </ClerkProvider>
   );
 }

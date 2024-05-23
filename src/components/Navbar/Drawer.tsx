@@ -155,7 +155,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && (
             <SheetClose asChild>
               <Link
-                href={`/${lang}/admin/dashboard`}
+                href={`/admin/dashboard`}
                 className="underline-offset-1 hover:scale-105 hover:text-teal-700"
               >
                 {d("admin")}
@@ -164,7 +164,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           )}
           <SheetClose asChild>
             <Link
-              href={`/${lang}/notes/public`}
+              href={`/notes/public`}
               className="underline-offset-1 hover:scale-105 hover:text-teal-700"
             >
               {d("note")}
@@ -173,7 +173,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           {isAdmin && (
             <SheetClose asChild>
               <Link
-                href={`/${lang}/notes/edit`}
+                href={`/notes/edit`}
                 className="underline-offset-1 hover:scale-105 hover:text-teal-700"
               >
                 {d("edit")}
@@ -182,7 +182,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           )}
           <SheetClose asChild>
             <Link
-              href={`/${lang}/wildcard`}
+              href={`/wildcard`}
               className="underline-offset-1 hover:scale-105 hover:text-teal-700"
             >
               {d("flashcard")}
@@ -190,7 +190,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           </SheetClose>
           <SheetClose asChild>
             <Link
-              href={`/${lang}/report`}
+              href={`/report`}
               className="underline-offset-1 hover:scale-105 hover:text-teal-700"
             >
               {d("reports")}
@@ -198,7 +198,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           </SheetClose>
           <SheetClose asChild>
             <Link
-              href={`/${lang}/exam`}
+              href={`/exam`}
               className="underline-offset-1 hover:scale-105 hover:text-teal-700"
             >
               {d("exam")}
@@ -206,7 +206,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           </SheetClose>
           <SheetClose asChild>
             <Link
-              href={`/${lang}/bookmark`}
+              href={`/bookmark`}
               className="underline-offset-1 hover:scale-105 hover:text-teal-700"
             >
               {d("bookmark")}
@@ -214,7 +214,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           </SheetClose>
           <SheetClose asChild>
             <Link
-              href={`/${lang}/review`}
+              href={`/review`}
               className="underline-offset-1 hover:scale-105 hover:text-teal-700"
             >
               {d("review")}

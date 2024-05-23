@@ -19,8 +19,7 @@ export default function Home({ userId, isAdmin }: userIdProps) {
   // const { userId } = auth();
   // if (userId) redirect("/notes/public");
   const pathname = usePathname();
-  const pathParts = pathname.split("/");
-  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? pathParts[1]);
+
   return (
     <main
       className="-z-30 m-auto flex h-screen  justify-center gap-5 overflow-hidden  "
@@ -65,7 +64,7 @@ export default function Home({ userId, isAdmin }: userIdProps) {
             className="hover:white w-44 rounded-full bg-gradient-to-br from-teal-300 from-10% via-teal-400 via-30% to-teal-600 to-90% text-white shadow-lg shadow-[#9d824f]"
             // className="hover:white bg-gradient-to-bar   rounded-full from-teal-300 from-10% via-teal-400 via-30% to-teal-600 to-90% text-white shadow-lg shadow-[#9d824f]"
           >
-            <Link href={`${lang}/notes/public`}> Start using now</Link>
+            <Link href={`/notes/public`}> Start using now</Link>
           </Button>
         </div>
 

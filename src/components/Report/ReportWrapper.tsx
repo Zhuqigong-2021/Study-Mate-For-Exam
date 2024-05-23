@@ -160,7 +160,7 @@ const colorClasses = [
 
 const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
   const [isClient, setIsClient] = useState(false);
-  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
+
   const r = useTranslations("Report");
 
   useEffect(() => {
@@ -368,7 +368,7 @@ const ReportWrapper = ({ reports, isSuperAdmin }: reportProps) => {
                 >
                   <Link
                     href={{
-                      pathname: `/${lang}/exam/${report.noteId}/report`,
+                      pathname: `/exam/${report.noteId}/report`,
                       query: {
                         noteId: `${report.noteId}`,
                         choiceId: JSON.stringify(report.choiceId),

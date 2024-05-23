@@ -48,7 +48,7 @@ interface mappedDataType {
 const ReportNoteQuestion = ({ note, mappedData }: NoteProps) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const router = useRouter();
-  const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE"));
+
   const e = useTranslations("Exam");
 
   return (
@@ -116,7 +116,7 @@ const ReportNoteQuestion = ({ note, mappedData }: NoteProps) => {
         <CardFooter className="py-4"></CardFooter>
 
         <Button asChild className="absolute bottom-5 right-10">
-          <Link href={`/${lang}/exam`}>{e("report.back")}</Link>
+          <Link href={`/exam`}>{e("report.back")}</Link>
         </Button>
       </Card>
     </>
