@@ -143,7 +143,7 @@ export function AllDataTable<TData extends any, TValue>({
                 .getColumn("questionTitle")
                 ?.setFilterValue(event.target.value)
             }
-            className="h-9 max-w-sm lg:mr-3 dark:border-none   dark:shadow-sm dark:shadow-violet-300"
+            className="h-9 max-w-sm lg:mr-3 dark:border-none   dark:shadow-sm dark:shadow-violet-300 dark:focus-visible:ring-indigo-400"
           />
 
           <TopicFilter

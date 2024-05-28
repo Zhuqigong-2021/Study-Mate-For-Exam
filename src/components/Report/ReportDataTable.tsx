@@ -144,7 +144,7 @@ export function ReportDataTable<TData extends any, TValue>({
               onChange={(event) =>
                 table.getColumn("userName")?.setFilterValue(event.target.value)
               }
-              className="h-9 max-w-sm lg:mr-3 dark:border-none dark:shadow-sm dark:shadow-violet-200"
+              className="h-9 max-w-sm lg:mr-3 dark:border-none dark:shadow-sm dark:shadow-violet-200 dark:focus-visible:ring-indigo-400"
             />
           )}
 

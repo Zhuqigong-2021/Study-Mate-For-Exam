@@ -117,7 +117,7 @@ export default function SetTimer({
   ] as const;
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="dark:circle-sm-exam dark:border-none">
+      <DialogContent className="dark:circle-sm-note dark:border-none">
         <DialogHeader>
           <DialogTitle>{e("timer.title")}</DialogTitle>
         </DialogHeader>
@@ -165,6 +165,7 @@ export default function SetTimer({
                         <SelectItem
                           key={key}
                           value={e(`timer.action.timer.option.${key}.value`)}
+                          className="dark:focus-visible:ring-indigo-400"
                         >
                           {e(`timer.action.timer.option.${key}.title`)}
                         </SelectItem>
@@ -188,7 +189,7 @@ export default function SetTimer({
                   <SelectTrigger id="framework1">
                     <SelectValue
                       placeholder={e("timer.placeholder")}
-                      className="border-transparent focus:border-transparent focus:ring-0"
+                      className="border-transparent focus:border-transparent focus:ring-0 "
                     />
                   </SelectTrigger>
                   <SelectContent position="popper">
