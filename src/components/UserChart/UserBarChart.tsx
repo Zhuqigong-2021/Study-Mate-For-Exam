@@ -10,7 +10,8 @@ import {
   Rectangle,
   CartesianGrid,
 } from "recharts";
-
+import { useTheme } from "next-themes";
+import { TooltipProps } from "recharts";
 interface dataType {
   data: {
     name: string;
@@ -18,6 +19,47 @@ interface dataType {
     // total: number;
   }[];
 }
+
+interface CustomTooltipProps extends TooltipProps<any, any> {}
+
+const CustomTooltip: React.FC<CustomTooltipProps> = ({
+  active,
+  payload,
+  label,
+}) => {
+  const { theme } = useTheme();
+
+  if (active && payload && payload.length) {
+    return (
+      <div
+        style={{
+          // backgroundColor: theme === "dark" ? "#1f2937" : "#fff",
+          padding: "5px",
+          border: "none",
+          borderRadius: "4px",
+          boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+          zIndex: 100,
+        }}
+        className="bg-white dark:bg-background"
+      >
+        <p
+          className={`text-sm ${
+            theme === "dark" ? "text-white" : "text-gray-800"
+          }`}
+        >
+          {label}
+        </p>
+        <p
+          className={`text-sm ${
+            theme === "dark" ? "text-white" : "text-gray-800"
+          }`}
+        >{`new: ${payload[0].value}`}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
 const UserBarChart = memo(({ data }: dataType) => {
   // console.log(data);
   // Find the index of the first non-zero 'new' value
@@ -26,6 +68,7 @@ const UserBarChart = memo(({ data }: dataType) => {
     (acc, item, index) => (item.new > 0 ? index : acc),
     0,
   );
+  const { theme } = useTheme();
   // Slice the data from the first non-zero index
   const filteredData = data.slice(firstNonZeroIndex, lastNonZeroIndex + 1);
 
@@ -72,8 +115,16 @@ const UserBarChart = memo(({ data }: dataType) => {
         /> */}
         <defs>
           <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="15%" stopOpacity={0.8} stopColor="#4f46e5" />
-            <stop offset="85%" stopColor="#a78bfa" stopOpacity={0.8} />
+            <stop
+              offset="15%"
+              stopOpacity={0.8}
+              stopColor={`${theme === "dark" ? "#4338ca" : "#4f46e5"}`}
+            />
+            <stop
+              offset="85%"
+              stopColor={`${theme === "dark" ? "#a78bfa" : "#a78bfa"}`}
+              stopOpacity={0.8}
+            />
           </linearGradient>
         </defs>
         <XAxis
@@ -91,8 +142,8 @@ const UserBarChart = memo(({ data }: dataType) => {
           domain={[0, "dataMax"]}
           ticks={Array.from({ length: tickCount }, (_, i) => i)}
         />
-        <Tooltip />
-        {/* <Legend /> */}
+        <Tooltip content={<CustomTooltip />} />
+
         <Bar
           dataKey="new"
           // fill="#2dd4bf"

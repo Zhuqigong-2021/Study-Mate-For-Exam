@@ -48,6 +48,7 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 
 export type Question = {
   id: string;
@@ -130,7 +131,7 @@ const ShowModal = ({
   const [filterOutNote, setFilterOutNote] = useState<any[]>([]);
   const [showMatchingNote, setShowMatchingNote] = useState("");
   const [topicFilter, setTopicFilter] = useState("");
-
+  const { theme } = useTheme();
   const [showAddEditQuestionDialog, setShowAddEditQuestionDialog] =
     useState(false);
   const router = useRouter();
@@ -175,6 +176,7 @@ const ShowModal = ({
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
+          className="dark:border-stone-400"
           onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Select row"
         />
@@ -323,11 +325,14 @@ const ShowModal = ({
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent
+                align="end"
+                className="dark:border-stone-800"
+              >
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="mx-auto my-1 h-[1px] w-full bg-gray-300 dark:bg-stone-600" />
                 <DropdownMenuItem
-                  className="w-full"
+                  className="w-full dark:text-stone-400"
                   onClick={() => {
                     navigator.clipboard.writeText(question.questionTitle);
                     toast.success(b("table.action.toast.copy-title"));
@@ -337,7 +342,7 @@ const ShowModal = ({
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
-                  className="w-full"
+                  className="w-full dark:text-stone-400"
                   onClick={() => {
                     setSelectedQuestion(question);
                     setShowAddEditQuestionDialog(true);
@@ -350,12 +355,12 @@ const ShowModal = ({
                   <AlertDialogTrigger asChild>
                     <Button
                       variant="outline"
-                      className="inline w-full border-none p-0 px-2 text-left"
+                      className="inline w-full border-none p-0 px-2 text-left dark:text-stone-400"
                     >
                       <span>{b("table.action.unbookmark")}</span>
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent>
+                  <AlertDialogContent className="circle-sm-exam dark:border-none">
                     <AlertDialogHeader>
                       <AlertDialogTitle>
                         {b("table.action.verify.title")}
@@ -365,11 +370,11 @@ const ShowModal = ({
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>
+                      <AlertDialogCancel className="dark:border-none dark:shadow-sm dark:shadow-red-200">
                         {b("table.action.verify.cancel")}
                       </AlertDialogCancel>
                       <AlertDialogAction
-                        className="bg-red-500 text-white"
+                        className="bg-red-500 text-white dark:border-none dark:shadow-sm dark:shadow-red-300 dark:hover:text-red-500"
                         onClick={() => {
                           if (isSuperAdmin) {
                             bookMarked(question.id);

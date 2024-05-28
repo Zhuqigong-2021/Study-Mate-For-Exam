@@ -35,6 +35,8 @@ import {
 
 import { useTranslations } from "next-intl";
 import { Link, redirect } from "@/navigation";
+import { useTheme } from "next-themes";
+import { dark } from "@clerk/themes";
 // import { Link, useRouter } from "@/navigation";
 // import { Link, useRouter, redirect } from "../../navigation";
 // import { setUserRole } from "@/app/admin/dashboard/_actions";
@@ -47,12 +49,10 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
 
   const [isClient, setIsClient] = useState(false);
-  const [mode, setMode] = useState(false);
+
   const pathname = usePathname();
   const searchParam = useSearchParams();
-  // alert(pathname);
-  // console.log("pathname:" + pathname);
-  // console.log("searchParam:" + searchParam);
+  const { theme, setTheme } = useTheme();
   const pathParts = pathname.split("/");
   const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? pathParts[1]);
   const router = useRouter();
@@ -170,7 +170,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
       pathParts[1] = newLocale;
       // Change the locale
     }
-    console.log(pathParts);
+
     // Join the parts back into a new path
     const newPath = pathParts.join("/");
     // alert(newPath);
@@ -186,16 +186,23 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
   return (
     <>
       <div
-        className={`bg-white p-4 shadow ${
-          isSticky ? "fixed left-0 top-0 z-50 w-full" : ""
-        }`}
+        className={` bg-white p-4  shadow ${
+          pathname == `/${lang}`
+            ? "bg-white dark:text-slate-800"
+            : "text-foreground  dark:bg-background"
+        } ${isSticky ? "fixed left-0 top-0 z-50 w-full" : ""}`}
       >
         <div className="m-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 ">
           <Link
             href={`/notes/public`}
             className="flex items-center gap-1 space-x-2"
           >
-            <span className="relative flex scale-y-95 font-sans  text-2xl font-black text-slate-800  lg:text-2xl">
+            {/* text-slate-800 */}
+            <span
+              className={`${
+                pathname == `/${lang}` ? "text-slate-800" : "dark:text-white"
+              } relative  flex scale-y-95 font-sans text-2xl  font-black  text-slate-800 lg:text-2xl `}
+            >
               Study Mate{" "}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -222,13 +229,13 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
             isClient && (
               <div className="flex flex-grow  justify-end lg:justify-center ">
                 <NavigationMenu className="flex w-full ">
-                  <NavigationMenuList className="flex w-full  items-center gap-2  font-semibold">
+                  <NavigationMenuList className="flex w-full  items-center gap-2  font-semibold ">
                     <NavigationMenuItem className="hidden  font-light   lg:flex ">
-                      <NavigationMenuTrigger>
+                      <NavigationMenuTrigger className="dark:text-teal-50 ">
                         {t("getting-started.title")}
                       </NavigationMenuTrigger>
-                      <NavigationMenuContent className="z-50">
-                        <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[550px] lg:grid-cols-[.75fr_1fr]">
+                      <NavigationMenuContent className="z-50 border-none dark:border-none  ">
+                        <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[550px] lg:grid-cols-[.75fr_1fr] ">
                           <li className="row-span-2">
                             <NavigationMenuLink asChild>
                               <a
@@ -267,7 +274,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                     </NavigationMenuItem>
 
                     <NavigationMenuItem className="z-50  hidden  font-light  lg:flex ">
-                      <NavigationMenuTrigger>
+                      <NavigationMenuTrigger className="dark:text-teal-50">
                         {t("taking-notes.title")}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
@@ -304,19 +311,23 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                     {(isAdmin || admin) && (
                       <Link
                         href={`/admin/dashboard`}
-                        className="hidden rounded-full bg-teal-50 p-2 shadow-inner  shadow-teal-500   lg:flex "
+                        className="hidden rounded-full bg-teal-50 p-2 shadow-inner shadow-teal-500  lg:flex   dark:bg-background "
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
                           height="24"
                           viewBox="0 0 24 24"
-                          fill="#14b8a6"
-                          stroke="white"
-                          strokeWidth="2"
+                          fill={
+                            isClient && theme === "dark" ? "#14b8a6" : "#14b8a6"
+                          }
+                          stroke={
+                            isClient && theme === "dark" ? "white" : "white"
+                          }
+                          strokeWidth={isClient && theme === "dark" ? 1 : 2}
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          className="lucide lucide-leaf  rotate-12"
+                          className="lucide lucide-leaf  rotate-12  "
                         >
                           <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
                           <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
@@ -325,7 +336,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                     )}
 
                     <NavigationMenuItem className="hidden  font-light   lg:flex ">
-                      <NavigationMenuTrigger>
+                      <NavigationMenuTrigger className="dark:text-teal-50">
                         {t("operations.title")}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
@@ -453,7 +464,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                     </NavigationMenuItem>
 
                     <NavigationMenuItem className="hidden  font-light   lg:flex ">
-                      <NavigationMenuTrigger>
+                      <NavigationMenuTrigger className="dark:text-teal-50">
                         {t("about-us.title")}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
@@ -475,7 +486,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                           <ListItem title={t("about-us.statement.title")}>
                             {t("about-us.statement.description")}
                           </ListItem>
-                          {(isAdmin || admin) && (
+                          {/* {(isAdmin || admin) && (
                             <ListItem
                               href={`/admin/dashboard`}
                               title={t("about-us.admin.title")}
@@ -483,7 +494,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                             >
                               <span>{t("about-us.admin.description")}</span>
                             </ListItem>
-                          )}
+                          )} */}
                         </ul>
                       </NavigationMenuContent>
                     </NavigationMenuItem>
@@ -500,28 +511,39 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                 <NavigationMenu>
                   <NavigationMenuList>
                     <NavigationMenuItem className=" hidden xl:flex lg:flex">
-                      {!mode && (
+                      {isClient && (
                         <Moon
-                          size={23}
-                          strokeWidth="1.5"
-                          stroke="#57534e"
-                          onClick={() => setMode((prev) => (prev = !prev))}
+                          size={24}
+                          // strokeWidth="1.5"
+                          stroke="none"
+                          // stroke="white"
+                          // fill="#5eead4"
+                          fill="#fefce8"
+                          // onClick={() => setMode((prev) => (prev = !prev))}
+                          // className="rotate-0 scale-100 transition-all dark:hidden dark:-rotate-90 dark:scale-0"
+                          className=" hidden translate-x-1 dark:block dark:scale-100"
+                          style={{
+                            filter: "drop-shadow(2px 2px 5px #ccfbf1)",
+                            WebkitFilter: "drop-shadow(2px 2px 5px #ccfbf1)",
+                          }}
+                          onClick={() => setTheme("light")}
                         />
                       )}
-
-                      {mode && (
+                      {/* dark:block dark:rotate-0 dark:scale-100 */}
+                      {isClient && (
                         <div
-                          className="blur-1 h-[1.15rem]  w-[1.15rem]   rounded-full bg-gradient-to-t from-amber-400 to-amber-200 "
+                          className="blur-1   h-[1.15rem] w-[1.15rem] rotate-90 scale-100 rounded-full bg-gradient-to-t from-amber-400 to-amber-200 transition-all  dark:hidden dark:rotate-0 dark:scale-0"
                           style={{ boxShadow: "0px 0px 18px #fef08a" }}
-                          onClick={() => setMode(false)}
+                          onClick={() => setTheme("dark")}
                         ></div>
                       )}
+                      <span className="sr-only">Toggle theme</span>
                     </NavigationMenuItem>
 
                     <NavigationMenuItem className="relative hidden px-3  xl:flex lg:flex">
                       <IoIosNotificationsOutline
                         size={28}
-                        className="text-stone-700"
+                        className="text-stone-700 dark:text-white/95"
                       />
                       <div className="absolute right-[0.75rem] top-0 h-2 w-2 rounded-full bg-rose-500"></div>
                     </NavigationMenuItem>
@@ -530,6 +552,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                       <UserButton
                         afterSignOutUrl="/"
                         appearance={{
+                          baseTheme: theme === "dark" ? dark : undefined,
                           elements: {
                             avatarBox: { width: "2rem", height: "2rem" },
                           },
@@ -656,7 +679,9 @@ const ListItem = React.forwardRef<
           )}
           {...props}
         >
-          <div className="text-sm font-medium leading-none">{title}</div>
+          <div className="text-sm font-medium leading-none  dark:text-teal-100">
+            {title}
+          </div>
           <div className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
           </div>

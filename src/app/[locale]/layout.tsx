@@ -12,6 +12,7 @@ import CommonNavbar from "@/components/Navbar/CommonNavbar";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { locales } from "@/navigation";
+import { ThemeProvider } from "../ThemeProvider";
 
 export const metadata: Metadata = {
   manifest: "/manifest.json",
@@ -62,7 +63,7 @@ export default async function RootLayout({
   const messages = await getMessages();
   return (
     <ClerkProvider>
-      <Head>
+      <head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="google" content="notranslate" />
         <link rel="icon" href="/images/favicon.ico" sizes="any" />
@@ -71,20 +72,23 @@ export default async function RootLayout({
           sizes="512x512"
           rel="apple-touch-startup-image"
         />
-      </Head>
+      </head>
 
       <html
         lang={locale}
         className={`${inter.variable} ${roboto_mono.variable}`}
+        suppressHydrationWarning={true}
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
           <body
-            className="bg-slate-50 font-sans"
+            className="bg-slate-50 font-sans dark:bg-background"
             suppressHydrationWarning={true}
           >
-            <CommonNavbar isAdmin={isAdmin} userId={userId ? userId : ""} />
-            {children}
-            <Toaster />
+            <ThemeProvider attribute="class">
+              <CommonNavbar isAdmin={isAdmin} userId={userId ? userId : ""} />
+              {children}
+              <Toaster />
+            </ThemeProvider>
           </body>
         </NextIntlClientProvider>
       </html>

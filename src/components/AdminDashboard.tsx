@@ -19,7 +19,7 @@ import {
   Sigma,
   Users,
 } from "lucide-react";
-
+import { dark } from "@clerk/themes";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -65,6 +65,7 @@ import AllUsers from "./UserDashboard/AllUsers";
 import { UserButton } from "@clerk/nextjs";
 import ReportPieChart from "./UserChart/ReportPieChart";
 import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 interface Range {
   min: number;
   max: number;
@@ -117,8 +118,10 @@ export function AdminDashboard({
   const [isClient, setIsClient] = useState(false);
   const [dataMode, setDataMode] = useState(false);
   const [currentTab, setCurrentTab] = useState("dashboard");
+
   // const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
   const d = useTranslations("Dashboard");
+  const { theme } = useTheme();
 
   const elementRef = useRef(null); // Creates a ref object
   const [width, setWidth] = useState(0);
@@ -129,6 +132,7 @@ export function AdminDashboard({
 
   useEffect(() => {
     const element = elementRef.current; // Capture the current ref value
+
     const resizeObserver = new ResizeObserver((entries) => {
       setTimeout(() => {
         for (let entry of entries) {
@@ -312,8 +316,8 @@ export function AdminDashboard({
   // console.log(reportData);
 
   return (
-    <div className="my-5 flex min-h-[900px] w-full max-w-[84rem]  flex-col overflow-hidden rounded-[1.5rem]  border shadow-md">
-      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+    <div className="dark:circle-lg my-5 flex min-h-[900px] w-full  max-w-[84rem] flex-col overflow-hidden  rounded-[1.5rem] border shadow-md dark:border-none">
+      <header className="dark:class sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 dark:border-none dark:shadow-sm dark:shadow-gray-700">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link
             href="#"
@@ -464,6 +468,7 @@ export function AdminDashboard({
           <UserButton
             afterSignOutUrl="/"
             appearance={{
+              baseTheme: theme === "dark" ? dark : undefined,
               elements: {
                 avatarBox: { width: "2rem", height: "2rem" },
               },
@@ -473,12 +478,12 @@ export function AdminDashboard({
       </header>
 
       {currentTab === "dashboard" && (
-        <main className="flex flex-1 flex-col  gap-2  bg-neutral-50 p-4 md:gap-4 md:p-8">
+        <main className="flex flex-1 flex-col  gap-2  bg-neutral-50 p-4 md:gap-4 md:p-8 dark:bg-black/25">
           <div className="grid gap-2 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
             <Card
               x-chunk="dashboard-01-chunk-0"
               onClick={() => router.push(`/admin/dashboard/users`)}
-              className="rounded-[1rem] "
+              className="dark:glass rounded-[1rem] dark:shadow-sm dark:shadow-violet-200"
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium ">
@@ -496,14 +501,17 @@ export function AdminDashboard({
                   />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  <span className="font-semibold text-green-500">
+                  <span className="font-semibold text-green-500 dark:text-teal-300">
                     +{totalMonthlyIncreaseUsers}%{" "}
                   </span>
                   {d("pannel.all-users.description")}
                 </p>
               </CardContent>
             </Card>
-            <Card x-chunk=" dashboard-01-chunk-1" className="rounded-[1rem]">
+            <Card
+              x-chunk=" dashboard-01-chunk-1"
+              className="dark:glass rounded-[1rem] dark:shadow-sm dark:shadow-violet-200"
+            >
               <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   {d("pannel.users.title")}
@@ -515,7 +523,7 @@ export function AdminDashboard({
                   <CountUp start={0} end={totalRecentUsers ?? 0} duration={3} />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  <span className="font-semibold text-green-500">
+                  <span className="font-semibold text-green-500 dark:text-teal-300">
                     +{totalRecentUsers}
                   </span>{" "}
                   {d("pannel.users.description")}
@@ -525,7 +533,7 @@ export function AdminDashboard({
             <Card
               x-chunk="dashboard-01-chunk-2"
               onClick={() => router.push(`/notes/all`)}
-              className="rounded-[1rem]"
+              className="dark:glass rounded-[1rem] dark:shadow-sm dark:shadow-violet-200"
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
@@ -538,7 +546,7 @@ export function AdminDashboard({
                   <CountUp start={0} end={notesTotal} duration={1.5} />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  <span className="font-semibold text-green-500">
+                  <span className="font-semibold text-green-500 dark:text-teal-300">
                     +{totalMonthlyIncreaseNotes}%
                   </span>{" "}
                   {d("pannel.notes.description")}
@@ -548,7 +556,7 @@ export function AdminDashboard({
             <Card
               x-chunk="dashboard-01-chunk-3"
               onClick={() => router.push(`/report`)}
-              className="rounded-[1rem]"
+              className="dark:glass rounded-[1rem] dark:shadow-sm dark:shadow-violet-200"
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
@@ -562,7 +570,7 @@ export function AdminDashboard({
                   <CountUp start={0} end={reportsNumber} duration={1.5} />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  <span className="font-semibold text-green-500">
+                  <span className="font-semibold text-green-500 dark:text-teal-300">
                     +{reportsThisMonth}
                   </span>{" "}
                   {d("pannel.report.description")}
@@ -573,16 +581,18 @@ export function AdminDashboard({
           <div className="grid gap-2    md:grid-cols-2 md:gap-4 xl:grid-cols-3 lg:grid-cols-3">
             <Card
               className={`overflow-hidden rounded-[1rem] border-none ${
-                dataMode ? "bg-white" : "bg-neutral-50"
+                dataMode
+                  ? "bg-white dark:bg-background dark:shadow-sm dark:shadow-violet-200"
+                  : "bg-neutral-50 dark:bg-transparent"
               }  xl:col-span-2`}
               x-chunk="dashboard-01-chunk-4 "
             >
               <CardHeader
                 className={`flex flex-row flex-wrap items-center rounded-[1rem] ${
                   dataMode
-                    ? "border-none"
-                    : "border-none bg-gradient-to-r from-violet-400 to-indigo-400 text-white shadow-sm shadow-gray-300"
-                }  bg-white`}
+                    ? "border-none dark:bg-background"
+                    : "border-none bg-gradient-to-r from-violet-400 to-indigo-400 text-white shadow-sm shadow-gray-300 "
+                }  bg-white `}
               >
                 <div className="grid gap-2">
                   <CardTitle>{d("data.header.title")}</CardTitle>
@@ -596,7 +606,9 @@ export function AdminDashboard({
                   asChild
                   size="sm"
                   className={`ml-auto gap-1 rounded-full px-4 ${
-                    dataMode ? "" : "bg-white text-indigo-600"
+                    dataMode
+                      ? "dark:bg-background dark:text-foreground dark:shadow-sm dark:shadow-indigo-200 dark:hover:text-background"
+                      : "bg-white text-indigo-600"
                   }`}
                   onClick={() => setDataMode((prev) => !prev)}
                 >
@@ -616,18 +628,18 @@ export function AdminDashboard({
               )}
               {!dataMode && (
                 <>
-                  <div className=" gap-4  py-4 md:flex md:justify-between">
-                    <div className="w-full rounded-[1rem]  border-none border-gray-300 bg-white p-2 py-4 text-left shadow-sm shadow-gray-300">
-                      <h2 className="mb-2 pl-4 text-[15px] font-semibold">
+                  <div className=" gap-4  py-4 md:flex md:justify-between dark:px-1">
+                    <div className="dark:glass w-full  rounded-[1rem] border-none border-gray-300 bg-white p-2 py-4 text-left shadow-sm shadow-gray-300  dark:shadow-violet-300">
+                      <h2 className="mb-2 pl-4 text-[15px] font-semibold dark:text-violet-100">
                         {d("data.charts.user-increase")}
                       </h2>
                       <UserBarChart data={chartData} />
                     </div>
                     <div
-                      className="mt-4 w-full rounded-[1rem] border-none border-gray-300 bg-white p-2 py-4 text-left shadow-sm shadow-gray-300 md:mt-0 "
+                      className="dark:glass mt-4 w-full rounded-[1rem] border-none border-gray-300 bg-white p-2 py-4 text-left shadow-sm shadow-gray-300 md:mt-0 dark:shadow-violet-300"
                       ref={elementRef}
                     >
-                      <h2 className="mb-2 pl-4 text-[15px] font-semibold">
+                      <h2 className="mb-2 pl-4 text-[15px] font-semibold dark:text-violet-100">
                         {d("data.charts.user-test")}
                       </h2>
 
@@ -635,17 +647,22 @@ export function AdminDashboard({
                     </div>
                   </div>
 
-                  <div className=" w-full rounded-[1rem]   border-none border-gray-300 bg-white py-4 text-left shadow-sm shadow-gray-300">
-                    <h2 className="mb-2  pl-6 text-[15px] font-semibold">
-                      {d("data.charts.total-users")}
-                    </h2>
-                    <UserAreaChart data={chartData} />
+                  <div className="dark:p-1">
+                    <div className="  dark:glass w-full  rounded-[1rem] border-none border-gray-300 bg-white py-4 text-left  shadow-sm  shadow-gray-300 dark:shadow-violet-300 ">
+                      <h2 className="mb-2  pl-6 text-[15px] font-semibold dark:text-violet-100">
+                        {d("data.charts.total-users")}
+                      </h2>
+                      <UserAreaChart data={chartData} />
+                    </div>
                   </div>
                 </>
               )}
               {/* </CardContent> */}
             </Card>
-            <Card x-chunk="dashboard-01-chunk-5 " className="rounded-[1rem]">
+            <Card
+              x-chunk="dashboard-01-chunk-5 "
+              className=" dark:glass rounded-[1rem] dark:shadow-sm  dark:shadow-violet-200 "
+            >
               <CardHeader>
                 {isClient && <CardTitle>{d("recent.title")}</CardTitle>}
                 {!isClient && (
@@ -656,10 +673,16 @@ export function AdminDashboard({
                 <Tabs defaultValue="users" className="w-full">
                   {isClient && (
                     <TabsList className="mb-10  grid w-full grid-cols-2 ">
-                      <TabsTrigger value="users">
+                      <TabsTrigger
+                        value="users"
+                        className="  dark:focus:bg-indigo-500 dark:data-[state=active]:bg-indigo-500"
+                      >
                         {d("recent.users")}
                       </TabsTrigger>
-                      <TabsTrigger value="results">
+                      <TabsTrigger
+                        value="results"
+                        className="dark:focus:bg-indigo-500 dark:data-[state=active]:bg-indigo-500"
+                      >
                         {d("recent.results")}
                       </TabsTrigger>
                     </TabsList>
@@ -726,7 +749,7 @@ export function AdminDashboard({
                                   <TooltipProvider>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
-                                        <button className="m-0 inline rounded-none border-none  bg-transparent bg-white  p-0 text-sm text-muted-foreground shadow-none hover:bg-transparent hover:bg-white hover:text-sm hover:text-muted-foreground hover:shadow-none focus:outline-none focus:ring-0">
+                                        <button className="m-0 inline rounded-none border-none bg-white  p-0   text-sm text-muted-foreground shadow-none hover:bg-transparent hover:bg-white hover:text-sm hover:text-muted-foreground hover:shadow-none focus:outline-none focus:ring-0 dark:border-none dark:bg-transparent dark:hover:bg-transparent">
                                           {" "}
                                           {shortenString(
                                             user.emailAddresses
@@ -822,10 +845,14 @@ export function AdminDashboard({
                                   styles={buildStyles({
                                     textColor:
                                       Number(report.result) == 100
-                                        ? "#14b8a6"
+                                        ? theme == "dark"
+                                          ? "#99f6e4"
+                                          : "#14b8a6"
                                         : Number(report.result) == 0
                                           ? "#f87171"
-                                          : "#404040",
+                                          : theme == "dark"
+                                            ? "#f7f7f7"
+                                            : "#404040",
                                     // rotation: 0.05,
                                     textSize: "28px",
                                     pathColor:
@@ -851,7 +878,7 @@ export function AdminDashboard({
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         {/* {report.userId} */}
-                                        <button className="m-0 inline rounded-none border-none  bg-transparent bg-white  p-0 text-sm text-muted-foreground shadow-none hover:bg-transparent hover:bg-white hover:text-sm hover:text-muted-foreground hover:shadow-none focus:outline-none focus:ring-0">
+                                        <button className="m-0 inline rounded-none border-none  bg-transparent bg-white  p-0 text-sm text-muted-foreground shadow-none hover:bg-transparent hover:bg-white hover:text-sm hover:text-muted-foreground hover:shadow-none focus:outline-none focus:ring-0 dark:bg-transparent dark:hover:bg-transparent">
                                           {shortenString(report.userEmail)}
                                         </button>
                                       </TooltipTrigger>

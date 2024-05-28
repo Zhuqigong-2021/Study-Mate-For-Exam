@@ -54,7 +54,7 @@ const ReportNoteQuestion = ({ note, mappedData }: NoteProps) => {
   return (
     <>
       <Card
-        className="relative cursor-pointer pb-10 transition-shadow hover:shadow-lg"
+        className="relative cursor-pointer pb-10 transition-shadow hover:shadow-lg dark:border-none dark:shadow-md dark:shadow-teal-200 dark:hover:shadow-teal-200"
         onClick={() => setShowAddEditNoteDialog(true)}
       >
         <CardHeader>
@@ -86,12 +86,12 @@ const ReportNoteQuestion = ({ note, mappedData }: NoteProps) => {
                       //   className={`border-grey-600  relative my-2 flex h-[40px] items-center rounded-md border  text-left hover:shadow-lg ${
                       //     answer ? "bg-green-50" : ""
                       //   }`}
-                      className={`border-grey-600 relative my-2 flex min-h-[40px] items-center rounded-md  border pb-0 text-left hover:shadow-lg 
+                      className={`border-grey-600 relative my-2 flex min-h-[40px] items-center rounded-md  border pb-0 text-left hover:shadow-lg dark:border-stone-600 
                       ${
                         answer
-                          ? "bg-green-50"
+                          ? "bg-green-50 dark:text-background"
                           : selectedChoiceIds?.includes(c.id)
-                            ? "bg-red-50"
+                            ? "bg-red-50 dark:text-background"
                             : ""
                       }`}
                     >
@@ -115,7 +115,10 @@ const ReportNoteQuestion = ({ note, mappedData }: NoteProps) => {
         </CardHeader>
         <CardFooter className="py-4"></CardFooter>
 
-        <Button asChild className="absolute bottom-5 right-10">
+        <Button
+          asChild
+          className="absolute bottom-5 right-10 dark:border-none dark:bg-transparent dark:text-teal-300 dark:shadow-md dark:shadow-teal-300 dark:hover:bg-background dark:hover:text-teal-200 dark:hover:shadow-lg dark:hover:shadow-teal-300"
+        >
           <Link href={`/exam`}>{e("report.back")}</Link>
         </Button>
       </Card>

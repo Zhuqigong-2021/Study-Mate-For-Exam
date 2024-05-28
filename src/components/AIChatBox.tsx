@@ -44,7 +44,7 @@ export default function AIChatBox({ open, onClose }: AIChatBoxProps) {
   return (
     <div
       className={cn(
-        "bottom-0 right-0 z-10 w-full max-w-[500px] p-1 xl:right-36",
+        " bottom-0 right-0 z-10 w-full max-w-[500px] p-1 xl:right-36 ",
         open ? "fixed" : "hidden",
       )}
     >
@@ -54,7 +54,7 @@ export default function AIChatBox({ open, onClose }: AIChatBoxProps) {
       >
         <XCircle size={25} />
       </button>
-      <div className="flex h-[600px] flex-col rounded border bg-background shadow-xl">
+      <div className="dark:circle-sm-note flex h-[600px] flex-col rounded border bg-background shadow-xl dark:border-none">
         <div
           className="no-scrollbar mt-7 h-full overflow-y-auto  p-2"
           ref={scrollRef}
@@ -102,7 +102,10 @@ export default function AIChatBox({ open, onClose }: AIChatBoxProps) {
             placeholder="Say something..."
             ref={inputRef}
           />
-          <Button type="submit" className="bg-slate-900 text-white">
+          <Button
+            type="submit"
+            className="bg-slate-900 text-white dark:border-none dark:bg-background dark:text-teal-300 dark:shadow-sm dark:shadow-teal-300  dark:hover:bg-background dark:hover:text-teal-500 dark:hover:shadow-md dark:hover:shadow-teal-200"
+          >
             Send{" "}
           </Button>
         </form>

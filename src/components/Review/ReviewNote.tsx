@@ -86,11 +86,11 @@ const ReviewNote = ({ note }: NoteProps) => {
     <>
       {isClient && (
         <Card
-          className="relative cursor-pointer   rounded-xl border-none bg-white shadow-gray-400  transition-shadow hover:shadow-gray-600"
+          className="relative cursor-pointer   rounded-xl border-none bg-white shadow-gray-400  transition-shadow hover:shadow-gray-600  dark:bg-background dark:shadow-teal-500 dark:hover:shadow-md dark:hover:shadow-teal-200"
           onClick={() => router.push(`/review/${note.id}`)}
         >
           <CardHeader className="relative h-32 ">
-            <CardTitle className="scale-y-90  text-lg text-gray-800">
+            <CardTitle className="scale-y-90  text-lg text-gray-800 dark:text-foreground">
               {note.title}
             </CardTitle>
 
@@ -118,7 +118,7 @@ const ReviewNote = ({ note }: NoteProps) => {
               ) : (
                 <Loader2
                   size={23}
-                  className="animate-spin rounded-full border border-white bg-gray-100 text-teal-600"
+                  className="animate-spin rounded-full border border-white bg-gray-100 text-teal-600 dark:border-none dark:bg-transparent dark:text-teal-300"
                 />
               )}
               <CardDescription className="text-xs">

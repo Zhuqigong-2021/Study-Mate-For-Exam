@@ -10,7 +10,7 @@ export default function AIChatButton() {
     <>
       <Button
         onClick={() => setChatBoxOpen(true)}
-        className="flex h-14 w-14 flex-col items-center justify-center rounded-full bg-teal-600 "
+        className="flex h-14 w-14 flex-col items-center justify-center rounded-full bg-teal-600 dark:border-none dark:bg-background dark:text-green-500 dark:shadow-md dark:shadow-green-500 dark:hover:bg-background dark:hover:shadow-lg dark:hover:shadow-green-400"
       >
         <Bot size={30} className="p-0" />
       </Button>

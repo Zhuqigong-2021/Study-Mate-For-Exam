@@ -108,7 +108,6 @@ export default async function Dashboard() {
   });
   let notesTotal = await prisma.note.count({});
   let reportsNumber = await prisma.report.count({});
- 
 
   // Helper function to determine if a date is in the current month
   function isDateInCurrentMonth(date: Date) {
@@ -131,7 +130,7 @@ export default async function Dashboard() {
   const numberOfNotesCreatedThisMonth = countNotesCreatedThisMonth(allNotes);
 
   return (
-    <div className="flex w-full flex-col items-center justify-center bg-slate-50">
+    <div className=" flex w-full flex-col items-center justify-center bg-slate-50  dark:bg-background">
       <AdminDashboard
         users={JSON.stringify(users)}
         userId={userId}

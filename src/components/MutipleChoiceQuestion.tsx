@@ -97,7 +97,7 @@ const MutipleChoiceQuestion = ({
         {isAdmin && !isLoading && (
           <BookmarkCheck
             className={`${
-              isFlagged ? " text-teal-600" : "text-black"
+              isFlagged ? " text-teal-600" : "text-black dark:text-foreground"
             } absolute   -left-6 top-1 `}
             onClick={() => bookMarked(question.id, isFlagged)}
           />
@@ -119,7 +119,7 @@ const MutipleChoiceQuestion = ({
         return (
           <CardContent
             key={c.id}
-            className={`border-grey-600  relative my-2 flex min-h-[40px] items-center rounded-md border py-2  text-left  `}
+            className={`border-grey-600  relative my-2 flex min-h-[40px] items-center rounded-md border py-2  text-left  dark:border-stone-600`}
           >
             <input
               type="checkbox"
@@ -129,7 +129,9 @@ const MutipleChoiceQuestion = ({
               onChange={() => handleCheckboxChange(c.id)}
             />
 
-            <span>{choiceLetter + "." + processString(c.content)}</span>
+            <span className="dark:border-stone-600">
+              {choiceLetter + "." + processString(c.content)}
+            </span>
             {/* <input
               className="absolute top-[50%] -translate-y-[50%]"
               // className={`absolute  top-[50%] -translate-y-[50%] ${

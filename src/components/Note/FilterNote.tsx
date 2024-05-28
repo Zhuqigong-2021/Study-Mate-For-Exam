@@ -11,6 +11,7 @@ import { FormSchema, formSchema } from "@/lib/validation/note";
 import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import Image from "next/image";
 import Notebackground from "../../assets/notesearch.png";
+import Polorbackground from "../../assets/test.png";
 import NotFound from "../../assets/NOTFOUNDFinal.png";
 
 import {
@@ -30,6 +31,7 @@ import { useClerk } from "@clerk/nextjs";
 import { pusherClient } from "@/lib/pusher";
 import { useTranslations } from "next-intl";
 import { usePathname } from "@/navigation";
+import { useTheme } from "next-themes";
 
 type Note = {
   userId: string;
@@ -69,6 +71,7 @@ const FilterNote = ({
   const [isSticky, setIsSticky] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [admin, setAdmin] = useState("");
+  const { theme } = useTheme();
   const { signOut } = useClerk();
   const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
 
@@ -83,7 +86,7 @@ const FilterNote = ({
   // }, [isAdmin]);
 
   const pathname = usePathname();
-  console.log("path:" + pathname);
+
   const router = useRouter();
   const selecedNotes = !userInput
     ? allNotes
@@ -151,12 +154,22 @@ const FilterNote = ({
   return (
     <>
       <div className="absolute left-0 right-0 top-[4.6rem]   flex h-[24rem] w-full items-center justify-center bg-teal-500/40">
-        <Image
-          src={Notebackground}
-          alt="note background"
-          placeholder="blur"
-          className=" absolute left-0 right-0   top-0 flex  h-[24rem] w-full items-center justify-center object-cover opacity-90 "
-        />
+        {isClient && theme === "dark" && (
+          <Image
+            src={Polorbackground}
+            alt="note background"
+            placeholder="blur"
+            className=" absolute left-0 right-0   top-0 flex  h-[24rem] w-full items-center justify-center object-cover opacity-90 "
+          />
+        )}
+        {isClient && theme !== "dark" && (
+          <Image
+            src={Notebackground}
+            alt="note background"
+            placeholder="blur"
+            className=" absolute left-0 right-0   top-0 flex  h-[24rem] w-full items-center justify-center object-cover opacity-90 "
+          />
+        )}
         <div className="relative  mx-4 flex h-10 w-full justify-center  md:w-1/2">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -179,7 +192,7 @@ const FilterNote = ({
               <Button
                 type="submit"
                 // asChild
-                className="absolute bottom-0 right-0 top-0 z-[1] bg-white   px-3 text-black hover:text-white"
+                className="absolute bottom-0 right-0 top-0 z-[1] scale-95   bg-white px-3 text-black hover:text-white"
               >
                 <Search size={25} />
               </Button>
@@ -190,7 +203,7 @@ const FilterNote = ({
       <div
         className={`${
           isSticky ? "mt-[29.6rem]" : "mt-[25rem]"
-        } max-w-7xl  bg-slate-50 `}
+        } max-w-7xl  bg-slate-50 dark:bg-background`}
       >
         {(isAdmin || admin) && isClient && (
           <div className="my-5 flex items-center justify-between">
@@ -215,7 +228,7 @@ const FilterNote = ({
                   <DropdownMenuLabel>
                     {h("card.cardTitle.filter.title")}
                   </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
+                  <DropdownMenuSeparator className="mx-auto my-1 h-[1px] w-full bg-gray-300 dark:bg-stone-600" />
                   <DropdownMenuItem
                     onClick={() => {
                       router.refresh();

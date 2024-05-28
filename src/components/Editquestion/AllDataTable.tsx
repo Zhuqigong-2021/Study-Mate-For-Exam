@@ -75,6 +75,10 @@ export function AllDataTable<TData extends any, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0, //initial page index
+    pageSize: 5, //default page size
+  });
   const e = useTranslations("Editquestion");
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -91,6 +95,9 @@ export function AllDataTable<TData extends any, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    initialState: {
+      pagination,
+    },
     state: {
       sorting,
       columnFilters,
@@ -115,11 +122,11 @@ export function AllDataTable<TData extends any, TValue>({
     // ... more color classes
   ];
   return (
-    <Card className="relative w-full">
+    <Card className="relative w-full dark:border-none   dark:shadow-md dark:shadow-violet-300">
       <CardHeader>
         <CardTitle className="font-bold">{e("title")}</CardTitle>
         <CardDescription>{e("description")}</CardDescription>
-        <span className="absolute right-10 top-10 hidden scale-[1.6]  rounded-full bg-neutral-100 p-[0.3rem] text-neutral-800 drop-shadow-sm md:block lg:block">
+        <span className="absolute right-10 top-10 hidden scale-[1.6]  rounded-full bg-neutral-100 p-[0.3rem] text-neutral-800 drop-shadow-sm md:block lg:block dark:bg-transparent dark:text-teal-400 dark:shadow-sm dark:shadow-teal-200">
           <MdOutlineEdit />
         </span>
       </CardHeader>
@@ -136,7 +143,7 @@ export function AllDataTable<TData extends any, TValue>({
                 .getColumn("questionTitle")
                 ?.setFilterValue(event.target.value)
             }
-            className="h-9 max-w-sm lg:mr-3"
+            className="h-9 max-w-sm lg:mr-3 dark:border-none   dark:shadow-sm dark:shadow-violet-300"
           />
 
           <TopicFilter
@@ -153,7 +160,7 @@ export function AllDataTable<TData extends any, TValue>({
               <Button
                 variant="outline"
                 size={"sm"}
-                className="ml-auto mt-1 space-x-1 md:mt-0"
+                className="ml-auto mt-1 space-x-1 md:mt-0 dark:border-none   dark:shadow-sm dark:shadow-violet-300"
               >
                 <span className="scale-[0.8] text-sm font-thin">
                   <Settings2 />
@@ -189,16 +196,19 @@ export function AllDataTable<TData extends any, TValue>({
           </DropdownMenu>
         </div>
         {/* table */}
-        <div className="rounded-md border">
+        <div className=" overflow-hidden rounded-md border dark:border-none dark:shadow-sm dark:shadow-violet-200">
           <Table>
-            <TableHeader>
+            <TableHeader className=" dark:border-stone-600 dark:bg-indigo-500">
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
+                <TableRow
+                  key={headerGroup.id}
+                  className=" dark:border-stone-800 "
+                >
                   {headerGroup.headers.map((header, index) => {
                     return (
                       <TableHead
                         key={header.id}
-                        className="relative"
+                        className="relative dark:border-stone-800 dark:text-foreground"
                         colSpan={header.colSpan}
                         style={{
                           position: "relative",
@@ -233,6 +243,7 @@ export function AllDataTable<TData extends any, TValue>({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
+                    className=" dark:border-stone-800 dark:text-stone-400"
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>

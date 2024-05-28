@@ -51,6 +51,7 @@ import { AllDataTable } from "./AllDataTable";
 import EditSelectQuestion from "./EditSelectQuestion";
 import Cookie from "js-cookie";
 import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 
 export type Question = {
   id: string;
@@ -132,6 +133,7 @@ const UpdateEditQuestions = ({
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
     null,
   );
+  const { theme } = useTheme();
   const [isClient, setIsClient] = useState(false);
   const e = useTranslations("Editquestion");
 
@@ -188,6 +190,7 @@ const UpdateEditQuestions = ({
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
+          className="dark:border-stone-400"
           onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Select row"
         />
@@ -339,14 +342,14 @@ const UpdateEditQuestions = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="flex flex-col items-start"
+                className="flex flex-col items-start dark:border-stone-800"
               >
                 <DropdownMenuLabel className="w-full">
                   Actions
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="mx-auto my-1 h-[1px] w-full bg-gray-300 dark:bg-stone-600" />
                 <DropdownMenuItem
-                  className="w-full"
+                  className="w-full dark:text-stone-400"
                   onClick={() => {
                     navigator.clipboard.writeText(question.id);
                     toast.success(e("table.action.toast.copyId"));
@@ -355,7 +358,7 @@ const UpdateEditQuestions = ({
                   {e("table.action.copyId")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  className="w-full"
+                  className="w-full dark:text-stone-400"
                   onClick={() => {
                     navigator.clipboard.writeText(question.comment);
                     toast.success(e("table.action.toast.copy-comment"));
@@ -364,7 +367,7 @@ const UpdateEditQuestions = ({
                   {e("table.action.copy-comment")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  className="w-full"
+                  className="w-full dark:text-stone-400"
                   onClick={() => {
                     navigator.clipboard.writeText(question.questionTitle);
                     toast.success(e("table.action.toast.copy-title"));
@@ -374,7 +377,7 @@ const UpdateEditQuestions = ({
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
-                  className="w-full"
+                  className="w-full dark:text-stone-400"
                   onClick={() => {
                     setSelectedQuestion(question);
                     setShowAddEditQuestionDialog(true);
@@ -387,12 +390,12 @@ const UpdateEditQuestions = ({
                   <AlertDialogTrigger asChild>
                     <Button
                       variant="outline"
-                      className="inline w-full border-none p-0 px-2 text-left"
+                      className="inline w-full border-none p-0 px-2 text-left dark:text-stone-400"
                     >
                       {e("table.action.delete")}
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent>
+                  <AlertDialogContent className="circle-sm-exam dark:border-none">
                     <AlertDialogHeader>
                       <AlertDialogTitle>
                         {e("table.action.verify.title")}
@@ -402,11 +405,11 @@ const UpdateEditQuestions = ({
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>
+                      <AlertDialogCancel className="dark:border-none dark:shadow-sm dark:shadow-red-200">
                         {e("table.action.verify.cancel")}
                       </AlertDialogCancel>
                       <AlertDialogAction
-                        className="bg-red-500 text-white"
+                        className="bg-red-500 text-white dark:border-none dark:shadow-sm dark:shadow-red-300 dark:hover:text-red-500"
                         onClick={() => {
                           if (isSuperAdmin) {
                             deleteQuestion(question.id);

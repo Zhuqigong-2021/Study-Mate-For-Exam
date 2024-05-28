@@ -9,7 +9,9 @@ import { UserButton, auth } from "@clerk/nextjs";
 import { redirect, usePathname } from "next/navigation";
 import yellowbook from "@/assets/neatperson.png";
 import Drawer from "@/components/Navbar/Drawer";
+import { dark } from "@clerk/themes";
 import Cookie from "js-cookie";
+import { useTheme } from "next-themes";
 
 interface userIdProps {
   userId: string | null;
@@ -18,7 +20,7 @@ interface userIdProps {
 export default function Home({ userId, isAdmin }: userIdProps) {
   // const { userId } = auth();
   // if (userId) redirect("/notes/public");
-  const pathname = usePathname();
+  const { theme } = useTheme();
 
   return (
     <main
@@ -121,6 +123,7 @@ export default function Home({ userId, isAdmin }: userIdProps) {
             <UserButton
               afterSignOutUrl="/"
               appearance={{
+                baseTheme: theme === "dark" ? dark : undefined,
                 elements: {
                   avatarBox: { width: "2.5rem", height: "2.5rem" },
                 },

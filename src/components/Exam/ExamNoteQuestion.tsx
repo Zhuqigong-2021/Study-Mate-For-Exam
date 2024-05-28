@@ -466,7 +466,7 @@ const ExamNoteQuestion = ({
     <>
       {isClient && (
         <Card
-          className="relative cursor-pointer  pb-10 transition-shadow hover:shadow-lg"
+          className="relative cursor-pointer  pb-10 transition-shadow hover:shadow-lg dark:border-none dark:shadow-md dark:shadow-teal-200 dark:hover:shadow-teal-200"
           onClick={() => setShowAddEditNoteDialog(true)}
         >
           <CardHeader>
@@ -495,7 +495,7 @@ const ExamNoteQuestion = ({
 
           <Button
             disabled={isSubmitting}
-            className="absolute bottom-5 right-5"
+            className="absolute bottom-5 right-5 dark:border-none dark:bg-transparent dark:text-teal-300 dark:shadow-md dark:shadow-teal-300 dark:hover:bg-background dark:hover:text-teal-200 dark:hover:shadow-lg dark:hover:shadow-teal-300"
             onClick={() => {
               handleSubmitReport();
               if (localStorage.getItem("timer"))

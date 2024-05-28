@@ -18,7 +18,7 @@ import Canada from "/public/canada.jpg";
 import France from "/public/france.jpg";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AddEditNoteDialog from "../Note/AddEditNoteDialog";
-import { Menu } from "lucide-react";
+import { Menu, Moon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import {
@@ -27,6 +27,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { dark } from "@clerk/themes";
+import { useTheme } from "next-themes";
 interface roleType {
   isAdmin: boolean;
   userId?: string;
@@ -34,6 +36,7 @@ interface roleType {
 const Drawer = ({ isAdmin, userId }: roleType) => {
   const pathname = usePathname();
   const searchParam = useSearchParams();
+  const { theme, setTheme } = useTheme();
   const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
@@ -74,12 +77,42 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent className="no-scrollbar overflow-y-scroll py-16 text-stone-600">
+      <SheetContent className="no-scrollbar overflow-y-scroll  py-16 text-stone-600 dark:border-none">
+        <div className="absolute left-4 top-4">
+          {isClient && (
+            <Moon
+              size={24}
+              // strokeWidth="1.5"
+              stroke="none"
+              // stroke="white"
+              // fill="#5eead4"
+              fill="#fefce8"
+              // onClick={() => setMode((prev) => (prev = !prev))}
+              // className="rotate-0 scale-100 transition-all dark:hidden dark:-rotate-90 dark:scale-0"
+              className=" hidden translate-x-1 dark:block dark:scale-100"
+              style={{
+                filter: "drop-shadow(2px 2px 5px #ccfbf1)",
+                WebkitFilter: "drop-shadow(2px 2px 5px #ccfbf1)",
+              }}
+              onClick={() => setTheme("light")}
+            />
+          )}
+          {/* dark:block dark:rotate-0 dark:scale-100 */}
+          {isClient && (
+            <div
+              className="blur-1   h-[1.15rem] w-[1.15rem] rotate-90 scale-100 rounded-full bg-gradient-to-t from-amber-400 to-amber-200 transition-all  dark:hidden dark:rotate-0 dark:scale-0"
+              style={{ boxShadow: "0px 0px 18px #fef08a" }}
+              onClick={() => setTheme("dark")}
+            ></div>
+          )}
+          <span className="sr-only">Toggle theme</span>
+        </div>
         <SheetHeader className="flex flex-col items-center">
           <SheetTitle>{d("title")}</SheetTitle>
           <UserButton
             afterSignOutUrl="/"
             appearance={{
+              baseTheme: theme === "dark" ? dark : undefined,
               elements: {
                 avatarBox: { width: "2.5rem", height: "2.5rem" },
               },
@@ -151,12 +184,12 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
             {d("description")}
           </SheetDescription>
         </SheetHeader>
-        <div className="absolute left-[50%] flex -translate-x-[50%] flex-col items-start space-y-8 py-10">
+        <div className="absolute left-[50%] flex -translate-x-[50%] flex-col items-start space-y-8 py-10 dark:text-stone-400">
           {userId === "user_2aFBx8E20RdENmTS0CRlRej0Px4" && (
             <SheetClose asChild>
               <Link
                 href={`/admin/dashboard`}
-                className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+                className="underline-offset-1 hover:scale-105 hover:text-teal-700 dark:hover:text-teal-300"
               >
                 {d("admin")}
               </Link>
@@ -165,7 +198,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           <SheetClose asChild>
             <Link
               href={`/notes/public`}
-              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+              className="underline-offset-1 hover:scale-105 hover:text-teal-700 dark:hover:text-teal-300"
             >
               {d("note")}
             </Link>
@@ -174,7 +207,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
             <SheetClose asChild>
               <Link
                 href={`/notes/edit`}
-                className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+                className="underline-offset-1 hover:scale-105 hover:text-teal-700 dark:hover:text-teal-300"
               >
                 {d("edit")}
               </Link>
@@ -183,7 +216,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           <SheetClose asChild>
             <Link
               href={`/wildcard`}
-              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+              className="underline-offset-1 hover:scale-105 hover:text-teal-700 dark:hover:text-teal-300"
             >
               {d("flashcard")}
             </Link>
@@ -191,7 +224,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           <SheetClose asChild>
             <Link
               href={`/report`}
-              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+              className="underline-offset-1 hover:scale-105 hover:text-teal-700 dark:hover:text-teal-300"
             >
               {d("reports")}
             </Link>
@@ -199,7 +232,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           <SheetClose asChild>
             <Link
               href={`/exam`}
-              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+              className="underline-offset-1 hover:scale-105 hover:text-teal-700 dark:hover:text-teal-300"
             >
               {d("exam")}
             </Link>
@@ -207,7 +240,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           <SheetClose asChild>
             <Link
               href={`/bookmark`}
-              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+              className="underline-offset-1 hover:scale-105 hover:text-teal-700 dark:hover:text-teal-300"
             >
               {d("bookmark")}
             </Link>
@@ -215,7 +248,7 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           <SheetClose asChild>
             <Link
               href={`/review`}
-              className="underline-offset-1 hover:scale-105 hover:text-teal-700"
+              className="underline-offset-1 hover:scale-105 hover:text-teal-700 dark:hover:text-teal-300"
             >
               {d("review")}
             </Link>
@@ -224,9 +257,9 @@ const Drawer = ({ isAdmin, userId }: roleType) => {
           {pathname.includes("/notes") && isAdmin && (
             <Button
               onClick={() => setShowAddEditNoteDialog(true)}
-              className="translate-y-8"
+              className="translate-y-8 dark:border-none dark:bg-transparent dark:text-teal-200 dark:shadow-sm dark:shadow-teal-400 dark:hover:text-background"
             >
-              Add a Note
+              {lang == "en" ? "Add a Note" : "Ajouter une note"}
             </Button>
           )}
           <AddEditNoteDialog

@@ -85,7 +85,7 @@ const EditBookMarkedQuestion = ({
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="no-scrollbar max-h-screen overflow-y-scroll">
+      <DialogContent className="no-scrollbar dark:circle-sm-note max-h-screen overflow-y-scroll ">
         <DialogHeader>
           <div className="py-4"></div>
           <DialogTitle>
@@ -101,7 +101,9 @@ const EditBookMarkedQuestion = ({
               <div
                 key={choice.id}
                 className={`mb-2 rounded-sm border border-slate-200 px-2 py-1 ${
-                  choice.answer ? "bg-teal-200" : "bg-white"
+                  choice.answer
+                    ? "bg-teal-200 dark:text-background"
+                    : "bg-white dark:text-background"
                 }`}
               >
                 {choiceLetter}. {choice.content}
@@ -128,7 +130,7 @@ const EditBookMarkedQuestion = ({
               <LoadingButton
                 type="submit"
                 loading={form.formState.isSubmitting}
-                className="mt-4"
+                className="mt-4 hover:text-background dark:border-none dark:bg-transparent dark:text-teal-300 dark:shadow-md dark:shadow-teal-300 dark:hover:bg-background dark:hover:text-teal-200 dark:hover:shadow-lg dark:hover:shadow-teal-300 "
               >
                 {b("table.action.edit.save")}
               </LoadingButton>

@@ -56,7 +56,7 @@ const EditNote = ({ note }: NoteProps) => {
   return (
     <>
       <Card
-        className="relative cursor-pointer pb-10 transition-shadow hover:shadow-lg"
+        className="relative cursor-pointer pb-10 transition-shadow hover:shadow-lg "
         onClick={() => setShowAddEditNoteDialog(true)}
       >
         <CardHeader>

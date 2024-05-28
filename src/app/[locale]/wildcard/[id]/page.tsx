@@ -58,9 +58,9 @@ const page = async ({ params }: idProps) => {
   });
 
   return (
-    <div className="w-full gap-3  " suppressHydrationWarning={true}>
+    <div className="mt-2 w-full gap-3 " suppressHydrationWarning={true}>
       <Card
-        className="relative flex  cursor-pointer flex-col items-center justify-center text-center transition-shadow hover:shadow-lg"
+        className="dark:circle-sm-note dark:hover:circle-md-note  relative flex cursor-pointer flex-col items-center justify-center text-center transition-shadow hover:shadow-lg"
         suppressHydrationWarning={true}
       >
         <CardHeader>
@@ -76,7 +76,7 @@ const page = async ({ params }: idProps) => {
               return (
                 <CarouselItem
                   key={index}
-                  className="flex flex-col items-center   "
+                  className="flex flex-col items-center    "
                 >
                   <div>
                     {index +
@@ -86,7 +86,7 @@ const page = async ({ params }: idProps) => {
                       "  " +
                       questionPage}
                   </div>
-                  <Card className=" min-h-[350px] w-full  p-4">
+                  <Card className=" min-h-[350px] w-full p-4 dark:border  dark:border-stone-700   ">
                     <CardTitle className=" my-8  pl-4 text-start text-[18px] capitalize lg:pl-0 lg:text-center  lg:text-[22px] ">
                       {processString(q.questionTitle)}
                     </CardTitle>
@@ -99,7 +99,7 @@ const page = async ({ params }: idProps) => {
                       return (
                         <CardContent
                           key={c.id}
-                          className={`border-grey-600 relative my-2 flex min-h-[40px] items-center rounded-md border py-2  text-left hover:shadow-lg ${
+                          className={`border-grey-600 relative my-2 flex min-h-[40px] items-center rounded-md border py-2 text-left hover:shadow-lg  dark:border-stone-600 dark:hover:text-background ${
                             answer ? "hover:bg-green-50" : "hover:bg-red-100"
                           }`}
                         >
@@ -116,13 +116,16 @@ const page = async ({ params }: idProps) => {
             })}
           </CarouselContent>
 
-          <CarouselPrevious className="absolute -left-3 top-[20%] z-10" />
-          <CarouselNext className="absolute -right-3 top-[20%]" />
+          <CarouselPrevious className="absolute -left-3 top-[20%] z-10 dark:shadow-md dark:shadow-teal-200" />
+          <CarouselNext className="absolute -right-3 top-[20%] dark:shadow-md dark:shadow-teal-200" />
         </Carousel>
 
         <CardFooter className="py-10"></CardFooter>
 
-        <Button asChild className="absolute bottom-2 right-2">
+        <Button
+          asChild
+          className="absolute bottom-4 right-4 dark:border-none dark:bg-transparent dark:text-teal-300 dark:shadow-sm dark:shadow-teal-300 dark:hover:bg-background dark:hover:text-teal-200 dark:hover:shadow-md dark:hover:shadow-teal-300 "
+        >
           <Link href={`/${locale}/wildcard`}>
             {locale == "fr" ? "Retour" : "Back"}
           </Link>

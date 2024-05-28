@@ -133,11 +133,11 @@ const Note = ({ note, isAdmin, index, lang }: NoteProps) => {
     <>
       {isClient && (
         <Card
-          className="relative cursor-pointer   rounded-xl border-none bg-white shadow-sm shadow-gray-400 hover:shadow-gray-600"
+          className="relative cursor-pointer   rounded-xl border-none bg-white shadow-sm shadow-gray-400 hover:shadow-gray-600 dark:bg-background dark:shadow-teal-500 dark:hover:shadow-md dark:hover:shadow-teal-200"
           onClick={() => setShowAddEditNoteDialog(true)}
         >
           {isAdmin && percentageGetter(note.description) && (
-            <div className="w-18 absolute -right-1 bottom-16 flex h-5 flex-col justify-center rounded-r-sm border-r border-red-600 bg-gradient-to-l  from-red-500   via-red-400 to-orange-100  px-2 py-1 pl-3 text-center text-xs font-light text-white shadow-sm">
+            <div className="w-18 absolute -right-1 bottom-16 flex h-5 flex-col justify-center rounded-r-sm border-r border-red-600 bg-gradient-to-l  from-red-500   via-red-400 to-orange-100 px-2 py-1 pl-3 text-center text-xs font-light text-white shadow-sm dark:to-transparent">
               <span className="flex items-center space-x-[4px] font-normal">
                 <PiMedalFill className=" text-yellow-50" size={12} />{" "}
                 <span>{percentageGetter(note.description)}</span>
@@ -146,7 +146,7 @@ const Note = ({ note, isAdmin, index, lang }: NoteProps) => {
           )}
           {!isAdmin && percentageGetter(note.description) && (
             <>
-              <div className="w-18 absolute -right-1 top-5 flex h-5 flex-col justify-center rounded-r-sm border-r border-red-600 bg-gradient-to-l from-red-500  via-red-400   to-orange-100 px-2  py-1 pl-3 text-center text-xs font-light text-white shadow-sm">
+              <div className="w-18 absolute -right-1 top-5 flex h-5 flex-col justify-center rounded-r-sm border-r border-red-600 bg-gradient-to-l from-red-500  via-red-400   to-orange-100 px-2 py-1  pl-3 text-center text-xs font-light text-white shadow-sm dark:to-transparent">
                 <span className="flex items-center space-x-[4px] font-normal">
                   <PiMedalFill className=" text-yellow-50" size={12} />{" "}
                   <span>{percentageGetter(note.description)}</span>
@@ -155,7 +155,7 @@ const Note = ({ note, isAdmin, index, lang }: NoteProps) => {
             </>
           )}
           <CardHeader className="h-32 space-y-0">
-            <CardTitle className="scale-y-90  text-lg text-gray-800">
+            <CardTitle className="scale-y-90  text-lg text-gray-800 dark:text-foreground">
               {note.title}
             </CardTitle>
 
@@ -165,7 +165,7 @@ const Note = ({ note, isAdmin, index, lang }: NoteProps) => {
                   ? colorClasses[9]
                   : pathname == `/${lang}/notes`
                     ? colorClasses[1]
-                    : "from-slate-900"
+                    : "from-slate-900 dark:from-cyan-500"
               } absolute  -left-1 -right-1 top-16 w-[55%] rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r to-transparent pl-6 text-sm text-white ${
                 lang == "en" ? "lg:w-1/3" : "lg:w-[38%]"
               }`}
@@ -180,7 +180,7 @@ const Note = ({ note, isAdmin, index, lang }: NoteProps) => {
           <CardContent
             className={`${
               pathname == `/${lang}/notes/public`
-                ? "bg-amber-500/5"
+                ? "bg-amber-500/5 "
                 : pathname == `/${lang}/notes`
                   ? "bg-teal-500/5"
                   : "bg-stone-500/5"
@@ -198,7 +198,7 @@ const Note = ({ note, isAdmin, index, lang }: NoteProps) => {
               ) : (
                 <Loader2
                   size={23}
-                  className="animate-spin rounded-full border border-white bg-gray-100 text-gray-600"
+                  className="animate-spin rounded-full border border-white bg-gray-100 text-gray-600 dark:border-none dark:bg-transparent dark:text-teal-300"
                 />
               )}
               <CardDescription className="text-xs">
@@ -216,7 +216,7 @@ const Note = ({ note, isAdmin, index, lang }: NoteProps) => {
           {isAdmin && (
             <Globe
               size={15}
-              className={`absolute right-6 top-6 ${
+              className={`absolute right-6 top-6 dark:text-teal-400 ${
                 isShared ? "text-teal-500" : ""
               }`}
               onClick={(e) => {

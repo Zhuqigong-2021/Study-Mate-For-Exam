@@ -125,11 +125,11 @@ export function ReportDataTable<TData extends any, TValue>({
     "bg-blue-400",
   ];
   return (
-    <Card className="relative w-full">
+    <Card className=" relative w-full  dark:border-none   dark:shadow-md dark:shadow-violet-300">
       <CardHeader>
         <CardTitle className="font-bold">{r("title")}</CardTitle>
         <CardDescription>{r("description")}</CardDescription>
-        <span className="absolute right-10 top-10 hidden scale-[1.6]  rounded-full bg-neutral-100 p-[0.3rem] font-bold text-teal-500 drop-shadow-sm md:block lg:block">
+        <span className="absolute right-10 top-10 hidden scale-[1.6]  rounded-full bg-neutral-100 p-[0.3rem] font-bold text-teal-500 drop-shadow-sm md:block lg:block dark:bg-transparent dark:shadow-sm dark:shadow-teal-300">
           <IoMdCheckmarkCircleOutline />
         </span>
       </CardHeader>
@@ -144,7 +144,7 @@ export function ReportDataTable<TData extends any, TValue>({
               onChange={(event) =>
                 table.getColumn("userName")?.setFilterValue(event.target.value)
               }
-              className="h-9 max-w-sm lg:mr-3"
+              className="h-9 max-w-sm lg:mr-3 dark:border-none dark:shadow-sm dark:shadow-violet-200"
             />
           )}
 
@@ -162,7 +162,7 @@ export function ReportDataTable<TData extends any, TValue>({
               <Button
                 variant="outline"
                 size={"sm"}
-                className="ml-auto mt-1 space-x-1 md:mt-0"
+                className="ml-auto mt-1 space-x-1 md:mt-0 dark:border-none dark:shadow-sm dark:shadow-violet-200"
               >
                 <span className="scale-[0.8] text-sm font-thin">
                   <Settings2 />
@@ -204,16 +204,19 @@ export function ReportDataTable<TData extends any, TValue>({
           </DropdownMenu>
         </div>
         {/* table */}
-        <div className="rounded-md border">
+        <div className="overflow-hidden rounded-md border dark:border-none   dark:shadow-sm dark:shadow-violet-200">
           <Table>
-            <TableHeader>
+            <TableHeader className=" dark:border-stone-600 dark:bg-indigo-500">
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
+                <TableRow
+                  key={headerGroup.id}
+                  className=" dark:border-stone-800 "
+                >
                   {headerGroup.headers.map((header, index) => {
                     return (
                       <TableHead
                         key={header.id}
-                        className="relative"
+                        className="relative  dark:border-stone-800 dark:text-foreground "
                         colSpan={header.colSpan}
                         style={{
                           position: "relative",
@@ -248,6 +251,7 @@ export function ReportDataTable<TData extends any, TValue>({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
+                    className=" dark:border-stone-800 dark:text-stone-400"
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
@@ -260,7 +264,7 @@ export function ReportDataTable<TData extends any, TValue>({
                   </TableRow>
                 ))
               ) : (
-                <TableRow>
+                <TableRow className=" dark:border-stone-800">
                   <TableCell
                     colSpan={columns.length}
                     className="h-24 text-center"

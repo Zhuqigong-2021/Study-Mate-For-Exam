@@ -1,3 +1,4 @@
+import { useTheme } from "next-themes";
 import React, { useEffect, useRef, useState } from "react";
 import {
   PieChart,
@@ -33,7 +34,7 @@ interface dataProps {
 
 export default function ReportPieChart({ width, data }: dataProps) {
   const [activeIndex, setActiveIndex] = useState(0); // Default to the first data entry
-
+  const { theme } = useTheme();
   const onPieEnter = (_: any, index: React.SetStateAction<number>) => {
     setActiveIndex(index);
   };
@@ -62,13 +63,14 @@ export default function ReportPieChart({ width, data }: dataProps) {
             left: `${coordinate!.x}px`,
             top: `${coordinate!.y}px`,
             transform: "translate(-50%, -50%)",
-            backgroundColor: "#fff",
+            backgroundColor: theme === "dark" ? "none" : "#fff",
             padding: "5px",
-            border: "1px solid #ccc",
+            borderRadius: "6px",
+            border: theme === "dark" ? "none" : "1px solid #ccc",
             zIndex: 100,
           }}
         >
-          <p className="flex  flex-col p-2 py-4">
+          <p className="flex  flex-col  p-2 py-4 dark:bg-background dark:text-foreground">
             <span>{`${"scope:" + payload[0].name}`}</span>
             <span>{`${"percent:" + payload[0].value}%`}</span>
           </p>
@@ -106,7 +108,11 @@ export default function ReportPieChart({ width, data }: dataProps) {
           onMouseEnter={onPieEnter}
         >
           {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <Cell
+              key={`cell-${index}`}
+              fill={COLORS[index % COLORS.length]}
+              stroke={theme == "dark" ? "none" : "1"}
+            />
           ))}
         </Pie>
         <text
@@ -150,16 +156,7 @@ export default function ReportPieChart({ width, data }: dataProps) {
           />
         )}
 
-        {width < 350 && (
-          <Legend
-            //   x={"0%"}
-            //   y={"0%"}
-            //   align="right"
-            //   verticalAlign="middle"
-            //   layout="vertical"
-            iconSize={10}
-          />
-        )}
+        {width < 350 && <Legend iconSize={10} />}
         <Tooltip content={<CustomTooltip />} position={{ x: 10, y: 10 }} />
       </PieChart>
     </ResponsiveContainer>

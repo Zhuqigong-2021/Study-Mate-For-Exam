@@ -27,9 +27,9 @@ const AllUsers = ({ usersList, isSuperAdmin }: usersListType) => {
   }
 
   return (
-    <div className="no-scrollbar mx-0 max-h-[520px] overflow-y-scroll md:px-6 ">
+    <div className="no-scrollbar mx-0 max-h-[520px] overflow-y-scroll md:px-6 dark:bg-background">
       {isClient && (
-        <div>
+        <div className="dark:bg-background">
           <UserWrapper usersList={usersList} isSuperAdmin={isSuperAdmin} />
         </div>
       )}

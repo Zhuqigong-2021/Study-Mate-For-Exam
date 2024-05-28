@@ -56,7 +56,7 @@ const ReviewChoiceQuestion = ({
         {isSuperAdmin && !isLoading && (
           <BookmarkCheck
             className={`${
-              isFlagged ? "text-teal-500  " : "text-stone-700"
+              isFlagged ? "text-teal-500  " : "text-stone-700 dark:text-white"
             } absolute   right-2 top-2 `}
             onClick={() => bookMarked(q.id, isFlagged)}
           />
@@ -77,7 +77,7 @@ const ReviewChoiceQuestion = ({
         return (
           <CardContent
             key={c.id}
-            className={`border-grey-600  relative my-2 flex min-h-[40px] items-center rounded-md border py-2  text-left hover:shadow-lg ${
+            className={`border-grey-600 relative  my-2 flex min-h-[40px] items-center rounded-md border py-2 text-left  hover:shadow-lg dark:border-stone-600 dark:hover:text-background ${
               answer ? "hover:bg-green-50" : "hover:bg-red-100"
             }`}
           >

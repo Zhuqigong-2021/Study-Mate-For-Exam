@@ -117,12 +117,12 @@ export default function SetTimer({
   ] as const;
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
+      <DialogContent className="dark:circle-sm-exam dark:border-none">
         <DialogHeader>
           <DialogTitle>{e("timer.title")}</DialogTitle>
         </DialogHeader>
 
-        <Card className="w-full">
+        <Card className="w-full dark:border-none">
           <CardHeader>
             <CardTitle>{e("timer.card-title")}</CardTitle>
             <CardDescription>{e("timer.description")}</CardDescription>
@@ -146,7 +146,7 @@ export default function SetTimer({
                 <Select onValueChange={(value) => setTimeValue(Number(value))}>
                   <SelectTrigger id="framework">
                     <SelectValue
-                      placeholder="Select"
+                      placeholder={e("timer.placeholder")}
                       className="border-transparent focus:border-transparent focus:ring-0"
                     />
                   </SelectTrigger>
@@ -187,7 +187,7 @@ export default function SetTimer({
                 <Select onValueChange={(value) => setBatchValue(Number(value))}>
                   <SelectTrigger id="framework1">
                     <SelectValue
-                      placeholder="Select"
+                      placeholder={e("timer.placeholder")}
                       className="border-transparent focus:border-transparent focus:ring-0"
                     />
                   </SelectTrigger>
@@ -214,11 +214,16 @@ export default function SetTimer({
             </div>
           </CardContent>
           <CardFooter className="flex justify-end space-x-2">
-            <Button variant="outline" onClick={() => setOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setOpen(false)}
+              className="dark:bg-red-500 dark:bg-transparent dark:text-foreground dark:text-red-400 dark:shadow-md dark:shadow-red-500 dark:hover:bg-transparent dark:hover:shadow-lg dark:hover:shadow-red-500"
+            >
               {e("timer.action.cancel")}
             </Button>
             <Button
               disabled={timeValue == 0 || batchValue == -1}
+              className="dark:border-none dark:bg-transparent dark:text-teal-300 dark:shadow-md dark:shadow-teal-300 dark:hover:bg-background dark:hover:text-teal-200 dark:hover:shadow-lg dark:hover:shadow-teal-300"
               onClick={() => {
                 if (localStorage.getItem("timer"))
                   localStorage.removeItem("timer");

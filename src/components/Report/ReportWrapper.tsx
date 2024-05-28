@@ -52,6 +52,7 @@ import Link from "next/link";
 import { nameFormatter } from "@/app/[locale]/utils/nameFormatter";
 import { dateFormatter } from "@/app/[locale]/utils/dateFormatter";
 import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 
 export type Question = {
   id: string;
@@ -161,7 +162,7 @@ const colorClasses = [
 
 const ReportWrapper = ({ reports, isSuperAdmin, isAdmin }: reportProps) => {
   const [isClient, setIsClient] = useState(false);
-
+  const { theme } = useTheme();
   const r = useTranslations("Report");
 
   useEffect(() => {
@@ -212,6 +213,7 @@ const ReportWrapper = ({ reports, isSuperAdmin, isAdmin }: reportProps) => {
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
+          className="dark:border-stone-400"
           onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Select row"
         />
@@ -240,7 +242,9 @@ const ReportWrapper = ({ reports, isSuperAdmin, isAdmin }: reportProps) => {
                     ? "#14b8a6"
                     : Number(score) == 0
                       ? "#f87171"
-                      : "#404040",
+                      : theme === "dark"
+                        ? "white"
+                        : "#404040",
                 // rotation: 0.05,
                 textSize: "28px",
                 pathColor: Number(score) >= 50 ? "#5eead4" : "#f3f4f6",
@@ -344,14 +348,14 @@ const ReportWrapper = ({ reports, isSuperAdmin, isAdmin }: reportProps) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="flex flex-col items-start"
+                className="flex flex-col items-start dark:border-stone-800"
               >
                 <DropdownMenuLabel className="w-full">
                   {r("table.action.title")}
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="mx-auto my-1 h-[1px] w-full bg-gray-300 dark:bg-stone-600" />
                 <DropdownMenuItem
-                  className="w-full"
+                  className="w-full dark:text-stone-400"
                   onClick={() => {
                     navigator.clipboard.writeText(report.id);
                     toast.success(r("table.action.toast.copyId"));
@@ -361,7 +365,7 @@ const ReportWrapper = ({ reports, isSuperAdmin, isAdmin }: reportProps) => {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
-                  className="w-full"
+                  className="w-full dark:text-stone-400"
                   onClick={() => {
                     // setSelectedQuestion(question);
                     // setShowAddEditQuestionDialog(true);
@@ -385,12 +389,12 @@ const ReportWrapper = ({ reports, isSuperAdmin, isAdmin }: reportProps) => {
                   <AlertDialogTrigger asChild>
                     <Button
                       variant="outline"
-                      className="inline w-full border-none p-0 px-2 text-left"
+                      className="inline w-full border-none p-0 px-2 text-left dark:text-stone-400"
                     >
                       {r("table.action.delete")}
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent>
+                  <AlertDialogContent className="circle-sm-exam dark:border-none">
                     <AlertDialogHeader>
                       <AlertDialogTitle>
                         {r("table.action.verify.title")}
@@ -400,11 +404,11 @@ const ReportWrapper = ({ reports, isSuperAdmin, isAdmin }: reportProps) => {
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>
+                      <AlertDialogCancel className="dark:border-none dark:shadow-sm dark:shadow-red-200">
                         {r("table.action.verify.cancel")}
                       </AlertDialogCancel>
                       <AlertDialogAction
-                        className="bg-red-500 text-white"
+                        className="bg-red-500 text-white dark:border-none dark:shadow-sm dark:shadow-red-300 dark:hover:text-red-500"
                         onClick={() => {
                           if (isSuperAdmin) {
                             deleteReport(report.id);

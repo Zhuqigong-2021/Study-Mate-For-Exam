@@ -117,7 +117,7 @@ export default function AddEditNoteDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
+      <DialogContent className="dark:circle-sm-note ">
         <DialogHeader>
           <DialogTitle>
             {noteToEdit ? h("note.title.edit") : h("note.title.add")}
@@ -164,6 +164,7 @@ export default function AddEditNoteDialog({
               {noteToEdit && isAdmin && (
                 <LoadingButton
                   variant="destructive"
+                  className="hover:bg-red-500 dark:bg-transparent dark:text-red-400 dark:shadow-sm dark:shadow-red-400 dark:hover:bg-transparent dark:hover:text-red-100 dark:hover:shadow-md dark:hover:shadow-red-400"
                   loading={deleteInProgress}
                   disabled={form.formState.isSubmitting}
                   onClick={deleteNote}
@@ -173,7 +174,11 @@ export default function AddEditNoteDialog({
                 </LoadingButton>
               )}
               {noteToEdit && (
-                <Button asChild variant="outline">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="dark:border-none dark:bg-background dark:text-teal-300 dark:shadow-sm dark:shadow-teal-200 dark:hover:bg-transparent dark:hover:text-teal-100 dark:hover:shadow-md dark:hover:shadow-teal-300"
+                >
                   <Link href={`/notes/${noteToEdit.id}/review `}>
                     {h("note.review")}
                   </Link>
@@ -182,6 +187,7 @@ export default function AddEditNoteDialog({
               {isAdmin && (
                 <LoadingButton
                   type="submit"
+                  className="dark:bg-transparent dark:text-green-300 dark:shadow-sm dark:shadow-green-300 dark:hover:bg-transparent dark:hover:text-green-200 dark:hover:shadow-md dark:hover:shadow-green-400"
                   loading={form.formState.isSubmitting}
                   disabled={deleteInProgress}
                 >

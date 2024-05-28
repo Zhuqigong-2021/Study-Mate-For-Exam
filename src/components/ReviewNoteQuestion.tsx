@@ -95,7 +95,7 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
   return (
     <>
       <Card
-        className="relative cursor-pointer pb-10 transition-shadow hover:shadow-lg"
+        className="relative cursor-pointer pb-10 transition-shadow hover:shadow-lg dark:m-1 dark:border-none  dark:shadow-md dark:shadow-teal-200 dark:hover:shadow-teal-200"
         onClick={() => setShowAddEditNoteDialog(true)}
       >
         <CardHeader>
@@ -109,13 +109,15 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
           <p className="flex flex-wrap ">{note.description}</p>
         </CardContent>
         <CardContent>
-          <div className="space-x-2  rounded-md border-b-0 border-black bg-stone-100 px-1 py-2">
+          <div className="space-x-2  rounded-md border-b-0 border-black bg-stone-100 px-1 py-2  dark:bg-background">
             <Button
               variant="outline"
               // className="border border-stone-600 hover:bg-black hover:text-white"
               className={`${
-                showAnswerOnly ? " bg-transparent" : "bg-white"
-              }   border-none hover:bg-black hover:text-white`}
+                showAnswerOnly
+                  ? " bg-transparent "
+                  : "bg-white dark:bg-transparent dark:shadow-sm dark:shadow-teal-200"
+              }   border-none hover:bg-black hover:text-white  dark:text-teal-300  dark:hover:shadow-md dark:hover:shadow-teal-100`}
               onClick={() => setShowAnswerOnly((prev) => !prev)}
             >
               {showAnswerOnly ? "Show All Options" : "Show Answer Only"}
@@ -123,8 +125,10 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
             <Button
               variant="outline"
               className={`${
-                isLoadAll ? " bg-white " : " bg-transparent"
-              } hidden  border-none  hover:bg-black  hover:text-white lg:inline`}
+                isLoadAll
+                  ? " bg-white dark:bg-transparent dark:shadow-sm dark:shadow-teal-200"
+                  : " bg-transparent"
+              } hidden  border-none  hover:bg-black  hover:text-white lg:inline  dark:text-teal-300 dark:shadow-sm  dark:hover:shadow-md dark:hover:shadow-teal-100`}
               onClick={() => setIsLoadAll((prev) => !prev)}
             >
               {isLoadAll ? "Priotize First Loading" : "Enable Page Search"}
@@ -192,8 +196,11 @@ const ReviewNoteQuestion = ({ note, isAdmin, isSuperAdmin }: NoteProps) => {
             }}
           />
         )}
-        {!hasMore && (
-          <Button asChild className="absolute bottom-5 right-10">
+        {(!hasMore || isLoadAll) && (
+          <Button
+            asChild
+            className="absolute bottom-5 right-10 hover:border dark:border-none dark:bg-transparent dark:text-teal-300 dark:shadow-sm dark:shadow-teal-300 dark:hover:bg-background dark:hover:text-teal-200 dark:hover:shadow-md dark:hover:shadow-teal-300"
+          >
             <Link href={`/review`}>{r("back")}</Link>
           </Button>
         )}

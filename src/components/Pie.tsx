@@ -8,7 +8,7 @@ interface pieType {
 const Pie = ({ right, wrong }: pieType) => {
   return (
     <PieChart
-      className="h-64 w-64  rounded-full border border-gray-200"
+      className="h-64 w-64  rounded-full border border-gray-200 dark:border-none"
       animate={true}
       animationDuration={1500}
       data={[

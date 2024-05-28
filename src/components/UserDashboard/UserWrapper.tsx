@@ -255,7 +255,7 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <button className="m-0 inline rounded-none border-none  bg-transparent bg-white  p-0 text-sm text-muted-foreground shadow-none hover:bg-transparent hover:bg-white hover:text-sm hover:text-muted-foreground hover:shadow-none focus:outline-none focus:ring-0">
+                <button className="m-0 inline rounded-none border-none  bg-transparent bg-white  p-0 text-sm text-muted-foreground shadow-none hover:bg-transparent hover:bg-white hover:text-sm hover:text-muted-foreground hover:shadow-none focus:outline-none focus:ring-0 dark:bg-background">
                   {nameFormatter(`${fullname}`)}
                 </button>
               </TooltipTrigger>
@@ -322,7 +322,8 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
                 <DropdownMenuLabel className="w-full">
                   {d("data.table.actions.title")}
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator />
+                {/* <DropdownMenuSeparator className="bg-white" /> */}
+                <DropdownMenuSeparator className="mx-auto my-1 h-[1px] w-full bg-gray-300 dark:bg-stone-600" />
                 <DropdownMenuItem
                   className="w-full"
                   onClick={() => handleRole(user)}

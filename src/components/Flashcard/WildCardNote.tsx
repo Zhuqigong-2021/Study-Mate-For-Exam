@@ -86,15 +86,15 @@ const WildCardNote = ({ note }: NoteProps) => {
     <>
       {isClient && (
         <Card
-          className="relative cursor-pointer rounded-xl  border-none bg-white shadow-gray-400  transition-shadow hover:shadow-gray-600 "
+          className="relative cursor-pointer rounded-xl  border-none bg-white shadow-gray-400  transition-shadow hover:shadow-gray-600 dark:bg-background dark:shadow-teal-500 dark:hover:shadow-md dark:hover:shadow-teal-200"
           onClick={() => router.push(`/wildcard/${note.id}`)}
         >
           <CardHeader className="relative h-32 ">
-            <CardTitle className="scale-y-90  text-lg text-gray-800">
+            <CardTitle className="scale-y-90  text-lg text-gray-800 dark:text-foreground">
               {note.title}
             </CardTitle>
             <div
-              className="absolute  -left-1 -right-1 top-14 w-[55%] rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r from-black to-transparent pl-6 text-sm text-white lg:w-[36%]"
+              className="absolute  -left-1 -right-1 top-14 w-[55%] rounded-l-sm rounded-br-sm  rounded-tr-lg bg-gradient-to-r from-black to-transparent pl-6 text-sm text-white lg:w-[36%] dark:from-cyan-500"
               style={{
                 clipPath: `polygon(100% 0%, 85% 48%, 100% 100%, 0.5% 100%, 0% 50%, 0.5% 0)`,
               }}
@@ -117,7 +117,7 @@ const WildCardNote = ({ note }: NoteProps) => {
               ) : (
                 <Loader2
                   size={23}
-                  className="animate-spin rounded-full border border-white bg-gray-100 text-gray-600"
+                  className="animate-spin rounded-full border border-white bg-gray-100 text-gray-600 dark:border-none dark:bg-transparent dark:text-cyan-300"
                 />
               )}
               <CardDescription className="text-xs">

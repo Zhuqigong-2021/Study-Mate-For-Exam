@@ -180,6 +180,7 @@
       "title": "Régler le Minuteur",
       "card-title": "Sujet de l'Examen",
       "description": "Démarrez votre examen en un clic.",
+      "placeholder": "Sélectionner",
       "name": "Nom",
       "action": {
         "timer": {

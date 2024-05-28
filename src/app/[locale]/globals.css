@@ -28,6 +28,7 @@
 
   .dark {
     --background: 20 14.3% 4.1%;
+    /* --background: 20 40% 3%; */
     --foreground: 60 9.1% 97.8%;
     --card: 20 14.3% 4.1%;
     --card-foreground: 60 9.1% 97.8%;
@@ -59,6 +60,51 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+  .circle-lg {
+    box-shadow: 0px 0px 12px #443c58;
+    border: none;
+  }
+  .circle-md {
+    box-shadow: 0 0 3px;
+  }
+  .circle-sm {
+    box-shadow: 0px 0px 8px #c4b5fd;
+    border: none;
+  }
+  .circle-sm-note {
+    box-shadow: 0px 0px 8px #b5fdf9;
+    border: none;
+  }
+  .circle-md-note {
+    box-shadow: 0px 0px 12px #b5fdf9;
+    border: none;
+  }
+  .circle-lg-note {
+    box-shadow: 0px 0px 16px #b5fdf9;
+    border: none;
+  }
+  .circle-sm-exam {
+    box-shadow: 0px 0px 8px #fdb5c2;
+    border: none;
+  }
+  .glass {
+    background: rgba(56, 48, 64, 0.2);
+    backdrop-filter: blur(5px);
+    border: none;
+  }
+  /* .glass-gradient {
+    background: linear-gradient(
+      top,
+      rgba(255, 255, 255, 0.08) 55%,
+
+      rgba(255, 255, 255, 0.05) 45%
+    );
+
+    background-blend-mode: overlay;
+    backdrop-filter: blur(5px);
+    border: none;
+    box-shadow: none;
+  } */
 }
 
 .resizer {

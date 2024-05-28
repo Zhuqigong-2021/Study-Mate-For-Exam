@@ -115,7 +115,7 @@ const CreateQuestion = ({ params }: idProps) => {
   }
 
   return (
-    <Card className="w-full">
+    <Card className="dark:circle-sm-note mt-2 w-full">
       <CardHeader>
         <CardTitle>{a("add-question.title")}</CardTitle>
         <CardDescription>{a("add-question.description")}</CardDescription>
@@ -191,7 +191,7 @@ const CreateQuestion = ({ params }: idProps) => {
 
             <button
               type="button"
-              className="mt-4  flex h-10 w-10 items-center justify-center rounded-full bg-teal-400 text-white shadow-sm hover:opacity-95"
+              className="mt-4  flex h-10 w-10 items-center justify-center rounded-full bg-teal-400 text-white shadow-sm hover:opacity-95 dark:bg-transparent dark:font-bold dark:text-teal-200 dark:shadow-md dark:shadow-teal-300 dark:hover:bg-teal-300 dark:hover:text-background dark:hover:shadow-teal-300"
               onClick={() => {
                 append({
                   content: " ",
@@ -205,6 +205,7 @@ const CreateQuestion = ({ params }: idProps) => {
           <CardFooter className="flex justify-between">
             <Button
               type="button"
+              className="dark:bg-red-500 dark:bg-transparent dark:text-foreground dark:text-red-400 dark:shadow-md dark:shadow-red-500 dark:hover:bg-transparent dark:hover:shadow-lg dark:hover:shadow-red-500"
               variant="outline"
               onClick={() => {
                 router.replace(`/notes/public`);
@@ -214,7 +215,7 @@ const CreateQuestion = ({ params }: idProps) => {
             </Button>
             <div className="flex gap-2">
               <LoadingButton
-                className="via-green-700"
+                className="via-green-700 dark:bg-transparent dark:text-foreground dark:text-green-400 dark:shadow-md dark:shadow-green-400 dark:hover:bg-transparent dark:hover:text-background dark:hover:text-green-300 dark:hover:shadow-lg dark:hover:shadow-green-400"
                 type="submit"
                 loading={isFormSubmitting}
                 disabled={form.formState.isSubmitting}
@@ -223,6 +224,7 @@ const CreateQuestion = ({ params }: idProps) => {
               </LoadingButton>
               <Button
                 type="button"
+                className="dark:bg-transparent  dark:text-teal-400 dark:shadow-sm dark:shadow-teal-300 dark:hover:bg-transparent dark:hover:text-background dark:hover:text-teal-300 dark:hover:shadow-lg dark:hover:shadow-teal-300"
                 onClick={() => router.replace(`/review/${id}`)}
               >
                 <LuEye />

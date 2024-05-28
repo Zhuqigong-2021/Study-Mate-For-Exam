@@ -96,7 +96,7 @@ const EditSelectQuestion = ({ open, setOpen, question }: questionDataProps) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="no-scrollbar max-h-screen max-w-[700px] overflow-y-scroll px-8 ">
+      <DialogContent className="no-scrollbar dark:circle-sm-note max-h-screen max-w-[700px] overflow-y-scroll px-8">
         <DialogHeader className="pb-3">
           <div className="pt-4"></div>
           <DialogTitle>
@@ -120,7 +120,7 @@ const EditSelectQuestion = ({ open, setOpen, question }: questionDataProps) => {
             {" "}
             {e("table.action.edit.choices")}
           </span>
-          <Card className="space-y-2 p-6">
+          <Card className="space-y-2 p-6 dark:border-none">
             {question.choices.map((choice, i: number) => {
               let choiceLetter = String.fromCharCode(65 + i);
               return (
@@ -161,7 +161,7 @@ const EditSelectQuestion = ({ open, setOpen, question }: questionDataProps) => {
             <LoadingButton
               type="submit"
               loading={isSubmitting}
-              className="mt-4"
+              className="mt-4 dark:border-none dark:bg-transparent dark:text-teal-300 dark:shadow-md dark:shadow-teal-300 dark:hover:bg-background dark:hover:text-teal-200 dark:hover:shadow-lg dark:hover:shadow-teal-300"
             >
               {e("table.action.edit.save")}
             </LoadingButton>

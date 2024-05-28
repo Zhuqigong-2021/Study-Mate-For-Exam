@@ -117,7 +117,7 @@ export function AllUserDataTable<TData extends any, TValue>({
     "bg-blue-400",
   ];
   return (
-    <div className="relative w-full ">
+    <div className="relative w-full dark:bg-background">
       {/* <CardContent className="border-none px-0"> */}
       <div className="flex flex-wrap items-center py-4">
         <Input
@@ -128,7 +128,7 @@ export function AllUserDataTable<TData extends any, TValue>({
           onChange={(event) =>
             table.getColumn("fullName")?.setFilterValue(event.target.value)
           }
-          className="h-9 max-w-sm lg:mr-3"
+          className="h-9 max-w-sm lg:mr-3 dark:border-none dark:shadow-sm dark:shadow-violet-200"
         />
 
         <TopicFilter
@@ -145,7 +145,7 @@ export function AllUserDataTable<TData extends any, TValue>({
             <Button
               variant="outline"
               size={"sm"}
-              className="ml-auto mt-1 space-x-1 md:mt-0"
+              className="ml-auto mt-1 space-x-1 md:mt-0 dark:border-none dark:shadow-sm dark:shadow-violet-200"
             >
               <span className="scale-[0.8] text-sm font-thin">
                 <Settings2 />
@@ -179,17 +179,20 @@ export function AllUserDataTable<TData extends any, TValue>({
         </DropdownMenu>
       </div>
       {/* table */}
-      <div className="flex w-full   overflow-x-auto rounded-md  border">
+      <div className="flex w-full   overflow-x-auto rounded-md  border dark:border-stone-600">
         <div className="max-w-full md:max-w-full ">
-          <Table className="w-full">
-            <TableHeader className="bg-stone-50">
+          <Table className="w-full dark:border-stone-600">
+            <TableHeader className="bg-stone-50 dark:border-stone-600 dark:bg-indigo-500  ">
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
+                <TableRow
+                  key={headerGroup.id}
+                  className="dark:border-stone-600"
+                >
                   {headerGroup.headers.map((header, index) => {
                     return (
                       <TableHead
                         key={header.id}
-                        className="relative"
+                        className="relative dark:text-foreground"
                         colSpan={header.colSpan}
                         style={{
                           position: "relative",
@@ -218,13 +221,17 @@ export function AllUserDataTable<TData extends any, TValue>({
                 </TableRow>
               ))}
             </TableHeader>
-            <TableBody>
+            <TableBody className=" dark:bg-background">
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row, index) => (
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    className={`${index % 2 == 0 ? "bg-white" : "bg-stone-50"}`}
+                    className={`${
+                      index % 2 == 0
+                        ? "bg-white dark:bg-background"
+                        : "bg-stone-50 dark:bg-background"
+                    } dark:border-stone-600`}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>

@@ -141,7 +141,7 @@ export const columns: ColumnDef<Question>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuSeparator />
+              <DropdownMenuSeparator className="mx-auto my-1 h-[1px] w-full bg-gray-300 dark:bg-stone-600" />
               <DropdownMenuItem
                 onClick={() => {
                   navigator.clipboard.writeText(question.questionTitle);

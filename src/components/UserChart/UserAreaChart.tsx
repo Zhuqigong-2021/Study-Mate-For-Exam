@@ -1,3 +1,4 @@
+import { useTheme } from "next-themes";
 import React, { memo, useEffect, useState } from "react";
 import {
   AreaChart,
@@ -8,40 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
-// const data = [
-//   {
-//     name: "Jan",
-//     new: 5,
-//     total: 1,
-//   },
-//   {
-//     name: "Feb",
-//     new: 10,
-//     total: 2,
-//     amt: 10,
-//   },
-//   {
-//     name: "Mar",
-//     new: 5,
-//     total: 4,
-//   },
-//   {
-//     name: "Apl",
-//     new: 1,
-//     total: 12,
-//   },
-//   {
-//     name: "May",
-//     new: 10,
-//     total: 15,
-//   },
-//   {
-//     name: "Jun",
-//     new: 3,
-//     total: 20,
-//   },
-// ];
+import { TooltipProps } from "recharts";
 interface dataType {
   data: {
     name: string;
@@ -49,9 +17,32 @@ interface dataType {
     total: number;
   }[];
 }
+
+interface CustomTooltipProps extends TooltipProps<any, any> {}
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+  const { theme } = useTheme();
+
+  if (active && payload && payload.length) {
+    return (
+      <div
+        className={`rounded-md p-2 ${
+          theme === "dark"
+            ? "bg-background text-white"
+            : "bg-white text-gray-800"
+        }`}
+      >
+        <p className="label">{`${label}`}</p>
+        <p className="intro">{`Total: ${payload[0].payload.total}`}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
+
 const UserAreaChart = memo(({ data }: dataType) => {
   const [tickCount, setTickCount] = useState(8); // Default tick count for smaller screens
-
+  const { theme } = useTheme();
   useEffect(() => {
     function handleResize() {
       // Set tick count based on window width
@@ -76,11 +67,13 @@ const UserAreaChart = memo(({ data }: dataType) => {
           bottom: 0,
         }}
       >
-        <CartesianGrid
-          strokeDasharray="3 3"
-          vertical={true}
-          horizontal={false}
-        />
+        {theme !== "dark" && (
+          <CartesianGrid
+            strokeDasharray="3 3"
+            vertical={true}
+            horizontal={false}
+          />
+        )}
         <XAxis
           dataKey="name"
           axisLine={false}
@@ -102,23 +95,16 @@ const UserAreaChart = memo(({ data }: dataType) => {
           //   }
           // }}
         />
-        <Tooltip />
+        <Tooltip content={<CustomTooltip />} />
 
-        {/* <Area
-          type="monotone"
-          dataKey="new"
-          stackId="1"
-          strokeWidth={3}
-          stroke="#84cc16"
-          // fill="#bef264"
-          fill="url(#colorNew)"
-        /> */}
         <Area
           type="monotone"
           dataKey="total"
           stackId="1"
           stroke="#6366f1"
           strokeWidth={3}
+          strokeLinecap="round"
+          strokeLinejoin="round"
           // fill="#4f46e5"
           fill="url(#colorTotal)"
           isAnimationActive={true}
