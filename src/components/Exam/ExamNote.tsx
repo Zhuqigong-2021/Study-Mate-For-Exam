@@ -69,7 +69,7 @@ const ExamNote = ({ note }: NoteProps) => {
     <>
       {isClient && (
         <Card
-          className="relative cursor-pointer rounded-xl border-none bg-white shadow-gray-400  transition-shadow hover:shadow-gray-600 dark:bg-background dark:shadow-teal-500 dark:hover:shadow-md dark:hover:shadow-teal-200 "
+          className="relative cursor-pointer rounded-xl border-none bg-white shadow-gray-400  transition-all  duration-700 ease-in-out   hover:shadow-gray-600 dark:bg-background dark:shadow-teal-500 dark:hover:shadow-md dark:hover:shadow-teal-200 "
           onClick={() => setShowAddEditNoteDialog(true)}
         >
           <CardHeader className="relative h-32 ">

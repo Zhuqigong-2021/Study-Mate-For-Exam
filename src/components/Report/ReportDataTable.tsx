@@ -125,7 +125,7 @@ export function ReportDataTable<TData extends any, TValue>({
     "bg-blue-400",
   ];
   return (
-    <Card className=" relative w-full  dark:border-none   dark:shadow-md dark:shadow-violet-300">
+    <Card className=" relative w-full  transition-all   duration-700 ease-in-out dark:border-none dark:shadow-md   dark:shadow-violet-300">
       <CardHeader>
         <CardTitle className="font-bold">{r("title")}</CardTitle>
         <CardDescription>{r("description")}</CardDescription>

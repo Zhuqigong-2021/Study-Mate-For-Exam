@@ -316,7 +316,7 @@ export function AdminDashboard({
   // console.log(reportData);
 
   return (
-    <div className="dark:circle-lg my-5 flex min-h-[900px] w-full  max-w-[84rem] flex-col overflow-hidden  rounded-[1.5rem] border shadow-md dark:border-none">
+    <div className="dark:circle-lg my-5 flex min-h-[900px] w-full  max-w-[84rem] flex-col overflow-hidden  rounded-[1.5rem] border shadow-md    dark:border-none">
       <header className="dark:class sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 dark:border-none dark:shadow-sm dark:shadow-gray-700">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link

@@ -133,7 +133,7 @@ const Note = ({ note, isAdmin, index, lang }: NoteProps) => {
     <>
       {isClient && (
         <Card
-          className="relative cursor-pointer   rounded-xl border-none bg-white shadow-sm shadow-gray-400 hover:shadow-gray-600 dark:bg-background dark:shadow-teal-500 dark:hover:shadow-md dark:hover:shadow-teal-200"
+          className="relative cursor-pointer   rounded-xl border-none bg-white shadow-sm shadow-gray-400 transition-all duration-700 ease-in-out hover:shadow-gray-600 dark:bg-background   dark:shadow-teal-500 dark:hover:shadow-md dark:hover:shadow-teal-200"
           onClick={() => setShowAddEditNoteDialog(true)}
         >
           {isAdmin && percentageGetter(note.description) && (
@@ -155,7 +155,7 @@ const Note = ({ note, isAdmin, index, lang }: NoteProps) => {
             </>
           )}
           <CardHeader className="h-32 space-y-0">
-            <CardTitle className="scale-y-90  text-lg text-gray-800 dark:text-foreground">
+            <CardTitle className="scale-y-90  text-lg text-gray-800  dark:text-foreground">
               {note.title}
             </CardTitle>
 

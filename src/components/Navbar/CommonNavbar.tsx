@@ -188,8 +188,8 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
       <div
         className={` bg-white p-4  shadow ${
           pathname == `/${lang}`
-            ? "bg-white dark:text-slate-800"
-            : "text-foreground  dark:bg-background"
+            ? "bg-white transition-all duration-300 ease-in-out dark:text-slate-800"
+            : "text-foreground transition-all duration-300 ease-in-out dark:bg-background"
         } ${isSticky ? "fixed left-0 top-0 z-50 w-full" : ""}`}
       >
         <div className="m-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 ">
@@ -200,7 +200,9 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
             {/* text-slate-800 */}
             <span
               className={`${
-                pathname == `/${lang}` ? "text-slate-800" : "dark:text-white"
+                pathname == `/${lang}`
+                  ? "text-slate-800"
+                  : "transition-all duration-300 ease-in-out dark:text-white"
               } relative  flex scale-y-95 font-sans text-2xl  font-black  text-slate-800 lg:text-2xl `}
             >
               Study Mate{" "}
@@ -231,10 +233,10 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                 <NavigationMenu className="flex w-full ">
                   <NavigationMenuList className="flex w-full  items-center gap-2  font-semibold ">
                     <NavigationMenuItem className="hidden  font-light   lg:flex ">
-                      <NavigationMenuTrigger className="dark:text-teal-50 ">
+                      <NavigationMenuTrigger className="transition-all duration-300 ease-in-out dark:text-teal-50 ">
                         {t("getting-started.title")}
                       </NavigationMenuTrigger>
-                      <NavigationMenuContent className="z-50 border-none dark:border-none  ">
+                      <NavigationMenuContent className="z-50 border-none transition-all duration-300 ease-in-out dark:border-none  ">
                         <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[550px] lg:grid-cols-[.75fr_1fr] ">
                           <li className="row-span-2">
                             <NavigationMenuLink asChild>
@@ -274,7 +276,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                     </NavigationMenuItem>
 
                     <NavigationMenuItem className="z-50  hidden  font-light  lg:flex ">
-                      <NavigationMenuTrigger className="dark:text-teal-50">
+                      <NavigationMenuTrigger className="transition-all duration-300 ease-in-out dark:text-teal-50">
                         {t("taking-notes.title")}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
@@ -311,7 +313,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                     {(isAdmin || admin) && (
                       <Link
                         href={`/admin/dashboard`}
-                        className="hidden rounded-full bg-teal-50 p-2 shadow-inner shadow-teal-500  lg:flex   dark:bg-background "
+                        className="hidden rounded-full bg-teal-50 p-2 shadow-inner shadow-teal-500  transition-all   duration-300 ease-in-out lg:flex dark:bg-background "
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -336,7 +338,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                     )}
 
                     <NavigationMenuItem className="hidden  font-light   lg:flex ">
-                      <NavigationMenuTrigger className="dark:text-teal-50">
+                      <NavigationMenuTrigger className="transition-all duration-300 ease-in-out dark:text-teal-50">
                         {t("operations.title")}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
@@ -464,7 +466,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                     </NavigationMenuItem>
 
                     <NavigationMenuItem className="hidden  font-light   lg:flex ">
-                      <NavigationMenuTrigger className="dark:text-teal-50">
+                      <NavigationMenuTrigger className="transition-all duration-300 ease-in-out dark:text-teal-50">
                         {t("about-us.title")}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
@@ -521,7 +523,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                           fill="#fefce8"
                           // onClick={() => setMode((prev) => (prev = !prev))}
                           // className="rotate-0 scale-100 transition-all dark:hidden dark:-rotate-90 dark:scale-0"
-                          className=" hidden translate-x-1 dark:block dark:scale-100"
+                          className=" hidden translate-x-1 transition-all duration-300 ease-in-out dark:block dark:scale-100"
                           style={{
                             filter: "drop-shadow(2px 2px 5px #ccfbf1)",
                             WebkitFilter: "drop-shadow(2px 2px 5px #ccfbf1)",
@@ -532,7 +534,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                       {/* dark:block dark:rotate-0 dark:scale-100 */}
                       {isClient && (
                         <div
-                          className="blur-1   h-[1.15rem] w-[1.15rem] rotate-90 scale-100 rounded-full bg-gradient-to-t from-amber-400 to-amber-200 transition-all  dark:hidden dark:rotate-0 dark:scale-0"
+                          className="blur-1   h-[1.15rem] w-[1.15rem] rotate-90 scale-100 rounded-full bg-gradient-to-t from-amber-400 to-amber-200 transition-all duration-300 ease-in-out  dark:hidden dark:rotate-0 dark:scale-0"
                           style={{ boxShadow: "0px 0px 18px #fef08a" }}
                           onClick={() => setTheme("dark")}
                         ></div>

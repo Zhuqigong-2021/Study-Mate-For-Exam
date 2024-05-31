@@ -117,7 +117,7 @@ export function AllUserDataTable<TData extends any, TValue>({
     "bg-blue-400",
   ];
   return (
-    <div className="relative w-full dark:bg-background">
+    <div className="relative w-full transition-all duration-700 ease-in-out dark:bg-background">
       {/* <CardContent className="border-none px-0"> */}
       <div className="flex flex-wrap items-center py-4">
         <Input
@@ -179,9 +179,9 @@ export function AllUserDataTable<TData extends any, TValue>({
         </DropdownMenu>
       </div>
       {/* table */}
-      <div className="flex w-full   overflow-x-auto rounded-md  border dark:border-stone-600">
+      <div className="flex w-full   overflow-x-auto rounded-md  border  dark:border-stone-600">
         <div className="max-w-full md:max-w-full ">
-          <Table className="w-full dark:border-stone-600">
+          <Table className="w-full  dark:border-stone-600">
             <TableHeader className="bg-stone-50 dark:border-stone-600 dark:bg-indigo-500  ">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow

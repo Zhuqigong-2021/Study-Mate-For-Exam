@@ -130,7 +130,7 @@ export default async function Dashboard() {
   const numberOfNotesCreatedThisMonth = countNotesCreatedThisMonth(allNotes);
 
   return (
-    <div className=" flex w-full flex-col items-center justify-center bg-slate-50  dark:bg-background">
+    <div className=" flex w-full flex-col items-center justify-center bg-slate-50  transition-all duration-700 ease-in-out dark:bg-background">
       <AdminDashboard
         users={JSON.stringify(users)}
         userId={userId}

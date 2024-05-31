@@ -81,7 +81,7 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
           <body
-            className="bg-slate-50 font-sans dark:bg-background"
+            className="bg-slate-50 font-sans transition-all duration-700 ease-in-out dark:bg-background"
             suppressHydrationWarning={true}
           >
             <ThemeProvider attribute="class">

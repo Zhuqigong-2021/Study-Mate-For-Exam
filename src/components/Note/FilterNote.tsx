@@ -203,7 +203,7 @@ const FilterNote = ({
       <div
         className={`${
           isSticky ? "mt-[29.6rem]" : "mt-[25rem]"
-        } max-w-7xl  bg-slate-50 dark:bg-background`}
+        } max-w-7xl  bg-slate-50 transition-all duration-700 ease-in-out dark:bg-background`}
       >
         {(isAdmin || admin) && isClient && (
           <div className="my-5 flex items-center justify-between">
@@ -271,7 +271,7 @@ const FilterNote = ({
             </DropdownMenu>
           </div>
         )}
-        <div className=" grid  gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className=" grid  gap-3  sm:grid-cols-2 lg:grid-cols-3">
           {isClient &&
             selecedNotes &&
             selecedNotes.map((note, index) => (
