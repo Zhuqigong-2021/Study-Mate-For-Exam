@@ -13,6 +13,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { locales } from "@/navigation";
 import { ThemeProvider } from "../ThemeProvider";
+// import "@knocklabs/react/dist/index.css";
+import { NotifyProvider } from "../NotifyProvider";
 
 export const metadata: Metadata = {
   manifest: "/manifest.json",
@@ -85,9 +87,11 @@ export default async function RootLayout({
             suppressHydrationWarning={true}
           >
             <ThemeProvider attribute="class">
-              <CommonNavbar isAdmin={isAdmin} userId={userId ? userId : ""} />
-              {children}
-              <Toaster />
+              <NotifyProvider userId={userId ?? ""}>
+                <CommonNavbar isAdmin={isAdmin} userId={userId ? userId : ""} />
+                {children}
+                <Toaster />
+              </NotifyProvider>
             </ThemeProvider>
           </body>
         </NextIntlClientProvider>

@@ -32,6 +32,17 @@ export const FormSchema = z.object({
   searchParam: z.string(),
 });
 
+export const inAppSchema = z.object({
+  link: z.string().min(1, { message: "redirect user link is required" }),
+  description: z.string().min(1, { message: "Description is required" }),
+  subject: z.string().min(1, { message: "Subject is required" }),
+  time: z.string(),
+  frameworks: z
+    .array(z.string())
+    .min(1, { message: "at least one receipient" }),
+  tag: z.array(z.string()).min(1, { message: "at least one tag" }),
+});
+
 export type CreateNoteSchema = z.infer<typeof createNoteSchema>;
 
 export type UpdateQuestionSchema = z.infer<typeof updateQuestionSchema>;
@@ -41,6 +52,8 @@ export type ChoiceSchema = z.infer<typeof choiceSchema>;
 export type CreateQuestionSchema = z.infer<typeof createQuestionSchema>;
 
 export type formSchema = z.infer<typeof FormSchema>;
+
+export type InAppSchema = z.infer<typeof inAppSchema>;
 // export const updateNoteSchema = createNoteSchema.extend({
 //   id: z.string().min(1),
 // });

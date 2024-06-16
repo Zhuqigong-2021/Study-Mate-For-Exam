@@ -3,15 +3,21 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import Cookie from "js-cookie";
 import Image from "next/image";
-import { UserButton, useClerk } from "@clerk/nextjs";
+import { UserButton, currentUser, useClerk } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
-import { Circle, Crown, Globe, Leaf, Moon, Sun } from "lucide-react";
+import { Circle, Crown, Divide, Globe, Leaf, Moon, Sun } from "lucide-react";
 import AddEditNoteDialog from "@/components/Note/AddEditNoteDialog";
 import Drawer from "./Drawer";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { cn } from "@/lib/utils";
-
+import {
+  Avatar,
+  NotificationCell,
+  NotificationFeedPopover,
+  NotificationIconButton,
+} from "@knocklabs/react";
+import "@knocklabs/react/dist/index.css";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -62,6 +68,9 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
 
   const [isSticky, setIsSticky] = useState(false);
   const t = useTranslations("Navbar");
+
+  const [isVisible, setIsVisible] = useState(false);
+  const notifButtonRef = useRef(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -543,11 +552,90 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                     </NavigationMenuItem>
 
                     <NavigationMenuItem className="relative hidden px-3  xl:flex lg:flex">
-                      <IoIosNotificationsOutline
+                      {/* <IoIosNotificationsOutline
                         size={28}
                         className="text-stone-700 dark:text-white/95"
                       />
-                      <div className="absolute right-[0.75rem] top-0 h-2 w-2 rounded-full bg-rose-500"></div>
+                      <div className="absolute right-[0.75rem] top-0 h-2 w-2 rounded-full bg-rose-500"></div> */}
+                      <div className=" text-stone-700 dark:text-white/95 ">
+                        <NotificationIconButton
+                          ref={notifButtonRef}
+                          onClick={(e) => setIsVisible(!isVisible)}
+                        />
+                        <NotificationFeedPopover
+                          buttonRef={notifButtonRef}
+                          isVisible={isVisible}
+                          onClose={() => setIsVisible(false)}
+                          renderItem={({ item, ...props }) => (
+                            <div
+                              className="m-2  overflow-hidden rounded-lg bg-stone-50"
+                              key={item.id}
+                              onClick={() => router.push(item.data?.link)}
+                              // href={`${item.data?.link}`}
+                            >
+                              <NotificationCell
+                                {...props}
+                                item={item}
+                                // You can use any properties available on the `actor` for the name and avatar
+                                // avatar={
+                                //   <Avatar
+                                //     name={item.actors[0].name}
+                                //     src={item.actors[0].avatar}
+                                //   />
+                                // }
+                                avatar={
+                                  <Image
+                                    src={item.data?.adminUrl}
+                                    alt="superadmin"
+                                    width={30}
+                                    height={30}
+                                    className="h-8 w-8 translate-y-1 rounded-full"
+                                  />
+                                }
+                              >
+                                {/* <div className="absolute right-8">
+                                  <Image
+                                    src={item.data?.adminUrl}
+                                    alt="superadmin"
+                                    width={30}
+                                    height={30}
+                                    className="h-8 w-8 -translate-y-6 rounded-full"
+                                  />
+                                  <div className="flex flex-wrap text-xs text-blue-400 underline">
+                                    <Link href={`/notes/$`}>
+                                      {item.data?.workoutText.value}
+                                    </Link>
+                                  </div>
+                                </div> */}
+                              </NotificationCell>
+                            </div>
+                          )}
+                          // renderItem={(item) => (
+                          //   <div className="m-2  flex h-16  items-center  rounded-lg bg-stone-50 p-2 shadow-sm">
+                          //     <div className="flex items-center space-x-3">
+                          //       <Image
+                          //         src={item.item.data?.adminUrl}
+                          //         alt="superadmin"
+                          //         width={30}
+                          //         height={30}
+                          //         className="h-8 w-8 rounded-full"
+                          //       />
+                          //       <div className="flex flex-wrap text-sm">
+                          //         <Link href={`/notes/$`}>
+                          //           Hey{" "}
+                          //           <span className="font-semibold">
+                          //             Qigong
+                          //           </span>
+                          //           👋<span> - we sent you a notification</span>
+                          //           <br />
+                          //           {item.item.data?.workoutText.value}
+                          //         </Link>
+                          //       </div>
+                          //     </div>
+                          //   </div>
+                          // )}
+                        />
+                      </div>
                     </NavigationMenuItem>
 
                     <NavigationMenuItem className="hidden  xl:flex lg:flex">

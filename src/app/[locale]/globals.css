@@ -128,3 +128,22 @@
 *:hover > .resizer {
   opacity: 1;
 }
+
+.rnf-dropdown.rnf-dropdown--light select {
+  color: #333;
+  width: 80px;
+}
+.rnf-notification-cell_unread-dot {
+  border: none !important;
+  background-color: red !important;
+}
+.rnf-notification-cell {
+  position: relative;
+}
+.rnf-notification-cell__timestamp {
+  /* translate: 190px -10px; */
+  font-size: 8px;
+  /* position: absolute;
+  right: 6px;
+  bottom: 16px; */
+}

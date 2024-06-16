@@ -66,6 +66,8 @@ import { UserButton } from "@clerk/nextjs";
 import ReportPieChart from "./UserChart/ReportPieChart";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
+import { sendNotification } from "@/app/[locale]/action";
+import Notification from "./Notification/Notification";
 interface Range {
   min: number;
   max: number;
@@ -314,9 +316,17 @@ export function AdminDashboard({
   //   { name: "0-75", value: 10 },
   // ];
   // console.log(reportData);
+  // const sendUsersNotification = async () => {
+  //   const response = await sendNotification();
+  //   console.log(response);
+  // };
 
   return (
-    <div className="dark:circle-lg my-5 flex min-h-[900px] w-full  max-w-[84rem] flex-col overflow-hidden  rounded-[1.5rem] border shadow-md    dark:border-none">
+    <div
+      className={`${
+        currentTab === "notification" ? "dark:circle-md-note" : "dark:circle-lg"
+      } my-5 flex min-h-[800px] w-full  max-w-[84rem] flex-col overflow-hidden  rounded-[1.5rem] border shadow-md    dark:border-none`}
+    >
       <header className="dark:class sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 dark:border-none dark:shadow-sm dark:shadow-gray-700">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link
@@ -922,8 +932,9 @@ export function AdminDashboard({
         </main>
       )}
       {currentTab === "notification" && (
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-          notification
+        <main className="flex flex-1 flex-col bg-white/75">
+          {/* <button onClick={sendUsersNotification}>Click to push</button> */}
+          <Notification usersList={usersList} />
         </main>
       )}
       {currentTab === "statistics" && (
@@ -939,61 +950,3 @@ export function AdminDashboard({
     </div>
   );
 }
-
-//  <div className="flex items-center gap-4">
-//                   <Avatar className="hidden h-9 w-9 sm:flex">
-//                     <AvatarFallback>JL</AvatarFallback>
-//                   </Avatar>
-//                   <div className="grid gap-1">
-//                     <p className="text-sm font-medium leading-none">
-//                       Jackson Lee
-//                     </p>
-//                     <p className="text-sm text-muted-foreground">
-//                       jackson.lee@email.com
-//                     </p>
-//                   </div>
-//                   <div className="ml-auto font-medium">+$39.00</div>
-//                 </div>
-//                 <div className="flex items-center gap-4">
-//                   <Avatar className="hidden h-9 w-9 sm:flex">
-//                     <AvatarFallback>IN</AvatarFallback>
-//                   </Avatar>
-//                   <div className="grid gap-1">
-//                     <p className="text-sm font-medium leading-none">
-//                       Isabella Nguyen
-//                     </p>
-//                     <p className="text-sm text-muted-foreground">
-//                       isabella.nguyen@email.com
-//                     </p>
-//                   </div>
-//                   <div className="ml-auto font-medium">+$299.00</div>
-//                 </div>
-//                 <div className="flex items-center gap-4">
-//                   <Avatar className="hidden h-9 w-9 sm:flex">
-//                     <AvatarFallback>WK</AvatarFallback>
-//                   </Avatar>
-//                   <div className="grid gap-1">
-//                     <p className="text-sm font-medium leading-none">
-//                       William Kim
-//                     </p>
-//                     <p className="text-sm text-muted-foreground">
-//                       will@email.com
-//                     </p>
-//                   </div>
-//                   <div className="ml-auto font-medium">+$99.00</div>
-//                 </div>
-//                 <div className="flex items-center gap-4">
-//                   <Avatar className="hidden h-9 w-9 sm:flex">
-
-//                     <AvatarFallback>SD</AvatarFallback>
-//                   </Avatar>
-//                   <div className="grid gap-1">
-//                     <p className="text-sm font-medium leading-none">
-//                       Sofia Davis
-//                     </p>
-//                     <p className="text-sm text-muted-foreground">
-//                       sofia.davis@email.com
-//                     </p>
-//                   </div>
-//                   <div className="ml-auto font-medium">+$39.00</div>
-//                 </div>

@@ -132,6 +132,7 @@ const colorClasses = [
 
 const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
   const [isClient, setIsClient] = useState(false);
+
   const d = useTranslations("Dashboard");
   useEffect(() => {
     setIsClient(true);
@@ -162,8 +163,8 @@ const ReportWrapper = ({ usersList, isSuperAdmin }: UsersProps) => {
         toast.error(d("data.table.toast.auth-err"));
         return;
       }
-      let userId: string = user.id;
-      let role: string = user.publicMetadata.role ? "" : "admin";
+      // let userId: string = user.id;
+      // let role: string = user.publicMetadata.role ? "" : "admin";
 
       toast.success(d("data.table.toast.role-suc"));
       router.refresh();
