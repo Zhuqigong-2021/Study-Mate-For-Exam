@@ -217,15 +217,15 @@ const Notification = ({ usersList }: notificationProps) => {
   //     console.log(response);
   //   };
   async function onSubmit(input: InAppSchema) {
-    alert(JSON.stringify(input));
+    // alert(JSON.stringify(input));
     try {
-      // setInAppLoading(true);
-      // const response: any = await sendNotification(input);
-      // if (response) {
-      //   toast.success("Notification has been sent successfully");
-      //   setInAppLoading(false);
-      //   form.reset();
-      // }
+      setInAppLoading(true);
+      const response: any = await sendNotification(input);
+      if (response) {
+        toast.success("Notification has been sent successfully");
+        setInAppLoading(false);
+        form.reset();
+      }
     } catch (error) {
       toast.error("Internal Error");
       setInAppLoading(false);
