@@ -58,7 +58,7 @@ import UserBarChart from "./UserChart/UserBarChart";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Label } from "./ui/label";
-import { Prisma, Report } from "@prisma/client";
+import { InAppNotification, Report } from "@prisma/client";
 import Cookie from "js-cookie";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import AllUsers from "./UserDashboard/AllUsers";
@@ -84,6 +84,7 @@ interface UserProps {
   notesTotal: number;
   reportsNumber: number;
   reports: string;
+  allInAppNotifications: string;
   isSuperAdmin: boolean;
   numberOfNotesCreatedThisMonth: number;
   isAdmin: boolean;
@@ -108,6 +109,7 @@ export function AdminDashboard({
   notesTotal,
   reportsNumber,
   reports,
+  allInAppNotifications,
   isSuperAdmin,
   numberOfNotesCreatedThisMonth,
   isAdmin,
@@ -117,6 +119,9 @@ export function AdminDashboard({
 
   const [usersList, setUsersList] = useState<User[]>([]);
   const [reportsList, setReportsList] = useState<Report[]>([]);
+  const [inAppnotificationList, setInAppNotificationList] = useState<
+    InAppNotification[]
+  >([]);
   const [isClient, setIsClient] = useState(false);
   const [dataMode, setDataMode] = useState(false);
   const [currentTab, setCurrentTab] = useState("dashboard");
@@ -170,6 +175,9 @@ export function AdminDashboard({
   useEffect(() => {
     setReportsList(JSON.parse(reports));
   }, [reports]);
+  useEffect(() => {
+    setInAppNotificationList(JSON.parse(allInAppNotifications));
+  }, [allInAppNotifications]);
 
   function shortenString(email: any) {
     const emailLength = 18; // Set the maximum length before shortening
@@ -934,7 +942,10 @@ export function AdminDashboard({
       {currentTab === "notification" && (
         <main className="flex flex-1 flex-col bg-white/75">
           {/* <button onClick={sendUsersNotification}>Click to push</button> */}
-          <Notification usersList={usersList} />
+          <Notification
+            usersList={usersList}
+            inAppNotificationList={inAppnotificationList}
+          />
         </main>
       )}
       {currentTab === "statistics" && (

@@ -70,6 +70,26 @@ model ReportList {
   reports Report[]
 }
 
+model InAppNotification {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+    link String
+    user  String
+    time String
+    subject String
+    to String[]
+    description String
+    tag String[]
+
+  notificationList NotificationList @relation(fields: [notificationListId],references: [id])
+  notificationListId String @unique @db.ObjectId
+  @@map("inAppNotifications")
+}
+
+model NotificationList {
+    id String @id @default(auto()) @map("_id") @db.ObjectId
+    inApps InAppNotification[]
+}
+
 // model Notification {
 //   id String @id @default(auto()) @map("_id") @db.ObjectId,
 

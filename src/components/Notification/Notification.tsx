@@ -72,13 +72,23 @@ import { InAppSchema, inAppSchema } from "@/lib/validation/note";
 import NotificationCard from "./NotificationCard";
 import { UserButton } from "@clerk/nextjs";
 import { Badge } from "../ui/badge";
+import { InAppNotification } from "@prisma/client";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface notificationProps {
   usersList: User[];
+  inAppNotificationList: InAppNotification[];
 }
 
-const Notification = ({ usersList }: notificationProps) => {
+const Notification = ({
+  usersList,
+  inAppNotificationList,
+}: notificationProps) => {
   const [currentTab, setCurrentTab] = useState<string>();
+  const sortedInAppNotifications = [...inAppNotificationList].sort(
+    (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
+  );
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [tags, setTags] = useState(["new", "important", "move", "exam"]);
@@ -88,7 +98,19 @@ const Notification = ({ usersList }: notificationProps) => {
   const { theme, setTheme } = useTheme();
   const [inAppLoading, setInAppLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
-
+  const [thisNotification, setThisNotification] = useState<InAppNotification>();
+  // {
+  //   id: "",
+  //   link: "",
+  //   user: "",
+  //   time: "",
+  //   subject: "",
+  //   to: [],
+  //   description: "",
+  //   tag: [],
+  //   notificationListId: "",
+  // }
+  const router = useRouter();
   const form = useForm<InAppSchema>({
     resolver: zodResolver(inAppSchema),
     defaultValues: {
@@ -96,7 +118,7 @@ const Notification = ({ usersList }: notificationProps) => {
       link: "",
       subject: "",
       description: "",
-      frameworks: [],
+      to: [],
       tag: [],
     },
   });
@@ -216,16 +238,71 @@ const Notification = ({ usersList }: notificationProps) => {
   //     const response = await sendNotification();
   //     console.log(response);
   //   };
+
+  //convert to locale date time
+  // let isoString = "2024-06-16T17:29:15.786Z";
+  // const date = new Date(isoString);
+
+  // // Convert to localized date and time
+  // const localizedDateTime = date.toLocaleString("en-US", {
+  //   year: "numeric",
+  //   month: "long",
+  //   day: "numeric",
+  //   hour: "numeric",
+  //   minute: "numeric",
+  //   second: "numeric",
+  //   hour12: true, // Use 12-hour clock, set to false for 24-hour clock
+  // });
+  function convertToLocaleDateTime(isoString: Date | number | string) {
+    const date = new Date(isoString);
+
+    // Convert to localized date and time
+    const localizedDateTime = date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: true, // Use 12-hour clock, set to false for 24-hour clock
+    });
+    return localizedDateTime;
+  }
+  // convert to timestamp
+  function getCurrentTimestamp() {
+    return new Date().toISOString();
+  }
   async function onSubmit(input: InAppSchema) {
     // alert(JSON.stringify(input));
+    // alert(convertToLocaleDateTime(getCurrentTimestamp()));
+    const currentTime = getCurrentTimestamp();
+
     try {
+      // if (currentUser) {
+      //   alert(JSON.stringify(currentUser));
+      // }
       setInAppLoading(true);
-      const response: any = await sendNotification(input);
+      const response: string = await sendNotification({
+        ...input,
+        time: currentTime,
+      });
       if (response) {
         toast.success("Notification has been sent successfully");
         setInAppLoading(false);
         form.reset();
+        router.refresh();
       }
+      // if (response.ok) {
+      //   toast.success("sent successfully");
+      // }
+      // const response = await fetch("/api/notification/inApp", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({ ...input, user: JSON.stringify(currentUser) }),
+      // });
+      // setIsFlagged(!isFlagged);
     } catch (error) {
       toast.error("Internal Error");
       setInAppLoading(false);
@@ -236,6 +313,16 @@ const Notification = ({ usersList }: notificationProps) => {
     alert(JSON.stringify(input));
     try {
     } catch (error) {}
+  }
+
+  function handleDataTransmit(id: string): void {
+    router.refresh();
+
+    const thisOne = sortedInAppNotifications.filter((no) => no.id === id)[0];
+
+    setThisNotification(thisOne);
+    // alert(JSON.stringify(thisOne));
+    console.log(JSON.parse(thisOne.user));
   }
 
   return (
@@ -534,13 +621,18 @@ const Notification = ({ usersList }: notificationProps) => {
                   </div>
 
                   <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
-                    <NotificationCard />
-                    <NotificationCard />
-                    <NotificationCard />
-                    <NotificationCard />
-                    <NotificationCard />
-                    <NotificationCard />
-                    <NotificationCard />
+                    {inAppNotificationList.length > 0 &&
+                      sortedInAppNotifications.map((no: InAppNotification) => (
+                        // <div key={no.id}>{no.time}</div>
+                        <div
+                          key={no.id}
+                          onClick={() => {
+                            handleDataTransmit(no.id);
+                          }}
+                        >
+                          <NotificationCard no={no} />
+                        </div>
+                      ))}
                   </div>
                 </div>
               )}
@@ -577,59 +669,85 @@ const Notification = ({ usersList }: notificationProps) => {
           <ResizablePanel defaultSize={93}>
             <ResizablePanelGroup direction="vertical">
               {/* <ResizablePanelGroup direction="vertical"> */}
-              <ResizablePanel defaultSize={15} minSize={13} maxSize={30}>
-                <div className="border-b-1   h-full  bg-white p-2 pb-3 dark:bg-black">
-                  <div className="flex items-center space-x-3 py-2 ">
-                    <div className="-translate-y-3">
-                      <UserButton
+              {thisNotification && (
+                <>
+                  <ResizablePanel defaultSize={15} minSize={13} maxSize={30}>
+                    <div className="border-b-1   h-full  bg-white p-2 pb-3 dark:bg-black">
+                      <div className="flex items-center space-x-3 py-2 ">
+                        <div className="-translate-y-3">
+                          {/* <UserButton
                         appearance={{
                           elements: {
                             avatarBox: { width: "2.3rem", height: "2.3rem" },
                           },
                         }}
-                      ></UserButton>
-                    </div>
-
-                    <div className="flex w-full flex-col ">
-                      <div className="flex w-full items-center justify-between">
-                        <span className="font-bold dark:text-teal-300">
-                          Phil Zhu
-                        </span>{" "}
-                        <span className="text-sm dark:text-teal-300">
-                          Mar 10,2023,3:00:00 PM
-                        </span>
-                      </div>
-                      <div className="mb-2">
-                        <div className="mb-1 text-sm dark:text-white/75">
-                          Important Announcement
+                      ></UserButton> */}
+                          {thisNotification && (
+                            <Image
+                              src={JSON.parse(
+                                thisNotification.user,
+                              ).imageUrl.toString()}
+                              alt="sender"
+                              width={35}
+                              height={35}
+                              className="rounded-full"
+                            />
+                          )}
                         </div>
-                        <div className="flex flex-wrap space-x-2">
-                          <span className="text-sm">To:</span>
-                          <Badge className="scale-90 dark:bg-teal-500 dark:text-white">
-                            All
-                          </Badge>
+
+                        <div className="flex w-full flex-col ">
+                          <div className="flex w-full items-center justify-between">
+                            <span className="font-bold dark:text-teal-300">
+                              {thisNotification &&
+                                JSON.parse(thisNotification?.user).firstName +
+                                  " " +
+                                  JSON.parse(thisNotification?.user).lastName}
+                            </span>{" "}
+                            {thisNotification && (
+                              <span className="text-sm dark:text-teal-300">
+                                {convertToLocaleDateTime(thisNotification.time)}
+                              </span>
+                            )}
+                          </div>
+                          {thisNotification && (
+                            <div className="mb-2">
+                              <div className="mb-1 text-sm dark:text-white/75">
+                                {thisNotification.subject}
+                              </div>
+
+                              <div className="flex flex-wrap space-x-2">
+                                <span className="text-sm">To:</span>
+                                <div className="flex space-x-0">
+                                  {thisNotification.to.map((t, index) => (
+                                    <Badge
+                                      key={index}
+                                      className="scale-90 dark:bg-teal-500 dark:text-white"
+                                    >
+                                      {t}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </ResizablePanel>
-              {/* <div className=" h-1 w-full border-b "></div> */}
-              <ResizableHandle withHandle={true} />
-              <ResizablePanel>
-                <div className="h-full  bg-white/75 p-2 py-3 text-sm dark:bg-black dark:text-white/80">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae
-                  quo explicabo tenetur et quis, aperiam, iure cupiditate
-                  repellat eveniet velit dicta? Fuga, deleniti ea quos hic
-                  consequatur molestiae debitis labore.
-                </div>
-              </ResizablePanel>
-              {/* </ResizablePanelGroup> */}
+                  </ResizablePanel>
+                  {/* <div className=" h-1 w-full border-b "></div> */}
+                  <ResizableHandle withHandle={true} />
+                  <ResizablePanel>
+                    <div className="h-full  bg-white/75 p-2 py-3 text-sm dark:bg-black dark:text-white/80">
+                      {thisNotification && thisNotification.description}
+                    </div>
+                  </ResizablePanel>
 
-              {(currentTab === "inbox" ||
-                !currentTab ||
-                currentTab === "email") && (
-                <ResizableHandle withHandle={false} disabled />
+                  {(currentTab === "inbox" ||
+                    !currentTab ||
+                    currentTab === "email") && (
+                    <ResizableHandle withHandle={false} disabled />
+                  )}
+                </>
               )}
               <ResizablePanel defaultSize={65} maxSize={90}>
                 <div className="no-scrollbar relative flex h-full flex-grow flex-col items-center justify-center   overflow-y-scroll bg-white/75 px-3  pb-2 pt-2  dark:bg-black">
@@ -637,13 +755,16 @@ const Notification = ({ usersList }: notificationProps) => {
                     <Form {...form}>
                       <form
                         onSubmit={form.handleSubmit(onSubmit)}
-                        className="no-scrollbar  w-full space-y-3   overflow-y-scroll  pb-4 dark:px-1"
+                        className={`${
+                          !thisNotification ? "space-y-14" : "space-y-3"
+                        } no-scrollbar  w-full   overflow-y-scroll  pb-4 dark:px-1`}
+                        // className="no-scrollbar  w-full   space-y-14 overflow-y-scroll pb-4 dark:px-1"
                       >
                         {/* <ResizablePanelGroup direction="vertical"> */}
 
                         <FormField
                           control={form.control}
-                          name="frameworks"
+                          name="to"
                           render={({ field }) => (
                             <FormItem className="">
                               <FormLabel className="flex w-full items-center justify-between space-x-2">

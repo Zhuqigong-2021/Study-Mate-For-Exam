@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { Knock } from "@knocklabs/node";
 import { User, auth, clerkClient } from "@clerk/nextjs/server";
 import { InAppSchema, inAppSchema } from "@/lib/validation/note";
+import prisma from "@/lib/db/prisma";
 export const fetchNoteData = async (page: number) => {
   const response = await fetch(`/api/notes?noteId=&{noteId}`, {
     method: "GET",
@@ -50,12 +51,10 @@ export const sendNotification = async (input: InAppSchema) => {
 
   let user: User[];
 
-  if (input.frameworks.includes("all")) {
+  if (input.to.includes("all")) {
     user = allUsersExceptSender;
-  } else if (input.frameworks.includes("admin")) {
-    const elseUsers = allUsers.filter((user) =>
-      input.frameworks.includes(user.id),
-    );
+  } else if (input.to.includes("admin")) {
+    const elseUsers = allUsers.filter((user) => input.to.includes(user.id));
     const combinedUsers = [...adminUsers, ...elseUsers];
     const uniqueUsers = Array.from(
       new Set(combinedUsers.map((user) => user.id)),
@@ -65,9 +64,7 @@ export const sendNotification = async (input: InAppSchema) => {
 
     user = uniqueUsers;
   } else {
-    const elseUsers = allUsers.filter((user) =>
-      input.frameworks.includes(user.id),
-    );
+    const elseUsers = allUsers.filter((user) => input.to.includes(user.id));
     user = elseUsers;
   }
   // const knockUser = await knock.users.identify(user[0].id, {
@@ -78,39 +75,105 @@ export const sendNotification = async (input: InAppSchema) => {
   // const superAdmin = allUsers.filter(
   //   (user) => user.id === "user_2aFBx8E20RdENmTS0CRlRej0Px4",
   // );
+
+  const firstNameArray = allUsers
+    .filter((user) => input.to.includes(user.id))
+    .map((user) => user.firstName ?? "unknown");
+
   const currentUser = allUsers.filter((user) => user.id == userId);
-  const knockUser = await knock.users.identify(userId!, {
-    name:
-      currentUser[0].firstName ??
-      "" + currentUser[0].lastName ??
-      "" ??
-      currentUser[0].username,
-    email: currentUser[0].emailAddresses[0].emailAddress,
+
+  const notificationList = await prisma.notificationList.findMany({
+    select: {
+      id: true,
+      inApps: {
+        select: {
+          id: true,
+          time: true,
+          user: true,
+          subject: true,
+          to: true,
+          description: true,
+          tag: true,
+          notificationListId: true,
+        },
+      },
+    },
   });
 
-  // console.log("userId:" + userId);
-  // console.log(knockUser);
-  // console.log(user[0].emailAddresses[0].emailAddress);
-  // console.log("user:" + JSON.stringify(user));
+  let notificationListId =
+    notificationList.length > 0 ? notificationList[0].id : null;
+  // const sendNotification = async (input: InAppSchema) => {
 
-  if (userId && user)
-    await knock.notify("notify-user", {
-      actor: userId,
-      recipients: user,
-      data: {
-        subject: input.subject,
-        description: input.description,
-        link: input.link,
-        adminUrl: currentUser[0].imageUrl,
-      },
-    });
+  // return knockUser;
+  //   return totalUsersNumber;
+  // };
+
+  // const knockUser = await knock.users.identify(userId!, {
+  //   name:
+  //     currentUser[0].firstName ??
+  //     "" + currentUser[0].lastName ??
+  //     "" ??
+  //     currentUser[0].username,
+  //   email: currentUser[0].emailAddresses[0].emailAddress,
+  // });
+  if (user.length > 0) {
+    user.forEach(
+      async (u) =>
+        await knock.users.identify(u.id!, {
+          name: u.firstName ?? "" + u.lastName ?? "" ?? u.username,
+          email: u.emailAddresses[0].emailAddress,
+        }),
+    );
+  }
+  // console.log(response);
+  await prisma.$transaction(async (tx) => {
+    if (notificationListId) {
+      await tx.inAppNotification.create({
+        data: {
+          link: input.link,
+          user: JSON.stringify(currentUser[0]),
+          time: input.time,
+          subject: input.subject,
+          to: firstNameArray,
+          description: input.description,
+          tag: input.tag,
+          notificationListId,
+        },
+      });
+    } else {
+      const notificationList = await tx.notificationList.create({
+        data: {},
+      });
+
+      await tx.inAppNotification.create({
+        data: {
+          link: input.link,
+          user: JSON.stringify(currentUser[0]),
+          time: input.time,
+          subject: input.subject,
+          to: firstNameArray,
+          description: input.description,
+          tag: input.tag,
+          notificationListId: notificationList?.id,
+        },
+      });
+    }
+
+    if (userId && user)
+      await knock.notify("notify-user", {
+        actor: userId,
+        recipients: user,
+        data: {
+          subject: input.subject,
+          description: input.description,
+          link: input.link,
+          adminUrl: currentUser[0].imageUrl,
+        },
+      });
+  });
 
   // return JSON.stringify(user);
   // console.log("user" + JSON.stringify(user[0].id));
 
-  return knockUser;
-  // console.log("admin:" + adminUsers);
-  // return JSON.stringify(user);
-  // console.log(JSON.stringify(allUsersExceptSender));
-  // return JSON.stringify(allUsersExceptSender) ?? "haha";
+  return "notification completed";
 };

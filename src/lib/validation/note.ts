@@ -37,9 +37,7 @@ export const inAppSchema = z.object({
   description: z.string().min(1, { message: "Description is required" }),
   subject: z.string().min(1, { message: "Subject is required" }),
   time: z.string(),
-  frameworks: z
-    .array(z.string())
-    .min(1, { message: "at least one receipient" }),
+  to: z.array(z.string()).min(1, { message: "at least one receipient" }),
   tag: z.array(z.string()).min(1, { message: "at least one tag" }),
 });
 
