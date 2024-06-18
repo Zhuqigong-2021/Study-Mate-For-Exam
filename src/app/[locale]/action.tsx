@@ -2,7 +2,7 @@
 import { getTranslations } from "next-intl/server";
 import { Knock } from "@knocklabs/node";
 import { User, auth, clerkClient } from "@clerk/nextjs/server";
-import { InAppSchema, inAppSchema } from "@/lib/validation/note";
+import { InAppSchema } from "@/lib/validation/note";
 import prisma from "@/lib/db/prisma";
 export const fetchNoteData = async (page: number) => {
   const response = await fetch(`/api/notes?noteId=&{noteId}`, {
