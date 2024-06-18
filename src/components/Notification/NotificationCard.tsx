@@ -11,6 +11,7 @@ import { Badge } from "../ui/badge";
 import { Star } from "lucide-react";
 import { InAppNotification } from "@prisma/client";
 import { timeAgo } from "@/app/[locale]/utils/timeAgo";
+import { limitStringLength } from "@/app/[locale]/utils/limitStringLength";
 
 interface notificationCardProps {
   no: InAppNotification;
@@ -45,7 +46,7 @@ const NotificationCard = ({ no }: notificationCardProps) => {
         {no.subject}
       </CardDescription>
       <CardContent className="m-0  p-0 text-xs font-normal text-stone-400">
-        {no.description}
+        {limitStringLength(no.description)}
       </CardContent>
       <div className="mr-6 mt-2 flex flex-wrap items-center space-x-2">
         {/* dark:border-none rounded-md dark:shadow-sm dark:shadow-teal-300 */}

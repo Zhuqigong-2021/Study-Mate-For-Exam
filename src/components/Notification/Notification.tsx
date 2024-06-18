@@ -86,6 +86,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
+import { limitStringLength } from "@/app/[locale]/utils/limitStringLength";
 
 interface notificationProps {
   usersList: User[];
@@ -597,7 +598,7 @@ const Notification = ({
                   <span className="flex items-center space-x-2 ">
                     <Package2 size={18} /> {!isCompact && <span>InApp</span>}
                   </span>
-                  {!isCompact && <span>95</span>}
+                  {!isCompact && <span>{sortedInAppNotifications.length}</span>}
                 </div>
 
                 <div
@@ -863,7 +864,7 @@ const Notification = ({
                   {/* <div className=" h-1 w-full border-b "></div> */}
                   <ResizableHandle withHandle={true} />
                   <ResizablePanel>
-                    <div className="h-full  bg-white/75 p-2 py-3 text-sm dark:bg-black dark:text-white/80">
+                    <div className="no-scrollbar  h-full overflow-y-scroll bg-white/75 p-2 py-3 text-sm dark:bg-black dark:text-white/80">
                       {thisNotification && thisNotification.description}
                     </div>
                   </ResizablePanel>
