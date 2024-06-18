@@ -55,7 +55,7 @@ const NotificationCard = ({ no }: notificationCardProps) => {
             key={index}
             className={`rounded-md ${
               tag === "new"
-                ? "dark:circle-sm-note  text-white dark:bg-teal-400"
+                ? "dark:circle-sm-note  border-none bg-black text-white dark:bg-teal-400"
                 : "dark:border-teal-300/55 dark:text-teal-300"
             }`}
           >

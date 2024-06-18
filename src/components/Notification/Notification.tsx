@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -86,9 +86,11 @@ const Notification = ({
   inAppNotificationList,
 }: notificationProps) => {
   const [currentTab, setCurrentTab] = useState<string>();
-  const sortedInAppNotifications = [...inAppNotificationList].sort(
-    (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
-  );
+  const sortedInAppNotifications = useMemo(() => {
+    return [...inAppNotificationList].sort(
+      (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
+    );
+  }, [inAppNotificationList]);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [tags, setTags] = useState(["new", "important", "move", "exam"]);
@@ -99,6 +101,10 @@ const Notification = ({
   const [inAppLoading, setInAppLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [thisNotification, setThisNotification] = useState<InAppNotification>();
+  const [search, setSearch] = useState("");
+  const [searchNotification, setSearchNotification] = useState<
+    InAppNotification[]
+  >(sortedInAppNotifications);
   // {
   //   id: "",
   //   link: "",
@@ -202,6 +208,40 @@ const Notification = ({
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  // useEffect(() => {
+  //   // console.log(search);
+  //   let inAppNos: InAppNotification[];
+  //   if (search) {
+  //     inAppNos = sortedInAppNotifications.filter(
+  //       (no) => no.subject.includes(search) || no.tag.includes(search),
+  //     );
+  //   } else {
+  //     inAppNos = sortedInAppNotifications;
+  //   }
+  //   if (inAppNos) {
+  //     setSearchNotification(inAppNos);
+  //   }
+  // }, [search, sortedInAppNotifications]);
+
+  useEffect(() => {
+    const lowerCaseSearch = search.toLowerCase(); // Convert search string to lowercase
+
+    let inAppNos = sortedInAppNotifications.filter(
+      (no) =>
+        !search ||
+        no.subject.toLowerCase().includes(lowerCaseSearch) || // Convert to lowercase before checking
+        no.tag.includes(lowerCaseSearch) || // Convert to lowercase before checking
+        no.description.toLowerCase().includes(lowerCaseSearch) ||
+        (
+          JSON.parse(no.user).firstName.toLowerCase() +
+          " " +
+          JSON.parse(no.user).lastName.toLowerCase()
+        ).includes(lowerCaseSearch), // Convert to lowercase before checking
+    );
+
+    setSearchNotification(inAppNos);
+  }, [search, sortedInAppNotifications]);
 
   useEffect(() => {
     const sidebarElement = sidebarRef.current;
@@ -616,13 +656,14 @@ const Notification = ({
                     <Input
                       className="dark:circle-sm-note flex h-8 w-full rounded-md border-none bg-white py-3 pl-8 text-sm shadow-sm  outline-none placeholder:text-muted-foreground focus-visible:ring-transparent  disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black  dark:text-teal-300 dark:placeholder-teal-300/75 dark:focus-visible:ring-teal-300/75"
                       placeholder="Search"
+                      onChange={(e) => setSearch(e.target.value)}
                     />
                     <Search className="dark:opacity-1 absolute left-2 top-2 mr-2 h-4 w-4 shrink-0 opacity-50 dark:text-teal-300" />
                   </div>
 
                   <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
                     {inAppNotificationList.length > 0 &&
-                      sortedInAppNotifications.map((no: InAppNotification) => (
+                      searchNotification.map((no: InAppNotification) => (
                         // <div key={no.id}>{no.time}</div>
                         <div
                           key={no.id}
