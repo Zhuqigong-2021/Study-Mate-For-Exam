@@ -177,3 +177,21 @@ export const sendNotification = async (input: InAppSchema) => {
 
   return "notification completed";
 };
+
+export const deleteNotification = async (id: string) => {
+  if (!userId) {
+    throw Error("You're not authorized");
+  }
+  const foundNotification = await prisma.inAppNotification.findUnique({
+    where: { id },
+  });
+  if (!foundNotification) {
+    throw Error("Notification is not found");
+  }
+  try {
+    const response = await prisma.inAppNotification.delete({ where: { id } });
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};

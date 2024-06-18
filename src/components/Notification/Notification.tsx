@@ -66,7 +66,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MultiSelect } from "./multi-select";
 import { User } from "@clerk/nextjs/server";
-import { sendNotification } from "@/app/[locale]/action";
+import { deleteNotification, sendNotification } from "@/app/[locale]/action";
 import toast from "react-hot-toast";
 import { InAppSchema, inAppSchema } from "@/lib/validation/note";
 import NotificationCard from "./NotificationCard";
@@ -75,6 +75,17 @@ import { Badge } from "../ui/badge";
 import { InAppNotification } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
 
 interface notificationProps {
   usersList: User[];
@@ -100,7 +111,8 @@ const Notification = ({
   const { theme, setTheme } = useTheme();
   const [inAppLoading, setInAppLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [thisNotification, setThisNotification] = useState<InAppNotification>();
+  const [thisNotification, setThisNotification] =
+    useState<InAppNotification | null>();
   const [search, setSearch] = useState("");
   const [searchNotification, setSearchNotification] = useState<
     InAppNotification[]
@@ -362,8 +374,20 @@ const Notification = ({
 
     setThisNotification(thisOne);
     // alert(JSON.stringify(thisOne));
-    console.log(JSON.parse(thisOne.user));
   }
+
+  const deleteThisNotification = async (id: string) => {
+    try {
+      const response = await deleteNotification(id);
+      if (response) {
+        toast.success("this notification has been deleted successfully");
+        router.refresh();
+        setThisNotification(null);
+      }
+    } catch (error) {
+      toast.error("notification not found");
+    }
+  };
 
   return (
     <ResizablePanelGroup
@@ -695,14 +719,75 @@ const Notification = ({
               <span className="flex space-x-2 text-sm font-thin">
                 <Star
                   size={18}
-                  className="font-light text-stone-700 dark:text-white/75"
+                  className="font-light text-stone-700  dark:text-transparent"
                   strokeWidth="1.8"
+                  fill="#fcd34d"
                 />
-                <Trash2
-                  size={18}
-                  className="font-light text-stone-700 dark:text-white/75"
-                  strokeWidth="1.8"
-                />
+                {!thisNotification && (
+                  <Trash2
+                    size={18}
+                    className="font-light text-stone-700 dark:text-white/75"
+                    strokeWidth="1.8"
+                    onClick={() => {
+                      // if (thisNotification) {
+                      //   deleteThisNotification(thisNotification?.id);
+                      // } else {
+                      toast.error(
+                        "Currently, you have no notifications to delete",
+                      );
+                    }}
+                  />
+                )}
+                {thisNotification && (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Trash2
+                        size={18}
+                        className="font-light text-stone-700 dark:text-white/75"
+                        strokeWidth="1.8"
+                        // onClick={() => {
+                        //   if (thisNotification) {
+                        //     deleteThisNotification(thisNotification?.id);
+                        //   } else {
+                        //     toast.error(
+                        //       "Currently, you have no notifications to delete",
+                        //     );
+                        //   }
+                        // }}
+                      />
+                    </AlertDialogTrigger>
+
+                    <AlertDialogContent className="circle-sm-exam dark:border-none">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          {/* {b("table.action.verify.title")} */}
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          {/* {b("table.action.verify.description")} */}
+                          This action cannot be undone. This will permanently
+                          delete your question and remove your data from our
+                          servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="dark:border-none dark:shadow-sm dark:shadow-red-200">
+                          Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          className="bg-red-500 text-white dark:border-none dark:shadow-sm dark:shadow-red-300 dark:hover:text-red-500"
+                          onClick={() => {
+                            if (thisNotification) {
+                              deleteThisNotification(thisNotification?.id);
+                            }
+                          }}
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
               </span>
             </div>
           </ResizablePanel>
