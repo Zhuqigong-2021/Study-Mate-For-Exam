@@ -66,7 +66,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MultiSelect } from "./multi-select";
 import { User } from "@clerk/nextjs/server";
-import { deleteNotification, sendNotification } from "@/app/[locale]/action";
+import {
+  checkStarStatus,
+  deleteNotification,
+  sendNotification,
+  updateStar,
+} from "@/app/[locale]/action";
 import toast from "react-hot-toast";
 import { InAppSchema, inAppSchema } from "@/lib/validation/note";
 import NotificationCard from "./NotificationCard";
@@ -91,11 +96,13 @@ import { limitStringLength } from "@/app/[locale]/utils/limitStringLength";
 interface notificationProps {
   usersList: User[];
   inAppNotificationList: InAppNotification[];
+  userId: string;
 }
 
 const Notification = ({
   usersList,
   inAppNotificationList,
+  userId,
 }: notificationProps) => {
   const [currentTab, setCurrentTab] = useState<string>();
   const sortedInAppNotifications = useMemo(() => {
@@ -103,8 +110,19 @@ const Notification = ({
       (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
     );
   }, [inAppNotificationList]);
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+
+  let currentUser = usersList.filter((user) => user.id === userId)[0];
+
+  const starNum = useMemo(() => {
+    return usersList.filter((user) => user.id === userId)[0].privateMetadata
+      .star
+      ? (
+          usersList.filter((user) => user.id === userId)[0].privateMetadata
+            .star as string[]
+        ).length
+      : 0;
+  }, [userId, usersList]);
+
   const [tags, setTags] = useState(["new", "important", "move", "exam"]);
   const [isCompact, setIsCompact] = useState(false);
   const sidebarRef = useRef<HTMLDivElement | null>(null);
@@ -118,6 +136,8 @@ const Notification = ({
   const [searchNotification, setSearchNotification] = useState<
     InAppNotification[]
   >(sortedInAppNotifications);
+  const [starNumber, setStarNumber] = useState(starNum || 0);
+  const [starStatus, setStarStatus] = useState(false);
   // {
   //   id: "",
   //   link: "",
@@ -129,6 +149,7 @@ const Notification = ({
   //   tag: [],
   //   notificationListId: "",
   // }
+
   const router = useRouter();
   const form = useForm<InAppSchema>({
     resolver: zodResolver(inAppSchema),
@@ -221,6 +242,10 @@ const Notification = ({
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (starNum) setStarNumber(starNum);
+  }, [starNum]);
 
   // useEffect(() => {
   //   // console.log(search);
@@ -345,17 +370,6 @@ const Notification = ({
         form.reset();
         router.refresh();
       }
-      // if (response.ok) {
-      //   toast.success("sent successfully");
-      // }
-      // const response = await fetch("/api/notification/inApp", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({ ...input, user: JSON.stringify(currentUser) }),
-      // });
-      // setIsFlagged(!isFlagged);
     } catch (error) {
       toast.error("Internal Error");
       setInAppLoading(false);
@@ -389,6 +403,47 @@ const Notification = ({
       toast.error("notification not found");
     }
   };
+
+  // if (thisNotification) {
+  //   if (currentUser && currentUser.privateMetadata.star)
+  //     setStarStatus(
+  //       (currentUser.privateMetadata.star as string[]).includes(
+  //         thisNotification.id,
+  //       ),
+  //     );
+  // }
+  useEffect(() => {
+    if (thisNotification) {
+      if (currentUser && currentUser.privateMetadata.star)
+        setStarStatus(
+          (currentUser.privateMetadata.star as string[]).includes(
+            thisNotification.id,
+          ),
+        );
+    }
+  }, [thisNotification, currentUser]);
+
+  useEffect(() => {
+    if (thisNotification) {
+      const result = async () => {
+        const starStatus = await checkStarStatus(userId, thisNotification.id);
+        if (starStatus) setStarStatus(starStatus);
+      };
+      result();
+    }
+  }, [thisNotification, userId]);
+
+  async function handleStar(id: string) {
+    if (thisNotification) {
+      const res = await updateStar(userId, thisNotification.id, !starStatus);
+      if (res) {
+        setStarStatus((star) => !star);
+        toast.success("you star this notification");
+      } else {
+        toast.error("Something went wrong");
+      }
+    }
+  }
 
   return (
     <ResizablePanelGroup
@@ -629,7 +684,18 @@ const Notification = ({
                   <span className="flex items-center space-x-2">
                     <Star size={18} /> {!isCompact && <span>Star</span>}
                   </span>
-                  {!isCompact && <span>35</span>}
+                  {!isCompact && (
+                    <span>
+                      {/* {usersList.filter((user) => user.id === userId)[0]
+                        .privateMetadata.star
+                        ? (
+                            usersList.filter((user) => user.id === userId)[0]
+                              .privateMetadata.star as string[]
+                          ).length
+                        : 0} */}
+                      {starNumber}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -696,7 +762,15 @@ const Notification = ({
                             handleDataTransmit(no.id);
                           }}
                         >
-                          <NotificationCard no={no} />
+                          {thisNotification && thisNotification.id == no.id ? (
+                            <NotificationCard
+                              no={no}
+                              currentUserId={userId}
+                              starStatus={starStatus}
+                            />
+                          ) : (
+                            <NotificationCard no={no} currentUserId={userId} />
+                          )}
                         </div>
                       ))}
                   </div>
@@ -720,9 +794,19 @@ const Notification = ({
               <span className="flex space-x-2 text-sm font-thin">
                 <Star
                   size={18}
-                  className="font-light text-stone-700  dark:text-transparent"
+                  className={`font-light text-stone-700  ${
+                    starStatus ? "dark:text-transparent" : "dark:text-white/75"
+                  }`}
                   strokeWidth="1.8"
-                  fill="#fcd34d"
+                  fill={starStatus ? "#fcd34d" : "transparent"}
+                  // fill="#fcd34d"
+                  onClick={() => {
+                    if (thisNotification) {
+                      handleStar(thisNotification.id);
+                    } else {
+                      toast.error("You don't have any notification to star");
+                    }
+                  }}
                 />
                 {!thisNotification && (
                   <Trash2

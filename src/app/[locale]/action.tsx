@@ -1,7 +1,8 @@
 "use server";
 import { getTranslations } from "next-intl/server";
 import { Knock } from "@knocklabs/node";
-import { User, auth, clerkClient } from "@clerk/nextjs/server";
+import { User, auth, clerkClient, currentUser } from "@clerk/nextjs/server";
+
 import { InAppSchema } from "@/lib/validation/note";
 import prisma from "@/lib/db/prisma";
 export const fetchNoteData = async (page: number) => {
@@ -182,16 +183,103 @@ export const deleteNotification = async (id: string) => {
   if (!userId) {
     throw Error("You're not authorized");
   }
+  const user = await currentUser();
+
   const foundNotification = await prisma.inAppNotification.findUnique({
     where: { id },
   });
   if (!foundNotification) {
     throw Error("Notification is not found");
   }
+
   try {
-    const response = await prisma.inAppNotification.delete({ where: { id } });
-    return response;
+    // if (user && user.privateMetadata.star) {
+    //   if ((user.privateMetadata.star as string[]).includes(id)) {
+    //     await updateStar(userId, id, false);
+    //   }
+    // }
+    const res = await updateStar(userId, id, false);
+    if (res) {
+      const response = await prisma.inAppNotification.delete({ where: { id } });
+      return response;
+    }
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const updateStar = async (
+  userId: string,
+  id: string,
+  toggle: boolean,
+) => {
+  const foundUser: User = await clerkClient.users.getUser(userId);
+  if (foundUser) {
+    // return JSON.stringify(foundUser);
+    if (!foundUser.privateMetadata.star) {
+      if (toggle) {
+        const res = await clerkClient.users.updateUser(userId, {
+          // locked: true,
+          privateMetadata: { star: [id] },
+        });
+        console.log("add star successfully");
+        return "add star successfully";
+      } else {
+        const res = await clerkClient.users.updateUser(userId, {
+          // locked: true,
+          privateMetadata: { star: [] },
+        });
+        console.log("remove star successfully");
+        return "remove star successfully";
+      }
+    } else {
+      if (toggle) {
+        const currentStar: any = foundUser.privateMetadata.star;
+        const res = await clerkClient.users.updateUser(userId, {
+          privateMetadata: { star: [...currentStar, id] },
+        });
+        return "add another notification successfully";
+      } else {
+        const stars = (foundUser.privateMetadata.star as string[]).filter(
+          (noId) => noId !== id,
+        );
+        const res = await clerkClient.users.updateUser(userId, {
+          privateMetadata: { star: [...stars] },
+        });
+        return "remove this notification successfully";
+      }
+    }
+  }
+  // if (foundUser) {
+  //   if (!foundUser.privateMetadata.star) {
+  //     if (toggle) {
+  //       const res = await clerkClient.users.updateUser(userId, {
+  //         // locked: true,
+  //         privateMetadata: { star: [id] },
+  //       });
+  //       if (!res) {
+  //         return { message: "something went wrong" };
+  //       }
+  //     } else {
+  //       const res = await clerkClient.users.updateUser(userId, {
+  //         // locked: true,
+  //         privateMetadata: { star: [] },
+  //       });
+  //       return res;
+  //     }
+  //   }
+  // }
+};
+
+export const checkStarStatus = async (userId: string, id: string) => {
+  const foundUser: User = await clerkClient.users.getUser(userId);
+  if (foundUser) {
+    if (foundUser.privateMetadata.star) {
+      const isInclude = (foundUser.privateMetadata.star as string[]).includes(
+        id,
+      );
+      return isInclude;
+    }
+    return false;
   }
 };

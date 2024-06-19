@@ -945,6 +945,7 @@ export function AdminDashboard({
           <Notification
             usersList={usersList}
             inAppNotificationList={inAppnotificationList}
+            userId={userId!}
           />
         </main>
       )}

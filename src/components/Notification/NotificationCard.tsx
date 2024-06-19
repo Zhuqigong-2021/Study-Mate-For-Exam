@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -12,17 +12,61 @@ import { Star } from "lucide-react";
 import { InAppNotification } from "@prisma/client";
 import { timeAgo } from "@/app/[locale]/utils/timeAgo";
 import { limitStringLength } from "@/app/[locale]/utils/limitStringLength";
+import { checkStarStatus, updateStar } from "@/app/[locale]/action";
+import toast from "react-hot-toast";
 
 interface notificationCardProps {
   no: InAppNotification;
+  currentUserId: string;
+  starStatus?: boolean;
 }
-const NotificationCard = ({ no }: notificationCardProps) => {
+const NotificationCard = ({
+  no,
+  currentUserId,
+  starStatus,
+}: notificationCardProps) => {
   const { firstName, lastName, fullname } = JSON.parse(no.user);
+
+  const [star, setStar] = useState(false);
+  useEffect(() => {
+    const result = async () => {
+      const starStatusResponse = await checkStarStatus(currentUserId, no.id);
+      if (starStatusResponse) setStar(starStatusResponse);
+    };
+    result();
+    // if (!starStatus) {
+    //   setStar(!starStatus);
+    // }
+    if (starStatus == false || starStatus == true) {
+      setStar(starStatus);
+    }
+    // console.log(starStatus);
+    return () => {};
+  }, [currentUserId, no.id, starStatus]);
+
+  // useEffect(() => {
+  //   const result = async () => {
+  //     const starStatusResponse = await checkStarStatus(currentUserId, no.id);
+  //     if (starStatusResponse) setStar(starStatus);
+  //   };
+  //   result();
+  // }, [currentUserId, no.id, starStatus]);
+  // const currentUserId = JSON.parse(no.user).id;
   let username = (firstName + " " + lastName).trim()
     ? (firstName + " " + lastName).trim()
     : fullname
       ? fullname
       : "no name";
+  async function handleStar(id: string) {
+    const res = await updateStar(currentUserId, id, !star);
+    if (res) {
+      setStar((star) => !star);
+      toast.success("you star this notification");
+    } else {
+      toast.error("Something went wrong");
+    }
+  }
+
   return (
     <Card className="dark:glass relative mx-1 border-none bg-white p-4 shadow-sm shadow-stone-300 dark:shadow-teal-300">
       <CardTitle className="text-md flex w-full justify-between">
@@ -80,7 +124,12 @@ const NotificationCard = ({ no }: notificationCardProps) => {
         </Badge> */}
       </div>
       <div className="absolute bottom-3 right-3  text-stone-500">
-        <Star size={18} fill="#fcd34d" strokeWidth={0} />
+        <Star
+          size={18}
+          fill={star ? "#fcd34d" : "transparent"}
+          strokeWidth={star ? 0 : 1}
+          onClick={() => handleStar(no.id)}
+        />
       </div>
 
       {/* <div className="flex justify-end ">
