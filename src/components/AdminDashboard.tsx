@@ -68,6 +68,8 @@ import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { sendNotification } from "@/app/[locale]/action";
 import Notification from "./Notification/Notification";
+import { useAppDispatch } from "@/lib/hook";
+import { setStar } from "@/Storage/Redux/starSlice";
 interface Range {
   min: number;
   max: number;
@@ -116,7 +118,7 @@ export function AdminDashboard({
 }: UserProps) {
   const router = useRouter();
   const pathname = usePathname();
-
+  const dispatch = useAppDispatch();
   const [usersList, setUsersList] = useState<User[]>([]);
   const [reportsList, setReportsList] = useState<Report[]>([]);
   const [inAppnotificationList, setInAppNotificationList] = useState<
@@ -366,7 +368,10 @@ export function AdminDashboard({
                 ? "text-foreground"
                 : "text-muted-foreground"
             } transition-colors hover:text-foreground`}
-            onClick={() => setCurrentTab("notification")}
+            onClick={() => {
+              setCurrentTab("notification");
+              dispatch(setStar(false));
+            }}
           >
             {d("menu.notification")}
           </button>

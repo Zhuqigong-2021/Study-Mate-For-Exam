@@ -624,7 +624,11 @@ const Notification = ({
             >
               <div className="flex flex-grow flex-col space-y-1 p-0  ">
                 <div
-                  onClick={() => setCurrentTab("inbox")}
+                  onClick={() => {
+                    setCurrentTab("inbox");
+                    setThisNotification(null);
+                    dispatch(setStar(false));
+                  }}
                   className={`flex ${
                     isCompact === true ? "w-9" : ""
                   } flex-shrink-0 scale-y-95 cursor-pointer items-center justify-between space-x-2 rounded-md  p-2 text-[15px] hover:bg-black hover:text-white ${
@@ -642,7 +646,11 @@ const Notification = ({
                 </div>
 
                 <div
-                  onClick={() => setCurrentTab("email")}
+                  onClick={() => {
+                    setCurrentTab("email");
+                    setThisNotification(null);
+                    dispatch(setStar(false));
+                  }}
                   className={`${
                     isCompact === true ? "w-9" : ""
                   } flex flex-shrink-0 scale-y-95 cursor-pointer items-center justify-between space-x-2 rounded-sm p-2 text-[15px] hover:bg-black hover:text-white ${
@@ -657,7 +665,11 @@ const Notification = ({
                   {!isCompact && <span>13</span>}
                 </div>
                 <div
-                  onClick={() => setCurrentTab("star")}
+                  onClick={() => {
+                    setCurrentTab("star");
+                    setThisNotification(null);
+                    dispatch(setStar(false));
+                  }}
                   className={`${
                     isCompact === true ? "w-9" : ""
                   } flex flex-shrink-0 scale-y-95 cursor-pointer items-center justify-between space-x-2 rounded-sm p-2 text-[15px] hover:bg-black hover:text-white ${
