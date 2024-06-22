@@ -222,14 +222,14 @@ export const updateStar = async (
           // locked: true,
           privateMetadata: { star: [id] },
         });
-        console.log("add star successfully");
+        // console.log("add star successfully");
         return "add star successfully";
       } else {
         const res = await clerkClient.users.updateUser(userId, {
           // locked: true,
           privateMetadata: { star: [] },
         });
-        console.log("remove star successfully");
+        // console.log("remove star successfully");
         return "remove star successfully";
       }
     } else {

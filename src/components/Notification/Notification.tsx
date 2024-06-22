@@ -1,10 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-} from "../ui/navigation-menu";
+
 import {
   Divide,
   Leaf,
@@ -20,34 +16,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Panel, PanelResizeHandle } from "react-resizable-panels";
-import { Separator } from "@/components/ui/separator";
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import { Span } from "next/dist/trace";
 import { useTheme } from "next-themes";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
@@ -92,6 +61,10 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { limitStringLength } from "@/app/[locale]/utils/limitStringLength";
+import { useAppDispatch, useAppSelector } from "@/lib/hook";
+import { setStar } from "@/Storage/Redux/starSlice";
+import { useGetUsersQuery, usePostUsersMutation } from "@/Apis/userApi";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 interface notificationProps {
   usersList: User[];
@@ -110,18 +83,23 @@ const Notification = ({
       (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
     );
   }, [inAppNotificationList]);
+  const { star: reduxStar } = useAppSelector((state) => state.starStore);
+  const dispatch = useAppDispatch();
+  // let currentUser = usersList.filter((user) => user.id === userId)[0];
 
-  let currentUser = usersList.filter((user) => user.id === userId)[0];
+  useEffect(() => {
+    console.log("notification reduxStar: " + reduxStar);
+  }, [reduxStar]);
 
-  const starNum = useMemo(() => {
-    return usersList.filter((user) => user.id === userId)[0].privateMetadata
-      .star
-      ? (
-          usersList.filter((user) => user.id === userId)[0].privateMetadata
-            .star as string[]
-        ).length
-      : 0;
-  }, [userId, usersList]);
+  // const starNum = useMemo(() => {
+  //   return usersList.filter((user) => user.id === userId)[0].privateMetadata
+  //     .star
+  //     ? (
+  //         usersList.filter((user) => user.id === userId)[0].privateMetadata
+  //           .star as string[]
+  //       ).length
+  //     : 0;
+  // }, [userId, usersList]);
 
   const [tags, setTags] = useState(["new", "important", "move", "exam"]);
   const [isCompact, setIsCompact] = useState(false);
@@ -130,14 +108,26 @@ const Notification = ({
   const { theme, setTheme } = useTheme();
   const [inAppLoading, setInAppLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [thisNotification, setThisNotification] =
-    useState<InAppNotification | null>();
+  // const [thisNotification, setThisNotification] =
+  //   useState<InAppNotification | null>();
+  const [thisNotification, setThisNotification] = useState<any>();
   const [search, setSearch] = useState("");
   const [searchNotification, setSearchNotification] = useState<
     InAppNotification[]
   >(sortedInAppNotifications);
+
+  let starCondition = reduxStar;
+  const { data: currentUser, isLoading } = useGetUsersQuery({
+    revalidateTag: true,
+  });
+  const [postUsers] = usePostUsersMutation();
+  const starNum = useMemo(() => {
+    if (!isLoading) return currentUser.privateMetadata.star.length;
+  }, [currentUser, isLoading]);
   const [starNumber, setStarNumber] = useState(starNum || 0);
-  const [starStatus, setStarStatus] = useState(false);
+
+  // console.log("data:" + JSON.stringify(data));
+  // console.log(data);
   // {
   //   id: "",
   //   link: "",
@@ -149,6 +139,22 @@ const Notification = ({
   //   tag: [],
   //   notificationListId: "",
   // }
+  // useEffect(() => {
+  //   const res = async () => {
+  //     const response = await fetch("/api/user", {
+  //       method: "GET",
+  //       // headers: {
+  //       //   "Content-Type": "application/json",
+  //       // },
+  //     });
+
+  //     // setIsFlagged(!isFlagged);
+  //     if (response.ok) {
+  //       console.log("response:" + JSON.stringify(response));
+  //     }
+  //   };
+  //   res();
+  // }, []);
 
   const router = useRouter();
   const form = useForm<InAppSchema>({
@@ -247,6 +253,9 @@ const Notification = ({
     if (starNum) setStarNumber(starNum);
   }, [starNum]);
 
+  // useEffect(() => {
+  //   console.log(currentUser);
+  // }, [currentUser]);
   // useEffect(() => {
   //   // console.log(search);
   //   let inAppNos: InAppNotification[];
@@ -381,13 +390,23 @@ const Notification = ({
     try {
     } catch (error) {}
   }
-
-  function handleDataTransmit(id: string): void {
+  useEffect(() => {
+    const updateUserPrivateData = async () => {
+      await postUsers("");
+    };
+    updateUserPrivateData();
+  }, [postUsers, reduxStar]);
+  //data transmit
+  async function handleDataTransmit(id: string) {
     router.refresh();
-
+    // await postUsers(id);
     const thisOne = sortedInAppNotifications.filter((no) => no.id === id)[0];
-
+    // console.log("reduxStar:" + reduxStar);
     setThisNotification(thisOne);
+    // console.log(
+    //   "currentStarStatus: " + currentUser.privateMetadata.star.includes(id),
+    // );
+    // dispatch(setStar(currentUser.privateMetadata.star.includes(id)));
     // alert(JSON.stringify(thisOne));
   }
 
@@ -404,41 +423,58 @@ const Notification = ({
     }
   };
 
-  // if (thisNotification) {
-  //   if (currentUser && currentUser.privateMetadata.star)
-  //     setStarStatus(
-  //       (currentUser.privateMetadata.star as string[]).includes(
-  //         thisNotification.id,
-  //       ),
-  //     );
-  // }
   useEffect(() => {
     if (thisNotification) {
-      if (currentUser && currentUser.privateMetadata.star)
-        setStarStatus(
-          (currentUser.privateMetadata.star as string[]).includes(
-            thisNotification.id,
+      if (currentUser && currentUser.privateMetadata.star) {
+        // setStarStatus(
+        //   (currentUser.privateMetadata.star as string[]).includes(
+        //     thisNotification.id,
+        //   ),
+        // );
+        // dispatch(
+        //   setStar(
+        //     (currentUser.privateMetadata.star as string[]).includes(
+        //       thisNotification.id,
+        //     ),
+        //   ),
+        // );
+        // console.log(
+        //   "real status: " +
+        //     currentUser.privateMetadata.star.includes(thisNotification.id),
+        // );
+        dispatch(
+          setStar(
+            currentUser.privateMetadata.star.includes(thisNotification.id),
           ),
         );
-    }
-  }, [thisNotification, currentUser]);
 
-  useEffect(() => {
-    if (thisNotification) {
-      const result = async () => {
-        const starStatus = await checkStarStatus(userId, thisNotification.id);
-        if (starStatus) setStarStatus(starStatus);
-      };
-      result();
+        // dispatch(setStar(thisNotification.reduxStar));
+        // toast.success("caught this notification channged");
+      }
     }
-  }, [thisNotification, userId]);
+  }, [thisNotification, currentUser, dispatch]);
+
+  // useEffect(() => {
+  //   if (thisNotification) {
+  //     const result = async () => {
+  //       const starStatus = await checkStarStatus(userId, thisNotification.id);
+  //       if (starStatus) {
+  //         // setStarStatus(starStatus);
+  //         dispatch(setStar(starStatus));
+  //       }
+  //     };
+  //     result();
+  //   }
+  // }, [thisNotification, userId, dispatch]);
 
   async function handleStar(id: string) {
     if (thisNotification) {
-      const res = await updateStar(userId, thisNotification.id, !starStatus);
+      const res = await updateStar(userId, thisNotification.id, !reduxStar);
+      // const response = await postUsers(id);
       if (res) {
-        setStarStatus((star) => !star);
-        toast.success("you star this notification");
+        // setStarStatus((star) => !star);
+        dispatch(setStar(!reduxStar));
+        // toast.success("handle star successfully");
       } else {
         toast.error("Something went wrong");
       }
@@ -487,64 +523,6 @@ const Notification = ({
                   <span className="text-lg font-bold dark:text-teal-200">
                     Study Mate
                   </span>
-                  {/* <Popover open={open} onOpenChange={setOpen}>
-                    <div>
-                      <PopoverTrigger asChild>
-                        <div
-                          // variant="outline"
-                          // role="combobox"
-                          aria-expanded={open}
-                          className=" flex items-center justify-between  rounded-md  bg-stone-50 p-2 text-sm dark:bg-black"
-                        >
-                          {value
-                            ? frameworks.find(
-                                (framework) => framework.value === value,
-                              )?.label
-                            : "Select framework..."}
-                          <ChevronsUpDown className="ml-2 h-3 w-3 shrink-0 opacity-50" />
-                        </div>
-                      </PopoverTrigger>
-                    </div>
-                    <div>
-                      <PopoverContent
-                        className="p-0"
-                        style={{ width: `${panelWidth}px` }}
-                      >
-                        <Command>
-                          <CommandInput placeholder="Search framework..." />
-                          <CommandList>
-                            <CommandEmpty>No framework found.</CommandEmpty>
-                            <CommandGroup>
-                              {frameworks.map((framework) => (
-                                <CommandItem
-                                  key={framework.value}
-                                  value={framework.value}
-                                  onSelect={(currentValue) => {
-                                    setValue(
-                                      currentValue === value
-                                        ? ""
-                                        : currentValue,
-                                    );
-                                    setOpen(false);
-                                  }}
-                                >
-                                  <Check
-                                    className={cn(
-                                      "mr-2 h-4 w-4",
-                                      value === framework.value
-                                        ? "opacity-100"
-                                        : "opacity-0",
-                                    )}
-                                  />
-                                  {framework.label}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </div>
-                  </Popover> */}
                 </div>
               )}
               {isCompact && (
@@ -766,7 +744,7 @@ const Notification = ({
                             <NotificationCard
                               no={no}
                               currentUserId={userId}
-                              starStatus={starStatus}
+                              starStatus={reduxStar}
                             />
                           ) : (
                             <NotificationCard no={no} currentUserId={userId} />
@@ -780,7 +758,47 @@ const Notification = ({
                 <span className="font-semibold">Email</span>
               )}
               {currentTab === "star" && (
-                <span className="font-semibold">Star</span>
+                <div className=" flex h-full w-full flex-col    p-4 font-semibold">
+                  <div className="relative mx-1">
+                    <Input
+                      className="dark:circle-sm-note flex h-8 w-full rounded-md border-none bg-white py-3 pl-8 text-sm shadow-sm  outline-none placeholder:text-muted-foreground focus-visible:ring-transparent  disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black  dark:text-teal-300 dark:placeholder-teal-300/75 dark:focus-visible:ring-teal-300/75"
+                      placeholder="Search"
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                    <Search className="dark:opacity-1 absolute left-2 top-2 mr-2 h-4 w-4 shrink-0 opacity-50 dark:text-teal-300" />
+                  </div>
+
+                  <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
+                    {inAppNotificationList.length > 0 &&
+                      searchNotification
+                        .filter((no: InAppNotification) =>
+                          currentUser.privateMetadata.star.includes(no.id),
+                        )
+                        .map((no: InAppNotification) => (
+                          // <div key={no.id}>{no.time}</div>
+                          <div
+                            key={no.id}
+                            onClick={() => {
+                              handleDataTransmit(no.id);
+                            }}
+                          >
+                            {thisNotification &&
+                            thisNotification.id == no.id ? (
+                              <NotificationCard
+                                no={no}
+                                currentUserId={userId}
+                                starStatus={reduxStar}
+                              />
+                            ) : (
+                              <NotificationCard
+                                no={no}
+                                currentUserId={userId}
+                              />
+                            )}
+                          </div>
+                        ))}
+                  </div>
+                </div>
               )}
             </div>
           </ResizablePanel>
@@ -795,10 +813,12 @@ const Notification = ({
                 <Star
                   size={18}
                   className={`font-light text-stone-700  ${
-                    starStatus ? "dark:text-transparent" : "dark:text-white/75"
+                    starCondition
+                      ? "dark:text-transparent"
+                      : "dark:text-white/75"
                   }`}
                   strokeWidth="1.8"
-                  fill={starStatus ? "#fcd34d" : "transparent"}
+                  fill={starCondition ? "#fcd34d" : "transparent"}
                   // fill="#fcd34d"
                   onClick={() => {
                     if (thisNotification) {
@@ -929,14 +949,16 @@ const Notification = ({
                               <div className="flex flex-wrap space-x-2">
                                 <span className="text-sm">To:</span>
                                 <div className="flex space-x-0">
-                                  {thisNotification.to.map((t, index) => (
-                                    <Badge
-                                      key={index}
-                                      className="scale-90 dark:bg-teal-500 dark:text-white"
-                                    >
-                                      {t}
-                                    </Badge>
-                                  ))}
+                                  {thisNotification.to.map(
+                                    (t: any, index: number) => (
+                                      <Badge
+                                        key={index}
+                                        className="scale-90 dark:bg-teal-500 dark:text-white"
+                                      >
+                                        {t}
+                                      </Badge>
+                                    ),
+                                  )}
                                 </div>
                               </div>
                             </div>

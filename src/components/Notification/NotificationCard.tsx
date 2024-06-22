@@ -14,7 +14,10 @@ import { timeAgo } from "@/app/[locale]/utils/timeAgo";
 import { limitStringLength } from "@/app/[locale]/utils/limitStringLength";
 import { checkStarStatus, updateStar } from "@/app/[locale]/action";
 import toast from "react-hot-toast";
-
+import { useAppDispatch, useAppSelector } from "@/lib/hook";
+import { setStar as setStarStatus } from "../../Storage/Redux/starSlice";
+import { useDispatch } from "react-redux";
+import { usePostUsersMutation } from "@/Apis/userApi";
 interface notificationCardProps {
   no: InAppNotification;
   currentUserId: string;
@@ -28,17 +31,18 @@ const NotificationCard = ({
   const { firstName, lastName, fullname } = JSON.parse(no.user);
 
   const [star, setStar] = useState(false);
+  const [postUser] = usePostUsersMutation();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     const result = async () => {
       const starStatusResponse = await checkStarStatus(currentUserId, no.id);
       if (starStatusResponse) setStar(starStatusResponse);
     };
     result();
-    // if (!starStatus) {
-    //   setStar(!starStatus);
-    // }
+
     if (starStatus == false || starStatus == true) {
       setStar(starStatus);
+      // useDispatch(setStar(starStatus))
     }
     // console.log(starStatus);
     return () => {};
@@ -59,8 +63,13 @@ const NotificationCard = ({
       : "no name";
   async function handleStar(id: string) {
     const res = await updateStar(currentUserId, id, !star);
+    // const response = await postUser(id);
     if (res) {
       setStar((star) => !star);
+      // setStar((starStatus) => !starStatus);
+      // console.log("star:" + star);
+      dispatch(setStarStatus(!star));
+      // console.log("reduxStar:" + reduxStar);
       toast.success("you star this notification");
     } else {
       toast.error("Something went wrong");
@@ -128,7 +137,11 @@ const NotificationCard = ({
           size={18}
           fill={star ? "#fcd34d" : "transparent"}
           strokeWidth={star ? 0 : 1}
-          onClick={() => handleStar(no.id)}
+          onClick={() => {
+            handleStar(no.id);
+
+            // console.log("reduxStar:" + reduxStar);
+          }}
         />
       </div>
 

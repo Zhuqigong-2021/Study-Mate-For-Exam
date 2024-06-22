@@ -15,6 +15,7 @@ import { locales } from "@/navigation";
 import { ThemeProvider } from "../ThemeProvider";
 // import "@knocklabs/react/dist/index.css";
 import { NotifyProvider } from "../NotifyProvider";
+import ReduxProvider from "@/Provider/ReduxProvider";
 
 export const metadata: Metadata = {
   manifest: "/manifest.json",
@@ -75,27 +76,31 @@ export default async function RootLayout({
           rel="apple-touch-startup-image"
         />
       </head>
-
-      <html
-        lang={locale}
-        className={`${inter.variable} ${roboto_mono.variable}`}
-        suppressHydrationWarning={true}
-      >
-        <NextIntlClientProvider messages={messages} locale={locale}>
-          <body
-            className="bg-slate-50 font-sans transition-all duration-700 ease-in-out dark:bg-background"
-            suppressHydrationWarning={true}
-          >
-            <ThemeProvider attribute="class">
-              <NotifyProvider userId={userId ?? ""}>
-                <CommonNavbar isAdmin={isAdmin} userId={userId ? userId : ""} />
-                {children}
-                <Toaster />
-              </NotifyProvider>
-            </ThemeProvider>
-          </body>
-        </NextIntlClientProvider>
-      </html>
+      <ReduxProvider>
+        <html
+          lang={locale}
+          className={`${inter.variable} ${roboto_mono.variable}`}
+          suppressHydrationWarning={true}
+        >
+          <NextIntlClientProvider messages={messages} locale={locale}>
+            <body
+              className="bg-slate-50 font-sans transition-all duration-700 ease-in-out dark:bg-background"
+              suppressHydrationWarning={true}
+            >
+              <ThemeProvider attribute="class">
+                <NotifyProvider userId={userId ?? ""}>
+                  <CommonNavbar
+                    isAdmin={isAdmin}
+                    userId={userId ? userId : ""}
+                  />
+                  {children}
+                  <Toaster />
+                </NotifyProvider>
+              </ThemeProvider>
+            </body>
+          </NextIntlClientProvider>
+        </html>
+      </ReduxProvider>
     </ClerkProvider>
   );
 }

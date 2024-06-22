@@ -115,7 +115,7 @@ const page = async ({
     newNote = { ...singleNoteWithDetails, questions: newQuestions };
   }
   // console.log("mappedData" + JSON.stringify(mappedData));
-  console.log(searchParams.choiceId);
+  // console.log(searchParams.choiceId);
   return (
     <div className=" grid gap-3" suppressHydrationWarning={true}>
       <ReportNoteQuestion note={newNote} mappedData={mappedData} />
