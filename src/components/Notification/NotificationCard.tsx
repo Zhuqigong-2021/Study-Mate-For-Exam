@@ -12,7 +12,11 @@ import { Star } from "lucide-react";
 import { InAppNotification } from "@prisma/client";
 import { timeAgo } from "@/app/[locale]/utils/timeAgo";
 import { limitStringLength } from "@/app/[locale]/utils/limitStringLength";
-import { checkStarStatus, updateStar } from "@/app/[locale]/action";
+import {
+  checkReadStatus,
+  checkStarStatus,
+  updateStar,
+} from "@/app/[locale]/action";
 import toast from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "@/lib/hook";
 import { setStar as setStarStatus } from "../../Storage/Redux/starSlice";
@@ -22,15 +26,18 @@ interface notificationCardProps {
   no: InAppNotification;
   currentUserId: string;
   starStatus?: boolean;
+  readStatus?: boolean;
 }
 const NotificationCard = ({
   no,
   currentUserId,
   starStatus,
+  readStatus,
 }: notificationCardProps) => {
   const { firstName, lastName, fullname } = JSON.parse(no.user);
 
   const [star, setStar] = useState(false);
+  const [read, setRead] = useState(false);
   const [postUser] = usePostUsersMutation();
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -44,9 +51,21 @@ const NotificationCard = ({
       setStar(starStatus);
       // useDispatch(setStar(starStatus))
     }
-    // console.log(starStatus);
     return () => {};
   }, [currentUserId, no.id, starStatus]);
+
+  useEffect(() => {
+    const result = async () => {
+      const readStatusResponse = await checkReadStatus(currentUserId, no.id);
+      if (readStatusResponse) setRead(readStatusResponse);
+    };
+    result();
+
+    if (readStatus == true || readStatus == false) {
+      setRead(readStatus);
+    }
+    return () => {};
+  }, [currentUserId, no.id, readStatus]);
 
   // useEffect(() => {
   //   const result = async () => {
@@ -61,11 +80,17 @@ const NotificationCard = ({
     : fullname
       ? fullname
       : "no name";
-  async function handleStar(id: string) {
+  async function handleStar(
+    event: React.MouseEvent<SVGSVGElement>,
+    id: string,
+  ) {
+    event.stopPropagation();
     const res = await updateStar(currentUserId, id, !star);
+    await postUser(id);
     // const response = await postUser(id);
     if (res) {
       setStar((star) => !star);
+
       // setStar((starStatus) => !starStatus);
       // console.log("star:" + star);
       dispatch(setStarStatus(!star));
@@ -88,7 +113,9 @@ const NotificationCard = ({
             }}
           /> */}
           <span className="text-sm font-bold ">{username}</span>
-          <div className=" dark:circle-sm-note h-2 w-2 rounded-full  bg-blue-400  dark:bg-cyan-400 dark:shadow-lg"></div>
+          {!read && (
+            <div className=" dark:circle-sm-note h-2 w-2 rounded-full  bg-blue-400  dark:bg-cyan-400 dark:shadow-lg"></div>
+          )}
         </div>
         <span className="text-xs text-gray-400 dark:text-emerald-200/75">
           {timeAgo(no.time, new Date().toISOString())}
@@ -137,26 +164,11 @@ const NotificationCard = ({
           size={18}
           fill={star ? "#fcd34d" : "transparent"}
           strokeWidth={star ? 0 : 1}
-          onClick={() => {
-            handleStar(no.id);
-
-            // console.log("reduxStar:" + reduxStar);
+          onClick={(event: React.MouseEvent<SVGSVGElement>) => {
+            handleStar(event, no.id);
           }}
         />
       </div>
-
-      {/* <div className="flex justify-end ">
-        <div className="flex items-center space-x-2">
-          <UserButton
-            appearance={{
-              elements: {
-                avatarBox: { width: "1.5rem", height: "1.5rem" },
-              },
-            }}
-          />
-          <span className="text-xs text-gray-400">Phil Zhu</span>
-        </div>
-      </div> */}
     </Card>
   );
 };

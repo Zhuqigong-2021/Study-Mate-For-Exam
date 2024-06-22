@@ -1,15 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { starReducer } from "./starSlice";
 import userApi from "@/Apis/userApi";
+import readApi from "@/Apis/readApi";
+import { readReducer } from "./readSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       starStore: starReducer,
+      readStore: readReducer,
       [userApi.reducerPath]: userApi.reducer,
+      [readApi.reducerPath]: readApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(userApi.middleware),
+      getDefaultMiddleware()
+        .concat(userApi.middleware)
+        .concat(readApi.middleware),
   });
 };
 

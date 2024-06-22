@@ -65,6 +65,10 @@ import { useAppDispatch, useAppSelector } from "@/lib/hook";
 import { setStar } from "@/Storage/Redux/starSlice";
 import { useGetUsersQuery, usePostUsersMutation } from "@/Apis/userApi";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { useUpdateReadMutation } from "@/Apis/readApi";
+import { readStatus } from "@/Storage/Redux/readSlice";
+import { TabsContent } from "@radix-ui/react-tabs";
+import { Button } from "../ui/button";
 
 interface notificationProps {
   usersList: User[];
@@ -78,12 +82,14 @@ const Notification = ({
   userId,
 }: notificationProps) => {
   const [currentTab, setCurrentTab] = useState<string>();
+  const [currentReadTab, setCurrentReadTab] = useState("");
   const sortedInAppNotifications = useMemo(() => {
     return [...inAppNotificationList].sort(
       (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
     );
   }, [inAppNotificationList]);
   const { star: reduxStar } = useAppSelector((state) => state.starStore);
+  const { read: reduxRead } = useAppSelector((state) => state.readStore);
   const dispatch = useAppDispatch();
   // let currentUser = usersList.filter((user) => user.id === userId)[0];
 
@@ -91,6 +97,9 @@ const Notification = ({
     console.log("notification reduxStar: " + reduxStar);
   }, [reduxStar]);
 
+  useEffect(() => {
+    console.log("notification reduxRead: " + reduxRead);
+  }, [reduxRead]);
   // const starNum = useMemo(() => {
   //   return usersList.filter((user) => user.id === userId)[0].privateMetadata
   //     .star
@@ -108,6 +117,7 @@ const Notification = ({
   const { theme, setTheme } = useTheme();
   const [inAppLoading, setInAppLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
+
   // const [thisNotification, setThisNotification] =
   //   useState<InAppNotification | null>();
   const [thisNotification, setThisNotification] = useState<any>();
@@ -121,12 +131,13 @@ const Notification = ({
     revalidateTag: true,
   });
   const [postUsers] = usePostUsersMutation();
+  const [updateRead] = useUpdateReadMutation();
   const starNum = useMemo(() => {
     if (!isLoading) {
       console.log(
         "real star number:" + currentUser?.privateMetadata?.star?.length,
       );
-      return currentUser?.privateMetadata?.star?.length;
+      return currentUser?.privateMetadata?.star?.length || 0;
     }
   }, [currentUser, isLoading]);
   // const [starNumber, setStarNumber] = useState(starNum || 0);
@@ -182,28 +193,6 @@ const Notification = ({
       frameworks: [],
     },
   });
-  //   const frameworksList = [
-  //     {
-  //       value: "next.js",
-  //       label: "Next.js",
-  //     },
-  //     {
-  //       value: "sveltekit",
-  //       label: "SvelteKit",
-  //     },
-  //     {
-  //       value: "nuxt.js",
-  //       label: "Nuxt.js",
-  //     },
-  //     {
-  //       value: "remix",
-  //       label: "Remix",
-  //     },
-  //     {
-  //       value: "astro",
-  //       label: "Astro",
-  //     },
-  //   ];
 
   const frameworksList = usersList.map((user) => {
     return {
@@ -397,10 +386,17 @@ const Notification = ({
   }
   useEffect(() => {
     const updateUserPrivateData = async () => {
-      await postUsers("");
+      await postUsers("trigger");
     };
     updateUserPrivateData();
-  }, [postUsers, reduxStar]);
+  }, [
+    postUsers,
+    reduxStar,
+    reduxRead,
+    currentReadTab,
+    currentTab,
+    thisNotification,
+  ]);
   //data transmit
   async function handleDataTransmit(id: string) {
     router.refresh();
@@ -415,6 +411,17 @@ const Notification = ({
     // alert(JSON.stringify(thisOne));
   }
 
+  async function updateReadStatus(notificationId: string) {
+    try {
+      const res = await updateRead({ notificationId });
+      if (res.data) {
+        dispatch(readStatus());
+        toast.success("You mark this notification read");
+      }
+    } catch (error) {
+      toast.error("something is wrong with read notification");
+    }
+  }
   const deleteThisNotification = async (id: string) => {
     try {
       const response = await deleteNotification(id);
@@ -431,22 +438,6 @@ const Notification = ({
   useEffect(() => {
     if (thisNotification) {
       if (currentUser && currentUser.privateMetadata.star) {
-        // setStarStatus(
-        //   (currentUser.privateMetadata.star as string[]).includes(
-        //     thisNotification.id,
-        //   ),
-        // );
-        // dispatch(
-        //   setStar(
-        //     (currentUser.privateMetadata.star as string[]).includes(
-        //       thisNotification.id,
-        //     ),
-        //   ),
-        // );
-        // console.log(
-        //   "real status: " +
-        //     currentUser.privateMetadata.star.includes(thisNotification.id),
-        // );
         dispatch(
           setStar(
             currentUser.privateMetadata.star.includes(thisNotification.id),
@@ -458,19 +449,6 @@ const Notification = ({
       }
     }
   }, [thisNotification, currentUser, dispatch]);
-
-  // useEffect(() => {
-  //   if (thisNotification) {
-  //     const result = async () => {
-  //       const starStatus = await checkStarStatus(userId, thisNotification.id);
-  //       if (starStatus) {
-  //         // setStarStatus(starStatus);
-  //         dispatch(setStar(starStatus));
-  //       }
-  //     };
-  //     result();
-  //   }
-  // }, [thisNotification, userId, dispatch]);
 
   async function handleStar(id: string) {
     if (thisNotification) {
@@ -716,22 +694,37 @@ const Notification = ({
               )}
               <Tabs
                 defaultValue="account"
-                className="w-[160px] scale-y-90 rounded-md "
+                className=" w-[140px] scale-y-90 rounded-md "
               >
-                <TabsList className="grid w-full grid-cols-2 text-sm ">
-                  <TabsTrigger
-                    value="account"
-                    className="dark:data-[state=active]:circle-sm-note dark:focus:bg-teal-400 dark:data-[state=active]:bg-teal-400"
-                  >
-                    All
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="password"
-                    className="dark:data-[state=active]:circle-sm-note dark:focus:bg-teal-400 dark:data-[state=active]:bg-teal-400"
-                  >
-                    Unread
-                  </TabsTrigger>
-                </TabsList>
+                {currentTab !== "star" && (
+                  <div className=" my-2 grid w-full grid-cols-2 space-x-[0.15rem] rounded-md p-1 text-sm dark:bg-stone-800 dark:bg-transparent/75">
+                    <Button
+                      onClick={() => setCurrentReadTab("All")}
+                      className={`${
+                        !currentReadTab || currentReadTab === "All"
+                          ? "dark:circle-sm-note dark:bg-teal-400 dark:text-white"
+                          : "dark:bg-stone-800 dark:text-stone-400"
+                      } dark:focus:circle-sm-note h-8 text-sm   dark:hover:bg-black dark:focus:bg-teal-400 dark:focus:text-white dark:data-[state=active]:bg-teal-400`}
+                    >
+                      All
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setCurrentReadTab("Unread");
+                        router.refresh();
+                        // dispatch(readStatus());
+                        // dispatch(starStatus());
+                      }}
+                      className={`${
+                        currentReadTab === "Unread"
+                          ? "dark:circle-sm-note dark:bg-teal-400 dark:text-white"
+                          : "dark:bg-stone-800 dark:text-stone-400"
+                      } dark:focus:circle-sm-note h-8 text-sm   dark:hover:bg-black dark:focus:bg-teal-400 dark:focus:text-white dark:data-[state=active]:bg-teal-400`}
+                    >
+                      <span className="scale-90">Unread</span>
+                    </Button>
+                  </div>
+                )}
               </Tabs>
             </div>
           </ResizablePanel>
@@ -748,29 +741,81 @@ const Notification = ({
                     />
                     <Search className="dark:opacity-1 absolute left-2 top-2 mr-2 h-4 w-4 shrink-0 opacity-50 dark:text-teal-300" />
                   </div>
-
-                  <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
-                    {inAppNotificationList.length > 0 &&
-                      searchNotification.map((no: InAppNotification) => (
-                        // <div key={no.id}>{no.time}</div>
-                        <div
-                          key={no.id}
-                          onClick={() => {
-                            handleDataTransmit(no.id);
-                          }}
-                        >
-                          {thisNotification && thisNotification.id == no.id ? (
-                            <NotificationCard
-                              no={no}
-                              currentUserId={userId}
-                              starStatus={reduxStar}
-                            />
-                          ) : (
-                            <NotificationCard no={no} currentUserId={userId} />
-                          )}
-                        </div>
-                      ))}
-                  </div>
+                  {(currentReadTab === "All" || !currentReadTab) && (
+                    <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
+                      {inAppNotificationList.length > 0 &&
+                        searchNotification.map((no: InAppNotification) => (
+                          // <div key={no.id}>{no.time}</div>
+                          <div
+                            key={no.id}
+                            onClick={() => {
+                              handleDataTransmit(no.id);
+                              updateReadStatus(no.id);
+                            }}
+                          >
+                            {thisNotification &&
+                            thisNotification.id == no.id ? (
+                              <NotificationCard
+                                no={no}
+                                currentUserId={userId}
+                                starStatus={reduxStar}
+                                readStatus={reduxRead}
+                              />
+                            ) : (
+                              <NotificationCard
+                                no={no}
+                                currentUserId={userId}
+                              />
+                            )}
+                          </div>
+                        ))}
+                    </div>
+                  )}
+                  {currentReadTab === "Unread" && (
+                    <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
+                      {inAppNotificationList.length > 0 &&
+                        searchNotification
+                          .filter(
+                            (notification: InAppNotification) =>
+                              !(
+                                currentUser?.privateMetadata?.read
+                                  ? currentUser?.privateMetadata?.read
+                                  : []
+                              ).includes(notification.id),
+                          )
+                          .map((no: InAppNotification) => (
+                            // <div key={no.id}>{no.time}</div>
+                            <div
+                              key={no.id}
+                              onClick={() => {
+                                handleDataTransmit(no.id);
+                                updateReadStatus(no.id);
+                              }}
+                            >
+                              <NotificationCard
+                                no={no}
+                                currentUserId={userId}
+                                readStatus={false}
+                              />
+                              {/* {thisNotification &&
+                              thisNotification.id == no.id ? (
+                                <NotificationCard
+                                  no={no}
+                                  currentUserId={userId}
+                                  starStatus={reduxStar}
+                                  readStatus={true}
+                                />
+                              ) : (
+                                <NotificationCard
+                                  no={no}
+                                  currentUserId={userId}
+                                  readStatus={true}
+                                />
+                              )} */}
+                            </div>
+                          ))}
+                    </div>
+                  )}
                 </div>
               )}
               {currentTab === "email" && (
@@ -790,8 +835,9 @@ const Notification = ({
                   <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
                     {inAppNotificationList.length > 0 &&
                       searchNotification
-                        .filter((no: InAppNotification) =>
-                          currentUser.privateMetadata.star.includes(no.id),
+                        .filter(
+                          (no: InAppNotification) =>
+                            currentUser.privateMetadata?.star?.includes(no.id),
                         )
                         .map((no: InAppNotification) => (
                           // <div key={no.id}>{no.time}</div>
@@ -799,6 +845,7 @@ const Notification = ({
                             key={no.id}
                             onClick={() => {
                               handleDataTransmit(no.id);
+                              updateReadStatus(no.id);
                             }}
                           >
                             {thisNotification &&
@@ -807,6 +854,7 @@ const Notification = ({
                                 no={no}
                                 currentUserId={userId}
                                 starStatus={reduxStar}
+                                readStatus={reduxRead}
                               />
                             ) : (
                               <NotificationCard

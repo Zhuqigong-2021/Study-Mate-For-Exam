@@ -217,58 +217,88 @@ export const updateStar = async (
   if (foundUser) {
     // return JSON.stringify(foundUser);
     if (!foundUser.privateMetadata.star) {
-      if (toggle) {
-        const res = await clerkClient.users.updateUser(userId, {
-          // locked: true,
-          privateMetadata: { star: [id] },
-        });
-        // console.log("add star successfully");
-        return "add star successfully";
+      if (foundUser.privateMetadata.read) {
+        const currentRead: any = foundUser.privateMetadata.read;
+        if (toggle) {
+          const res = await clerkClient.users.updateUser(userId, {
+            // locked: true,
+            privateMetadata: { read: [...currentRead], star: [id] },
+          });
+          // console.log("add star successfully");
+          return "add star successfully";
+        } else {
+          const res = await clerkClient.users.updateUser(userId, {
+            // locked: true,
+            privateMetadata: { read: [...currentRead], star: [] },
+          });
+          // console.log("remove star successfully");
+          return "remove star successfully";
+        }
       } else {
-        const res = await clerkClient.users.updateUser(userId, {
-          // locked: true,
-          privateMetadata: { star: [] },
-        });
-        // console.log("remove star successfully");
-        return "remove star successfully";
+        if (toggle) {
+          const res = await clerkClient.users.updateUser(userId, {
+            // locked: true,
+            privateMetadata: { star: [id] },
+          });
+          // console.log("add star successfully");
+          return "add star successfully";
+        } else {
+          const res = await clerkClient.users.updateUser(userId, {
+            // locked: true,
+            privateMetadata: { star: [] },
+          });
+          // console.log("remove star successfully");
+          return "remove star successfully";
+        }
       }
     } else {
-      if (toggle) {
-        const currentStar: any = foundUser.privateMetadata.star;
-        const res = await clerkClient.users.updateUser(userId, {
-          privateMetadata: { star: [...currentStar, id] },
-        });
-        return "add another notification successfully";
+      const isDuplicated = (
+        foundUser.privateMetadata.star as string[]
+      ).includes(id);
+      if (foundUser.privateMetadata.read) {
+        const currentRead: any = foundUser.privateMetadata.read;
+        if (toggle) {
+          const currentStar: any = foundUser.privateMetadata.star;
+          if (!isDuplicated) {
+            const res = await clerkClient.users.updateUser(userId, {
+              privateMetadata: {
+                read: [...currentRead],
+                star: [...currentStar, id],
+              },
+            });
+            return "add another notification successfully";
+          }
+        } else {
+          const stars = (foundUser.privateMetadata.star as string[]).filter(
+            (noId) => noId !== id,
+          );
+          const res = await clerkClient.users.updateUser(userId, {
+            privateMetadata: { read: [...currentRead], star: [...stars] },
+          });
+          return "remove this notification successfully";
+        }
       } else {
-        const stars = (foundUser.privateMetadata.star as string[]).filter(
-          (noId) => noId !== id,
-        );
-        const res = await clerkClient.users.updateUser(userId, {
-          privateMetadata: { star: [...stars] },
-        });
-        return "remove this notification successfully";
+        if (toggle) {
+          const currentStar: any = foundUser.privateMetadata.star;
+
+          if (!isDuplicated) {
+            const res = await clerkClient.users.updateUser(userId, {
+              privateMetadata: { star: [...currentStar, id] },
+            });
+            return "add another notification successfully";
+          }
+        } else {
+          const stars = (foundUser.privateMetadata.star as string[]).filter(
+            (noId) => noId !== id,
+          );
+          const res = await clerkClient.users.updateUser(userId, {
+            privateMetadata: { star: [...stars] },
+          });
+          return "remove this notification successfully";
+        }
       }
     }
   }
-  // if (foundUser) {
-  //   if (!foundUser.privateMetadata.star) {
-  //     if (toggle) {
-  //       const res = await clerkClient.users.updateUser(userId, {
-  //         // locked: true,
-  //         privateMetadata: { star: [id] },
-  //       });
-  //       if (!res) {
-  //         return { message: "something went wrong" };
-  //       }
-  //     } else {
-  //       const res = await clerkClient.users.updateUser(userId, {
-  //         // locked: true,
-  //         privateMetadata: { star: [] },
-  //       });
-  //       return res;
-  //     }
-  //   }
-  // }
 };
 
 export const checkStarStatus = async (userId: string, id: string) => {
@@ -276,6 +306,19 @@ export const checkStarStatus = async (userId: string, id: string) => {
   if (foundUser) {
     if (foundUser.privateMetadata.star) {
       const isInclude = (foundUser.privateMetadata.star as string[]).includes(
+        id,
+      );
+      return isInclude;
+    }
+    return false;
+  }
+};
+
+export const checkReadStatus = async (userId: string, id: string) => {
+  const foundUser: User = await clerkClient.users.getUser(userId);
+  if (foundUser) {
+    if (foundUser.privateMetadata.read) {
+      const isInclude = (foundUser.privateMetadata.read as string[]).includes(
         id,
       );
       return isInclude;
