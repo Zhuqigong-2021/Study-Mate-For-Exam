@@ -122,7 +122,7 @@ const Notification = ({
   });
   const [postUsers] = usePostUsersMutation();
   const starNum = useMemo(() => {
-    if (!isLoading) return currentUser.privateMetadata.star.length;
+    if (!isLoading) return currentUser?.privateMetadata?.star?.length;
   }, [currentUser, isLoading]);
   const [starNumber, setStarNumber] = useState(starNum || 0);
 
@@ -631,7 +631,9 @@ const Notification = ({
                   <span className="flex items-center space-x-2 ">
                     <Package2 size={18} /> {!isCompact && <span>InApp</span>}
                   </span>
-                  {!isCompact && <span>{sortedInAppNotifications.length}</span>}
+                  {!isCompact && (
+                    <span>{sortedInAppNotifications?.length}</span>
+                  )}
                 </div>
 
                 <div
