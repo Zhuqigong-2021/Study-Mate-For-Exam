@@ -122,9 +122,14 @@ const Notification = ({
   });
   const [postUsers] = usePostUsersMutation();
   const starNum = useMemo(() => {
-    if (!isLoading) return currentUser?.privateMetadata?.star?.length;
+    if (!isLoading) {
+      console.log(
+        "real star number:" + currentUser?.privateMetadata?.star?.length,
+      );
+      return currentUser?.privateMetadata?.star?.length;
+    }
   }, [currentUser, isLoading]);
-  const [starNumber, setStarNumber] = useState(starNum || 0);
+  // const [starNumber, setStarNumber] = useState(starNum || 0);
 
   // console.log("data:" + JSON.stringify(data));
   // console.log(data);
@@ -249,9 +254,9 @@ const Notification = ({
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    if (starNum) setStarNumber(starNum);
-  }, [starNum]);
+  // useEffect(() => {
+  //   if (starNum) setStarNumber(starNum);
+  // }, [starNum]);
 
   // useEffect(() => {
   //   console.log(currentUser);
@@ -673,7 +678,7 @@ const Notification = ({
                               .privateMetadata.star as string[]
                           ).length
                         : 0} */}
-                      {starNumber}
+                      {starNum}
                     </span>
                   )}
                 </div>
