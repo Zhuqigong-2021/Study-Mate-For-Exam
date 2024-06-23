@@ -1482,9 +1482,10 @@ const Notification = ({
 
           <ResizableHandle />
 
-          <ResizablePanel defaultSize={35} minSize={30} maxSize={50}>
+          <ResizablePanel defaultSize={35} minSize={35} maxSize={50}>
             <ResizablePanelGroup direction="vertical">
-              <ResizablePanel defaultSize={7} maxSize={7} minSize={7}>
+              <div className="text-white dark:bg-black"> this is 2nd</div>
+              {/* <ResizablePanel defaultSize={7} maxSize={7} minSize={7}>
                 <div className="flex h-full flex-grow items-center justify-between   bg-white px-3 dark:bg-black">
                   {(currentTab === "inbox" || !currentTab) && (
                     <span className=" font-semibold">InApp</span>
@@ -1529,7 +1530,7 @@ const Notification = ({
                   </Tabs>
                 </div>
               </ResizablePanel>
-              <ResizableHandle withHandle={false} disabled />
+              <ResizableHandle withHandle={false} disabled /> */}
               {/* <ResizablePanel defaultSize={93}>
                 <div className="flex h-full items-center justify-center bg-white/75  dark:bg-black">
                   {(currentTab === "inbox" || !currentTab) && (
@@ -1659,9 +1660,10 @@ const Notification = ({
 
           <ResizableHandle />
 
-          {/* <ResizablePanel defaultSize={63}>
+          <ResizablePanel defaultSize={63}>
             <ResizablePanelGroup direction="vertical">
-              <ResizablePanel defaultSize={5} minSize={5} maxSize={5}>
+              <div className="text-white dark:bg-black"> this is 3rd</div>
+              {/* <ResizablePanel defaultSize={5} minSize={5} maxSize={5}>
                 <div className="flex h-full flex-grow items-center justify-end  bg-white px-3 dark:bg-black">
                   <span className="flex space-x-2 text-sm font-thin">
                     <Star
@@ -2092,9 +2094,9 @@ const Notification = ({
                     </div>
                   </ResizablePanel>
                 </ResizablePanelGroup>
-              </ResizablePanel>
+              </ResizablePanel> */}
             </ResizablePanelGroup>
-          </ResizablePanel> */}
+          </ResizablePanel>
         </ResizablePanelGroup>
       )}
     </>
