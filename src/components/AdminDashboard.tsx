@@ -63,6 +63,7 @@ import { sendNotification } from "@/app/[locale]/action";
 import Notification from "./Notification/Notification";
 import { useAppDispatch, useAppSelector } from "@/lib/hook";
 import { setStar } from "@/Storage/Redux/starSlice";
+import { setGlobalWidth } from "@/Storage/Redux/widthSlice";
 interface Range {
   min: number;
   max: number;
@@ -121,6 +122,7 @@ export function AdminDashboard({
   const [dataMode, setDataMode] = useState(false);
   const [currentTab, setCurrentTab] = useState("dashboard");
   const { width: globalWidth } = useAppSelector((state) => state.widthStore);
+
   // const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
   const d = useTranslations("Dashboard");
   const { theme } = useTheme();
@@ -323,9 +325,7 @@ export function AdminDashboard({
   //   const response = await sendNotification();
   //   console.log(response);
   // };
-  useEffect(() => {
-    console.log("globalWidth: " + globalWidth);
-  }, [globalWidth]);
+
   return (
     <div
       className={`${
@@ -334,7 +334,7 @@ export function AdminDashboard({
             ? "dark:circle-md-note min-h-[800px]"
             : "dark:circle-md-note min-h-[1500px]"
           : "dark:circle-lg min-h-[800px]"
-      } my-5 flex  w-full  max-w-[84rem] flex-col overflow-hidden  rounded-[1.5rem] border shadow-md    dark:border-none`}
+      } my-5 flex    w-full  max-w-[84rem] flex-col overflow-hidden  rounded-[1.5rem] border shadow-md    dark:border-none`}
     >
       <header className="dark:class sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 dark:border-none dark:shadow-sm dark:shadow-gray-700">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">

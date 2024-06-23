@@ -146,6 +146,7 @@ const Notification = ({
   });
   const [postUsers] = usePostUsersMutation();
   const [updateRead] = useUpdateReadMutation();
+  const { width: globalWidth } = useAppSelector((state) => state.widthStore);
   const starNum = useMemo(() => {
     if (!isLoading) {
       console.log(
@@ -333,14 +334,14 @@ const Notification = ({
     return () => window.removeEventListener("resize", handleResize);
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log(screenWidth);
-    if (screenWidth >= 891) {
-      setCurrentLayout("horizontal");
-    } else {
-      setCurrentLayout("vertical");
-    }
-  }, [screenWidth]);
+  // useEffect(() => {
+  //   console.log(screenWidth);
+  //   if (screenWidth >= 891) {
+  //     setCurrentLayout("horizontal");
+  //   } else {
+  //     setCurrentLayout("vertical");
+  //   }
+  // }, [screenWidth]);
   //   useEffect(() => {
   //     // Force the width based on isCompact state
   //     if (isCompact) {
@@ -497,7 +498,13 @@ const Notification = ({
       }
     }
   }
+  // useEffect(() => {
+  //   console.log("screenWidth: " + screenWidth);
+  // }, [screenWidth]);
 
+  // useEffect(() => {
+  //   console.log("globalWidth: " + globalWidth);
+  // }, [globalWidth]);
   return (
     <ResizablePanelGroup
       direction={screenWidth >= 891 ? "horizontal" : "vertical"}
