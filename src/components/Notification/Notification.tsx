@@ -1482,7 +1482,7 @@ const Notification = ({
 
           <ResizableHandle />
 
-          {/* <ResizablePanel defaultSize={35} minSize={30} maxSize={50}>
+          <ResizablePanel defaultSize={35} minSize={30} maxSize={50}>
             <ResizablePanelGroup direction="vertical">
               <ResizablePanel defaultSize={7} maxSize={7} minSize={7}>
                 <div className="flex h-full flex-grow items-center justify-between   bg-white px-3 dark:bg-black">
@@ -1655,7 +1655,7 @@ const Notification = ({
                 </div>
               </ResizablePanel>
             </ResizablePanelGroup>
-          </ResizablePanel> */}
+          </ResizablePanel>
 
           <ResizableHandle />
 
