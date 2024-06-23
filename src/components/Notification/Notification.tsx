@@ -1532,7 +1532,7 @@ const Notification = ({
             </ResizablePanel>
             <ResizableHandle />
             <ResizablePanel defaultSize={93}>
-              <div className="flex  h-full items-center justify-center  bg-white/75  dark:bg-black">
+              <div className="flex  h-full items-center justify-center   bg-white/75 dark:bg-black">
                 {(currentTab === "inbox" || !currentTab) && (
                   <div className=" flex h-full w-full flex-col    p-4 font-semibold">
                     <div className="relative mx-1">
@@ -1661,10 +1661,10 @@ const Notification = ({
 
           <ResizableHandle />
 
-          <ResizablePanel defaultSize={63}>
+          <ResizablePanel defaultSize={63} minSize={48}>
             {/* <ResizablePanelGroup direction="vertical"> */}
-            <ResizablePanel defaultSize={5} minSize={5} maxSize={5}>
-              <div className="flex h-full flex-grow items-center justify-end  bg-white px-3 dark:bg-black">
+            <ResizablePanel defaultSize={10} minSize={10} maxSize={10}>
+              <div className="flex h-full flex-grow items-center justify-end  bg-white px-3 py-2 dark:bg-black">
                 <span className="flex space-x-2 text-sm font-thin">
                   <Star
                     size={18}
@@ -1741,8 +1741,8 @@ const Notification = ({
                 </span>
               </div>
             </ResizablePanel>
-            <ResizableHandle withHandle={false} disabled />
-            <ResizablePanel defaultSize={95}>
+            <ResizableHandle />
+            <ResizablePanel defaultSize={90}>
               {/* <ResizablePanelGroup direction="vertical"> */}
               {thisNotification && (
                 <>
@@ -1820,14 +1820,14 @@ const Notification = ({
                 </>
               )}
               <ResizablePanel defaultSize={70} maxSize={70}>
-                <div className="no-scrollbar relative flex h-full flex-grow flex-col items-center justify-center   overflow-y-scroll bg-white/75 px-3  pb-2 pt-2  dark:bg-black">
+                <div className="no-scrollbar relative flex h-full  flex-grow flex-col items-center justify-center   overflow-y-scroll bg-white/75 px-3  pb-2 pt-2  dark:bg-black">
                   {(currentTab === "inbox" || !currentTab) && (
                     <Form {...form}>
                       <form
                         onSubmit={form.handleSubmit(onSubmit)}
                         className={`${
                           !thisNotification ? "space-y-14" : "space-y-3"
-                        } no-scrollbar  w-full   overflow-y-scroll  pb-4 dark:px-1`}
+                        } no-scrollbar  h-[1000px] w-full  overflow-y-scroll  py-4  dark:px-1`}
                       >
                         <FormField
                           control={form.control}

@@ -942,7 +942,7 @@ export function AdminDashboard({
         </main>
       )}
       {currentTab === "notification" && (
-        <main className="flex flex-1 flex-col bg-white/75">
+        <main className="flex flex-1 flex-col bg-white/75 dark:bg-black/80">
           {/* <button onClick={sendUsersNotification}>Click to push</button> */}
           <Notification
             usersList={usersList}
