@@ -1534,7 +1534,7 @@ const Notification = ({
             <ResizablePanel defaultSize={93}>
               <div className="flex  h-full items-center justify-center   bg-white/75 dark:bg-black">
                 {(currentTab === "inbox" || !currentTab) && (
-                  <div className=" flex h-full w-full flex-col    p-4 font-semibold">
+                  <div className=" no-scrollbar flex h-full w-full flex-col overflow-y-scroll  p-4 font-semibold">
                     <div className="relative mx-1">
                       <Input
                         className="dark:circle-sm-note flex h-8 w-full rounded-md border-none bg-white py-3 pl-8 text-sm shadow-sm  outline-none placeholder:text-muted-foreground focus-visible:ring-transparent  disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black  dark:text-teal-300 dark:placeholder-teal-300/75 dark:focus-visible:ring-teal-300/75"
@@ -1545,7 +1545,7 @@ const Notification = ({
                     </div>
                     {/* smaller than 891 */}
                     {(currentReadTab === "All" || !currentReadTab) && (
-                      <div className="no-scrollbar  mt-4 h-[596px] space-y-3 overflow-y-scroll pb-2 ">
+                      <div className="no-scrollbar  mt-4 h-[450px] space-y-3 overflow-y-scroll pb-2 ">
                         {inAppNotificationList.length > 0 &&
                           searchNotification.map((no: InAppNotification) => (
                             <div
@@ -1574,7 +1574,7 @@ const Notification = ({
                       </div>
                     )}
                     {currentReadTab === "Unread" && (
-                      <div className="no-scrollbar mt-4 h-[596px] space-y-3 overflow-y-scroll pb-2 ">
+                      <div className="no-scrollbar mt-4 h-[450px] space-y-3 overflow-y-scroll pb-2 ">
                         {inAppNotificationList.length > 0 &&
                           searchNotification
                             .filter(
@@ -1747,7 +1747,7 @@ const Notification = ({
               {thisNotification && (
                 <>
                   <ResizablePanel defaultSize={15} minSize={13} maxSize={30}>
-                    <div className="border-b-1   h-full  bg-white p-2 pb-3 dark:bg-black">
+                    <div className="border-b-1   no-scrollbar  h-[100px] overflow-y-scroll bg-white p-2 pb-3 dark:bg-black">
                       <div className="flex items-center space-x-3 py-2 ">
                         <div className="-translate-y-3">
                           {thisNotification && (
@@ -1807,7 +1807,7 @@ const Notification = ({
 
                   <ResizableHandle withHandle={true} />
                   <ResizablePanel defaultSize={15}>
-                    <div className="no-scrollbar  h-full overflow-y-scroll bg-white/75 p-2 py-3 text-sm dark:bg-black dark:text-white/80">
+                    <div className="no-scrollbar  h-[200px] overflow-y-scroll bg-white/75 p-2 py-3 text-sm dark:bg-black dark:text-white/80">
                       {thisNotification && thisNotification.description}
                     </div>
                   </ResizablePanel>
@@ -1820,7 +1820,7 @@ const Notification = ({
                 </>
               )}
               <ResizablePanel defaultSize={70} maxSize={70}>
-                <div className="no-scrollbar relative flex h-full  flex-grow flex-col items-center justify-center   overflow-y-scroll bg-white/75 px-3  pb-2 pt-2  dark:bg-black">
+                <div className="no-scrollbar relative flex h-full flex-grow flex-col  items-center justify-center overflow-y-scroll  bg-white/75 px-3  pb-2 pt-2  dark:bg-black">
                   {(currentTab === "inbox" || !currentTab) && (
                     <Form {...form}>
                       <form
