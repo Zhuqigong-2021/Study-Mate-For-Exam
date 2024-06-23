@@ -1484,7 +1484,7 @@ const Notification = ({
           <ResizableHandle />
 
           <ResizablePanel defaultSize={35} minSize={35} maxSize={50}>
-            <PanelGroup direction="vertical">
+            <ResizablePanelGroup direction="vertical">
               <ResizablePanel defaultSize={7} maxSize={7} minSize={7}>
                 <div className="flex h-full flex-grow items-center justify-between   bg-white px-3 dark:bg-black">
                   {(currentTab === "inbox" || !currentTab) && (
@@ -1530,9 +1530,9 @@ const Notification = ({
                   </Tabs>
                 </div>
               </ResizablePanel>
-              <ResizableHandle withHandle={false} disabled />
+              <ResizableHandle />
               <ResizablePanel defaultSize={93}>
-                <div className="flex h-full items-center justify-center bg-white/75  dark:bg-black">
+                <div className="flex  h-full items-center justify-center  bg-white/75  dark:bg-black">
                   {(currentTab === "inbox" || !currentTab) && (
                     <div className=" flex h-full w-full flex-col    p-4 font-semibold">
                       <div className="relative mx-1">
@@ -1543,8 +1543,9 @@ const Notification = ({
                         />
                         <Search className="dark:opacity-1 absolute left-2 top-2 mr-2 h-4 w-4 shrink-0 opacity-50 dark:text-teal-300" />
                       </div>
+                      {/* smaller than 891 */}
                       {(currentReadTab === "All" || !currentReadTab) && (
-                        <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
+                        <div className="no-scrollbar mb-2 mt-4 h-full space-y-3 overflow-y-scroll ">
                           {inAppNotificationList.length > 0 &&
                             searchNotification.map((no: InAppNotification) => (
                               <div
@@ -1616,7 +1617,7 @@ const Notification = ({
                         />
                         <Search className="dark:opacity-1 absolute left-2 top-2 mr-2 h-4 w-4 shrink-0 opacity-50 dark:text-teal-300" />
                       </div>
-
+                      {/* smaller than 891 */}
                       <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
                         {inAppNotificationList.length > 0 &&
                           searchNotification
@@ -1655,7 +1656,8 @@ const Notification = ({
                   )}
                 </div>
               </ResizablePanel>
-            </PanelGroup>
+            </ResizablePanelGroup>
+            {/* </PanelGroup> */}
           </ResizablePanel>
 
           <ResizableHandle />
