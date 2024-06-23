@@ -547,9 +547,9 @@ const Notification = ({
       }
     }
   }
-  // useEffect(() => {
-  //   console.log("screenWidth: " + screenWidth);
-  // }, [screenWidth]);
+  useEffect(() => {
+    console.log("screenWidth: " + screenWidth);
+  }, [screenWidth]);
 
   // useEffect(() => {
   //   console.log("globalWidth: " + globalWidth);
@@ -721,7 +721,6 @@ const Notification = ({
             <Drawer>
               <DrawerTrigger asChild>
                 <Button variant="outline" className="rounded-md">
-                  {/* <Menu /> */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"
@@ -765,12 +764,7 @@ const Notification = ({
                   <DrawerDescription className="">
                     <DrawerContent className="dark:border-none">
                       <div className="flex h-full  items-center  dark:border-none">
-                        {/* <DrawerTitle>Menu</DrawerTitle> */}
-                        <div
-                          // ref={sidebarRef}
-                          className="flex h-full flex-grow items-start justify-center border  bg-white/75 px-2 py-2 dark:border-none dark:bg-black"
-                          //   style={{ width: isCompact ? "50px" : "200px" }}
-                        >
+                        <div className="flex h-full flex-grow items-start justify-center border  bg-white/75 px-2 py-2 dark:border-none dark:bg-black">
                           <div className="flex flex-grow flex-col space-y-2 p-0 py-4  ">
                             <div
                               onClick={() => {
@@ -842,7 +836,7 @@ const Notification = ({
           </div>
         </ResizablePanel>
       )}
-      {/* <PanelResizeHandle /> */}
+
       {screenWidth >= 891 && <ResizableHandle withHandle />}
       {screenWidth < 891 && <ResizableHandle />}
       {screenWidth >= 891 && (

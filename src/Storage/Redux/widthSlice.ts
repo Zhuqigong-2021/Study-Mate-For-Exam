@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  width: typeof window !== "undefined" ? window.innerWidth : 0,
+  width: typeof window !== "undefined" ? window.innerWidth : 350,
 };
 
 export const widthSlice = createSlice({
