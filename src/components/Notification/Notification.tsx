@@ -1618,7 +1618,7 @@ const Notification = ({
                       <Search className="dark:opacity-1 absolute left-2 top-2 mr-2 h-4 w-4 shrink-0 opacity-50 dark:text-teal-300" />
                     </div>
                     {/* smaller than 891 */}
-                    <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
+                    <div className="no-scrollbar mt-4 h-[596px] space-y-3 overflow-y-scroll ">
                       {inAppNotificationList.length > 0 &&
                         searchNotification
                           .filter(
@@ -1662,434 +1662,430 @@ const Notification = ({
           <ResizableHandle />
 
           <ResizablePanel defaultSize={63}>
-            <ResizablePanelGroup direction="vertical">
-              <ResizablePanel defaultSize={5} minSize={5} maxSize={5}>
-                <div className="flex h-full flex-grow items-center justify-end  bg-white px-3 dark:bg-black">
-                  <span className="flex space-x-2 text-sm font-thin">
-                    <Star
+            {/* <ResizablePanelGroup direction="vertical"> */}
+            <ResizablePanel defaultSize={5} minSize={5} maxSize={5}>
+              <div className="flex h-full flex-grow items-center justify-end  bg-white px-3 dark:bg-black">
+                <span className="flex space-x-2 text-sm font-thin">
+                  <Star
+                    size={18}
+                    className={`font-light text-stone-700  ${
+                      starCondition
+                        ? "dark:text-transparent"
+                        : "dark:text-white/75"
+                    }`}
+                    strokeWidth="1.8"
+                    fill={starCondition ? "#fcd34d" : "transparent"}
+                    onClick={() => {
+                      if (thisNotification) {
+                        handleStar(thisNotification.id);
+                      } else {
+                        toast.error("You don't have any notification to star");
+                      }
+                    }}
+                  />
+                  {!thisNotification && (
+                    <Trash2
                       size={18}
-                      className={`font-light text-stone-700  ${
-                        starCondition
-                          ? "dark:text-transparent"
-                          : "dark:text-white/75"
-                      }`}
+                      className="font-light text-stone-700 dark:text-white/75"
                       strokeWidth="1.8"
-                      fill={starCondition ? "#fcd34d" : "transparent"}
                       onClick={() => {
-                        if (thisNotification) {
-                          handleStar(thisNotification.id);
-                        } else {
-                          toast.error(
-                            "You don't have any notification to star",
-                          );
-                        }
+                        toast.error(
+                          "Currently, you have no notifications to delete",
+                        );
                       }}
                     />
-                    {!thisNotification && (
-                      <Trash2
-                        size={18}
-                        className="font-light text-stone-700 dark:text-white/75"
-                        strokeWidth="1.8"
-                        onClick={() => {
-                          toast.error(
-                            "Currently, you have no notifications to delete",
-                          );
-                        }}
-                      />
-                    )}
-                    {thisNotification && (
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Trash2
-                            size={18}
-                            className="font-light text-stone-700 dark:text-white/75"
-                            strokeWidth="1.8"
-                          />
-                        </AlertDialogTrigger>
+                  )}
+                  {thisNotification && (
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Trash2
+                          size={18}
+                          className="font-light text-stone-700 dark:text-white/75"
+                          strokeWidth="1.8"
+                        />
+                      </AlertDialogTrigger>
 
-                        <AlertDialogContent
-                          className="circle-sm-exam dark:border-none"
-                          aria-describedby="content"
-                          aria-description="content"
-                        >
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              Are you absolutely sure?
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              This action cannot be undone. This will
-                              permanently delete your question and remove your
-                              data from our servers.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel className="dark:border-none dark:shadow-sm dark:shadow-red-200">
-                              Cancel
-                            </AlertDialogCancel>
-                            <AlertDialogAction
-                              className="bg-red-500 text-white dark:border-none dark:shadow-sm dark:shadow-red-300 dark:hover:text-red-500"
-                              onClick={() => {
-                                if (thisNotification) {
-                                  deleteThisNotification(thisNotification?.id);
-                                }
-                              }}
-                            >
-                              Continue
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    )}
-                  </span>
-                </div>
-              </ResizablePanel>
-              <ResizableHandle withHandle={false} disabled />
-              <ResizablePanel defaultSize={95}>
-                {/* <ResizablePanelGroup direction="vertical"> */}
-                {thisNotification && (
-                  <>
-                    <ResizablePanel defaultSize={15} minSize={13} maxSize={30}>
-                      <div className="border-b-1   h-full  bg-white p-2 pb-3 dark:bg-black">
-                        <div className="flex items-center space-x-3 py-2 ">
-                          <div className="-translate-y-3">
+                      <AlertDialogContent
+                        className="circle-sm-exam dark:border-none"
+                        aria-describedby="content"
+                        aria-description="content"
+                      >
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete your question and remove your data from our
+                            servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel className="dark:border-none dark:shadow-sm dark:shadow-red-200">
+                            Cancel
+                          </AlertDialogCancel>
+                          <AlertDialogAction
+                            className="bg-red-500 text-white dark:border-none dark:shadow-sm dark:shadow-red-300 dark:hover:text-red-500"
+                            onClick={() => {
+                              if (thisNotification) {
+                                deleteThisNotification(thisNotification?.id);
+                              }
+                            }}
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  )}
+                </span>
+              </div>
+            </ResizablePanel>
+            <ResizableHandle withHandle={false} disabled />
+            <ResizablePanel defaultSize={95}>
+              {/* <ResizablePanelGroup direction="vertical"> */}
+              {thisNotification && (
+                <>
+                  <ResizablePanel defaultSize={15} minSize={13} maxSize={30}>
+                    <div className="border-b-1   h-full  bg-white p-2 pb-3 dark:bg-black">
+                      <div className="flex items-center space-x-3 py-2 ">
+                        <div className="-translate-y-3">
+                          {thisNotification && (
+                            <Image
+                              src={JSON.parse(
+                                thisNotification.user,
+                              ).imageUrl.toString()}
+                              alt="sender"
+                              width={35}
+                              height={35}
+                              className="rounded-full"
+                            />
+                          )}
+                        </div>
+
+                        <div className="flex w-full flex-col ">
+                          <div className="flex w-full items-center justify-between">
+                            <span className="font-bold dark:text-teal-300">
+                              {thisNotification &&
+                                JSON.parse(thisNotification?.user).firstName +
+                                  " " +
+                                  JSON.parse(thisNotification?.user).lastName}
+                            </span>{" "}
                             {thisNotification && (
-                              <Image
-                                src={JSON.parse(
-                                  thisNotification.user,
-                                ).imageUrl.toString()}
-                                alt="sender"
-                                width={35}
-                                height={35}
-                                className="rounded-full"
-                              />
+                              <span className="text-sm dark:text-teal-300">
+                                {convertToLocaleDateTime(thisNotification.time)}
+                              </span>
                             )}
                           </div>
+                          {thisNotification && (
+                            <div className="mb-2">
+                              <div className="mb-1 text-sm dark:text-white/75">
+                                {thisNotification.subject}
+                              </div>
 
-                          <div className="flex w-full flex-col ">
-                            <div className="flex w-full items-center justify-between">
-                              <span className="font-bold dark:text-teal-300">
-                                {thisNotification &&
-                                  JSON.parse(thisNotification?.user).firstName +
-                                    " " +
-                                    JSON.parse(thisNotification?.user).lastName}
-                              </span>{" "}
-                              {thisNotification && (
-                                <span className="text-sm dark:text-teal-300">
-                                  {convertToLocaleDateTime(
-                                    thisNotification.time,
+                              <div className="flex flex-wrap space-x-2">
+                                <span className="text-sm">To:</span>
+                                <div className="flex space-x-0">
+                                  {thisNotification.to.map(
+                                    (t: any, index: number) => (
+                                      <Badge
+                                        key={index}
+                                        className="scale-90 dark:bg-teal-500 dark:text-white"
+                                      >
+                                        {t}
+                                      </Badge>
+                                    ),
                                   )}
-                                </span>
-                              )}
-                            </div>
-                            {thisNotification && (
-                              <div className="mb-2">
-                                <div className="mb-1 text-sm dark:text-white/75">
-                                  {thisNotification.subject}
-                                </div>
-
-                                <div className="flex flex-wrap space-x-2">
-                                  <span className="text-sm">To:</span>
-                                  <div className="flex space-x-0">
-                                    {thisNotification.to.map(
-                                      (t: any, index: number) => (
-                                        <Badge
-                                          key={index}
-                                          className="scale-90 dark:bg-teal-500 dark:text-white"
-                                        >
-                                          {t}
-                                        </Badge>
-                                      ),
-                                    )}
-                                  </div>
                                 </div>
                               </div>
-                            )}
-                          </div>
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </ResizablePanel>
+                    </div>
+                  </ResizablePanel>
 
-                    <ResizableHandle withHandle={true} />
-                    <ResizablePanel defaultSize={15}>
-                      <div className="no-scrollbar  h-full overflow-y-scroll bg-white/75 p-2 py-3 text-sm dark:bg-black dark:text-white/80">
-                        {thisNotification && thisNotification.description}
-                      </div>
-                    </ResizablePanel>
+                  <ResizableHandle withHandle={true} />
+                  <ResizablePanel defaultSize={15}>
+                    <div className="no-scrollbar  h-full overflow-y-scroll bg-white/75 p-2 py-3 text-sm dark:bg-black dark:text-white/80">
+                      {thisNotification && thisNotification.description}
+                    </div>
+                  </ResizablePanel>
 
-                    {(currentTab === "inbox" ||
-                      !currentTab ||
-                      currentTab === "email") && (
-                      <ResizableHandle withHandle={false} disabled />
-                    )}
-                  </>
-                )}
-                <ResizablePanel defaultSize={70} maxSize={70}>
-                  <div className="no-scrollbar relative flex h-full flex-grow flex-col items-center justify-center   overflow-y-scroll bg-white/75 px-3  pb-2 pt-2  dark:bg-black">
-                    {(currentTab === "inbox" || !currentTab) && (
-                      <Form {...form}>
-                        <form
-                          onSubmit={form.handleSubmit(onSubmit)}
-                          className={`${
-                            !thisNotification ? "space-y-14" : "space-y-3"
-                          } no-scrollbar  w-full   overflow-y-scroll  pb-4 dark:px-1`}
-                        >
-                          <FormField
-                            control={form.control}
-                            name="to"
-                            render={({ field }) => (
-                              <FormItem className="">
-                                <FormLabel className="flex w-full items-center justify-between space-x-2">
-                                  <span>To:</span>{" "}
-                                  <FormMessage className="text-xs" />
-                                </FormLabel>
-                                <FormControl>
-                                  <MultiSelect
-                                    options={receipients}
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
-                                    placeholder="Select receipients"
-                                    variant="inverted"
-                                    animation={2}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                          <ResizableHandle
-                            withHandle={false}
-                            disabled
-                            className="my-3"
-                          />
-                          <FormField
-                            control={form.control}
-                            name="time"
-                            render={({ field }) => (
-                              <FormItem className="hidden">
-                                <FormLabel>
-                                  <span className="text-xs">Time</span>
-                                </FormLabel>
-                                <FormControl>
-                                  <Input placeholder="time..." {...field} />
-                                </FormControl>
+                  {(currentTab === "inbox" ||
+                    !currentTab ||
+                    currentTab === "email") && (
+                    <ResizableHandle withHandle={false} disabled />
+                  )}
+                </>
+              )}
+              <ResizablePanel defaultSize={70} maxSize={70}>
+                <div className="no-scrollbar relative flex h-full flex-grow flex-col items-center justify-center   overflow-y-scroll bg-white/75 px-3  pb-2 pt-2  dark:bg-black">
+                  {(currentTab === "inbox" || !currentTab) && (
+                    <Form {...form}>
+                      <form
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className={`${
+                          !thisNotification ? "space-y-14" : "space-y-3"
+                        } no-scrollbar  w-full   overflow-y-scroll  pb-4 dark:px-1`}
+                      >
+                        <FormField
+                          control={form.control}
+                          name="to"
+                          render={({ field }) => (
+                            <FormItem className="">
+                              <FormLabel className="flex w-full items-center justify-between space-x-2">
+                                <span>To:</span>{" "}
                                 <FormMessage className="text-xs" />
-                              </FormItem>
-                            )}
-                          />
+                              </FormLabel>
+                              <FormControl>
+                                <MultiSelect
+                                  options={receipients}
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                  placeholder="Select receipients"
+                                  variant="inverted"
+                                  animation={2}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        <ResizableHandle
+                          withHandle={false}
+                          disabled
+                          className="my-3"
+                        />
+                        <FormField
+                          control={form.control}
+                          name="time"
+                          render={({ field }) => (
+                            <FormItem className="hidden">
+                              <FormLabel>
+                                <span className="text-xs">Time</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input placeholder="time..." {...field} />
+                              </FormControl>
+                              <FormMessage className="text-xs" />
+                            </FormItem>
+                          )}
+                        />
 
-                          <div className="flex w-full space-x-4 ">
-                            <FormField
-                              control={form.control}
-                              name="subject"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel className="flex w-full items-center justify-between space-x-2">
-                                    <span className="text-xs text-inherit">
-                                      Subject
-                                    </span>
-                                    <FormMessage className="text-xs" />
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      placeholder="Add a subject..."
-                                      className="dark:hover:circle-sm-note pl-4 focus-visible:ring-transparent dark:border-none dark:shadow-sm dark:shadow-teal-300"
-                                      {...field}
-                                    />
-                                  </FormControl>
-                                </FormItem>
-                              )}
-                            />
-                            <FormField
-                              control={form.control}
-                              name="link"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel className="flex w-full items-center justify-between space-x-2">
-                                    <span className="text-xs">Link</span>
-                                    <FormMessage className="text-xs" />
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      placeholder="Relative url..."
-                                      className="dark:hover:circle-sm-note pl-4 focus-visible:ring-transparent dark:border-none dark:shadow-sm  dark:shadow-teal-300 "
-                                      {...field}
-                                    />
-                                  </FormControl>
-                                </FormItem>
-                              )}
-                            />
-                          </div>
+                        <div className="flex w-full space-x-4 ">
                           <FormField
                             control={form.control}
-                            name="tag"
+                            name="subject"
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel className="flex w-full items-center justify-between space-x-2">
-                                  <span>Tag </span>{" "}
-                                  <FormMessage className="text-xs" />
-                                </FormLabel>
-                                <FormControl>
-                                  <MultiSelect
-                                    options={tagsList}
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
-                                    placeholder="Select tag"
-                                    variant="inverted"
-                                    animation={2}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="description"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="flex w-full items-center justify-between space-x-2">
-                                  <span className="text-xs ">
-                                    Short description
+                                  <span className="text-xs text-inherit">
+                                    Subject
                                   </span>
                                   <FormMessage className="text-xs" />
                                 </FormLabel>
                                 <FormControl>
-                                  <Textarea
-                                    placeholder="Input your notification..."
-                                    className="dark:hover:circle-sm-note pl-4 focus-visible:ring-transparent dark:border-none dark:shadow-sm  dark:shadow-teal-300"
+                                  <Input
+                                    placeholder="Add a subject..."
+                                    className="dark:hover:circle-sm-note pl-4 focus-visible:ring-transparent dark:border-none dark:shadow-sm dark:shadow-teal-300"
                                     {...field}
                                   />
                                 </FormControl>
                               </FormItem>
                             )}
                           />
-
-                          <div className="flex justify-end   sm:gap-0 ">
-                            <LoadingButton
-                              type="submit"
-                              size={"sm"}
-                              className="   px-2 py-0 dark:bg-transparent dark:text-teal-300 dark:shadow-sm dark:shadow-teal-300 dark:hover:bg-transparent dark:hover:text-teal-200 dark:hover:shadow-md dark:hover:shadow-teal-400"
-                              loading={inAppLoading}
-                              disabled={form.formState.isSubmitting}
-                            >
-                              <span className="flex items-center space-x-1">
-                                {!inAppLoading && <Send size={14} />}
-                                <span className="scale-y-90 text-[14px]">
-                                  Send
-                                </span>
-                              </span>
-                            </LoadingButton>
-                          </div>
-                        </form>
-                      </Form>
-                    )}
-                    {currentTab === "email" && (
-                      <Form {...emailForm}>
-                        <form
-                          onSubmit={emailForm.handleSubmit(onSubmitEmail)}
-                          className="w-full space-y-3  "
-                        >
                           <FormField
-                            control={emailForm.control}
-                            name="title"
+                            control={form.control}
+                            name="link"
                             render={({ field }) => (
-                              <FormItem className="hidden">
-                                <FormLabel>
-                                  <span className="text-xs">Time</span>
+                              <FormItem>
+                                <FormLabel className="flex w-full items-center justify-between space-x-2">
+                                  <span className="text-xs">Link</span>
+                                  <FormMessage className="text-xs" />
                                 </FormLabel>
                                 <FormControl>
                                   <Input
-                                    placeholder="Add a subject..."
+                                    placeholder="Relative url..."
+                                    className="dark:hover:circle-sm-note pl-4 focus-visible:ring-transparent dark:border-none dark:shadow-sm  dark:shadow-teal-300 "
                                     {...field}
                                   />
                                 </FormControl>
                               </FormItem>
                             )}
                           />
-                          <FormField
-                            control={emailForm.control}
-                            name="frameworks"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>To:</FormLabel>
-                                <FormControl>
-                                  <MultiSelect
-                                    options={receipients}
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
-                                    placeholder="Select options"
-                                    variant="inverted"
-                                    animation={2}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                          <ResizableHandle
-                            withHandle={false}
-                            disabled
-                            className="my-3"
-                          />
-                          <FormField
-                            control={emailForm.control}
-                            name="subject"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>
-                                  <span className="text-xs">Subject</span>
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    placeholder="Add a subject..."
-                                    {...field}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
+                        </div>
+                        <FormField
+                          control={form.control}
+                          name="tag"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex w-full items-center justify-between space-x-2">
+                                <span>Tag </span>{" "}
+                                <FormMessage className="text-xs" />
+                              </FormLabel>
+                              <FormControl>
+                                <MultiSelect
+                                  options={tagsList}
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                  placeholder="Select tag"
+                                  variant="inverted"
+                                  animation={2}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
 
-                          <FormField
-                            control={emailForm.control}
-                            name="message"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>
-                                  <span className="text-xs">Message</span>
-                                </FormLabel>
-                                <FormControl>
-                                  <Textarea
-                                    placeholder="Input your email message..."
-                                    {...field}
-                                    rows={7}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-
-                          <div className=" flex justify-end  gap-1 sm:gap-0">
-                            <LoadingButton
-                              type="submit"
-                              size={"sm"}
-                              className="mt-4 px-2 py-0 dark:bg-transparent dark:text-green-300 dark:shadow-sm dark:shadow-green-300 dark:hover:bg-transparent dark:hover:text-green-200 dark:hover:shadow-md dark:hover:shadow-green-400"
-                              loading={false}
-                              disabled={false}
-                            >
-                              <span className="flex items-center space-x-1">
-                                <Send size={14} />
-                                <span className="scale-y-90 text-[14px]">
-                                  Send
+                        <FormField
+                          control={form.control}
+                          name="description"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex w-full items-center justify-between space-x-2">
+                                <span className="text-xs ">
+                                  Short description
                                 </span>
+                                <FormMessage className="text-xs" />
+                              </FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  placeholder="Input your notification..."
+                                  className="dark:hover:circle-sm-note pl-4 focus-visible:ring-transparent dark:border-none dark:shadow-sm  dark:shadow-teal-300"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+
+                        <div className="flex justify-end   sm:gap-0 ">
+                          <LoadingButton
+                            type="submit"
+                            size={"sm"}
+                            className="   px-2 py-0 dark:bg-transparent dark:text-teal-300 dark:shadow-sm dark:shadow-teal-300 dark:hover:bg-transparent dark:hover:text-teal-200 dark:hover:shadow-md dark:hover:shadow-teal-400"
+                            loading={inAppLoading}
+                            disabled={form.formState.isSubmitting}
+                          >
+                            <span className="flex items-center space-x-1">
+                              {!inAppLoading && <Send size={14} />}
+                              <span className="scale-y-90 text-[14px]">
+                                Send
                               </span>
-                            </LoadingButton>
-                          </div>
-                        </form>
-                      </Form>
-                    )}
-                  </div>
-                </ResizablePanel>
-                {/* </ResizablePanelGroup> */}
+                            </span>
+                          </LoadingButton>
+                        </div>
+                      </form>
+                    </Form>
+                  )}
+                  {currentTab === "email" && (
+                    <Form {...emailForm}>
+                      <form
+                        onSubmit={emailForm.handleSubmit(onSubmitEmail)}
+                        className="w-full space-y-3  "
+                      >
+                        <FormField
+                          control={emailForm.control}
+                          name="title"
+                          render={({ field }) => (
+                            <FormItem className="hidden">
+                              <FormLabel>
+                                <span className="text-xs">Time</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Add a subject..."
+                                  {...field}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={emailForm.control}
+                          name="frameworks"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>To:</FormLabel>
+                              <FormControl>
+                                <MultiSelect
+                                  options={receipients}
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                  placeholder="Select options"
+                                  variant="inverted"
+                                  animation={2}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        <ResizableHandle
+                          withHandle={false}
+                          disabled
+                          className="my-3"
+                        />
+                        <FormField
+                          control={emailForm.control}
+                          name="subject"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>
+                                <span className="text-xs">Subject</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Add a subject..."
+                                  {...field}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={emailForm.control}
+                          name="message"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>
+                                <span className="text-xs">Message</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  placeholder="Input your email message..."
+                                  {...field}
+                                  rows={7}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+
+                        <div className=" flex justify-end  gap-1 sm:gap-0">
+                          <LoadingButton
+                            type="submit"
+                            size={"sm"}
+                            className="mt-4 px-2 py-0 dark:bg-transparent dark:text-green-300 dark:shadow-sm dark:shadow-green-300 dark:hover:bg-transparent dark:hover:text-green-200 dark:hover:shadow-md dark:hover:shadow-green-400"
+                            loading={false}
+                            disabled={false}
+                          >
+                            <span className="flex items-center space-x-1">
+                              <Send size={14} />
+                              <span className="scale-y-90 text-[14px]">
+                                Send
+                              </span>
+                            </span>
+                          </LoadingButton>
+                        </div>
+                      </form>
+                    </Form>
+                  )}
+                </div>
               </ResizablePanel>
-            </ResizablePanelGroup>
+              {/* </ResizablePanelGroup> */}
+            </ResizablePanel>
+            {/* </ResizablePanelGroup> */}
           </ResizablePanel>
         </ResizablePanelGroup>
       )}
