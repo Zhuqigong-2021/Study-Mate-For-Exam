@@ -1484,8 +1484,7 @@ const Notification = ({
 
           <ResizablePanel defaultSize={35} minSize={35} maxSize={50}>
             <ResizablePanelGroup direction="vertical">
-              <div className="text-white dark:bg-black"> this is 2nd</div>
-              {/* <ResizablePanel defaultSize={7} maxSize={7} minSize={7}>
+              <ResizablePanel defaultSize={7} maxSize={7} minSize={7}>
                 <div className="flex h-full flex-grow items-center justify-between   bg-white px-3 dark:bg-black">
                   {(currentTab === "inbox" || !currentTab) && (
                     <span className=" font-semibold">InApp</span>
@@ -1530,8 +1529,8 @@ const Notification = ({
                   </Tabs>
                 </div>
               </ResizablePanel>
-              <ResizableHandle withHandle={false} disabled /> */}
-              {/* <ResizablePanel defaultSize={93}>
+              <ResizableHandle withHandle={false} disabled />
+              <ResizablePanel defaultSize={93}>
                 <div className="flex h-full items-center justify-center bg-white/75  dark:bg-black">
                   {(currentTab === "inbox" || !currentTab) && (
                     <div className=" flex h-full w-full flex-col    p-4 font-semibold">
@@ -1654,7 +1653,7 @@ const Notification = ({
                     </div>
                   )}
                 </div>
-              </ResizablePanel> */}
+              </ResizablePanel>
             </ResizablePanelGroup>
           </ResizablePanel>
 
@@ -1662,7 +1661,9 @@ const Notification = ({
 
           <ResizablePanel defaultSize={63}>
             <ResizablePanelGroup direction="vertical">
-              <div className="text-white dark:bg-black"> this is 3rd</div>
+              <div className="flex h-full flex-grow text-white dark:bg-black">
+                this is 3rd
+              </div>
               {/* <ResizablePanel defaultSize={5} minSize={5} maxSize={5}>
                 <div className="flex h-full flex-grow items-center justify-end  bg-white px-3 dark:bg-black">
                   <span className="flex space-x-2 text-sm font-thin">
