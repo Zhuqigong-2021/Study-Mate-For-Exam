@@ -515,7 +515,7 @@ const Notification = ({
   // }, [isCompact]);
   return (
     <>
-      {globalWidth < 891 && (
+      {globalWidth > 891 && (
         <ResizablePanelGroup
           // direction={screenWidth >= 891 ? "horizontal" : "vertical"}
           direction="horizontal"
@@ -1348,6 +1348,15 @@ const Notification = ({
               </ResizablePanel>
             </ResizablePanelGroup>
           </ResizablePanel>
+        </ResizablePanelGroup>
+      )}
+      {globalWidth < 891 && (
+        <ResizablePanelGroup
+          // direction={screenWidth >= 891 ? "horizontal" : "vertical"}
+          direction="vertical"
+          className="flex  w-full flex-grow"
+        >
+          <div>Haha this is vertical</div>
         </ResizablePanelGroup>
       )}
     </>
