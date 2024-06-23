@@ -32,14 +32,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { RxDashboard } from "react-icons/rx";
@@ -68,7 +61,7 @@ import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { sendNotification } from "@/app/[locale]/action";
 import Notification from "./Notification/Notification";
-import { useAppDispatch } from "@/lib/hook";
+import { useAppDispatch, useAppSelector } from "@/lib/hook";
 import { setStar } from "@/Storage/Redux/starSlice";
 interface Range {
   min: number;
@@ -127,7 +120,7 @@ export function AdminDashboard({
   const [isClient, setIsClient] = useState(false);
   const [dataMode, setDataMode] = useState(false);
   const [currentTab, setCurrentTab] = useState("dashboard");
-
+  const { width: globalWidth } = useAppSelector((state) => state.widthStore);
   // const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
   const d = useTranslations("Dashboard");
   const { theme } = useTheme();
@@ -330,12 +323,18 @@ export function AdminDashboard({
   //   const response = await sendNotification();
   //   console.log(response);
   // };
-
+  useEffect(() => {
+    console.log("globalWidth: " + globalWidth);
+  }, [globalWidth]);
   return (
     <div
       className={`${
-        currentTab === "notification" ? "dark:circle-md-note" : "dark:circle-lg"
-      } my-5 flex min-h-[800px] w-full  max-w-[84rem] flex-col overflow-hidden  rounded-[1.5rem] border shadow-md    dark:border-none`}
+        currentTab === "notification"
+          ? globalWidth >= 891
+            ? "dark:circle-md-note min-h-[800px]"
+            : "dark:circle-md-note min-h-[1500px]"
+          : "dark:circle-lg min-h-[800px]"
+      } my-5 flex  w-full  max-w-[84rem] flex-col overflow-hidden  rounded-[1.5rem] border shadow-md    dark:border-none`}
     >
       <header className="dark:class sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 dark:border-none dark:shadow-sm dark:shadow-gray-700">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
@@ -412,13 +411,6 @@ export function AdminDashboard({
           </SheetTrigger>
           <SheetContent side="left">
             <nav className="grid gap-6 text-lg font-medium">
-              {/* <Link
-                href="#"
-                className="flex items-center gap-2 text-lg font-semibold"
-              >
-                <Package2 className="h-6 w-6" />
-                <span className="sr-only">Acme Inc</span>
-              </Link> */}
               <Link
                 href="#"
                 className="flex items-center gap-2 text-lg font-semibold md:text-base"
@@ -478,16 +470,6 @@ export function AdminDashboard({
           </SheetContent>
         </Sheet>
         <div className=" flex w-full flex-grow items-center justify-end gap-4  md:ml-auto md:gap-2 lg:gap-4">
-          {/* <form className="ml-auto flex-1 sm:flex-initial">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search products..."
-                className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-              />
-            </div>
-          </form> */}
           <UserButton
             afterSignOutUrl="/"
             appearance={{

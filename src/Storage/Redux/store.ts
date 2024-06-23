@@ -3,12 +3,14 @@ import { starReducer } from "./starSlice";
 import userApi from "@/Apis/userApi";
 import readApi from "@/Apis/readApi";
 import { readReducer } from "./readSlice";
+import { widthReducer } from "./widthSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       starStore: starReducer,
       readStore: readReducer,
+      widthStore: widthReducer,
       [userApi.reducerPath]: userApi.reducer,
       [readApi.reducerPath]: readApi.reducer,
     },
