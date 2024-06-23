@@ -87,6 +87,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "../ui/drawer";
+import { PanelGroup } from "react-resizable-panels";
 
 interface notificationProps {
   usersList: User[];
@@ -1483,105 +1484,147 @@ const Notification = ({
           <ResizableHandle />
 
           <ResizablePanel defaultSize={35} minSize={35} maxSize={50}>
-            {/* <ResizablePanelGroup direction="vertical"> */}
-            <ResizablePanel defaultSize={7} maxSize={7} minSize={7}>
-              <div className="flex h-full flex-grow items-center justify-between   bg-white px-3 dark:bg-black">
-                {(currentTab === "inbox" || !currentTab) && (
-                  <span className=" font-semibold">InApp</span>
-                )}
-                {currentTab === "email" && (
-                  <span className="font-semibold">Email</span>
-                )}
-                {currentTab === "star" && (
-                  <span className="font-semibold">Star</span>
-                )}
-                <Tabs
-                  defaultValue="account"
-                  className=" w-[140px] scale-y-90 rounded-md "
-                >
-                  {currentTab !== "star" && (
-                    <div className=" my-2 grid w-full grid-cols-2 space-x-[0.15rem] rounded-md p-1 text-sm dark:bg-stone-800 dark:bg-transparent/75">
-                      <Button
-                        onClick={() => setCurrentReadTab("All")}
-                        className={`${
-                          !currentReadTab || currentReadTab === "All"
-                            ? "dark:circle-sm-note dark:bg-teal-400 dark:text-white"
-                            : "dark:bg-stone-800 dark:text-stone-400"
-                        } dark:focus:circle-sm-note h-8 text-sm   dark:hover:bg-black dark:focus:bg-teal-400 dark:focus:text-white dark:data-[state=active]:bg-teal-400`}
-                      >
-                        All
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          setCurrentReadTab("Unread");
-                          router.refresh();
-                        }}
-                        className={`${
-                          currentReadTab === "Unread"
-                            ? "dark:circle-sm-note dark:bg-teal-400 dark:text-white"
-                            : "dark:bg-stone-800 dark:text-stone-400"
-                        } dark:focus:circle-sm-note h-8 text-sm   dark:hover:bg-black dark:focus:bg-teal-400 dark:focus:text-white dark:data-[state=active]:bg-teal-400`}
-                      >
-                        <span className="scale-90">Unread</span>
-                      </Button>
-                    </div>
+            <PanelGroup direction="vertical">
+              <ResizablePanel defaultSize={7} maxSize={7} minSize={7}>
+                <div className="flex h-full flex-grow items-center justify-between   bg-white px-3 dark:bg-black">
+                  {(currentTab === "inbox" || !currentTab) && (
+                    <span className=" font-semibold">InApp</span>
                   )}
-                </Tabs>
-              </div>
-            </ResizablePanel>
-            <ResizableHandle withHandle={false} disabled />
-            <ResizablePanel defaultSize={93}>
-              <div className="flex h-full items-center justify-center bg-white/75  dark:bg-black">
-                {(currentTab === "inbox" || !currentTab) && (
-                  <div className=" flex h-full w-full flex-col    p-4 font-semibold">
-                    <div className="relative mx-1">
-                      <Input
-                        className="dark:circle-sm-note flex h-8 w-full rounded-md border-none bg-white py-3 pl-8 text-sm shadow-sm  outline-none placeholder:text-muted-foreground focus-visible:ring-transparent  disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black  dark:text-teal-300 dark:placeholder-teal-300/75 dark:focus-visible:ring-teal-300/75"
-                        placeholder="Search"
-                        onChange={(e) => setSearch(e.target.value)}
-                      />
-                      <Search className="dark:opacity-1 absolute left-2 top-2 mr-2 h-4 w-4 shrink-0 opacity-50 dark:text-teal-300" />
-                    </div>
-                    {(currentReadTab === "All" || !currentReadTab) && (
-                      <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
-                        {inAppNotificationList.length > 0 &&
-                          searchNotification.map((no: InAppNotification) => (
-                            <div
-                              key={no.id}
-                              onClick={() => {
-                                handleDataTransmit(no.id);
-                                updateReadStatus(no.id);
-                              }}
-                            >
-                              {thisNotification &&
-                              thisNotification.id == no.id ? (
-                                <NotificationCard
-                                  no={no}
-                                  currentUserId={userId}
-                                  starStatus={reduxStar}
-                                  readStatus={reduxRead}
-                                />
-                              ) : (
-                                <NotificationCard
-                                  no={no}
-                                  currentUserId={userId}
-                                />
-                              )}
-                            </div>
-                          ))}
+                  {currentTab === "email" && (
+                    <span className="font-semibold">Email</span>
+                  )}
+                  {currentTab === "star" && (
+                    <span className="font-semibold">Star</span>
+                  )}
+                  <Tabs
+                    defaultValue="account"
+                    className=" w-[140px] scale-y-90 rounded-md "
+                  >
+                    {currentTab !== "star" && (
+                      <div className=" my-2 grid w-full grid-cols-2 space-x-[0.15rem] rounded-md p-1 text-sm dark:bg-stone-800 dark:bg-transparent/75">
+                        <Button
+                          onClick={() => setCurrentReadTab("All")}
+                          className={`${
+                            !currentReadTab || currentReadTab === "All"
+                              ? "dark:circle-sm-note dark:bg-teal-400 dark:text-white"
+                              : "dark:bg-stone-800 dark:text-stone-400"
+                          } dark:focus:circle-sm-note h-8 text-sm   dark:hover:bg-black dark:focus:bg-teal-400 dark:focus:text-white dark:data-[state=active]:bg-teal-400`}
+                        >
+                          All
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setCurrentReadTab("Unread");
+                            router.refresh();
+                          }}
+                          className={`${
+                            currentReadTab === "Unread"
+                              ? "dark:circle-sm-note dark:bg-teal-400 dark:text-white"
+                              : "dark:bg-stone-800 dark:text-stone-400"
+                          } dark:focus:circle-sm-note h-8 text-sm   dark:hover:bg-black dark:focus:bg-teal-400 dark:focus:text-white dark:data-[state=active]:bg-teal-400`}
+                        >
+                          <span className="scale-90">Unread</span>
+                        </Button>
                       </div>
                     )}
-                    {currentReadTab === "Unread" && (
+                  </Tabs>
+                </div>
+              </ResizablePanel>
+              <ResizableHandle withHandle={false} disabled />
+              <ResizablePanel defaultSize={93}>
+                <div className="flex h-full items-center justify-center bg-white/75  dark:bg-black">
+                  {(currentTab === "inbox" || !currentTab) && (
+                    <div className=" flex h-full w-full flex-col    p-4 font-semibold">
+                      <div className="relative mx-1">
+                        <Input
+                          className="dark:circle-sm-note flex h-8 w-full rounded-md border-none bg-white py-3 pl-8 text-sm shadow-sm  outline-none placeholder:text-muted-foreground focus-visible:ring-transparent  disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black  dark:text-teal-300 dark:placeholder-teal-300/75 dark:focus-visible:ring-teal-300/75"
+                          placeholder="Search"
+                          onChange={(e) => setSearch(e.target.value)}
+                        />
+                        <Search className="dark:opacity-1 absolute left-2 top-2 mr-2 h-4 w-4 shrink-0 opacity-50 dark:text-teal-300" />
+                      </div>
+                      {(currentReadTab === "All" || !currentReadTab) && (
+                        <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
+                          {inAppNotificationList.length > 0 &&
+                            searchNotification.map((no: InAppNotification) => (
+                              <div
+                                key={no.id}
+                                onClick={() => {
+                                  handleDataTransmit(no.id);
+                                  updateReadStatus(no.id);
+                                }}
+                              >
+                                {thisNotification &&
+                                thisNotification.id == no.id ? (
+                                  <NotificationCard
+                                    no={no}
+                                    currentUserId={userId}
+                                    starStatus={reduxStar}
+                                    readStatus={reduxRead}
+                                  />
+                                ) : (
+                                  <NotificationCard
+                                    no={no}
+                                    currentUserId={userId}
+                                  />
+                                )}
+                              </div>
+                            ))}
+                        </div>
+                      )}
+                      {currentReadTab === "Unread" && (
+                        <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
+                          {inAppNotificationList.length > 0 &&
+                            searchNotification
+                              .filter(
+                                (notification: InAppNotification) =>
+                                  !(
+                                    currentUser?.privateMetadata?.read
+                                      ? currentUser?.privateMetadata?.read
+                                      : []
+                                  ).includes(notification.id),
+                              )
+                              .map((no: InAppNotification) => (
+                                <div
+                                  key={no.id}
+                                  onClick={() => {
+                                    handleDataTransmit(no.id);
+                                    updateReadStatus(no.id);
+                                  }}
+                                >
+                                  <NotificationCard
+                                    no={no}
+                                    currentUserId={userId}
+                                    readStatus={false}
+                                  />
+                                </div>
+                              ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {currentTab === "email" && (
+                    <span className="font-semibold">Email</span>
+                  )}
+                  {currentTab === "star" && (
+                    <div className=" flex h-full w-full flex-col    p-4 font-semibold">
+                      <div className="relative mx-1">
+                        <Input
+                          className="dark:circle-sm-note flex h-8 w-full rounded-md border-none bg-white py-3 pl-8 text-sm shadow-sm  outline-none placeholder:text-muted-foreground focus-visible:ring-transparent  disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black  dark:text-teal-300 dark:placeholder-teal-300/75 dark:focus-visible:ring-teal-300/75"
+                          placeholder="Search"
+                          onChange={(e) => setSearch(e.target.value)}
+                        />
+                        <Search className="dark:opacity-1 absolute left-2 top-2 mr-2 h-4 w-4 shrink-0 opacity-50 dark:text-teal-300" />
+                      </div>
+
                       <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
                         {inAppNotificationList.length > 0 &&
                           searchNotification
                             .filter(
-                              (notification: InAppNotification) =>
-                                !(
-                                  currentUser?.privateMetadata?.read
-                                    ? currentUser?.privateMetadata?.read
-                                    : []
-                                ).includes(notification.id),
+                              (no: InAppNotification) =>
+                                currentUser.privateMetadata?.star?.includes(
+                                  no.id,
+                                ),
                             )
                             .map((no: InAppNotification) => (
                               <div
@@ -1591,70 +1634,28 @@ const Notification = ({
                                   updateReadStatus(no.id);
                                 }}
                               >
-                                <NotificationCard
-                                  no={no}
-                                  currentUserId={userId}
-                                  readStatus={false}
-                                />
+                                {thisNotification &&
+                                thisNotification.id == no.id ? (
+                                  <NotificationCard
+                                    no={no}
+                                    currentUserId={userId}
+                                    starStatus={reduxStar}
+                                    readStatus={reduxRead}
+                                  />
+                                ) : (
+                                  <NotificationCard
+                                    no={no}
+                                    currentUserId={userId}
+                                  />
+                                )}
                               </div>
                             ))}
                       </div>
-                    )}
-                  </div>
-                )}
-                {currentTab === "email" && (
-                  <span className="font-semibold">Email</span>
-                )}
-                {currentTab === "star" && (
-                  <div className=" flex h-full w-full flex-col    p-4 font-semibold">
-                    <div className="relative mx-1">
-                      <Input
-                        className="dark:circle-sm-note flex h-8 w-full rounded-md border-none bg-white py-3 pl-8 text-sm shadow-sm  outline-none placeholder:text-muted-foreground focus-visible:ring-transparent  disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black  dark:text-teal-300 dark:placeholder-teal-300/75 dark:focus-visible:ring-teal-300/75"
-                        placeholder="Search"
-                        onChange={(e) => setSearch(e.target.value)}
-                      />
-                      <Search className="dark:opacity-1 absolute left-2 top-2 mr-2 h-4 w-4 shrink-0 opacity-50 dark:text-teal-300" />
                     </div>
-
-                    <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
-                      {inAppNotificationList.length > 0 &&
-                        searchNotification
-                          .filter(
-                            (no: InAppNotification) =>
-                              currentUser.privateMetadata?.star?.includes(
-                                no.id,
-                              ),
-                          )
-                          .map((no: InAppNotification) => (
-                            <div
-                              key={no.id}
-                              onClick={() => {
-                                handleDataTransmit(no.id);
-                                updateReadStatus(no.id);
-                              }}
-                            >
-                              {thisNotification &&
-                              thisNotification.id == no.id ? (
-                                <NotificationCard
-                                  no={no}
-                                  currentUserId={userId}
-                                  starStatus={reduxStar}
-                                  readStatus={reduxRead}
-                                />
-                              ) : (
-                                <NotificationCard
-                                  no={no}
-                                  currentUserId={userId}
-                                />
-                              )}
-                            </div>
-                          ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </ResizablePanel>
-            {/* </ResizablePanelGroup> */}
+                  )}
+                </div>
+              </ResizablePanel>
+            </PanelGroup>
           </ResizablePanel>
 
           <ResizableHandle />
