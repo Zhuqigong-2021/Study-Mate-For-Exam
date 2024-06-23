@@ -1,5 +1,11 @@
 "use client";
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 
 import {
   Divide,
@@ -126,7 +132,7 @@ const Notification = ({
 
   const [tags, setTags] = useState(["new", "important", "move", "exam"]);
   const [isCompact, setIsCompact] = useState(false);
-  const sidebarRef = useRef<HTMLDivElement | null>(null);
+  // const sidebarRef = useRef<HTMLDivElement | null>(null);
   const [panelWidth, setPanelWidth] = useState(200);
   const { theme, setTheme } = useTheme();
   const [inAppLoading, setInAppLoading] = useState(false);
@@ -299,28 +305,71 @@ const Notification = ({
     setSearchNotification(inAppNos);
   }, [search, sortedInAppNotifications]);
 
-  useEffect(() => {
-    const sidebarElement = sidebarRef.current;
+  // useEffect(() => {
+  //   const sidebarElement = sidebarRef.current;
 
-    const handleResize = (entries: any) => {
-      for (let entry of entries) {
-        setIsCompact(entry.contentRect.width < 140); // Adjust the width threshold as needed
-      }
-      setPanelWidth(entries[0].contentRect.width);
-    };
+  //   const handleResize = (entries: any) => {
+  //     for (let entry of entries) {
+  //       setIsCompact(entry.contentRect.width < 140); // Adjust the width threshold as needed
+  //     }
+  //     setPanelWidth(entries[0].contentRect.width);
+  //   };
 
-    const resizeObserver = new ResizeObserver(handleResize);
+  //   const resizeObserver = new ResizeObserver(handleResize);
 
-    if (sidebarElement) {
-      resizeObserver.observe(sidebarElement);
+  //   if (sidebarElement) {
+  //     resizeObserver.observe(sidebarElement);
+  //   }
+
+  //   return () => {
+  //     if (sidebarElement) {
+  //       resizeObserver.unobserve(sidebarElement);
+  //     }
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   const sidebarElement = sidebarRef.current;
+
+  //   const handleResize = (entries: any) => {
+  //     for (let entry of entries) {
+  //       setIsCompact(entry.contentRect.width < 140);
+  //     }
+  //   };
+
+  //   const resizeObserver = new ResizeObserver(handleResize);
+
+  //   if (sidebarElement) {
+  //     resizeObserver.observe(sidebarElement);
+  //   }
+
+  //   return () => {
+  //     if (sidebarElement) {
+  //       resizeObserver.unobserve(sidebarElement);
+  //     }
+  //   };
+  // }, [sidebarRef.current]);
+  const sidebarRef = useCallback((node: Element | null) => {
+    if (node !== null) {
+      const handleResize = (entries: any) => {
+        for (let entry of entries) {
+          setIsCompact(entry.contentRect.width < 140);
+        }
+      };
+
+      const resizeObserver = new ResizeObserver(handleResize);
+
+      resizeObserver.observe(node);
+
+      return () => {
+        resizeObserver.unobserve(node);
+      };
     }
-
-    return () => {
-      if (sidebarElement) {
-        resizeObserver.unobserve(sidebarElement);
-      }
-    };
   }, []);
+
+  useEffect(() => {
+    console.log("panelWidth: " + panelWidth);
+  }, [panelWidth]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -505,6 +554,9 @@ const Notification = ({
   // useEffect(() => {
   //   console.log("globalWidth: " + globalWidth);
   // }, [globalWidth]);
+  // useEffect(() => {
+  //   console.log("Sidebar reference:", sidebarRef.current);
+  // }, [isCompact]);
   return (
     <ResizablePanelGroup
       direction={screenWidth >= 891 ? "horizontal" : "vertical"}
@@ -514,9 +566,9 @@ const Notification = ({
         <ResizablePanel
           defaultSize={18}
           maxSize={20}
-          className={`hidden  ${
+          className={`  ${
             !isCompact ? "transition-all duration-300 ease-in-out" : ""
-          } md:block`}
+          } `}
           collapsible={true}
           collapsedSize={4}
           minSize={16}
@@ -726,21 +778,19 @@ const Notification = ({
                                 setThisNotification(null);
                                 dispatch(setStar(false));
                               }}
-                              className={`flex ${
-                                isCompact === true ? "w-9" : ""
-                              } flex-shrink-0 scale-y-95 cursor-pointer items-center justify-between space-x-2 rounded-md  p-2 text-[15px] hover:bg-black hover:text-white ${
-                                currentTab === "inbox" || !currentTab
-                                  ? "dark:circle-sm-note bg-black text-white dark:bg-teal-400"
-                                  : " dark:hover:circle-sm-note dark:glass  bg-white dark:bg-transparent"
-                              } `}
+                              className={`flex 
+                               
+                             flex-shrink-0 scale-y-95 cursor-pointer items-center justify-between space-x-2 rounded-md  p-2 text-[15px] hover:bg-black hover:text-white ${
+                               currentTab === "inbox" || !currentTab
+                                 ? "dark:circle-sm-note bg-black text-white dark:bg-teal-400"
+                                 : " dark:hover:circle-sm-note dark:glass  bg-white dark:bg-transparent"
+                             } `}
                             >
                               <span className="flex items-center space-x-2 ">
-                                <Package2 size={18} />{" "}
-                                {!isCompact && <span>InApp</span>}
+                                <Package2 size={18} /> <span>InApp</span>
                               </span>
-                              {!isCompact && (
-                                <span>{sortedInAppNotifications?.length}</span>
-                              )}
+
+                              <span>{sortedInAppNotifications?.length}</span>
                             </div>
 
                             <div
@@ -749,19 +799,18 @@ const Notification = ({
                                 setThisNotification(null);
                                 dispatch(setStar(false));
                               }}
-                              className={`${
-                                isCompact === true ? "w-9" : ""
-                              } flex flex-shrink-0 scale-y-95 cursor-pointer items-center justify-between space-x-2 rounded-sm p-2 text-[15px] hover:bg-black hover:text-white ${
-                                currentTab === "email"
-                                  ? "dark:circle-sm-note bg-black text-white dark:bg-teal-400"
-                                  : "dark:hover:circle-sm-note dark:glass bg-white dark:bg-transparent "
-                              } `}
+                              className={`
+                               
+                               flex flex-shrink-0 scale-y-95 cursor-pointer items-center justify-between space-x-2 rounded-sm p-2 text-[15px] hover:bg-black hover:text-white ${
+                                 currentTab === "email"
+                                   ? "dark:circle-sm-note bg-black text-white dark:bg-teal-400"
+                                   : "dark:hover:circle-sm-note dark:glass bg-white dark:bg-transparent "
+                               } `}
                             >
                               <span className="flex items-center space-x-2">
-                                <Mail size={18} />{" "}
-                                {!isCompact && <span>Email</span>}
+                                <Mail size={18} /> <span>Email</span>
                               </span>
-                              {!isCompact && <span>13</span>}
+                              <span>13</span>
                             </div>
                             <div
                               onClick={() => {
@@ -769,30 +818,18 @@ const Notification = ({
                                 setThisNotification(null);
                                 dispatch(setStar(false));
                               }}
-                              className={`${
-                                isCompact === true ? "w-9" : ""
-                              } flex flex-shrink-0 scale-y-95 cursor-pointer items-center justify-between space-x-2 rounded-sm p-2 text-[15px] hover:bg-black hover:text-white ${
-                                currentTab === "star"
-                                  ? "dark:circle-md-note bg-black text-white dark:bg-teal-400"
-                                  : " dark:hover:circle-sm-note  dark:glass bg-white dark:bg-transparent"
-                              } `}
+                              className={`
+                               
+                               flex flex-shrink-0 scale-y-95 cursor-pointer items-center justify-between space-x-2 rounded-sm p-2 text-[15px] hover:bg-black hover:text-white ${
+                                 currentTab === "star"
+                                   ? "dark:circle-md-note bg-black text-white dark:bg-teal-400"
+                                   : " dark:hover:circle-sm-note  dark:glass bg-white dark:bg-transparent"
+                               } `}
                             >
                               <span className="flex items-center space-x-2">
-                                <Star size={18} />{" "}
-                                {!isCompact && <span>Star</span>}
+                                <Star size={18} /> <span>Star</span>
                               </span>
-                              {!isCompact && (
-                                <span>
-                                  {/* {usersList.filter((user) => user.id === userId)[0]
-                        .privateMetadata.star
-                        ? (
-                            usersList.filter((user) => user.id === userId)[0]
-                              .privateMetadata.star as string[]
-                          ).length
-                        : 0} */}
-                                  {starNum}
-                                </span>
-                              )}
+                              <span>{starNum}</span>
                             </div>
                           </div>
                         </div>
@@ -1261,7 +1298,11 @@ const Notification = ({
                         />
                       </AlertDialogTrigger>
 
-                      <AlertDialogContent className="circle-sm-exam dark:border-none">
+                      <AlertDialogContent
+                        className="circle-sm-exam dark:border-none"
+                        aria-describedby="content"
+                        aria-description="content"
+                      >
                         <AlertDialogHeader>
                           <AlertDialogTitle>
                             {/* {b("table.action.verify.title")} */}
@@ -1730,7 +1771,11 @@ const Notification = ({
                         />
                       </AlertDialogTrigger>
 
-                      <AlertDialogContent className="circle-sm-exam dark:border-none">
+                      <AlertDialogContent
+                        className="circle-sm-exam dark:border-none"
+                        aria-describedby="content"
+                        aria-description="content"
+                      >
                         <AlertDialogHeader>
                           <AlertDialogTitle>
                             {/* {b("table.action.verify.title")} */}

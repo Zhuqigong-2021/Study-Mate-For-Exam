@@ -145,7 +145,11 @@ const EditNoteQuestion = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-h-screen max-w-[800px] overflow-y-scroll py-16">
+      <DialogContent
+        className="max-h-screen max-w-[800px] overflow-y-scroll py-16"
+        aria-describedby="sidebar content"
+        aria-description="sidebar content"
+      >
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}

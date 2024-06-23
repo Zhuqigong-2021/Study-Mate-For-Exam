@@ -85,7 +85,11 @@ const EditBookMarkedQuestion = ({
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="no-scrollbar dark:circle-sm-note max-h-screen overflow-y-scroll ">
+      <DialogContent
+        className="no-scrollbar dark:circle-sm-note max-h-screen overflow-y-scroll "
+        aria-describedby=" content"
+        aria-description="content"
+      >
         <DialogHeader>
           <div className="py-4"></div>
           <DialogTitle>

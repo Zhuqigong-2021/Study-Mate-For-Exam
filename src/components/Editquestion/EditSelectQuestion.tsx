@@ -96,7 +96,11 @@ const EditSelectQuestion = ({ open, setOpen, question }: questionDataProps) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="no-scrollbar dark:circle-sm-note max-h-screen max-w-[700px] overflow-y-scroll px-8">
+      <DialogContent
+        className="no-scrollbar dark:circle-sm-note max-h-screen max-w-[700px] overflow-y-scroll px-8"
+        aria-describedby="content"
+        aria-description="content"
+      >
         <DialogHeader className="pb-3">
           <div className="pt-4"></div>
           <DialogTitle>

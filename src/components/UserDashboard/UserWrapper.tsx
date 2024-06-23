@@ -1,17 +1,6 @@
 "use client";
 import React, { useCallback, useEffect } from "react";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+
 import "react-circular-progressbar/dist/styles.css";
 import { Button } from "@/components/ui/button";
 import {

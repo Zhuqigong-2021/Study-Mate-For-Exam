@@ -117,7 +117,11 @@ export default function AddEditNoteDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="dark:circle-sm-note ">
+      <DialogContent
+        className="dark:circle-sm-note "
+        aria-describedby="content"
+        aria-description="content"
+      >
         <DialogHeader>
           <DialogTitle>
             {noteToEdit ? h("note.title.edit") : h("note.title.add")}

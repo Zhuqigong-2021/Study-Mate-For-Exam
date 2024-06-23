@@ -394,7 +394,11 @@ const ReportWrapper = ({ reports, isSuperAdmin, isAdmin }: reportProps) => {
                       {r("table.action.delete")}
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent className="circle-sm-exam dark:border-none">
+                  <AlertDialogContent
+                    className="circle-sm-exam dark:border-none"
+                    aria-describedby="content"
+                    aria-description="content"
+                  >
                     <AlertDialogHeader>
                       <AlertDialogTitle>
                         {r("table.action.verify.title")}

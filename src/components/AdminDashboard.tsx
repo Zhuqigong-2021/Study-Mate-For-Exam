@@ -64,6 +64,8 @@ import Notification from "./Notification/Notification";
 import { useAppDispatch, useAppSelector } from "@/lib/hook";
 import { setStar } from "@/Storage/Redux/starSlice";
 import { setGlobalWidth } from "@/Storage/Redux/widthSlice";
+// import { DialogContent, DialogDescription, DialogTitle } from "./ui/dialog";
+import { DialogTitle, DialogDescription } from "@radix-ui/react-dialog";
 interface Range {
   min: number;
   max: number;
@@ -398,77 +400,90 @@ export function AdminDashboard({
           </button>
         </nav>
 
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="shrink-0 md:hidden"
+        {isClient && (
+          <Sheet>
+            <SheetTrigger asChild role="dialog" className="border-none">
+              <Button
+                variant="outline"
+                size="icon"
+                className="shrink-0 md:hidden"
+              >
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle navigation menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              side="left"
+              aria-describedby="sidebar content"
+              aria-description="sidebar content"
+              className="border-none dark:border-none"
             >
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle navigation menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left">
-            <nav className="grid gap-6 text-lg font-medium">
-              <Link
-                href="#"
-                className="flex items-center gap-2 text-lg font-semibold md:text-base"
-              >
-                {(currentTab == "dashboard" || currentTab == "") && (
-                  <RxDashboard className="h-6 w-6 " />
-                )}
-                {currentTab == "notification" && <Mail className="h-6 w-6" />}
-                {currentTab == "statistics" && <PieChart className="h-6 w-6" />}
-                {currentTab == "settings" && <Settings className="h-6 w-6" />}
-                <span className="sr-only">Acme Inc</span>
-              </Link>
-              <button
-                className={`${
-                  currentTab == "dashboard"
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }   text-left transition-colors hover:text-foreground`}
-                onClick={() => setCurrentTab("dashboard")}
-              >
-                <span className="text-nowrap">{d("menu.dashboard")}</span>
-              </button>
-              <button
-                // href="/admin/dashboard/users"
-                className={`${
-                  currentTab == "notification"
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                } text-left transition-colors hover:text-foreground`}
-                onClick={() => setCurrentTab("notification")}
-              >
-                {d("menu.notification")}
-              </button>
-              <button
-                // href="/admin/dashboard/users"
-                onClick={() => setCurrentTab("statistics")}
-                className={`${
-                  currentTab == "statistics"
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                } text-left transition-colors hover:text-foreground`}
-              >
-                {d("menu.stats")}
-              </button>
-              <button
-                // href="/admin/dashboard/users"
-                onClick={() => setCurrentTab("settings")}
-                className={`${
-                  currentTab == "settings"
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                } text-left transition-colors hover:text-foreground`}
-              >
-                {d("menu.settings")}
-              </button>
-            </nav>
-          </SheetContent>
-        </Sheet>
+              <DialogTitle className="hidden">
+                this is to not trigger error
+              </DialogTitle>
+
+              <nav className="grid gap-6 text-lg font-medium">
+                <Link
+                  href="#"
+                  className="flex items-center gap-2 text-lg font-semibold md:text-base"
+                >
+                  {(currentTab == "dashboard" || currentTab == "") && (
+                    <RxDashboard className="h-6 w-6 " />
+                  )}
+                  {currentTab == "notification" && <Mail className="h-6 w-6" />}
+                  {currentTab == "statistics" && (
+                    <PieChart className="h-6 w-6" />
+                  )}
+                  {currentTab == "settings" && <Settings className="h-6 w-6" />}
+                  <span className="sr-only">Acme Inc</span>
+                </Link>
+                <button
+                  className={`${
+                    currentTab == "dashboard"
+                      ? "text-foreground"
+                      : "text-muted-foreground"
+                  }   text-left transition-colors hover:text-foreground`}
+                  onClick={() => setCurrentTab("dashboard")}
+                >
+                  <span className="text-nowrap">{d("menu.dashboard")}</span>
+                </button>
+                <button
+                  // href="/admin/dashboard/users"
+                  className={`${
+                    currentTab == "notification"
+                      ? "text-foreground"
+                      : "text-muted-foreground"
+                  } text-left transition-colors hover:text-foreground`}
+                  onClick={() => setCurrentTab("notification")}
+                >
+                  {d("menu.notification")}
+                </button>
+                <button
+                  // href="/admin/dashboard/users"
+                  onClick={() => setCurrentTab("statistics")}
+                  className={`${
+                    currentTab == "statistics"
+                      ? "text-foreground"
+                      : "text-muted-foreground"
+                  } text-left transition-colors hover:text-foreground`}
+                >
+                  {d("menu.stats")}
+                </button>
+                <button
+                  // href="/admin/dashboard/users"
+                  onClick={() => setCurrentTab("settings")}
+                  className={`${
+                    currentTab == "settings"
+                      ? "text-foreground"
+                      : "text-muted-foreground"
+                  } text-left transition-colors hover:text-foreground`}
+                >
+                  {d("menu.settings")}
+                </button>
+              </nav>
+            </SheetContent>
+          </Sheet>
+        )}
         <div className=" flex w-full flex-grow items-center justify-end gap-4  md:ml-auto md:gap-2 lg:gap-4">
           <UserButton
             afterSignOutUrl="/"

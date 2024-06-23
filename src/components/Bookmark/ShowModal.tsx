@@ -360,7 +360,11 @@ const ShowModal = ({
                       <span>{b("table.action.unbookmark")}</span>
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent className="circle-sm-exam dark:border-none">
+                  <AlertDialogContent
+                    className="circle-sm-exam dark:border-none"
+                    aria-describedby="content"
+                    aria-description="content"
+                  >
                     <AlertDialogHeader>
                       <AlertDialogTitle>
                         {b("table.action.verify.title")}

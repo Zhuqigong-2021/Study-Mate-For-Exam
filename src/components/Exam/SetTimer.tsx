@@ -117,7 +117,11 @@ export default function SetTimer({
   ] as const;
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="dark:circle-sm-note dark:border-none">
+      <DialogContent
+        className="dark:circle-sm-note dark:border-none"
+        aria-describedby="content"
+        aria-description="content"
+      >
         <DialogHeader>
           <DialogTitle>{e("timer.title")}</DialogTitle>
         </DialogHeader>
