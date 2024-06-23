@@ -562,7 +562,7 @@ const Notification = ({
       direction={screenWidth >= 891 ? "horizontal" : "vertical"}
       className="flex  w-full flex-grow"
     >
-      {screenWidth >= 891 && (
+      {globalWidth >= 891 && (
         <ResizablePanel
           defaultSize={18}
           maxSize={20}
@@ -715,7 +715,7 @@ const Notification = ({
           </ResizablePanelGroup>
         </ResizablePanel>
       )}
-      {screenWidth < 891 && (
+      {globalWidth < 891 && (
         <ResizablePanel defaultSize={2} minSize={2} maxSize={2}>
           <div className="flex h-full items-center justify-center bg-white dark:border-none dark:bg-black">
             <Drawer>
@@ -837,9 +837,9 @@ const Notification = ({
         </ResizablePanel>
       )}
 
-      {screenWidth >= 891 && <ResizableHandle withHandle />}
-      {screenWidth < 891 && <ResizableHandle />}
-      {screenWidth >= 891 && (
+      {globalWidth >= 891 && <ResizableHandle withHandle />}
+      {globalWidth < 891 && <ResizableHandle />}
+      {globalWidth >= 891 && (
         <ResizablePanel defaultSize={35} minSize={30} maxSize={50}>
           <ResizablePanelGroup direction="vertical">
             <ResizablePanel defaultSize={7} maxSize={7} minSize={7}>
@@ -1035,7 +1035,7 @@ const Notification = ({
           </ResizablePanelGroup>
         </ResizablePanel>
       )}
-      {screenWidth < 891 && (
+      {globalWidth < 891 && (
         <ResizablePanel defaultSize={35} minSize={30} maxSize={50}>
           <ResizablePanelGroup direction="vertical">
             <ResizablePanel defaultSize={7} maxSize={7} minSize={7}>
@@ -1232,9 +1232,9 @@ const Notification = ({
         </ResizablePanel>
       )}
 
-      {screenWidth >= 891 && <ResizableHandle withHandle />}
-      {screenWidth < 891 && <ResizableHandle />}
-      {screenWidth >= 891 && (
+      {globalWidth >= 891 && <ResizableHandle withHandle />}
+      {globalWidth < 891 && <ResizableHandle />}
+      {globalWidth >= 891 && (
         <ResizablePanel defaultSize={47}>
           <ResizablePanelGroup direction="vertical">
             <ResizablePanel defaultSize={7} minSize={7} maxSize={7}>
@@ -1707,7 +1707,7 @@ const Notification = ({
           </ResizablePanelGroup>
         </ResizablePanel>
       )}
-      {screenWidth < 891 && (
+      {globalWidth < 891 && (
         <ResizablePanel defaultSize={63}>
           <ResizablePanelGroup direction="vertical">
             <ResizablePanel defaultSize={5} minSize={5} maxSize={5}>
