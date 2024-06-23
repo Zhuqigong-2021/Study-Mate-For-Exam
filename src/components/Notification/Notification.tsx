@@ -1545,7 +1545,7 @@ const Notification = ({
                     </div>
                     {/* smaller than 891 */}
                     {(currentReadTab === "All" || !currentReadTab) && (
-                      <div className="no-scrollbar mb-2 mt-4 h-full space-y-3 overflow-y-scroll ">
+                      <div className="no-scrollbar  mt-4 h-[596px] space-y-3 overflow-y-scroll pb-2 ">
                         {inAppNotificationList.length > 0 &&
                           searchNotification.map((no: InAppNotification) => (
                             <div
@@ -1574,7 +1574,7 @@ const Notification = ({
                       </div>
                     )}
                     {currentReadTab === "Unread" && (
-                      <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
+                      <div className="no-scrollbar mt-4 h-[596px] space-y-3 overflow-y-scroll pb-2 ">
                         {inAppNotificationList.length > 0 &&
                           searchNotification
                             .filter(
