@@ -515,7 +515,8 @@ const Notification = ({
   // }, [isCompact]);
   return (
     <ResizablePanelGroup
-      direction={screenWidth >= 891 ? "horizontal" : "vertical"}
+      // direction={screenWidth >= 891 ? "horizontal" : "vertical"}
+      direction="vertical"
       className="flex  w-full flex-grow"
     >
       <ResizablePanel defaultSize={2} minSize={2} maxSize={2}>
