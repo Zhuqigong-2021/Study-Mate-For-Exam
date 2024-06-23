@@ -1530,7 +1530,7 @@ const Notification = ({
                 </div>
               </ResizablePanel>
               <ResizableHandle withHandle={false} disabled />
-              <ResizablePanel defaultSize={93}>
+              {/* <ResizablePanel defaultSize={93}>
                 <div className="flex h-full items-center justify-center bg-white/75  dark:bg-black">
                   {(currentTab === "inbox" || !currentTab) && (
                     <div className=" flex h-full w-full flex-col    p-4 font-semibold">
@@ -1653,7 +1653,7 @@ const Notification = ({
                     </div>
                   )}
                 </div>
-              </ResizablePanel>
+              </ResizablePanel> */}
             </ResizablePanelGroup>
           </ResizablePanel>
 
