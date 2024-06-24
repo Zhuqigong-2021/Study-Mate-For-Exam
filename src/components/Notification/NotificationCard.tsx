@@ -92,7 +92,7 @@ const NotificationCard = ({
         debounceRef.current.cancel();
       }
     };
-  }, [currentUserId, no.id]);
+  }, [currentUserId, no.id, readStatus]);
 
   // useEffect(() => {
   //   const result = async () => {
