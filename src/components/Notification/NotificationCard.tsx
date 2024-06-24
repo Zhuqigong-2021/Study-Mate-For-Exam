@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Card,
   CardContent,
@@ -12,6 +12,7 @@ import { Star } from "lucide-react";
 import { InAppNotification } from "@prisma/client";
 import { timeAgo } from "@/app/[locale]/utils/timeAgo";
 import { limitStringLength } from "@/app/[locale]/utils/limitStringLength";
+import debounce from "lodash/debounce";
 import {
   checkReadStatus,
   checkStarStatus,
@@ -54,18 +55,44 @@ const NotificationCard = ({
     return () => {};
   }, [currentUserId, no.id, starStatus]);
 
-  useEffect(() => {
-    const result = async () => {
-      const readStatusResponse = await checkReadStatus(currentUserId, no.id);
-      if (readStatusResponse) setRead(readStatusResponse);
-    };
-    result();
+  // useEffect(() => {
+  //   const result = async () => {
+  //     const readStatusResponse = await checkReadStatus(currentUserId, no.id);
+  //     if (readStatusResponse) setRead(readStatusResponse);
+  //   };
+  //   result();
 
-    if (readStatus == true || readStatus == false) {
-      setRead(readStatus);
-    }
-    return () => {};
-  }, [currentUserId, no.id, readStatus]);
+  //   if (readStatus == true || readStatus == false) {
+  //     setRead(readStatus);
+  //   }
+  //   return () => {};
+  // }, [currentUserId, no.id, readStatus]);
+
+  //   const checkReadStatusCallback = useCallback(async () => {
+  //     debounce(
+  //       const readStatusResponse = await checkReadStatus(currentUserId, no.id);
+  //     if (readStatusResponse) setRead(readStatusResponse),300)
+
+  // }, []);
+  const debounceRef = useRef<any>(null);
+
+  useEffect(() => {
+    const checkReadStatusCallback = debounce(async () => {
+      const readStatusResponse = await checkReadStatus(currentUserId, no.id);
+      if (readStatusResponse) {
+        setRead(readStatusResponse);
+      }
+    }, 300);
+
+    debounceRef.current = checkReadStatusCallback;
+    debounceRef.current();
+
+    return () => {
+      if (debounceRef.current) {
+        debounceRef.current.cancel();
+      }
+    };
+  }, [currentUserId, no.id]);
 
   // useEffect(() => {
   //   const result = async () => {

@@ -2,7 +2,7 @@
 import { getTranslations } from "next-intl/server";
 import { Knock } from "@knocklabs/node";
 import { User, auth, clerkClient, currentUser } from "@clerk/nextjs/server";
-
+import { pusherServer } from "@/lib/pusher";
 import { InAppSchema } from "@/lib/validation/note";
 import prisma from "@/lib/db/prisma";
 export const fetchNoteData = async (page: number) => {
@@ -326,3 +326,15 @@ export const checkReadStatus = async (userId: string, id: string) => {
     return false;
   }
 };
+
+export async function informOtherAdmin(isInformed: boolean) {
+  try {
+    await pusherServer.trigger("action", "user:inform", {
+      isInformed: isInformed,
+    });
+    // return res;
+    return { status: "ok" };
+  } catch (err) {
+    return { message: err };
+  }
+}

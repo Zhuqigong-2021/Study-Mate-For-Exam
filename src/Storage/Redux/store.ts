@@ -4,6 +4,7 @@ import userApi from "@/Apis/userApi";
 import readApi from "@/Apis/readApi";
 import { readReducer } from "./readSlice";
 import { widthReducer } from "./widthSlice";
+import inAppApi from "@/Apis/inAppApi";
 
 export const makeStore = () => {
   return configureStore({
@@ -13,11 +14,13 @@ export const makeStore = () => {
       widthStore: widthReducer,
       [userApi.reducerPath]: userApi.reducer,
       [readApi.reducerPath]: readApi.reducer,
+      [inAppApi.reducerPath]: inAppApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()
         .concat(userApi.middleware)
-        .concat(readApi.middleware),
+        .concat(readApi.middleware)
+        .concat(inAppApi.middleware),
   });
 };
 

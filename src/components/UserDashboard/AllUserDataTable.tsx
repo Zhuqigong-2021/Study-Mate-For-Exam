@@ -37,13 +37,7 @@ import { Filter, Settings2 } from "lucide-react";
 
 import { DataTablePagination } from "../DataTablePagination";
 import TopicFilter from "../TopicFilter";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { useTranslations } from "next-intl";
 

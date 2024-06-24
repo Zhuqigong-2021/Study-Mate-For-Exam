@@ -141,6 +141,8 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
   const redirectUser = useCallback(() => {
     router.push(`/notes/public`);
   }, [router]);
+
+  //frontend
   useEffect(() => {
     pusherClient.subscribe("authorize");
     pusherClient.bind(
