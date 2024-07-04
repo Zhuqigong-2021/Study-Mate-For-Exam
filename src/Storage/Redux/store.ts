@@ -5,6 +5,7 @@ import readApi from "@/Apis/readApi";
 import { readReducer } from "./readSlice";
 import { widthReducer } from "./widthSlice";
 import inAppApi from "@/Apis/inAppApi";
+import starApi from "@/Apis/starApi";
 
 export const makeStore = () => {
   return configureStore({
@@ -15,12 +16,14 @@ export const makeStore = () => {
       [userApi.reducerPath]: userApi.reducer,
       [readApi.reducerPath]: readApi.reducer,
       [inAppApi.reducerPath]: inAppApi.reducer,
+      [starApi.reducerPath]: starApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()
         .concat(userApi.middleware)
         .concat(readApi.middleware)
-        .concat(inAppApi.middleware),
+        .concat(inAppApi.middleware)
+        .concat(starApi.middleware),
   });
 };
 

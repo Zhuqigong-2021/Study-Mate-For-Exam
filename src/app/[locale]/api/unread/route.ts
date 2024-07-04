@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   }
 
   const { notificationId } = await req.json();
-  console.log("noID: " + notificationId);
+
   const foundUser: User = await clerkClient.users.getUser(userId);
 
   if (foundUser) {

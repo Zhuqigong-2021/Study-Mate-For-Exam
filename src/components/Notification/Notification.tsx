@@ -12,6 +12,7 @@ import {
   Leaf,
   Mail,
   Menu,
+  MoreVertical,
   Package2,
   Search,
   Send,
@@ -43,11 +44,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { MultiSelect } from "./multi-select";
 import { User } from "@clerk/nextjs/server";
 import {
-  checkStarStatus,
   deleteNotification,
   informOtherAdmin,
   sendNotification,
-  updateStar,
 } from "@/app/[locale]/action";
 import toast from "react-hot-toast";
 import { InAppSchema, inAppSchema } from "@/lib/validation/note";
@@ -74,7 +73,7 @@ import { setStar } from "@/Storage/Redux/starSlice";
 import { useGetUsersQuery, usePostUsersMutation } from "@/Apis/userApi";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { useUpdateReadMutation } from "@/Apis/readApi";
-import { readStatus } from "@/Storage/Redux/readSlice";
+import { setReadStatus } from "@/Storage/Redux/readSlice";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { Button } from "../ui/button";
 import { setGlobalWidth } from "@/Storage/Redux/widthSlice";
@@ -90,6 +89,17 @@ import {
 } from "../ui/drawer";
 import { PanelGroup } from "react-resizable-panels";
 import { useGetInAppQuery, useUpdateInAppMutation } from "@/Apis/inAppApi";
+import { useUpdateStarMutation } from "@/Apis/starApi";
+import { divide } from "lodash";
+import { CardPlaceholder } from "./CardPlaceholder";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 interface notificationProps {
   usersList: User[];
@@ -109,26 +119,16 @@ const Notification = ({
 
   const { star: reduxStar } = useAppSelector((state) => state.starStore);
   const { read: reduxRead } = useAppSelector((state) => state.readStore);
+  // const { read: reduxRead } = useAppSelector((state) => state.readStore);
   const { data: inApp, isLoading: isInAppDataLoading } = useGetInAppQuery({});
+  const [updateStar] = useUpdateStarMutation();
+  const [updateRead] = useUpdateReadMutation();
   const dispatch = useAppDispatch();
   // let currentUser = usersList.filter((user) => user.id === userId)[0];
 
-  // useEffect(() => {
-  //   console.log("notification reduxStar: " + reduxStar);
-  // }, [reduxStar]);
-
-  // useEffect(() => {
-  //   console.log("notification reduxRead: " + reduxRead);
-  // }, [reduxRead]);
-  // const starNum = useMemo(() => {
-  //   return usersList.filter((user) => user.id === userId)[0].privateMetadata
-  //     .star
-  //     ? (
-  //         usersList.filter((user) => user.id === userId)[0].privateMetadata
-  //           .star as string[]
-  //       ).length
-  //     : 0;
-  // }, [userId, usersList]);
+  useEffect(() => {
+    console.log("notification reduxStar: " + reduxStar);
+  }, [reduxStar]);
 
   const [tags, setTags] = useState(["new", "important", "move", "exam"]);
   const [isCompact, setIsCompact] = useState(false);
@@ -144,15 +144,16 @@ const Notification = ({
     useState<InAppNotification[]>();
   let sortedInAppNotifications = useMemo(() => {
     if (!inAppNotifications) {
-      return [...inAppNotificationList].sort(
-        (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
-      );
+      // return [...inAppNotificationList].sort(
+      //   (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
+      // );
+      return [];
     } else {
       return [...inAppNotifications].sort(
         (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
       );
     }
-  }, [inAppNotifications, inAppNotificationList]);
+  }, [inAppNotifications]);
   const [thisNotification, setThisNotification] = useState<any>();
 
   const [search, setSearch] = useState("");
@@ -165,17 +166,31 @@ const Notification = ({
     revalidateTag: true,
   });
   const [postUsers] = usePostUsersMutation();
-  const [updateRead] = useUpdateReadMutation();
+
   const [updateInApp] = useUpdateInAppMutation();
   const { width: globalWidth } = useAppSelector((state) => state.widthStore);
-  const starNum = useMemo(() => {
-    if (!isLoading) {
-      console.log(
-        "real star number:" + currentUser?.privateMetadata?.star?.length,
-      );
-      return currentUser?.privateMetadata?.star?.length || 0;
-    }
-  }, [currentUser, isLoading]);
+
+  // const starNum = useMemo(() => {
+  //   return inAppNotificationList.filter((notification) =>
+  //     notification.star.includes(userId),
+  //   ).length;
+  // }, [inAppNotificationList, userId]);
+  const starNum = inAppNotifications
+    ? inAppNotifications.filter((notification) =>
+        notification.star.includes(userId),
+      ).length
+    : 0;
+  // useEffect(() => {
+  //   console.log("inAppNotifications are changing");
+  // }, [inAppNotifications]);
+  useEffect(() => {
+    const triggerUpdate = async () => {
+      await updateInApp("");
+    };
+    triggerUpdate();
+    console.log("trigger this inapp");
+  }, [updateInApp]);
+
   // const [starNumber, setStarNumber] = useState(starNum || 0);
 
   // console.log("data:" + JSON.stringify(data));
@@ -209,6 +224,7 @@ const Notification = ({
   // }, []);
 
   const router = useRouter();
+
   const form = useForm<InAppSchema>({
     resolver: zodResolver(inAppSchema),
     defaultValues: {
@@ -218,6 +234,8 @@ const Notification = ({
       description: "",
       to: [],
       tag: [],
+      read: [],
+      star: [],
     },
   });
 
@@ -279,27 +297,6 @@ const Notification = ({
     setIsClient(true);
   }, []);
 
-  // useEffect(() => {
-  //   if (starNum) setStarNumber(starNum);
-  // }, [starNum]);
-
-  // useEffect(() => {
-  //   console.log(currentUser);
-  // }, [currentUser]);
-  // useEffect(() => {
-  //   // console.log(search);
-  //   let inAppNos: InAppNotification[];
-  //   if (search) {
-  //     inAppNos = sortedInAppNotifications.filter(
-  //       (no) => no.subject.includes(search) || no.tag.includes(search),
-  //     );
-  //   } else {
-  //     inAppNos = sortedInAppNotifications;
-  //   }
-  //   if (inAppNos) {
-  //     setSearchNotification(inAppNos);
-  //   }
-  // }, [search, sortedInAppNotifications]);
   useEffect(() => {
     if (!isInAppDataLoading) {
       setInAppNotifications(inApp);
@@ -343,9 +340,9 @@ const Notification = ({
     }
   }, []);
 
-  useEffect(() => {
-    console.log("panelWidth: " + panelWidth);
-  }, [panelWidth]);
+  // useEffect(() => {
+  //   console.log("panelWidth: " + panelWidth);
+  // }, [panelWidth]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -423,15 +420,15 @@ const Notification = ({
       //   alert(JSON.stringify(currentUser));
       // }
       // alert(JSON.stringify(input));
-      // setInAppLoading(true);
+      setInAppLoading(true);
       const response: string = await sendNotification({
         ...input,
         time: currentTime,
       });
       const res = await informOtherAdmin(true);
-
       if (response && res.status == "ok") {
         toast.success("Notification has been sent successfully");
+        await updateInApp("");
         setInAppLoading(false);
         form.reset();
         router.refresh();
@@ -450,7 +447,10 @@ const Notification = ({
     pusherClient.bind(
       "user:inform",
       ({ isInformed }: { isInformed: boolean }) => {
+        // toast.success("received but no inform");
         if (isInformed) {
+          // toast.success("Your InApp notifications List has been modified");
+          // console.log("receive it from the frontend ");
           updateNotificationList();
         }
       },
@@ -465,44 +465,50 @@ const Notification = ({
     try {
     } catch (error) {}
   }
-  useEffect(() => {
-    const updateUserPrivateData = async () => {
-      await postUsers("trigger");
-    };
-    updateUserPrivateData();
-  }, [
-    postUsers,
-    reduxStar,
-    reduxRead,
-    currentReadTab,
-    currentTab,
-    thisNotification,
-  ]);
+  // useEffect(() => {
+  //   const updateUserPrivateData = async () => {
+  //     await postUsers("trigger");
+  //   };
+  //   updateUserPrivateData();
+  // }, [postUsers, reduxStar, currentReadTab, currentTab, thisNotification]);
+
   //data transmit
   async function handleDataTransmit(id: string) {
-    router.refresh();
-    // await postUsers(id);
     const thisOne = sortedInAppNotifications.filter((no) => no.id === id)[0];
+    // const thisOne = inAppNotifications!.filter((no) => no.id === id);
     // console.log("reduxStar:" + reduxStar);
+    // await updateInApp(id);
+    // console.log("call this updateInApp");
+
+    // dispatch(setStar(!reduxStar));
     setThisNotification(thisOne);
-    // console.log(
-    //   "currentStarStatus: " + currentUser.privateMetadata.star.includes(id),
-    // );
-    // dispatch(setStar(currentUser.privateMetadata.star.includes(id)));
-    // alert(JSON.stringify(thisOne));
   }
 
-  async function updateReadStatus(notificationId: string) {
-    try {
-      const res = await updateRead({ notificationId });
-      if (res.data) {
-        dispatch(readStatus());
-        toast.success("You mark this notification read");
-      }
-    } catch (error) {
-      toast.error("something is wrong with read notification");
+  async function updateReadStatus(notificationId: string, read: boolean) {
+    // if (thisNotification) {
+    // if (thisNotification.id == notificationId) {
+    const res = await updateRead({
+      currentUserId: userId,
+      notificationId: notificationId,
+      read: read,
+    });
+
+    if (res) {
+      await updateInApp(notificationId);
+
+      dispatch(setReadStatus(read));
+    }
+    if (read) {
+      toast.success("You read this notification");
     }
   }
+
+  // useEffect(() => {
+  //   toast.success("changed this notification");
+  // }, [thisNotification]);
+  useEffect(() => {
+    console.log("reduxRead: " + reduxRead);
+  }, [reduxRead]);
   const deleteThisNotification = async (id: string) => {
     try {
       const response = await deleteNotification(id);
@@ -511,7 +517,9 @@ const Notification = ({
       // await updateNotificationList();
       if (response && res.status == "ok") {
         toast.success("this notification has been deleted successfully");
-        router.refresh();
+
+        await updateInApp(id);
+        // router.refresh();
         setThisNotification(null);
       }
     } catch (error) {
@@ -519,27 +527,27 @@ const Notification = ({
     }
   };
 
-  useEffect(() => {
-    if (thisNotification) {
-      if (currentUser && currentUser.privateMetadata.star) {
-        dispatch(
-          setStar(
-            currentUser.privateMetadata.star.includes(thisNotification.id),
-          ),
-        );
-
-        // dispatch(setStar(thisNotification.reduxStar));
-        // toast.success("caught this notification channged");
-      }
-    }
-  }, [thisNotification, currentUser, dispatch]);
+  // useEffect(() => {
+  //   if (thisNotification) {
+  //     if (inAppNotifications) {
+  //       dispatch(setStar(thisNotification.star.includes(userId)));
+  //     }
+  //   }
+  // }, [thisNotification, dispatch, inAppNotifications, userId]);
 
   async function handleStar(id: string) {
+    // alert("current reduxStar: " + reduxStar);
     if (thisNotification) {
-      const res = await updateStar(userId, thisNotification.id, !reduxStar);
+      // alert("this notification exists");
+      const res = await updateStar({
+        currentUserId: userId,
+        notificationId: thisNotification.id,
+        star: !reduxStar,
+      });
       // const response = await postUsers(id);
       if (res) {
         // setStarStatus((star) => !star);
+        await updateInApp(id);
         dispatch(setStar(!reduxStar));
         // toast.success("handle star successfully");
       } else {
@@ -547,16 +555,10 @@ const Notification = ({
       }
     }
   }
-  useEffect(() => {
-    console.log("screenWidth: " + screenWidth);
-  }, [screenWidth]);
+  // useEffect(() => {
+  //   console.log("screenWidth: " + screenWidth);
+  // }, [screenWidth]);
 
-  // useEffect(() => {
-  //   console.log("globalWidth: " + globalWidth);
-  // }, [globalWidth]);
-  // useEffect(() => {
-  //   console.log("Sidebar reference:", sidebarRef.current);
-  // }, [isCompact]);
   return (
     <>
       {globalWidth >= 891 && (
@@ -782,14 +784,24 @@ const Notification = ({
                       </div>
                       {(currentReadTab === "All" || !currentReadTab) && (
                         <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
-                          {inAppNotificationList.length > 0 &&
+                          {sortedInAppNotifications.length > 0 &&
+                            inAppNotifications &&
                             searchNotification.map((no: InAppNotification) => (
                               // <div key={no.id}>{no.time}</div>
                               <div
                                 key={no.id}
                                 onClick={() => {
                                   handleDataTransmit(no.id);
-                                  updateReadStatus(no.id);
+
+                                  dispatch(setStar(no.star.includes(userId)));
+
+                                  if (!no.read.includes(userId)) {
+                                    updateReadStatus(no.id, true);
+                                  }
+
+                                  dispatch(
+                                    setReadStatus(no.read.includes(userId)),
+                                  );
                                 }}
                               >
                                 {thisNotification &&
@@ -798,16 +810,25 @@ const Notification = ({
                                     no={no}
                                     currentUserId={userId}
                                     starStatus={reduxStar}
+                                    currentNoId={thisNotification?.id ?? null}
                                     readStatus={reduxRead}
                                   />
                                 ) : (
                                   <NotificationCard
                                     no={no}
                                     currentUserId={userId}
+                                    currentNoId={thisNotification?.id ?? null}
                                   />
                                 )}
                               </div>
                             ))}
+                          {!inAppNotifications && (
+                            <div className="space-y-2 px-1">
+                              {[1, 1, 1, 1].map((p, i) => (
+                                <CardPlaceholder key={i} />
+                              ))}
+                            </div>
+                          )}
                         </div>
                       )}
                       {currentReadTab === "Unread" && (
@@ -816,41 +837,42 @@ const Notification = ({
                             searchNotification
                               .filter(
                                 (notification: InAppNotification) =>
-                                  !(
-                                    currentUser?.privateMetadata?.read
-                                      ? currentUser?.privateMetadata?.read
-                                      : []
-                                  ).includes(notification.id),
+                                  notification.read.length == 0,
                               )
+
                               .map((no: InAppNotification) => (
                                 // <div key={no.id}>{no.time}</div>
                                 <div
                                   key={no.id}
                                   onClick={() => {
                                     handleDataTransmit(no.id);
-                                    updateReadStatus(no.id);
+                                    dispatch(setStar(no.star.includes(userId)));
+                                    if (!no.read.includes(userId)) {
+                                      updateReadStatus(no.id, true);
+                                    }
+
+                                    dispatch(
+                                      setReadStatus(no.read.includes(userId)),
+                                    );
                                   }}
                                 >
-                                  <NotificationCard
-                                    no={no}
-                                    currentUserId={userId}
-                                    readStatus={false}
-                                  />
-                                  {/* {thisNotification &&
-                              thisNotification.id == no.id ? (
-                                <NotificationCard
-                                  no={no}
-                                  currentUserId={userId}
-                                  starStatus={reduxStar}
-                                  readStatus={true}
-                                />
-                              ) : (
-                                <NotificationCard
-                                  no={no}
-                                  currentUserId={userId}
-                                  readStatus={true}
-                                />
-                              )} */}
+                                  {thisNotification &&
+                                  thisNotification.id == no.id ? (
+                                    <NotificationCard
+                                      no={no}
+                                      currentUserId={userId}
+                                      starStatus={reduxStar}
+                                      currentNoId={thisNotification?.id ?? null}
+                                      // readStatus={true}
+                                    />
+                                  ) : (
+                                    <NotificationCard
+                                      no={no}
+                                      currentUserId={userId}
+                                      currentNoId={thisNotification?.id ?? null}
+                                      // readStatus={true}
+                                    />
+                                  )}
                                 </div>
                               ))}
                         </div>
@@ -874,11 +896,8 @@ const Notification = ({
                       <div className="no-scrollbar mt-4 h-full space-y-3 overflow-y-scroll ">
                         {inAppNotificationList.length > 0 &&
                           searchNotification
-                            .filter(
-                              (no: InAppNotification) =>
-                                currentUser.privateMetadata?.star?.includes(
-                                  no.id,
-                                ),
+                            .filter((no: InAppNotification) =>
+                              no.star.includes(userId),
                             )
                             .map((no: InAppNotification) => (
                               // <div key={no.id}>{no.time}</div>
@@ -886,7 +905,14 @@ const Notification = ({
                                 key={no.id}
                                 onClick={() => {
                                   handleDataTransmit(no.id);
-                                  updateReadStatus(no.id);
+                                  dispatch(setStar(no.star.includes(userId)));
+                                  if (!no.read.includes(userId)) {
+                                    updateReadStatus(no.id, true);
+                                  }
+
+                                  dispatch(
+                                    setReadStatus(no.read.includes(userId)),
+                                  );
                                 }}
                               >
                                 {thisNotification &&
@@ -895,12 +921,14 @@ const Notification = ({
                                     no={no}
                                     currentUserId={userId}
                                     starStatus={reduxStar}
+                                    currentNoId={thisNotification?.id ?? null}
                                     readStatus={reduxRead}
                                   />
                                 ) : (
                                   <NotificationCard
                                     no={no}
                                     currentUserId={userId}
+                                    currentNoId={thisNotification?.id ?? null}
                                   />
                                 )}
                               </div>
@@ -916,28 +944,38 @@ const Notification = ({
           <ResizablePanel defaultSize={47}>
             <ResizablePanelGroup direction="vertical">
               <ResizablePanel defaultSize={7} minSize={7} maxSize={7}>
-                <div className="flex h-full flex-grow items-center justify-end  bg-white px-3 dark:bg-black">
+                <div className="flex h-full flex-grow items-center justify-between bg-white px-3 dark:bg-black">
                   <span className="flex space-x-2 text-sm font-thin">
-                    <Star
-                      size={18}
-                      className={`font-light text-stone-700  ${
-                        starCondition
-                          ? "dark:text-transparent"
-                          : "dark:text-white/75"
-                      }`}
-                      strokeWidth="1.8"
-                      fill={starCondition ? "#fcd34d" : "transparent"}
-                      // fill="#fcd34d"
-                      onClick={() => {
-                        if (thisNotification) {
-                          handleStar(thisNotification.id);
-                        } else {
-                          toast.error(
-                            "You don't have any notification to star",
-                          );
-                        }
-                      }}
-                    />
+                    {thisNotification && (
+                      <Star
+                        size={18}
+                        className={`font-light text-stone-700  ${
+                          starCondition
+                            ? "dark:text-transparent"
+                            : "dark:text-white/75"
+                        }`}
+                        strokeWidth="1.8"
+                        fill={starCondition ? "#fcd34d" : "transparent"}
+                        // fill="#fcd34d"
+                        onClick={() => {
+                          if (thisNotification) {
+                            handleStar(thisNotification.id);
+                          } else {
+                            toast.error(
+                              "You don't have any notification to star",
+                            );
+                          }
+                        }}
+                      />
+                    )}
+                    {!thisNotification && (
+                      <Star
+                        size={18}
+                        className="font-light text-stone-700 dark:text-stone-300"
+                        strokeWidth="1.8"
+                        fill={"transparent"}
+                      />
+                    )}
                     {!thisNotification && (
                       <Trash2
                         size={18}
@@ -1008,6 +1046,42 @@ const Notification = ({
                       </AlertDialog>
                     )}
                   </span>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">Open menu</span>
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      align="end"
+                      className="dark:border-stone-800"
+                    >
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuSeparator className="mx-auto my-1 h-[1px] w-full bg-gray-300 dark:bg-stone-600" />
+                      <DropdownMenuItem
+                        className="w-full dark:text-stone-400"
+                        onClick={() => {
+                          if (thisNotification) {
+                            if (reduxRead) {
+                              updateReadStatus(thisNotification.id, false);
+                              toast.success("You have marked this unread");
+                            } else {
+                              toast.error(
+                                "Sorry,this notification is already unread",
+                              );
+                            }
+                          } else {
+                            toast.error(
+                              "Sorry you have no notification chosen",
+                            );
+                          }
+                        }}
+                      >
+                        mark this unread
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </ResizablePanel>
               <ResizableHandle withHandle={false} disabled />
@@ -1396,7 +1470,6 @@ const Notification = ({
       )}
       {globalWidth < 891 && (
         <ResizablePanelGroup
-          // direction={screenWidth >= 891 ? "horizontal" : "vertical"}
           direction="vertical"
           className="flex  w-full flex-grow"
         >
@@ -1426,100 +1499,100 @@ const Notification = ({
                     </svg>
                   </Button>
                 </DrawerTrigger>
-                <DrawerContent className=" dark:border-none">
-                  <DrawerHeader>
-                    <DrawerTitle>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 22 22"
-                        fill={
-                          isClient && theme === "dark" ? "#14b8a6" : "#14b8a6"
-                        }
-                        stroke={
-                          isClient && theme === "dark" ? "#5eead4" : "white"
-                        }
-                        strokeWidth={isClient && theme === "dark" ? 1 : 2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="lucide lucide-leaf   rotate-[45] "
-                      >
-                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
-                        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
-                      </svg>
-                    </DrawerTitle>
-                    <DrawerDescription className="">
-                      <DrawerContent className="dark:border-none">
-                        <div className="flex h-full  items-center  dark:border-none">
-                          <div className="flex h-full flex-grow items-start justify-center border  bg-white/75 px-2 py-2 dark:border-none dark:bg-black">
-                            <div className="flex flex-grow flex-col space-y-2 p-0 py-4  ">
-                              <div
-                                onClick={() => {
-                                  setCurrentTab("inbox");
-                                  setThisNotification(null);
-                                  dispatch(setStar(false));
-                                }}
-                                className={`flex 
+                {/* <DrawerContent className=" dark:border-none"> */}
+                {/* <DrawerHeader> */}
+                {/* <DrawerDescription className=""> */}
+                <DrawerContent className="dark:border-none">
+                  <div className="dark:bg-dark flex h-10 w-full items-center justify-center ">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 22 22"
+                      fill={
+                        isClient && theme === "dark" ? "#14b8a6" : "#14b8a6"
+                      }
+                      stroke={
+                        isClient && theme === "dark" ? "#5eead4" : "white"
+                      }
+                      strokeWidth={isClient && theme === "dark" ? 1 : 2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="lucide lucide-leaf   rotate-[45] "
+                    >
+                      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+                      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+                    </svg>
+                  </div>
+                  <div className="flex h-full  items-center  dark:border-none">
+                    <div className="flex h-full flex-grow items-start justify-center border  bg-white/75 px-2 py-2 dark:border-none dark:bg-black">
+                      <div className="flex flex-grow flex-col space-y-2 p-0 py-4  ">
+                        <DrawerClose
+                          onClick={() => {
+                            setCurrentTab("inbox");
+                            setThisNotification(null);
+                            dispatch(setStar(false));
+                          }}
+                          className={`flex 
                                
                              flex-shrink-0 scale-y-95 cursor-pointer items-center justify-between space-x-2 rounded-md  p-2 text-[15px] hover:bg-black hover:text-white ${
                                currentTab === "inbox" || !currentTab
                                  ? "dark:circle-sm-note bg-black text-white dark:bg-teal-400"
                                  : " dark:hover:circle-sm-note dark:glass  bg-white dark:bg-transparent"
                              } `}
-                              >
-                                <span className="flex items-center space-x-2 ">
-                                  <Package2 size={18} /> <span>InApp</span>
-                                </span>
+                        >
+                          <span className="flex items-center space-x-2 ">
+                            <Package2 size={18} /> <span>InApp</span>
+                          </span>
 
-                                <span>{sortedInAppNotifications?.length}</span>
-                              </div>
+                          <span>{sortedInAppNotifications?.length}</span>
+                        </DrawerClose>
 
-                              <div
-                                onClick={() => {
-                                  setCurrentTab("email");
-                                  setThisNotification(null);
-                                  dispatch(setStar(false));
-                                }}
-                                className={`
+                        <DrawerClose
+                          onClick={() => {
+                            setCurrentTab("email");
+                            setThisNotification(null);
+                            dispatch(setStar(false));
+                          }}
+                          className={`
                                
                                flex flex-shrink-0 scale-y-95 cursor-pointer items-center justify-between space-x-2 rounded-sm p-2 text-[15px] hover:bg-black hover:text-white ${
                                  currentTab === "email"
                                    ? "dark:circle-sm-note bg-black text-white dark:bg-teal-400"
                                    : "dark:hover:circle-sm-note dark:glass bg-white dark:bg-transparent "
                                } `}
-                              >
-                                <span className="flex items-center space-x-2">
-                                  <Mail size={18} /> <span>Email</span>
-                                </span>
-                                <span>13</span>
-                              </div>
-                              <div
-                                onClick={() => {
-                                  setCurrentTab("star");
-                                  setThisNotification(null);
-                                  dispatch(setStar(false));
-                                }}
-                                className={`
+                        >
+                          <span className="flex items-center space-x-2">
+                            <Mail size={18} /> <span>Email</span>
+                          </span>
+                          <span>13</span>
+                        </DrawerClose>
+                        <DrawerClose
+                          onClick={() => {
+                            setCurrentTab("star");
+                            setThisNotification(null);
+                            dispatch(setStar(false));
+                          }}
+                          className={`
                                
                                flex flex-shrink-0 scale-y-95 cursor-pointer items-center justify-between space-x-2 rounded-sm p-2 text-[15px] hover:bg-black hover:text-white ${
                                  currentTab === "star"
                                    ? "dark:circle-md-note bg-black text-white dark:bg-teal-400"
                                    : " dark:hover:circle-sm-note  dark:glass bg-white dark:bg-transparent"
                                } `}
-                              >
-                                <span className="flex items-center space-x-2">
-                                  <Star size={18} /> <span>Star</span>
-                                </span>
-                                <span>{starNum}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </DrawerContent>
-                    </DrawerDescription>
-                  </DrawerHeader>
+                        >
+                          <span className="flex items-center space-x-2">
+                            <Star size={18} /> <span>Star</span>
+                          </span>
+                          <span>{starNum}</span>
+                        </DrawerClose>
+                      </div>
+                    </div>
+                  </div>
                 </DrawerContent>
+                {/* </DrawerDescription> */}
+                {/* </DrawerHeader> */}
+                {/* </DrawerContent> */}
               </Drawer>
             </div>
           </ResizablePanel>
@@ -1589,13 +1662,23 @@ const Notification = ({
                     {/* smaller than 891 */}
                     {(currentReadTab === "All" || !currentReadTab) && (
                       <div className="no-scrollbar  mt-4 h-[450px] space-y-3 overflow-y-scroll pb-2 ">
-                        {inAppNotificationList.length > 0 &&
+                        {sortedInAppNotifications.length > 0 &&
+                          inAppNotifications &&
                           searchNotification.map((no: InAppNotification) => (
                             <div
                               key={no.id}
                               onClick={() => {
                                 handleDataTransmit(no.id);
-                                updateReadStatus(no.id);
+
+                                dispatch(setStar(no.star.includes(userId)));
+
+                                if (!no.read.includes(userId)) {
+                                  updateReadStatus(no.id, true);
+                                }
+
+                                dispatch(
+                                  setReadStatus(no.read.includes(userId)),
+                                );
                               }}
                             >
                               {thisNotification &&
@@ -1604,16 +1687,25 @@ const Notification = ({
                                   no={no}
                                   currentUserId={userId}
                                   starStatus={reduxStar}
+                                  currentNoId={thisNotification?.id ?? null}
                                   readStatus={reduxRead}
                                 />
                               ) : (
                                 <NotificationCard
                                   no={no}
                                   currentUserId={userId}
+                                  currentNoId={thisNotification?.id ?? null}
                                 />
                               )}
                             </div>
                           ))}
+                        {!inAppNotifications && (
+                          <div className="space-y-2 px-1">
+                            {[1, 1, 1, 1].map((p, i) => (
+                              <CardPlaceholder key={i} />
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                     {currentReadTab === "Unread" && (
@@ -1622,24 +1714,28 @@ const Notification = ({
                           searchNotification
                             .filter(
                               (notification: InAppNotification) =>
-                                !(
-                                  currentUser?.privateMetadata?.read
-                                    ? currentUser?.privateMetadata?.read
-                                    : []
-                                ).includes(notification.id),
+                                notification.read.length == 0,
                             )
                             .map((no: InAppNotification) => (
                               <div
                                 key={no.id}
                                 onClick={() => {
                                   handleDataTransmit(no.id);
-                                  updateReadStatus(no.id);
+                                  dispatch(setStar(no.star.includes(userId)));
+                                  if (!no.read.includes(userId)) {
+                                    updateReadStatus(no.id, true);
+                                  }
+
+                                  dispatch(
+                                    setReadStatus(no.read.includes(userId)),
+                                  );
                                 }}
                               >
                                 <NotificationCard
                                   no={no}
                                   currentUserId={userId}
                                   readStatus={false}
+                                  currentNoId={thisNotification?.id ?? null}
                                 />
                               </div>
                             ))}
@@ -1661,21 +1757,25 @@ const Notification = ({
                       <Search className="dark:opacity-1 absolute left-2 top-2 mr-2 h-4 w-4 shrink-0 opacity-50 dark:text-teal-300" />
                     </div>
                     {/* smaller than 891 */}
-                    <div className="no-scrollbar mt-4 h-[596px] space-y-3 overflow-y-scroll ">
+                    <div className="no-scrollbar mt-4 h-[450px] space-y-3 overflow-y-scroll py-2">
                       {inAppNotificationList.length > 0 &&
                         searchNotification
-                          .filter(
-                            (no: InAppNotification) =>
-                              currentUser.privateMetadata?.star?.includes(
-                                no.id,
-                              ),
+                          .filter((no: InAppNotification) =>
+                            no.star.includes(userId),
                           )
                           .map((no: InAppNotification) => (
                             <div
                               key={no.id}
                               onClick={() => {
                                 handleDataTransmit(no.id);
-                                updateReadStatus(no.id);
+                                dispatch(setStar(no.star.includes(userId)));
+                                if (!no.read.includes(userId)) {
+                                  updateReadStatus(no.id, true);
+                                }
+
+                                dispatch(
+                                  setReadStatus(no.read.includes(userId)),
+                                );
                               }}
                             >
                               {thisNotification &&
@@ -1684,12 +1784,14 @@ const Notification = ({
                                   no={no}
                                   currentUserId={userId}
                                   starStatus={reduxStar}
+                                  currentNoId={thisNotification?.id ?? null}
                                   readStatus={reduxRead}
                                 />
                               ) : (
                                 <NotificationCard
                                   no={no}
                                   currentUserId={userId}
+                                  currentNoId={thisNotification?.id ?? null}
                                 />
                               )}
                             </div>
@@ -1707,7 +1809,7 @@ const Notification = ({
           <ResizablePanel defaultSize={63} minSize={48}>
             {/* <ResizablePanelGroup direction="vertical"> */}
             <ResizablePanel defaultSize={10} minSize={10} maxSize={10}>
-              <div className="flex h-full flex-grow items-center justify-end  bg-white px-3 py-2 dark:bg-black">
+              <div className="flex h-full flex-grow items-center justify-between  bg-white px-3 py-2 dark:bg-black">
                 <span className="flex space-x-2 text-sm font-thin">
                   <Star
                     size={18}
@@ -1782,6 +1884,40 @@ const Notification = ({
                     </AlertDialog>
                   )}
                 </span>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                      <span className="sr-only">Open menu</span>
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    className="dark:border-stone-800"
+                  >
+                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuSeparator className="mx-auto my-1 h-[1px] w-full bg-gray-300 dark:bg-stone-600" />
+                    <DropdownMenuItem
+                      className="w-full dark:text-stone-400"
+                      onClick={() => {
+                        if (thisNotification) {
+                          if (reduxRead) {
+                            updateReadStatus(thisNotification.id, false);
+                            toast.success("You have marked this unread");
+                          } else {
+                            toast.error(
+                              "Sorry,this notification is already unread",
+                            );
+                          }
+                        } else {
+                          toast.error("Sorry you have no notification chosen");
+                        }
+                      }}
+                    >
+                      mark this unread
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </ResizablePanel>
             <ResizableHandle />

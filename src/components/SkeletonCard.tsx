@@ -32,34 +32,14 @@ export function SkeletonCard() {
       {!isClient && (
         <CardContent className={` h-14 rounded-b-xl  px-6 py-2`}>
           <span className="absolute bottom-4 left-6 flex items-center space-x-2">
-            {/* {user && isClient ? (
-            <Image
-              src={user.imageUrl}
-              alt="profile"
-              width={24}
-              height={24}
-              className="rounded-full"
-            />
-          ) : (
-            <Loader2
-              size={23}
-              className="animate-spin rounded-full border border-white bg-gray-100 text-gray-600"
-            />
-          )} */}
             {!isClient && (
               <Skeleton className="h-5 w-5 rounded-full bg-stone-200" />
             )}
             {!isClient && <Skeleton className="h-3 w-[40px] bg-stone-100" />}
-            {/* <CardDescription className="text-xs">
-              {user && user.firstName + " " + (user.lastName ?? "")}
-            </CardDescription> */}
           </span>
           {!isClient && (
             <Skeleton className="absolute bottom-4 right-6 h-3 w-[90px] bg-stone-100 text-xs" />
           )}
-          {/* <CardDescription className="absolute bottom-4 right-6 text-xs "> */}
-          {/* {createdUpdatedAtTimestamp} */}
-          {/* </CardDescription> */}
         </CardContent>
       )}
     </Card>

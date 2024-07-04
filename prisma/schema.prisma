@@ -79,9 +79,11 @@ model InAppNotification {
     to String[]
     description String
     tag String[]
-
+    star String[]
+    read String[]
   notificationList NotificationList @relation(fields: [notificationListId],references: [id])
   notificationListId String @unique @db.ObjectId
+    
   @@map("inAppNotifications")
 }
 

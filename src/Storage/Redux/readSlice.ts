@@ -8,11 +8,11 @@ export const readSlice = createSlice({
   name: "read",
   initialState: initialState,
   reducers: {
-    readStatus: (state) => {
-      state.read = true;
+    setReadStatus: (state, action) => {
+      state.read = action.payload;
     },
   },
 });
 
-export const { readStatus } = readSlice.actions;
+export const { setReadStatus } = readSlice.actions;
 export const readReducer = readSlice.reducer;

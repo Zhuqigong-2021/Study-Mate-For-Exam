@@ -66,6 +66,7 @@ import { setStar } from "@/Storage/Redux/starSlice";
 import { setGlobalWidth } from "@/Storage/Redux/widthSlice";
 // import { DialogContent, DialogDescription, DialogTitle } from "./ui/dialog";
 import { DialogTitle, DialogDescription } from "@radix-ui/react-dialog";
+import { useUpdateInAppMutation } from "@/Apis/inAppApi";
 interface Range {
   min: number;
   max: number;
@@ -124,7 +125,7 @@ export function AdminDashboard({
   const [dataMode, setDataMode] = useState(false);
   const [currentTab, setCurrentTab] = useState("dashboard");
   const { width: globalWidth } = useAppSelector((state) => state.widthStore);
-
+  // const [updateInApp] = useUpdateInAppMutation();
   // const [lang, setLang] = useState(Cookie.get("NEXT_LOCALE") ?? "en");
   const d = useTranslations("Dashboard");
   const { theme } = useTheme();
@@ -372,6 +373,7 @@ export function AdminDashboard({
             onClick={() => {
               setCurrentTab("notification");
               dispatch(setStar(false));
+              // router.refresh();
             }}
           >
             {d("menu.notification")}

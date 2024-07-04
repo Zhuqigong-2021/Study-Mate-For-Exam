@@ -39,6 +39,8 @@ export const inAppSchema = z.object({
   time: z.string(),
   to: z.array(z.string()).min(1, { message: "at least one receipient" }),
   tag: z.array(z.string()).min(1, { message: "at least one tag" }),
+  read: z.array(z.string()),
+  star: z.array(z.string()),
 });
 
 export type CreateNoteSchema = z.infer<typeof createNoteSchema>;

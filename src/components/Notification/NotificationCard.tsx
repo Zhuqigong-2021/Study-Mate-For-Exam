@@ -13,47 +13,60 @@ import { InAppNotification } from "@prisma/client";
 import { timeAgo } from "@/app/[locale]/utils/timeAgo";
 import { limitStringLength } from "@/app/[locale]/utils/limitStringLength";
 import debounce from "lodash/debounce";
-import {
-  checkReadStatus,
-  checkStarStatus,
-  updateStar,
-} from "@/app/[locale]/action";
+import { checkReadStatus } from "@/app/[locale]/action";
 import toast from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "@/lib/hook";
 import { setStar as setStarStatus } from "../../Storage/Redux/starSlice";
 import { useDispatch } from "react-redux";
 import { usePostUsersMutation } from "@/Apis/userApi";
+import { useUpdateStarMutation } from "@/Apis/starApi";
+import { useRouter } from "next/navigation";
+import { useUpdateInAppMutation } from "@/Apis/inAppApi";
 interface notificationCardProps {
   no: InAppNotification;
   currentUserId: string;
   starStatus?: boolean;
   readStatus?: boolean;
+  currentNoId?: string | null;
 }
 const NotificationCard = ({
   no,
   currentUserId,
   starStatus,
   readStatus,
+  currentNoId,
 }: notificationCardProps) => {
   const { firstName, lastName, fullname } = JSON.parse(no.user);
 
   const [star, setStar] = useState(false);
   const [read, setRead] = useState(false);
   const [postUser] = usePostUsersMutation();
+  const [updateStar] = useUpdateStarMutation();
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const [updateInApp] = useUpdateInAppMutation();
   useEffect(() => {
-    const result = async () => {
-      const starStatusResponse = await checkStarStatus(currentUserId, no.id);
-      if (starStatusResponse) setStar(starStatusResponse);
-    };
-    result();
+    if (no.star.includes(currentUserId)) {
+      setStar(true);
+    }
 
     if (starStatus == false || starStatus == true) {
       setStar(starStatus);
       // useDispatch(setStar(starStatus))
     }
     return () => {};
-  }, [currentUserId, no.id, starStatus]);
+  }, [currentUserId, no.id, no.star, starStatus]);
+  useEffect(() => {
+    if (no.read.includes(currentUserId)) {
+      setRead(true);
+    }
+
+    if (readStatus == false || readStatus == true) {
+      setRead(readStatus);
+      // useDispatch(setStar(starStatus))
+    }
+    return () => {};
+  }, [currentUserId, no.id, no.read, readStatus]);
 
   // useEffect(() => {
   //   const result = async () => {
@@ -76,32 +89,24 @@ const NotificationCard = ({
   // }, []);
   const debounceRef = useRef<any>(null);
 
-  useEffect(() => {
-    const checkReadStatusCallback = debounce(async () => {
-      const readStatusResponse = await checkReadStatus(currentUserId, no.id);
-      if (readStatusResponse) {
-        setRead(readStatusResponse);
-      }
-    }, 300);
-
-    debounceRef.current = checkReadStatusCallback;
-    debounceRef.current();
-
-    return () => {
-      if (debounceRef.current) {
-        debounceRef.current.cancel();
-      }
-    };
-  }, [currentUserId, no.id, readStatus]);
-
   // useEffect(() => {
-  //   const result = async () => {
-  //     const starStatusResponse = await checkStarStatus(currentUserId, no.id);
-  //     if (starStatusResponse) setStar(starStatus);
+  //   const checkReadStatusCallback = debounce(async () => {
+  //     const readStatusResponse = await checkReadStatus(currentUserId, no.id);
+  //     if (readStatusResponse) {
+  //       setRead(readStatusResponse);
+  //     }
+  //   }, 300);
+
+  //   debounceRef.current = checkReadStatusCallback;
+  //   debounceRef.current();
+
+  //   return () => {
+  //     if (debounceRef.current) {
+  //       debounceRef.current.cancel();
+  //     }
   //   };
-  //   result();
-  // }, [currentUserId, no.id, starStatus]);
-  // const currentUserId = JSON.parse(no.user).id;
+  // }, [currentUserId, no.id, readStatus]);
+
   let username = (firstName + " " + lastName).trim()
     ? (firstName + " " + lastName).trim()
     : fullname
@@ -109,20 +114,30 @@ const NotificationCard = ({
       : "no name";
   async function handleStar(
     event: React.MouseEvent<SVGSVGElement>,
-    id: string,
+    notificationId: string,
   ) {
     event.stopPropagation();
-    const res = await updateStar(currentUserId, id, !star);
-    await postUser(id);
+    const res = await updateStar({
+      currentUserId,
+      notificationId,
+      star: !star,
+    });
+    // await postUser(notificationId);
     // const response = await postUser(id);
-    if (res) {
-      setStar((star) => !star);
 
-      // setStar((starStatus) => !starStatus);
-      // console.log("star:" + star);
-      dispatch(setStarStatus(!star));
-      // console.log("reduxStar:" + reduxStar);
-      toast.success("you star this notification");
+    const notificationLists = await updateInApp(notificationId);
+    if (res.data && notificationLists) {
+      setStar((star) => !star);
+      if (currentNoId && currentNoId == notificationId) {
+        dispatch(setStarStatus(!star));
+      }
+
+      router.refresh();
+      if (!star) {
+        toast.success("you star this notification");
+      } else {
+        toast.success("you unstar this notification");
+      }
     } else {
       toast.error("Something went wrong");
     }
@@ -132,13 +147,6 @@ const NotificationCard = ({
     <Card className="dark:glass relative mx-1 border-none bg-white p-4 shadow-sm shadow-stone-300 dark:shadow-teal-300">
       <CardTitle className="text-md flex w-full justify-between">
         <div className="mb-1 flex items-center space-x-2">
-          {/* <UserButton
-            appearance={{
-              elements: {
-                avatarBox: { width: "1.5rem", height: "1.5rem" },
-              },
-            }}
-          /> */}
           <span className="text-sm font-bold ">{username}</span>
           {!read && (
             <div className=" dark:circle-sm-note h-2 w-2 rounded-full  bg-blue-400  dark:bg-cyan-400 dark:shadow-lg"></div>
@@ -170,21 +178,6 @@ const NotificationCard = ({
             {tag}
           </Badge>
         ))}
-        {/* <Badge
-          variant={"outline"}
-          className="rounded-md dark:border-teal-300/55 dark:text-teal-300"
-        >
-          important
-        </Badge>
-        <Badge
-          variant={"outline"}
-          className="rounded-md dark:border-teal-300/55 dark:text-teal-300"
-        >
-          exam
-        </Badge>
-        <Badge className="dark:circle-sm-note rounded-md text-white dark:bg-teal-400">
-          new
-        </Badge> */}
       </div>
       <div className="absolute bottom-3 right-3  text-stone-500">
         <Star

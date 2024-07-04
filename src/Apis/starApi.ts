@@ -1,12 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const readApi = createApi({
-  reducerPath: "readApi",
+const starApi = createApi({
+  reducerPath: "starApi",
   baseQuery: fetchBaseQuery({
     // baseUrl: "https://sushibackend.azurewebsites.net/api/",
     baseUrl: "/api",
   }),
-  tagTypes: ["Read"],
+  tagTypes: ["Star"],
   endpoints: (builder) => ({
     // getUsers: builder.query({
     //   query: () => ({
@@ -19,20 +19,20 @@ const readApi = createApi({
 
     //   providesTags: ["Users"],
     // }),
-    updateRead: builder.mutation({
-      query: ({ currentUserId, notificationId, read }) => ({
-        url: "/notification/inApp/read",
+    updateStar: builder.mutation({
+      query: ({ currentUserId, notificationId, star }) => ({
+        url: "/notification/inApp/star",
         method: "POST",
-        body: { notificationId, currentUserId, read },
+        body: { notificationId, currentUserId, star },
         headers: {
           "Content-Type": "Application/json",
         },
       }),
 
-      invalidatesTags: ["Read"],
+      invalidatesTags: ["Star"],
     }),
   }),
 });
 
-export const { useUpdateReadMutation } = readApi;
-export default readApi;
+export const { useUpdateStarMutation } = starApi;
+export default starApi;

@@ -95,6 +95,8 @@ export const sendNotification = async (input: InAppSchema) => {
           to: true,
           description: true,
           tag: true,
+          star: true,
+          read: true,
           notificationListId: true,
         },
       },
@@ -103,20 +105,7 @@ export const sendNotification = async (input: InAppSchema) => {
 
   let notificationListId =
     notificationList.length > 0 ? notificationList[0].id : null;
-  // const sendNotification = async (input: InAppSchema) => {
 
-  // return knockUser;
-  //   return totalUsersNumber;
-  // };
-
-  // const knockUser = await knock.users.identify(userId!, {
-  //   name:
-  //     currentUser[0].firstName ??
-  //     "" + currentUser[0].lastName ??
-  //     "" ??
-  //     currentUser[0].username,
-  //   email: currentUser[0].emailAddresses[0].emailAddress,
-  // });
   if (user.length > 0) {
     user.forEach(
       async (u) =>
@@ -138,6 +127,8 @@ export const sendNotification = async (input: InAppSchema) => {
           to: firstNameArray,
           description: input.description,
           tag: input.tag,
+          read: input.read,
+          star: input.star,
           notificationListId,
         },
       });
@@ -155,6 +146,8 @@ export const sendNotification = async (input: InAppSchema) => {
           to: firstNameArray,
           description: input.description,
           tag: input.tag,
+          read: input.read,
+          star: input.star,
           notificationListId: notificationList?.id,
         },
       });
@@ -198,121 +191,119 @@ export const deleteNotification = async (id: string) => {
     //     await updateStar(userId, id, false);
     //   }
     // }
-    const res = await updateStar(userId, id, false);
-    if (res) {
-      const response = await prisma.inAppNotification.delete({ where: { id } });
-      return response;
-    }
+
+    const response = await prisma.inAppNotification.delete({ where: { id } });
+    return response;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const updateStar = async (
-  userId: string,
-  id: string,
-  toggle: boolean,
-) => {
-  const foundUser: User = await clerkClient.users.getUser(userId);
-  if (foundUser) {
-    // return JSON.stringify(foundUser);
-    if (!foundUser.privateMetadata.star) {
-      if (foundUser.privateMetadata.read) {
-        const currentRead: any = foundUser.privateMetadata.read;
-        if (toggle) {
-          const res = await clerkClient.users.updateUser(userId, {
-            // locked: true,
-            privateMetadata: { read: [...currentRead], star: [id] },
-          });
-          // console.log("add star successfully");
-          return "add star successfully";
-        } else {
-          const res = await clerkClient.users.updateUser(userId, {
-            // locked: true,
-            privateMetadata: { read: [...currentRead], star: [] },
-          });
-          // console.log("remove star successfully");
-          return "remove star successfully";
-        }
-      } else {
-        if (toggle) {
-          const res = await clerkClient.users.updateUser(userId, {
-            // locked: true,
-            privateMetadata: { star: [id] },
-          });
-          // console.log("add star successfully");
-          return "add star successfully";
-        } else {
-          const res = await clerkClient.users.updateUser(userId, {
-            // locked: true,
-            privateMetadata: { star: [] },
-          });
-          // console.log("remove star successfully");
-          return "remove star successfully";
-        }
-      }
-    } else {
-      const isDuplicated = (
-        foundUser.privateMetadata.star as string[]
-      ).includes(id);
-      if (foundUser.privateMetadata.read) {
-        const currentRead: any = foundUser.privateMetadata.read;
-        if (toggle) {
-          const currentStar: any = foundUser.privateMetadata.star;
-          if (!isDuplicated) {
-            const res = await clerkClient.users.updateUser(userId, {
-              privateMetadata: {
-                read: [...currentRead],
-                star: [...currentStar, id],
-              },
-            });
-            return "add another notification successfully";
-          }
-        } else {
-          const stars = (foundUser.privateMetadata.star as string[]).filter(
-            (noId) => noId !== id,
-          );
-          const res = await clerkClient.users.updateUser(userId, {
-            privateMetadata: { read: [...currentRead], star: [...stars] },
-          });
-          return "remove this notification successfully";
-        }
-      } else {
-        if (toggle) {
-          const currentStar: any = foundUser.privateMetadata.star;
+// export const updateStar = async (
+//   userId: string,
+//   id: string,
+//   toggle: boolean,
+// ) => {
+//   const foundUser: User = await clerkClient.users.getUser(userId);
+//   if (foundUser) {
+//     // return JSON.stringify(foundUser);
+//     if (!foundUser.privateMetadata.star) {
+//       if (foundUser.privateMetadata.read) {
+//         const currentRead: any = foundUser.privateMetadata.read;
+//         if (toggle) {
+//           const res = await clerkClient.users.updateUser(userId, {
+//             // locked: true,
+//             privateMetadata: { read: [...currentRead], star: [id] },
+//           });
+//           // console.log("add star successfully");
+//           return "add star successfully";
+//         } else {
+//           const res = await clerkClient.users.updateUser(userId, {
+//             // locked: true,
+//             privateMetadata: { read: [...currentRead], star: [] },
+//           });
+//           // console.log("remove star successfully");
+//           return "remove star successfully";
+//         }
+//       } else {
+//         if (toggle) {
+//           const res = await clerkClient.users.updateUser(userId, {
+//             // locked: true,
+//             privateMetadata: { star: [id] },
+//           });
+//           // console.log("add star successfully");
+//           return "add star successfully";
+//         } else {
+//           const res = await clerkClient.users.updateUser(userId, {
+//             // locked: true,
+//             privateMetadata: { star: [] },
+//           });
+//           // console.log("remove star successfully");
+//           return "remove star successfully";
+//         }
+//       }
+//     } else {
+//       const isDuplicated = (
+//         foundUser.privateMetadata.star as string[]
+//       ).includes(id);
+//       if (foundUser.privateMetadata.read) {
+//         const currentRead: any = foundUser.privateMetadata.read;
+//         if (toggle) {
+//           const currentStar: any = foundUser.privateMetadata.star;
+//           if (!isDuplicated) {
+//             const res = await clerkClient.users.updateUser(userId, {
+//               privateMetadata: {
+//                 read: [...currentRead],
+//                 star: [...currentStar, id],
+//               },
+//             });
+//             return "add another notification successfully";
+//           }
+//         } else {
+//           const stars = (foundUser.privateMetadata.star as string[]).filter(
+//             (noId) => noId !== id,
+//           );
+//           const res = await clerkClient.users.updateUser(userId, {
+//             privateMetadata: { read: [...currentRead], star: [...stars] },
+//           });
+//           return "remove this notification successfully";
+//         }
+//       } else {
+//         if (toggle) {
+//           const currentStar: any = foundUser.privateMetadata.star;
 
-          if (!isDuplicated) {
-            const res = await clerkClient.users.updateUser(userId, {
-              privateMetadata: { star: [...currentStar, id] },
-            });
-            return "add another notification successfully";
-          }
-        } else {
-          const stars = (foundUser.privateMetadata.star as string[]).filter(
-            (noId) => noId !== id,
-          );
-          const res = await clerkClient.users.updateUser(userId, {
-            privateMetadata: { star: [...stars] },
-          });
-          return "remove this notification successfully";
-        }
-      }
-    }
-  }
-};
+//           if (!isDuplicated) {
+//             const res = await clerkClient.users.updateUser(userId, {
+//               privateMetadata: { star: [...currentStar, id] },
+//             });
+//             return "add another notification successfully";
+//           }
+//         } else {
+//           const stars = (foundUser.privateMetadata.star as string[]).filter(
+//             (noId) => noId !== id,
+//           );
+//           const res = await clerkClient.users.updateUser(userId, {
+//             privateMetadata: { star: [...stars] },
+//           });
+//           return "remove this notification successfully";
+//         }
+//       }
+//     }
+//   }
+// };
 
-export const checkStarStatus = async (userId: string, id: string) => {
-  const foundUser: User = await clerkClient.users.getUser(userId);
-  if (foundUser) {
-    if (foundUser.privateMetadata.star) {
-      const isInclude = (foundUser.privateMetadata.star as string[]).includes(
-        id,
-      );
-      return isInclude;
-    }
-    return false;
-  }
-};
+// export const checkStarStatus = async (userId: string, id: string) => {
+//   const foundUser: User = await clerkClient.users.getUser(userId);
+//   if (foundUser) {
+//     if (foundUser.privateMetadata.star) {
+//       const isInclude = (foundUser.privateMetadata.star as string[]).includes(
+//         id,
+//       );
+//       return isInclude;
+//     }
+//     return false;
+//   }
+// };
 
 export const checkReadStatus = async (userId: string, id: string) => {
   const foundUser: User = await clerkClient.users.getUser(userId);
@@ -332,7 +323,7 @@ export async function informOtherAdmin(isInformed: boolean) {
     await pusherServer.trigger("action", "user:inform", {
       isInformed: isInformed,
     });
-    // return res;
+    console.log("hit the backend server action");
     return { status: "ok" };
   } catch (err) {
     return { message: err };
