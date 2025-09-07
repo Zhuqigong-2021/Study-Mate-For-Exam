@@ -560,11 +560,13 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                       />
                       <div className="absolute right-[0.75rem] top-0 h-2 w-2 rounded-full bg-rose-500"></div> */}
                       <div className=" text-stone-700 dark:text-white/95 ">
-                        <NotificationIconButton
-                          ref={notifButtonRef}
-                          onClick={(e) => setIsVisible(!isVisible)}
-                        />
-                        <NotificationFeedPopover
+                        {/* {isClient && (
+                          <NotificationIconButton
+                            ref={notifButtonRef}
+                            onClick={(e) => setIsVisible(!isVisible)}
+                          />
+                        )} */}
+                        {/* <NotificationFeedPopover
                           buttonRef={notifButtonRef}
                           isVisible={isVisible}
                           onClose={() => setIsVisible(false)}
@@ -573,18 +575,12 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                               className="m-2  overflow-hidden rounded-lg bg-stone-50"
                               key={item.id}
                               onClick={() => router.push(item.data?.link)}
-                              // href={`${item.data?.link}`}
+                           
                             >
                               <NotificationCell
                                 {...props}
                                 item={item}
-                                // You can use any properties available on the `actor` for the name and avatar
-                                // avatar={
-                                //   <Avatar
-                                //     name={item.actors[0].name}
-                                //     src={item.actors[0].avatar}
-                                //   />
-                                // }
+                             
                                 avatar={
                                   <Image
                                     src={item.data?.adminUrl}
@@ -595,20 +591,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                                   />
                                 }
                               >
-                                {/* <div className="absolute right-8">
-                                  <Image
-                                    src={item.data?.adminUrl}
-                                    alt="superadmin"
-                                    width={30}
-                                    height={30}
-                                    className="h-8 w-8 -translate-y-6 rounded-full"
-                                  />
-                                  <div className="flex flex-wrap text-xs text-blue-400 underline">
-                                    <Link href={`/notes/$`}>
-                                      {item.data?.workoutText.value}
-                                    </Link>
-                                  </div>
-                                </div> */}
+                                
                               </NotificationCell>
                             </div>
                           )}
@@ -636,7 +619,7 @@ const CommonNavbar = ({ userId, isAdmin }: userType) => {
                           //     </div>
                           //   </div>
                           // )}
-                        />
+                        /> */}
                       </div>
                     </NavigationMenuItem>
 

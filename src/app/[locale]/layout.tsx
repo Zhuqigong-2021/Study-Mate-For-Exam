@@ -87,16 +87,16 @@ export default async function RootLayout({
               className="bg-slate-50 font-sans transition-all duration-700 ease-in-out dark:bg-background"
               suppressHydrationWarning={true}
             >
-              <ThemeProvider attribute="class">
-                <NotifyProvider userId={userId ?? ""}>
+              <NotifyProvider userId={userId ?? ""}>
+                <ThemeProvider attribute="class">
                   <CommonNavbar
                     isAdmin={isAdmin}
                     userId={userId ? userId : ""}
                   />
                   {children}
                   <Toaster />
-                </NotifyProvider>
-              </ThemeProvider>
+                </ThemeProvider>
+              </NotifyProvider>
             </body>
           </NextIntlClientProvider>
         </html>
